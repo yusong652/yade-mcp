@@ -1,0 +1,23 @@
+{
+  "name": "TranslationEngine",
+  "category": "engines",
+  "parent": "KinematicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "translationAxis",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "velocity",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_MindlinPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "betan",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "betas",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "en",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "es",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "eta",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "frictAngle",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "gamma",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "krot",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ktwist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "vn",
+      "type": "NoneType",
+      "default": "None"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Facet",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "area",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
+    },
+    {
+      "name": "vertices",
+      "type": "list",
+      "default": "[Vector3(nan,nan,nan), Vector3(nan,nan,nan), Vector3(nan,nan,nan)]"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

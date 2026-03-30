@@ -1,0 +1,58 @@
+{
+  "name": "Law2_ScGeom_MindlinPhys_Mindlin",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "calcEnergy",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "frictionDissipation",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "includeAdhesion",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "includeMoment",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "neverErase",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "normDampDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "nothing",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "preventGranularRatcheting",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "shearDampDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearEnergy",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

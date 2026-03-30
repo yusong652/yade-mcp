@@ -1,0 +1,48 @@
+{
+  "name": "PyRunner",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "command",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "ignoreErrors",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "updateGlobals",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

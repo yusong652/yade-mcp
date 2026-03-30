@@ -1,0 +1,124 @@
+{
+  "version": "1.0",
+  "description": "YADE Python API documentation. Browse: category -> class -> details.",
+  "categories": {
+    "engines": {
+      "description": "Simulation engines: forces, collisions, integration, recording, boundary control",
+      "classes": [
+        "Bo1_Box_Aabb",
+        "Bo1_Facet_Aabb",
+        "Bo1_Sphere_Aabb",
+        "Bo1_Wall_Aabb",
+        "ForceEngine",
+        "ForceResetter",
+        "GlobalStiffnessTimeStepper",
+        "GravityEngine",
+        "Ig2_Box_Sphere_ScGeom",
+        "Ig2_Facet_Sphere_ScGeom",
+        "Ig2_Sphere_Sphere_ScGeom",
+        "Ig2_Wall_Sphere_ScGeom",
+        "InsertionSortCollider",
+        "InteractionLoop",
+        "Ip2_CohFrictMat_CohFrictMat_CohFrictPhys",
+        "Ip2_FrictMat_FrictMat_FrictPhys",
+        "Ip2_FrictMat_FrictMat_MindlinPhys",
+        "NewtonIntegrator",
+        "PeriTriaxController",
+        "PyRunner",
+        "RotationEngine",
+        "TranslationEngine",
+        "TriaxialStressController",
+        "VTKRecorder"
+      ]
+    },
+    "materials": {
+      "description": "Material models: elasticity, friction, cohesion, viscosity",
+      "classes": [
+        "CohFrictMat",
+        "CpmMat",
+        "ElastMat",
+        "FrictMat",
+        "JCFpmMat",
+        "LudingMat",
+        "PolyhedraMat",
+        "ViscElMat",
+        "WireMat"
+      ]
+    },
+    "shapes": {
+      "description": "Geometric shapes: Sphere, Wall, Facet, Box, Polyhedra, etc.",
+      "classes": [
+        "Box",
+        "Clump",
+        "Facet",
+        "LevelSet",
+        "Polyhedra",
+        "Sphere",
+        "Tetra",
+        "Wall"
+      ]
+    },
+    "interactions": {
+      "description": "Contact components: geometry, physics, and constitutive laws",
+      "subcategories": {
+        "geometry": {
+          "description": "Contact geometry classes (ScGeom, ScGeom6D, etc.)",
+          "classes": [
+            "L3Geom",
+            "PolyhedraGeom",
+            "ScGeom",
+            "ScGeom6D",
+            "VolumeGeom"
+          ]
+        },
+        "physics": {
+          "description": "Contact physics classes (FrictPhys, MindlinPhys, etc.)",
+          "classes": [
+            "CapillaryPhys",
+            "CohFrictPhys",
+            "CpmPhys",
+            "FrictPhys",
+            "JCFpmPhys",
+            "MindlinPhys",
+            "NormPhys",
+            "NormShearPhys",
+            "ViscElPhys"
+          ]
+        },
+        "laws": {
+          "description": "Constitutive law classes (Law2_*)",
+          "classes": [
+            "Law2_L3Geom_FrictPhys_ElPerfPl",
+            "Law2_PolyhedraGeom_PolyhedraPhys_Volumetric",
+            "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
+            "Law2_ScGeom_CpmPhys_Cpm",
+            "Law2_ScGeom_FrictPhys_CundallStrack",
+            "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
+            "Law2_ScGeom_MindlinPhys_Mindlin",
+            "Law2_ScGeom_ViscElPhys_Basic"
+          ]
+        }
+      }
+    },
+    "bodies": {
+      "description": "Body management, state, and container operations",
+      "classes": [
+        "Body",
+        "BodyContainer",
+        "State"
+      ]
+    },
+    "utils": {
+      "description": "Utility functions: body creation, timestep estimation, helpers",
+      "classes": [
+        "utils"
+      ]
+    },
+    "omega": {
+      "description": "Omega (O) singleton: simulation control and scene management",
+      "classes": [
+        "Omega"
+      ]
+    }
+  }
+}

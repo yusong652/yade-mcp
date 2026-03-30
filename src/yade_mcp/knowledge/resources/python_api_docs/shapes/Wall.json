@@ -1,0 +1,33 @@
+{
+  "name": "Wall",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "axis",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "sense",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

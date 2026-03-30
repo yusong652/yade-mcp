@@ -1,0 +1,28 @@
+{
+  "name": "Tetra",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "v",
+      "type": "list",
+      "default": "[Vector3(2.928517594614104652e-316,0,2.93104800122584518e-316), Vector3(6.944534"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

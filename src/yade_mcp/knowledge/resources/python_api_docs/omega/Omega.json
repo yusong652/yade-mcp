@@ -1,0 +1,109 @@
+{
+  "name": "Omega",
+  "category": "omega",
+  "description": "Central simulation controller, accessed as O. Manages scene, bodies, engines, and simulation lifecycle.",
+  "attributes": [
+    {
+      "name": "bodies",
+      "type": "BodyContainer",
+      "default": ""
+    },
+    {
+      "name": "interactions",
+      "type": "InteractionContainer",
+      "default": ""
+    },
+    {
+      "name": "materials",
+      "type": "MaterialContainer",
+      "default": ""
+    },
+    {
+      "name": "engines",
+      "type": "list",
+      "default": ""
+    },
+    {
+      "name": "dt",
+      "type": "float",
+      "default": ""
+    },
+    {
+      "name": "iter",
+      "type": "int",
+      "default": ""
+    },
+    {
+      "name": "time",
+      "type": "float",
+      "default": ""
+    },
+    {
+      "name": "realtime",
+      "type": "float",
+      "default": ""
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": ""
+    },
+    {
+      "name": "cell",
+      "type": "NoneType",
+      "default": ""
+    },
+    {
+      "name": "trackEnergy",
+      "type": "bool",
+      "default": ""
+    },
+    {
+      "name": "tags",
+      "type": "TagsWrapper",
+      "default": ""
+    }
+  ],
+  "methods": [
+    {
+      "name": "run",
+      "signature": "O.run(*args, **kwargs)",
+      "description": ""
+    },
+    {
+      "name": "pause",
+      "signature": "O.pause()",
+      "description": "\npause( (Omega)arg1) -> None :\n    Stop simulation execution. (May be called from within the loop, and it will stop after the current step)."
+    },
+    {
+      "name": "wait",
+      "signature": "O.wait()",
+      "description": "\nwait( (Omega)arg1) -> None :\n    Don't return until the simulation will have been paused. (Returns immediately if not running)."
+    },
+    {
+      "name": "reset",
+      "signature": "O.reset()",
+      "description": "\nreset( (Omega)arg1) -> None :\n    Reset simulations completely (including another scenes!)."
+    },
+    {
+      "name": "save",
+      "signature": "O.save()",
+      "description": "\nsave( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Save current simulation to file (should be .xml or .xml.bz2 or .yade or .yade.gz). .xml files are bigger than .yade, but can be more "
+    },
+    {
+      "name": "load",
+      "signature": "O.load()",
+      "description": "\nload( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Load simulation from file. The file should have been :yref:`saved<Omega.save>` in the same version of Yade built or compiled with the"
+    },
+    {
+      "name": "saveTmp",
+      "signature": "O.saveTmp()",
+      "description": "\nsaveTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Save simulation to memory (disappears at shutdown), can be loaded later with loadTmp. *mark* optionally distinguishes differ"
+    },
+    {
+      "name": "loadTmp",
+      "signature": "O.loadTmp()",
+      "description": "\nloadTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Load simulation previously stored in memory by saveTmp. *mark* optionally distinguishes multiple saved simulations"
+    }
+  ]
+}

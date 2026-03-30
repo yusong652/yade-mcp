@@ -1,0 +1,72 @@
+{
+  "name": "State",
+  "category": "bodies",
+  "description": "Dynamic state of a body: position, velocity, mass, inertia.",
+  "attributes": [
+    {
+      "name": "angMom",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "angVel",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "densityScaling",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "inertia",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "isDamped",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "mass",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ori",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "pos",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "refOri",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "refPos",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "se3",
+      "type": "tuple",
+      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))"
+    },
+    {
+      "name": "vel",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

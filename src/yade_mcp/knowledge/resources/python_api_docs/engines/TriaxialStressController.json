@@ -1,0 +1,243 @@
+{
+  "name": "TriaxialStressController",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "boxVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "computeStressStrainInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "depth",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "depth0",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "externalWork",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "finalMaxMultiplier",
+      "type": "float",
+      "default": "1.00001"
+    },
+    {
+      "name": "goal1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "goal2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "goal3",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "height",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "height0",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "internalCompaction",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "legacyStressDamping",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "maxMultiplier",
+      "type": "float",
+      "default": "1.001"
+    },
+    {
+      "name": "max_vel",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "max_vel1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "max_vel2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "max_vel3",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "meanStress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "particlesVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "porosity",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "previousMultiplier",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "previousStress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "radiusControlInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "spheresVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "stiffnessUpdateInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "strain",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "strainDamping",
+      "type": "float",
+      "default": "0.99"
+    },
+    {
+      "name": "stressDamping",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "stressMask",
+      "type": "int",
+      "default": "7"
+    },
+    {
+      "name": "thickness",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "updatePorosity",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "volumetricStrain",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "wall_back_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_back_id",
+      "type": "int",
+      "default": "4"
+    },
+    {
+      "name": "wall_bottom_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_bottom_id",
+      "type": "int",
+      "default": "2"
+    },
+    {
+      "name": "wall_front_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_front_id",
+      "type": "int",
+      "default": "5"
+    },
+    {
+      "name": "wall_left_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_left_id",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "wall_right_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_right_id",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "wall_top_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_top_id",
+      "type": "int",
+      "default": "3"
+    },
+    {
+      "name": "width",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "width0",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

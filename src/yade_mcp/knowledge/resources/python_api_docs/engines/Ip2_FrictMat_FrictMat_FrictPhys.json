@@ -1,0 +1,23 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_FrictPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictAngle",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "kn",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "ks",
+      "type": "NoneType",
+      "default": "None"
+    }
+  ]
+}

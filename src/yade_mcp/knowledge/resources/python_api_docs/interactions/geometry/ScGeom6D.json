@@ -1,0 +1,63 @@
+{
+  "name": "ScGeom6D",
+  "category": "interactions",
+  "parent": "ScGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "bending",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "Vector3(0,1,1)"
+    },
+    {
+      "name": "initialOrientation1",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "initialOrientation2",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "twist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "twistCreep",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    }
+  ]
+}

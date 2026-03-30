@@ -1,0 +1,88 @@
+{
+  "name": "VTKRecorder",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "ascii",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "compress",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "fileName",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "multiblock",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "multiblockLS",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "parallelMode",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "recorders",
+      "type": "list",
+      "default": "['all']"
+    },
+    {
+      "name": "skipFacetIntr",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "skipNondynamic",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

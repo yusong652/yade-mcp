@@ -1,0 +1,33 @@
+{
+  "name": "Clump",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "members",
+      "type": "dict",
+      "default": "{}"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

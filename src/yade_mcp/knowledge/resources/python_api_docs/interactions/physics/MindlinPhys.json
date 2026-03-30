@@ -1,0 +1,153 @@
+{
+  "name": "MindlinPhys",
+  "category": "interactions",
+  "parent": "RotStiffFrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Fs",
+      "type": "Vector2",
+      "default": "Vector2(0,0)"
+    },
+    {
+      "name": "adhesionForce",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "beta",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "betan",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "betas",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "initD",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "isAdhesive",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isBroken",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isSliding",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kno",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kr",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kso",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ktw",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "maxBendPl",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentBend",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "momentTwist",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "normalViscous",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "prevU",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "shearElastic",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "shearViscous",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "usElastic",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "usTotal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

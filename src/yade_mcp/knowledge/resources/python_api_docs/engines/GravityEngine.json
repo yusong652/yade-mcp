@@ -1,0 +1,23 @@
+{
+  "name": "GravityEngine",
+  "category": "engines",
+  "parent": "FieldApplier",
+  "description": "",
+  "attributes": [
+    {
+      "name": "gravity",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "warnOnce",
+      "type": "bool",
+      "default": "True"
+    }
+  ]
+}

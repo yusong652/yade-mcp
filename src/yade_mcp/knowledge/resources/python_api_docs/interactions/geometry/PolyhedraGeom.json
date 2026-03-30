@@ -1,0 +1,48 @@
+{
+  "name": "PolyhedraGeom",
+  "category": "interactions",
+  "parent": "IGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "equivalentCrossSection",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "equivalentPenetrationDepth",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "orthonormal_axis",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "penetrationVolume",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "twist_axis",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

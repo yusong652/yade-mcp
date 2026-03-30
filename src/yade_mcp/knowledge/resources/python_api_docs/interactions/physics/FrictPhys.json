@@ -1,0 +1,38 @@
+{
+  "name": "FrictPhys",
+  "category": "interactions",
+  "parent": "NormShearPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    }
+  ]
+}

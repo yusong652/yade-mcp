@@ -1,0 +1,68 @@
+{
+  "name": "ViscElPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Fn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "Fv",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "cn",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "mR",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "mRtype",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    }
+  ]
+}

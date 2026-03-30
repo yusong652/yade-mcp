@@ -1,0 +1,38 @@
+{
+  "name": "ScGeom",
+  "category": "interactions",
+  "parent": "GenericSpheresContact",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "Vector3(0,-nan,4800)"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(2.121995790471206669e-314,2.751831419358424755e-316,0)"
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

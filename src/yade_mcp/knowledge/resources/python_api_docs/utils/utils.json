@@ -1,0 +1,42 @@
+{
+  "name": "utils",
+  "category": "utils",
+  "description": "YADE utility functions for body creation, timestep estimation, and simulation helpers.",
+  "functions": [
+    {
+      "name": "sphere",
+      "signature": "utils.sphere(center, radius, dynamic=None, fixed=False, wire=False, color=None, highlight=False, material=-1, mask=1)",
+      "description": "Create sphere with given parameters; mass and inertia computed automatically.\n\n\tLast assigned material is used by default (*material* = -1), and utils.defaultMaterial() will be used if no material is "
+    },
+    {
+      "name": "wall",
+      "signature": "utils.wall(position, axis, sense=0, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), material=-1, mask=1)",
+      "description": "Return ready-made wall body.\n\n\t:param float-or-Vector3 position: center of the wall. If float, it is the position along given axis, the other 2 components being zero\n\t:param \u2208{0,1,2} axis: orientation"
+    },
+    {
+      "name": "facet",
+      "signature": "utils.facet(vertices, dynamic=None, fixed=True, wire=True, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, noBound=False, material=-1, mask=1)",
+      "description": "Create a :yref:`Facet`-shaped body with given parameters. Body center is chosen as the center of the inscribed circle of the *vertices* triangle\n\n\t:param [Vector3,Vector3,Vector3] vertices: coordinate"
+    },
+    {
+      "name": "box",
+      "signature": "utils.box(center, extents, orientation=Quaternion((1,0,0),0), dynamic=None, fixed=False, wire=False, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, material=-1, mask=1)",
+      "description": "Create box (cuboid) with given parameters.\n\n\t:param Vector3 extents: half-sizes along x,y,z axes. Use can be made of *orientation* parameter in case those box-related axes do not conform the simulatio"
+    },
+    {
+      "name": "unbalancedForce",
+      "signature": "utils.unbalancedForce()",
+      "description": "\nunbalancedForce([  (bool)useMaxForce=False]) -> float :\n    Compute the ratio of mean (or maximum, if *useMaxForce*) summary force on bodies and mean force magnitude on interactions. For perfectly st"
+    },
+    {
+      "name": "PWaveTimeStep",
+      "signature": "utils.PWaveTimeStep()",
+      "description": "\nPWaveTimeStep() -> float :\n    Get timestep accoring to the velocity of P-Wave propagation; computed for spheres and/or polyhedra based on their sizes, rigidities and masses."
+    },
+    {
+      "name": "RayleighWaveTimeStep",
+      "signature": "utils.RayleighWaveTimeStep()",
+      "description": "\nRayleighWaveTimeStep() -> float :\n    Determination of time step according to Rayleigh wave speed of force propagation."
+    }
+  ]
+}

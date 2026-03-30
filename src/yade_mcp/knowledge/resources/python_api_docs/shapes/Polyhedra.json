@@ -1,0 +1,38 @@
+{
+  "name": "Polyhedra",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "seed",
+      "type": "int",
+      "default": "1774880220"
+    },
+    {
+      "name": "size",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "v",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

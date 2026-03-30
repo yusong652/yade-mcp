@@ -1,0 +1,23 @@
+{
+  "name": "ElastMat",
+  "category": "materials",
+  "parent": "Material",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "name": "JCFpmPhys",
+  "category": "interactions",
+  "parent": "NormShearPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "FnMax",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "FsMax",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "checkedForCluster",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "clusterInts",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "clusteredEvent",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "computedCentroid",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "crackJointAperture",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "crossSection",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dilation",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "elapsedIter",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "eventBeginTime",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "eventNumber",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "firstMomentCalc",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "initD",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "interactionsAdded",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isBroken",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isCohesive",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isOnJoint",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isOnSlot",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "jointCumulativeSliding",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "jointNormal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "kineticEnergy",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentBroken",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "momentCalculated",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "momentCentroid",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "momentEnergy",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentEnergyChange",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentMagnitude",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "more",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "nearbyFound",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "nearbyInts",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "originalClusterEvent",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "originalEvent",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "strainEnergy",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "tanDilationAngle",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "tanFrictionAngle",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "temporalWindow",
+      "type": "int",
+      "default": "0"
+    }
+  ]
+}

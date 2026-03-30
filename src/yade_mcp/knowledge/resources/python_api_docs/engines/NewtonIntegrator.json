@@ -1,0 +1,37 @@
+{
+  "name": "NewtonIntegrator",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "Integrate acceleration to velocity and velocity to position using Newton's second law. Handles both translational and rotational motion. Most common integrator in YADE simulations.",
+  "attributes": [
+    {
+      "name": "gravity",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Gravitational acceleration applied to all dynamic bodies. Example: (0, 0, -9.81) for Earth gravity."
+    },
+    {
+      "name": "damping",
+      "type": "float",
+      "default": "0.2",
+      "description": "Non-viscous damping coefficient (0-1). Applies numerical damping to accelerations to help reach quasi-static equilibrium faster. 0 = no damping, typically 0.2-0.4."
+    },
+    {
+      "name": "exactAsphericalRot",
+      "type": "bool",
+      "default": "true",
+      "description": "Use exact aspherical body rotation integration. More accurate for non-spherical bodies (clumps)."
+    },
+    {
+      "name": "kinEnergy",
+      "type": "float",
+      "read_only": true,
+      "description": "Total kinetic energy of the simulation (translational + rotational)."
+    }
+  ],
+  "examples": [
+    "NewtonIntegrator(gravity=(0, 0, -9.81), damping=0.3)",
+    "NewtonIntegrator(gravity=(0, 0, -9.81), damping=0.2, exactAsphericalRot=True)"
+  ],
+  "see_also": ["ForceResetter", "InsertionSortCollider"]
+}

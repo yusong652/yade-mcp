@@ -1,0 +1,128 @@
+{
+  "name": "CohFrictPhys",
+  "category": "interactions",
+  "parent": "RotStiffFrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesionBroken",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "cohesionDisablesFriction",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "creep_viscosity",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "fragile",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "initCohesion",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kr",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ktw",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "maxRollPl",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "maxTwistPl",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentRotationLaw",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "moment_bending",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "moment_twist",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "normalAdhesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "rollingAdhesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearAdhesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "twistingAdhesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "unp",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "unpMax",
+      "type": "float",
+      "default": "-1.0"
+    }
+  ]
+}

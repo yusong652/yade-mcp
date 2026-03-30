@@ -1,0 +1,18 @@
+{
+  "name": "Ig2_Sphere_Sphere_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "avoidGranularRatcheting",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "interactionDetectionFactor",
+      "type": "float",
+      "default": "1.0"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Law2_ScGeom_FrictPhys_CundallStrack",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "sphericalBodies",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "traceEnergy",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

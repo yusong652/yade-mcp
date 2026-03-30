@@ -1,0 +1,23 @@
+{
+  "name": "InteractionLoop",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "callbacks",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "loopOnSortedInteractions",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "warnRoleIg2",
+      "type": "bool",
+      "default": "True"
+    }
+  ]
+}

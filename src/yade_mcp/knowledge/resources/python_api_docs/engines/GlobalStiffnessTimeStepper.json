@@ -1,0 +1,58 @@
+{
+  "name": "GlobalStiffnessTimeStepper",
+  "category": "engines",
+  "parent": "TimeStepper",
+  "description": "",
+  "attributes": [
+    {
+      "name": "active",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "defaultDt",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "densityScaling",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "maxDt",
+      "type": "float",
+      "default": "1.7976931348623157e+308"
+    },
+    {
+      "name": "parallelMode",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "previousDt",
+      "type": "float",
+      "default": "1.7976931348623157e+308"
+    },
+    {
+      "name": "targetDt",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "timestepSafetyCoefficient",
+      "type": "float",
+      "default": "0.8"
+    },
+    {
+      "name": "viscEl",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

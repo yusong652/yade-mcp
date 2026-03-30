@@ -1,0 +1,83 @@
+{
+  "name": "WireMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "as",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "diameter",
+      "type": "float",
+      "default": "0.0027"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "isDoubleTwist",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "lambdaEps",
+      "type": "float",
+      "default": "0.47"
+    },
+    {
+      "name": "lambdaF",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "lambdak",
+      "type": "float",
+      "default": "0.73"
+    },
+    {
+      "name": "lambdau",
+      "type": "float",
+      "default": "0.2"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "seed",
+      "type": "int",
+      "default": "12345"
+    },
+    {
+      "name": "strainStressValues",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "strainStressValuesDT",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "type",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

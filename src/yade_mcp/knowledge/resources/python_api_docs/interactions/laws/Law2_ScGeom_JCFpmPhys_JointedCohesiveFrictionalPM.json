@@ -1,0 +1,98 @@
+{
+  "name": "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "clusterMoments",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "computedCentroid",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "cracksFileExist",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "eventNumber",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "momentFudgeFactor",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "momentRadiusFactor",
+      "type": "float",
+      "default": "5.0"
+    },
+    {
+      "name": "momentsFileExist",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "nbShearCracks",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "nbTensCracks",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "neverErase",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "recordCracks",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "recordMoments",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "smoothJoint",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "totalCracksSurface",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "totalShearCracksE",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "totalTensCracksE",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "useStrainEnergy",
+      "type": "bool",
+      "default": "True"
+    }
+  ]
+}

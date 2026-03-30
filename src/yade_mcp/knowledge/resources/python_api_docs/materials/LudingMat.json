@@ -1,0 +1,48 @@
+{
+  "name": "LudingMat",
+  "category": "materials",
+  "parent": "Material",
+  "description": "",
+  "attributes": [
+    {
+      "name": "G0",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "PhiF",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "k1",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "kc",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "kp",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "nan"
+    }
+  ]
+}

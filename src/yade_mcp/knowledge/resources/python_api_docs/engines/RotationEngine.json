@@ -1,0 +1,33 @@
+{
+  "name": "RotationEngine",
+  "category": "engines",
+  "parent": "KinematicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "angularVelocity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "rotateAroundZero",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "rotationAxis",
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
+    },
+    {
+      "name": "zeroPoint",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

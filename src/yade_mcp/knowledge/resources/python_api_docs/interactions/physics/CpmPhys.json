@@ -1,0 +1,198 @@
+{
+  "name": "CpmPhys",
+  "category": "interactions",
+  "parent": "NormShearPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "E",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "Fn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "Fs",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "G",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "crossSection",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "cummBetaCount",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "cummBetaIter",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "damLaw",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "dmgOverstress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dmgRateExp",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dmgStrain",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dmgTau",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "epsCrackOnset",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "epsFracture",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "epsN",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "epsNPl",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "epsT",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "epsTPl",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "equivStrainShearContrib",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "isCohesive",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isoPrestress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kappaD",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "neverDamage",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "omega",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "plRateExp",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "plTau",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "refLength",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "refPD",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "relDuctility",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "relResidualStrength",
+      "type": "float",
+      "default": "6.94451619504194e-310"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "sigmaN",
+      "type": "float",
+      "default": "6.9445161950388e-310"
+    },
+    {
+      "name": "sigmaT",
+      "type": "Vector3",
+      "default": "Vector3(6.944536850125823878e-310,6.944516195045103742e-310,6.944518512660408586"
+    },
+    {
+      "name": "tanFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "undamagedCohesion",
+      "type": "float",
+      "default": "nan"
+    }
+  ]
+}

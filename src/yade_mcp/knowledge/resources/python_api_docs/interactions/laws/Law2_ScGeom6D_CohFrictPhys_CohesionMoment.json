@@ -1,0 +1,43 @@
+{
+  "name": "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "always_use_moment_law",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "creep_viscosity",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "neverErase",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "shear_creep",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "traceEnergy",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "twist_creep",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "useIncrementalForm",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

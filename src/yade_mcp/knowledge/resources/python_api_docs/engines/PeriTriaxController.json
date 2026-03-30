@@ -1,0 +1,108 @@
+{
+  "name": "PeriTriaxController",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "absStressTol",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "currUnbalanced",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "doneHook",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "dynCell",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "externalWork",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "globUpdate",
+      "type": "int",
+      "default": "5"
+    },
+    {
+      "name": "goal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "growDamping",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "mass",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "maxBodySpan",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "maxStrainRate",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "maxUnbalanced",
+      "type": "float",
+      "default": "0.0001"
+    },
+    {
+      "name": "prevGrow",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "relStressTol",
+      "type": "float",
+      "default": "3e-05"
+    },
+    {
+      "name": "stiff",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "strain",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "strainRate",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "stress",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "stressMask",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "stressTensor",
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+    }
+  ]
+}

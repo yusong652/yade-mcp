@@ -11,6 +11,7 @@ from fastmcp import FastMCP
 from yade_mcp import __version__
 from yade_mcp.bridge import close_bridge_client
 from yade_mcp.tools import (
+    browse_api,
     check_task_status,
     execute_code,
     execute_task,
@@ -22,13 +23,16 @@ mcp = FastMCP(
     "YADE MCP Server",
     instructions=(
         "YADE (Yet Another Dynamic Engine) MCP server. "
-        "Provides tools for executing YADE DEM simulations "
-        "and managing long-running tasks through a yade-mcp-bridge "
-        "WebSocket service running inside a YADE process."
+        "Provides tools for browsing YADE Python API documentation "
+        "and for executing DEM simulations and managing long-running tasks "
+        "through a yade-mcp-bridge WebSocket service running inside a YADE process."
     ),
 )
 
 logger = logging.getLogger("yade-mcp.server")
+
+# Register documentation tools
+browse_api.register(mcp)
 
 # Register execution tools
 execute_task.register(mcp)

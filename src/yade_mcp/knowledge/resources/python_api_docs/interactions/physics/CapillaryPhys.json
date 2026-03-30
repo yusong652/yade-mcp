@@ -1,0 +1,88 @@
+{
+  "name": "CapillaryPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Delta1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "Delta2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "fCap",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "fusionNumber",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "isBroken",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "meniscus",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "nn11",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "nn33",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "vMeniscus",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "name": "Body",
+  "category": "bodies",
+  "description": "A simulation body with shape, material, state, and bound.",
+  "attributes": [
+    {
+      "name": "aspherical",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "bound",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "bounded",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "clumpId",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "dynamic",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "flags",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "groupMask",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "isClump",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isClumpMember",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isStandalone",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "isSubdomain",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "iterBorn",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "mat",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "material",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "shape",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "state",
+      "type": "State",
+      "default": "<State instance at 0x388fd10>"
+    },
+    {
+      "name": "subdomain",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "timeBorn",
+      "type": "float",
+      "default": "-1.0"
+    }
+  ]
+}

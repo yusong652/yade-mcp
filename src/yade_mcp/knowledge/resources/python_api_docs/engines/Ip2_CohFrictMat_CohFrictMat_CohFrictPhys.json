@@ -1,0 +1,43 @@
+{
+  "name": "Ip2_CohFrictMat_CohFrictMat_CohFrictPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictAngle",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "normalCohesion",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "rollingCohesion",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "setCohesionNow",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "setCohesionOnNewContacts",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "shearCohesion",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "twistingCohesion",
+      "type": "NoneType",
+      "default": "None"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "VolumeGeom",
+  "category": "interactions",
+  "parent": "IGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "averagePenetrationDepth",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "contactArea",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "orthonormal_axis",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "penetrationVolume",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "twist_axis",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

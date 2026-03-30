@@ -1,0 +1,83 @@
+{
+  "name": "CpmMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "damLaw",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "4800.0"
+    },
+    {
+      "name": "dmgRateExp",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dmgTau",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "epsCrackOnset",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "equivStrainShearContrib",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "isoPrestress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "neverDamage",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "plRateExp",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "plTau",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "relDuctility",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "sigmaT",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

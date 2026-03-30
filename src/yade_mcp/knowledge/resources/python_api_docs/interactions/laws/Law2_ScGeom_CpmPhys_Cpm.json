@@ -1,0 +1,38 @@
+{
+  "name": "Law2_ScGeom_CpmPhys_Cpm",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "epsSoft",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "omegaThreshold",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "relKnSoft",
+      "type": "float",
+      "default": "0.3"
+    },
+    {
+      "name": "yieldEllipseShift",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "yieldLogSpeed",
+      "type": "float",
+      "default": "0.1"
+    },
+    {
+      "name": "yieldSurfType",
+      "type": "int",
+      "default": "2"
+    }
+  ]
+}

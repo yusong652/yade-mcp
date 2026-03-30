@@ -1,0 +1,48 @@
+{
+  "name": "L3Geom",
+  "category": "interactions",
+  "parent": "GenericSpheresContact",
+  "description": "",
+  "attributes": [
+    {
+      "name": "F",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "Vector3(1.011846442682872922e-320,0,6.944499766239071868e-310)"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(2.547345948847582943e-316,0,6.944499766182155505e-310)"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "trsf",
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
+    },
+    {
+      "name": "u",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "u0",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    }
+  ]
+}

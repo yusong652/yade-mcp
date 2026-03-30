@@ -1,0 +1,98 @@
+{
+  "name": "InsertionSortCollider",
+  "category": "engines",
+  "parent": "Collider",
+  "description": "",
+  "attributes": [
+    {
+      "name": "allowBiggerThanPeriod",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "avoidSelfInteractionMask",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "doSort",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "fastestBodyMaxDist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "keepListsShort",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "minSweepDistFactor",
+      "type": "float",
+      "default": "0.1"
+    },
+    {
+      "name": "newton",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "numAction",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "numReinit",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "overlapTolerance",
+      "type": "float",
+      "default": "1e-07"
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "smartInsertErase",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "sortAxis",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "sortThenCollide",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "strideActive",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "targetInterv",
+      "type": "int",
+      "default": "100"
+    },
+    {
+      "name": "updatingDispFactor",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "verletDist",
+      "type": "float",
+      "default": "-0.5"
+    }
+  ]
+}

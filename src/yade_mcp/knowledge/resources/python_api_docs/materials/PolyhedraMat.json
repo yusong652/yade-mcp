@@ -1,0 +1,73 @@
+{
+  "name": "PolyhedraMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "IsSplitable",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "Wei_P",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "Wei_S0",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "Wei_V0",
+      "type": "float",
+      "default": "1e-09"
+    },
+    {
+      "name": "Wei_m",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "sigmaCD",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "sigmaCZ",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "strength",
+      "type": "float",
+      "default": "100.0"
+    },
+    {
+      "name": "strengthTau",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

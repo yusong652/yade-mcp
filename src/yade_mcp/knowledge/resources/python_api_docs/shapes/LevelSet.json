@@ -1,0 +1,83 @@
+{
+  "name": "LevelSet",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "axesAABE",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "corners",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "distField",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "hasAABE",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "lsGrid",
+      "type": "RegularGrid",
+      "default": "<RegularGrid instance at 0x389ba00>"
+    },
+    {
+      "name": "n_neighborsNodes",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "neighborsNodes",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "smearCoeff",
+      "type": "float",
+      "default": "1.5"
+    },
+    {
+      "name": "sphericity",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "starLike",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "surfNodes",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "twoD",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

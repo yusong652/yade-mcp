@@ -1,0 +1,18 @@
+{
+  "name": "Ig2_Facet_Sphere_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "hertzian",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "shrinkFactor",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

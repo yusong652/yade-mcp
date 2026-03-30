@@ -1,0 +1,78 @@
+{
+  "name": "JCFpmMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "jointCohesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "jointDilationAngle",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "jointFrictionAngle",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "jointNormalStiffness",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "jointShearStiffness",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "jointTensileStrength",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "residualFrictionAngle",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "tensileStrength",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "type",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}
