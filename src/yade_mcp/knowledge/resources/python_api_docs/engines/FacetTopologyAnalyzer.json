@@ -1,0 +1,28 @@
+{
+  "name": "FacetTopologyAnalyzer",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "commonEdgesFound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "commonVerticesFound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "projectionAxis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relTolerance",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

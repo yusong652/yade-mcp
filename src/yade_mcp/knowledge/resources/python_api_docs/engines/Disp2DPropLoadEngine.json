@@ -1,0 +1,63 @@
+{
+  "name": "Disp2DPropLoadEngine",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "LOG",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxback",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxbas",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxfront",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxleft",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxright",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_topbox",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nbre_iter",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "theta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "v",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

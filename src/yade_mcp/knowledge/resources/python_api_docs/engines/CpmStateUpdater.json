@@ -1,0 +1,43 @@
+{
+  "name": "CpmStateUpdater",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "avgRelResidual",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxOmega",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

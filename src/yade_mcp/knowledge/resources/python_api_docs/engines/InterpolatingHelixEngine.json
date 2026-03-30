@@ -1,0 +1,63 @@
+{
+  "name": "InterpolatingHelixEngine",
+  "category": "engines",
+  "parent": "HelixEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "angleTurned",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angularVelocities",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angularVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "linearVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotateAroundZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotationAxis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "slope",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "times",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wrap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zeroPoint",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

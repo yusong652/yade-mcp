@@ -1,0 +1,7 @@
+{
+  "name": "Ig2_Wall_Polyhedra_PolyhedraGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": []
+}

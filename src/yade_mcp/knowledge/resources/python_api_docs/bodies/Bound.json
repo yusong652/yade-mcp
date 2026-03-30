@@ -1,0 +1,38 @@
+{
+  "name": "Bound",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "lastUpdateIter",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "min",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sweepLength",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

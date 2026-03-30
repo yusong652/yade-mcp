@@ -1,0 +1,883 @@
+{
+  "name": "PartialSatClayEngine",
+  "category": "engines",
+  "parent": "PartialSatClayEngineT",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Ka",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Kw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Po",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SrM",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SsM",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "a",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "airViscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "allCellsFractured",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaBound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaBoundValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaExpRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alpham",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "apertureFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "averageCavityPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bIntrinsicPerm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betaExpRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betaLaplaceShape",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betam",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockCellPoroThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockHook",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockIsoCells",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondIsPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondIsTemperature",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryUseMaxMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryXPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "breakControlledRemesh",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "brokenBondsRemoveCapillaryforces",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "calcCrackArea",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFluidDensity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFlux",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "changeCrackSaturation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "clampKValues",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "collectedDT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "computeFracturePaths",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "constantPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "controlCavityPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "controlCavityVolumeChange",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "convertClumps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crackAreaFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crackCellPoroThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crackModelActive",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crackedCellTotal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "debug",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "decoupleForces",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "defTolerance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "desiredPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "directlyModifySatFromPoro",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "displacementBasedCracks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "doInterpolate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "dt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "elapsedIters",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "eps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "epsVolMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "first",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fixTriUpdatePermInt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fixedAlpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "flatThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidBulkModulus",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidCp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "forceConfinement",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "forceMetis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fracBasedPointSuctionCalc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fracPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "freeSwelling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "freezePorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "freezeSaturation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "gasPermFirst",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "getCHOLMODPerfTimings",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "getGasPerm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "homogeneousSuctionValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "idOffset",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ignoredBody",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "imageryFilePath",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iniVoidVolumes",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kappaWeibullScale",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "lambdaWeibullShape",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "lmbda",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "manualCrackPerm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "matricSuctionRatio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxKdivKmean",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxPo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxPoroClamp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanInitialPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanKStat",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanK_opt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanPoreSizeDiameter",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meshUpdateInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "microStructureAdh",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "microStructureE",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "microStructureNu",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "microStructurePhi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "microStructureRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minCellVol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minKdivKmean",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minLambdao",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minMicroRadFrac",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minParticleSwellFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minPoroClamp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mineralPoro",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minimumPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "multithread",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nUnsatPerm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numFactorizeThreads",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numSolveThreads",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onlyFractureExposedCracks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pAir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "partialSatDT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "partialSatEngine",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "particleSwelling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permAreaFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permClamp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permeabilityFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permeabilityMap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phiZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "porosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pressureForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pumpTorque",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "resetOriginalParticleValues",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "resetVolumeSolids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "residualAperture",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sineAverage",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sineMagnitude",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "slipBoundary",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stiffness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "suction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "swelling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tempDependentViscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalBndCondValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalEngine",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "timeDimension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tolerance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalCracks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalSpecimenVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalVolChange",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twistTorque",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updateTriangulation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useForceForCracks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useKeq",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useKozeny",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useOpeningPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useSolver",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousNormalBodyStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousShear",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousShearBodyStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumeCorrection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumeFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumes",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wallIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wallThickness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterSurfaceTension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waveAction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "xmax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "xmin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ymax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ymin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zmax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zmin",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

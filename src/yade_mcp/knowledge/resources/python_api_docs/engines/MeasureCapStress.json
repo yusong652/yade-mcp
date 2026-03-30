@@ -1,0 +1,83 @@
+{
+  "name": "MeasureCapStress",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "capillaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "debug",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "muGamma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "muSnw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "muSsw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "muVw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigmaCap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "surfaceTension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vW",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wettAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

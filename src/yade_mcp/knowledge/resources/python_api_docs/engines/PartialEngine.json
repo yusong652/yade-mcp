@@ -1,0 +1,13 @@
+{
+  "name": "PartialEngine",
+  "category": "engines",
+  "parent": "Engine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

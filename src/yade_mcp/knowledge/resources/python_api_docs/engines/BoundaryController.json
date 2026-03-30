@@ -1,0 +1,7 @@
+{
+  "name": "BoundaryController",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": []
+}

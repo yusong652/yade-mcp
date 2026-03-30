@@ -1,0 +1,18 @@
+{
+  "name": "Ig2_Sphere_Polyhedra_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "edgeCoeff",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vertexCoeff",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

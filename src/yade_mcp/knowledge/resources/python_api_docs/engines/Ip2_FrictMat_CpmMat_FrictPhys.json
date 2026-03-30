@@ -1,0 +1,13 @@
+{
+  "name": "Ip2_FrictMat_CpmMat_FrictPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

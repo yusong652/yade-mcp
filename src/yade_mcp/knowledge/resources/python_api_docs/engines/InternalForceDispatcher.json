@@ -1,0 +1,13 @@
+{
+  "name": "InternalForceDispatcher",
+  "category": "engines",
+  "parent": "Dispatcher",
+  "description": "",
+  "attributes": [
+    {
+      "name": "functors",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

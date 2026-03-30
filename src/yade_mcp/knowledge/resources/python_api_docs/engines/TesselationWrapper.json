@@ -1,0 +1,38 @@
+{
+  "name": "TesselationWrapper",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alphaCapsVol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "far",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "grad_u",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "groupMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "n_spheres",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

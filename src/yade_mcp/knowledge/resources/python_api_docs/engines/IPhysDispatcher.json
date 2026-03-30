@@ -1,0 +1,13 @@
+{
+  "name": "IPhysDispatcher",
+  "category": "engines",
+  "parent": "Dispatcher",
+  "description": "",
+  "attributes": [
+    {
+      "name": "functors",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

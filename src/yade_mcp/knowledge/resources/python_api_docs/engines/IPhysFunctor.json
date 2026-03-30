@@ -1,0 +1,7 @@
+{
+  "name": "IPhysFunctor",
+  "category": "engines",
+  "parent": "Functor",
+  "description": "",
+  "attributes": []
+}

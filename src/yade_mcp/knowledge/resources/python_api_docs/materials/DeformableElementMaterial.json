@@ -1,0 +1,13 @@
+{
+  "name": "DeformableElementMaterial",
+  "category": "materials",
+  "parent": "Material",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

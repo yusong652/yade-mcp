@@ -1,0 +1,83 @@
+{
+  "name": "ResetRandomPosition",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "angularVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angularVelocityRange",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "factoryFacets",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxAttempts",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "point",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "subscribedBodies",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "velocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "velocityRange",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumeSection",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

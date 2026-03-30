@@ -1,0 +1,48 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_MindlinCapillaryPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "betan",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betas",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "en",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "es",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "eta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "gamma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "krot",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ktwist",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

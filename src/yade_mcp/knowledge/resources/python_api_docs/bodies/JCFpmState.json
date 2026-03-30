@@ -1,0 +1,173 @@
+{
+  "name": "JCFpmState",
+  "category": "bodies",
+  "parent": "ThermalState",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Cp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Tcondition",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angMom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryId",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "damageIndex",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "delRadius",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "densityScaling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "inertia",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isCavity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isDamped",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "joint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "jointNormal1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "jointNormal2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "jointNormal3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nbBrokenBonds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nbInitBonds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "oldTemp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onJoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ori",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refOri",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "se3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stabilityCoefficient",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stepFlux",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "temp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalMass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vel",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

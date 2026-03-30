@@ -1,0 +1,33 @@
+{
+  "name": "SplitPolyTauMax",
+  "category": "engines",
+  "parent": "PolyhedraSplitter",
+  "description": "",
+  "attributes": [
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

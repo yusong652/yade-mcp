@@ -1,0 +1,13 @@
+{
+  "name": "Law2_ScGeom_MindlinPhys_MindlinDeresiewitz",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

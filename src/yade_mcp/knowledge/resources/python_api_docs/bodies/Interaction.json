@@ -1,0 +1,53 @@
+{
+  "name": "Interaction",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cellDist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "geom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isActive",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isReal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterBorn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterMadeReal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phys",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

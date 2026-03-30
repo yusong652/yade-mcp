@@ -1,0 +1,38 @@
+{
+  "name": "Law2_VolumeGeom_ViscoFrictPhys_Elastic",
+  "category": "interactions",
+  "parent": "Law2_VolumeGeom_FrictPhys_Elastic",
+  "description": "",
+  "attributes": [
+    {
+      "name": "creepStiffness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearCreep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumePower",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

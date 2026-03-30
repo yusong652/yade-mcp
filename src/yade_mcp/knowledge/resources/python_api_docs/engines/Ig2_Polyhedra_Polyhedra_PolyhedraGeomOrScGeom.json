@@ -1,0 +1,23 @@
+{
+  "name": "Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "createScGeom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ig2polyhedraGeom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ig2scGeom",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

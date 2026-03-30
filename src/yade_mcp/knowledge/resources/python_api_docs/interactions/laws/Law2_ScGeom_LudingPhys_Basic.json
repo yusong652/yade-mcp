@@ -1,0 +1,7 @@
+{
+  "name": "Law2_ScGeom_LudingPhys_Basic",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": []
+}

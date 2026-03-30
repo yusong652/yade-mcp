@@ -1,0 +1,13 @@
+{
+  "name": "Bo1_Node_Aabb",
+  "category": "engines",
+  "parent": "BoundFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "aabbEnlargeFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

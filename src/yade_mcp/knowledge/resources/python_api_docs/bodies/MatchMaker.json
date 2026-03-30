@@ -1,0 +1,23 @@
+{
+  "name": "MatchMaker",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "algo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "matches",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "val",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

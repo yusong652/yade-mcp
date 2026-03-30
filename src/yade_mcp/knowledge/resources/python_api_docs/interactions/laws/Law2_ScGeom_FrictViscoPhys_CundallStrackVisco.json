@@ -1,0 +1,23 @@
+{
+  "name": "Law2_ScGeom_FrictViscoPhys_CundallStrackVisco",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sphericalBodies",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

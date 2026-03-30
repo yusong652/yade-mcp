@@ -1,0 +1,18 @@
+{
+  "name": "SpatialQuickSortCollider",
+  "category": "engines",
+  "parent": "Collider",
+  "description": "",
+  "attributes": [
+    {
+      "name": "avoidSelfInteractionMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundDispatcher",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

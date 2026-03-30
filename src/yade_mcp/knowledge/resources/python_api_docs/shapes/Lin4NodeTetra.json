@@ -1,0 +1,38 @@
+{
+  "name": "Lin4NodeTetra",
+  "category": "shapes",
+  "parent": "DeformableElement",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "elementframe",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "faces",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "localmap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": []
+}

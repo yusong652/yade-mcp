@@ -1,0 +1,83 @@
+{
+  "name": "PotentialParticleVTKRecorder",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "REC_COLORS",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "REC_ID",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "REC_INTERACTION",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "REC_VELOCITY",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fileName",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxDimension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sampleX",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sampleY",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sampleZ",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twoDimension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

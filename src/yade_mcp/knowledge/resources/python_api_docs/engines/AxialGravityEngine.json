@@ -1,0 +1,28 @@
+{
+  "name": "AxialGravityEngine",
+  "category": "engines",
+  "parent": "FieldApplier",
+  "description": "",
+  "attributes": [
+    {
+      "name": "acceleration",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "axisDirection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "axisPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mask",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

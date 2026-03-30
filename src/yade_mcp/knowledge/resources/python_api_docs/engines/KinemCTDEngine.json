@@ -1,0 +1,98 @@
+{
+  "name": "KinemCTDEngine",
+  "category": "engines",
+  "parent": "KinemSimpleShearBox",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "LOG",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "compSpeed",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "f0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "firstRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxback",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxbas",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxfront",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxleft",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_boxright",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id_topbox",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max_vel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigma_save",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "targetSigma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "temoin_save",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wallDamping",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "y0",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

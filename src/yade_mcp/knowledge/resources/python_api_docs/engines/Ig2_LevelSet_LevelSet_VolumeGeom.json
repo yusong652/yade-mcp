@@ -1,0 +1,23 @@
+{
+  "name": "Ig2_LevelSet_LevelSet_VolumeGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "nRefineOctree",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "smearCoeffOctree",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useAABE",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

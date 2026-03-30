@@ -1,0 +1,68 @@
+{
+  "name": "SegmentedStateUpdater",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "activateWettability",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "interParticleExchangeCoeff",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "intraParticleExchangeCoeff",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phiResolution",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevTime",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "reInitCohesion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thetaResolution",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

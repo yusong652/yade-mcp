@@ -1,0 +1,7 @@
+{
+  "name": "Ip2_2xInelastCohFrictMat_InelastCohFrictPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": []
+}

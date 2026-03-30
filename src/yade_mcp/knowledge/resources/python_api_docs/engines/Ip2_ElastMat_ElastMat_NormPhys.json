@@ -1,0 +1,7 @@
+{
+  "name": "Ip2_ElastMat_ElastMat_NormPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": []
+}

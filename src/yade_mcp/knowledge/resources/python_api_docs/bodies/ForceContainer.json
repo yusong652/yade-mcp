@@ -1,0 +1,7 @@
+{
+  "name": "ForceContainer",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,63 @@
+{
+  "name": "ChCylGeom6D",
+  "category": "interactions",
+  "parent": "ScGeom6D",
+  "description": "",
+  "attributes": [
+    {
+      "name": "bending",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialOrientation1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialOrientation2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearInc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twistCreep",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

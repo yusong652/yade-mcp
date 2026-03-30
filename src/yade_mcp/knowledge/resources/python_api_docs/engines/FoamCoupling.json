@@ -1,0 +1,58 @@
+{
+  "name": "FoamCoupling",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "comm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "dataExchangeInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidDensity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidDomains",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "foamDeltaT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "foamPath",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "foamVersion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isGaussianInterp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numParticles",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "particleDensity",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

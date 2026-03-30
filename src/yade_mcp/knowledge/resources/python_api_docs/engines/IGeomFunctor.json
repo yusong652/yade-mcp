@@ -1,0 +1,7 @@
+{
+  "name": "IGeomFunctor",
+  "category": "engines",
+  "parent": "Functor",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,98 @@
+{
+  "name": "ScGridCoGeom",
+  "category": "interactions",
+  "parent": "ScGeom6D",
+  "description": "",
+  "attributes": [
+    {
+      "name": "bending",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id4",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "id5",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialOrientation1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialOrientation2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isDuplicate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearInc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "trueInt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twistCreep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "weight",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

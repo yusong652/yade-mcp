@@ -1,0 +1,53 @@
+{
+  "name": "LubricationPDFEngine",
+  "category": "engines",
+  "parent": "PDFEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "filename",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numDiscretizeAnglePhi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numDiscretizeAngleTheta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "warnedOnce",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

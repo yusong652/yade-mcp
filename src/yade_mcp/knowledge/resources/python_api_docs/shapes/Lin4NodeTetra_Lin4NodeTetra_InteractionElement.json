@@ -1,0 +1,43 @@
+{
+  "name": "Lin4NodeTetra_Lin4NodeTetra_InteractionElement",
+  "category": "shapes",
+  "parent": "DeformableCohesiveElement",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "elementframe",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "faces",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "localmap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nodepairs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

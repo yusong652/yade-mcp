@@ -1,0 +1,83 @@
+{
+  "name": "CapillarityEngine",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "binaryFusion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "createDistantMeniscii",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "disp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "epsilonMean",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fusionDetection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hertzInitialized",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hertzOn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "imposePressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialized",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "inputFilename",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "liquidTension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalVolumeConstant",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalVolumeofWater",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

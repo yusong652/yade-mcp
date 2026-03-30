@@ -1,0 +1,78 @@
+{
+  "name": "WireState",
+  "category": "bodies",
+  "parent": "State",
+  "description": "",
+  "attributes": [
+    {
+      "name": "angMom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "angVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "densityScaling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "inertia",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isDamped",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numBrokenLinks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ori",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refOri",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "se3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vel",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

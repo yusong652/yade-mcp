@@ -1,0 +1,33 @@
+{
+  "name": "VESupportEngine",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "bIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "c1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "c2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k2",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

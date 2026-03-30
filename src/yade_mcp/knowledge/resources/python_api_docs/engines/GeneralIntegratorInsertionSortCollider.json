@@ -1,0 +1,103 @@
+{
+  "name": "GeneralIntegratorInsertionSortCollider",
+  "category": "engines",
+  "parent": "InsertionSortCollider",
+  "description": "",
+  "attributes": [
+    {
+      "name": "allowBiggerThanPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "avoidSelfInteractionMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundDispatcher",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "doSort",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fastestBodyMaxDist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "keepListsShort",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minSweepDistFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "newton",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numAction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numReinit",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "overlapTolerance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "periodic",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "smartInsertErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sortAxis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sortThenCollide",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strideActive",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "targetInterv",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updatingDispFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "verletDist",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

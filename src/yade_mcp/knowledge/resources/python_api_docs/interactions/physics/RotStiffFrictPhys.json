@@ -1,0 +1,48 @@
+{
+  "name": "RotStiffFrictPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kr",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ktw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

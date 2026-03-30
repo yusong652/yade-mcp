@@ -1,0 +1,43 @@
+{
+  "name": "Law2_SCG_KnKsPhys_KnKsLaw",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Talesnick",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "allowBreakage",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "allowViscousAttraction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialOverlapDistance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "preventGranularRatcheting",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

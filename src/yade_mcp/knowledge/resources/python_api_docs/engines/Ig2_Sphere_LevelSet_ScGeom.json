@@ -1,0 +1,7 @@
+{
+  "name": "Ig2_Sphere_LevelSet_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": []
+}

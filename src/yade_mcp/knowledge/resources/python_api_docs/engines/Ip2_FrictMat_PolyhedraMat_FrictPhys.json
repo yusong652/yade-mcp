@@ -1,0 +1,7 @@
+{
+  "name": "Ip2_FrictMat_PolyhedraMat_FrictPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": []
+}

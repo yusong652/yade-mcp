@@ -1,0 +1,28 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_CapillaryPhysDelaunay",
+  "category": "engines",
+  "parent": "Ip2_FrictMat_FrictMat_FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "computeDefault",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

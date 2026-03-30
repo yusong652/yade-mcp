@@ -1,0 +1,13 @@
+{
+  "name": "FEInternalForceEngine",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "internalforcedispatcher",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

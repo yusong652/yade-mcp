@@ -1,0 +1,38 @@
+{
+  "name": "BoundDispatcher",
+  "category": "engines",
+  "parent": "Dispatcher",
+  "description": "",
+  "attributes": [
+    {
+      "name": "activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "functors",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minSweepDistFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sweepDist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "targetInterv",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updatingDispFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

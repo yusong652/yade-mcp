@@ -1,0 +1,138 @@
+{
+  "name": "SpheresFactory",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "PSDcalculateMass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "PSDcum",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "PSDsizes",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "exactDiam",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "goalMass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "massFlowRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "materialId",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxAttempt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxMass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxParticles",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numParticles",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "silent",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stopIfFailed",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalMass",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vMin",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

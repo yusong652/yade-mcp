@@ -1,0 +1,28 @@
+{
+  "name": "GenericSpheresContact",
+  "category": "interactions",
+  "parent": "IGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR2",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

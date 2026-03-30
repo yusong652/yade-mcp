@@ -1,0 +1,13 @@
+{
+  "name": "EnergyTracker",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "energies",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Ig2_Polyhedra_Polyhedra_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

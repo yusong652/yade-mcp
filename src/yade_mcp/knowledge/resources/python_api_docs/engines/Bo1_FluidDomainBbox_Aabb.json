@@ -1,0 +1,7 @@
+{
+  "name": "Bo1_FluidDomainBbox_Aabb",
+  "category": "engines",
+  "parent": "BoundFunctor",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

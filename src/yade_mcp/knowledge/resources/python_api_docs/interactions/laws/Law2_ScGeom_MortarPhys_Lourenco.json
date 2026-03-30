@@ -1,0 +1,7 @@
+{
+  "name": "Law2_ScGeom_MortarPhys_Lourenco",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": []
+}

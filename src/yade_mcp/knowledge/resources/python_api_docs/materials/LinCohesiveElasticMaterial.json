@@ -1,0 +1,23 @@
+{
+  "name": "LinCohesiveElasticMaterial",
+  "category": "materials",
+  "parent": "CohesiveDeformableElementMaterial",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "poissonratio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "youngmodulus",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

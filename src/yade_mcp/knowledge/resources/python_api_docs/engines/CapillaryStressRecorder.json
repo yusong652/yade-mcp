@@ -1,0 +1,48 @@
+{
+  "name": "CapillaryStressRecorder",
+  "category": "engines",
+  "parent": "Recorder",
+  "description": "",
+  "attributes": [
+    {
+      "name": "addIterNum",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "file",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "truncate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

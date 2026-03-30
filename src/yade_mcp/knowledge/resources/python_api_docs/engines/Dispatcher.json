@@ -1,0 +1,7 @@
+{
+  "name": "Dispatcher",
+  "category": "engines",
+  "parent": "Engine",
+  "description": "",
+  "attributes": []
+}

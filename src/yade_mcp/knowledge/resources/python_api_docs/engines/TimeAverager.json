@@ -1,0 +1,28 @@
+{
+  "name": "TimeAverager",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "computeContactForceField",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "grid",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigma",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

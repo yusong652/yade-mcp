@@ -1,0 +1,7 @@
+{
+  "name": "InteractionContainer",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": []
+}

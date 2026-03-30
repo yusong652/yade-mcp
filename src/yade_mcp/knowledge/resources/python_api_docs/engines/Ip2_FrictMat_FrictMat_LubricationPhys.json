@@ -1,0 +1,23 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_LubricationPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "eps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "eta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "keps",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

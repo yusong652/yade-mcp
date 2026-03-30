@@ -1,0 +1,13 @@
+{
+  "name": "ParallelEngine",
+  "category": "engines",
+  "parent": "Engine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "slaves",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

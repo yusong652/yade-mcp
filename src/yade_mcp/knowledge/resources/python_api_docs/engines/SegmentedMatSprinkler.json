@@ -1,0 +1,88 @@
+{
+  "name": "SegmentedMatSprinkler",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaResolution",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "beta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betaResolution",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "feedRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "lostVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevTime",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refDir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "releasedVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "versors",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

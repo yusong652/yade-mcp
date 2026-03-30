@@ -1,0 +1,58 @@
+{
+  "name": "Law2_ScGeom_PotentialLubricationPhys",
+  "category": "interactions",
+  "parent": "Law2_ScGeom_ImplicitLubricationPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "MaxDist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "MaxIter",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SolutionTol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateRollLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateTangencialLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateTwistLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxSubSteps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "potential",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "resolution",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "theta",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

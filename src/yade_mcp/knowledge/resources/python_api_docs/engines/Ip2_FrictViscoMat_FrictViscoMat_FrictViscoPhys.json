@@ -1,0 +1,23 @@
+{
+  "name": "Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "frictAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kRatio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

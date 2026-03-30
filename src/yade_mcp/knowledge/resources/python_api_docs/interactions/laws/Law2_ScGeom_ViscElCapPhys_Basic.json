@@ -1,0 +1,18 @@
+{
+  "name": "Law2_ScGeom_ViscElCapPhys_Basic",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "NLiqBridg",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "VLiqBridg",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

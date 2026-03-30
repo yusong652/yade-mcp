@@ -1,0 +1,58 @@
+{
+  "name": "HdapsGravityEngine",
+  "category": "engines",
+  "parent": "GravityEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "accel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "calibrate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "calibrated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "gravity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hdapsDir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "msecUpdate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updateThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "warnOnce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zeroGravity",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

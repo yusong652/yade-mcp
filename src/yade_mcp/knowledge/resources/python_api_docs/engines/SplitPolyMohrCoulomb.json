@@ -1,0 +1,38 @@
+{
+  "name": "SplitPolyMohrCoulomb",
+  "category": "engines",
+  "parent": "PolyhedraSplitter",
+  "description": "",
+  "attributes": [
+    {
+      "name": "fileName",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initRun",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nDo",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "realPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "virtPeriod",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

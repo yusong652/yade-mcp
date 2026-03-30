@@ -1,0 +1,28 @@
+{
+  "name": "Ip2_ViscElMat_ViscElMat_MultiViscElPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "en",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "et",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

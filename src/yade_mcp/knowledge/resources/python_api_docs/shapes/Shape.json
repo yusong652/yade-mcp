@@ -1,0 +1,23 @@
+{
+  "name": "Shape",
+  "category": "shapes",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

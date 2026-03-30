@@ -1,0 +1,28 @@
+{
+  "name": "RadialForceEngine",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "axisDir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "axisPt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fNorm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

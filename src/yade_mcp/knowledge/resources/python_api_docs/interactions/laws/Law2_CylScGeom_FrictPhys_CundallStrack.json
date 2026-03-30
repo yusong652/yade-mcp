@@ -1,0 +1,13 @@
+{
+  "name": "Law2_CylScGeom_FrictPhys_CundallStrack",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

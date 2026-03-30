@@ -1,0 +1,213 @@
+{
+  "name": "KnKsPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "brittleLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cohesion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cohesionBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "contactArea",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cumulative_us",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "effective_phi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialShearDir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "intactRock",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isSliding",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "jointLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "jointType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "knVol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn_i",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ksVol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks_i",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxClosure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mobilizedShear",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalViscous",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phi_b",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phi_r",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevNormal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevSigma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ptOnP1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ptOnP2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearDir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearIncrementForCD",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearViscous",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tensionBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "u_cumulative",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "u_elastic",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useFaceProperties",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousDamping",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "warmstart",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

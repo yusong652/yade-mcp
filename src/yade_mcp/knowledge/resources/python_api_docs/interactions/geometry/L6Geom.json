@@ -1,0 +1,58 @@
+{
+  "name": "L6Geom",
+  "category": "interactions",
+  "parent": "L3Geom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "F",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phi0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "trsf",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "u",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "u0",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

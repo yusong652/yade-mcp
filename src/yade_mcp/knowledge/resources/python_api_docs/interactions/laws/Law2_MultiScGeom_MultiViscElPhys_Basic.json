@@ -1,0 +1,7 @@
+{
+  "name": "Law2_MultiScGeom_MultiViscElPhys_Basic",
+  "category": "interactions",
+  "parent": "Law2_ScGeom_ViscElPhys_Basic",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,28 @@
+{
+  "name": "TTetraSimpleGeom",
+  "category": "interactions",
+  "parent": "IGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "flag",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "penetrationVolume",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Integrator",
+  "category": "engines",
+  "parent": "TimeStepper",
+  "description": "",
+  "attributes": [
+    {
+      "name": "active",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "integrationsteps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxVelocitySq",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "slaves",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

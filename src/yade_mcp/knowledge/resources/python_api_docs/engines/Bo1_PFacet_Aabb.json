@@ -1,0 +1,13 @@
+{
+  "name": "Bo1_PFacet_Aabb",
+  "category": "engines",
+  "parent": "BoundFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "aabbEnlargeFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

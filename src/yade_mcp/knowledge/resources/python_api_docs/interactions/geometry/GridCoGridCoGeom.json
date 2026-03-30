@@ -1,0 +1,48 @@
+{
+  "name": "GridCoGridCoGeom",
+  "category": "interactions",
+  "parent": "ScGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refR2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relPos1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relPos2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearInc",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "name": "LawTester",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "disPath",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "displIsRel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "doneHook",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hooks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "idWeight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pathSteps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ptGeom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ptOurs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "renderLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotGeom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotOurs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotPath",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotWeight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "step",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "trsf",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "uGeom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "uTest",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "uuPrev",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

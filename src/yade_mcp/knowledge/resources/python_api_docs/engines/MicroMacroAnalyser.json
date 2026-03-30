@@ -1,0 +1,48 @@
+{
+  "name": "MicroMacroAnalyser",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "compDeformation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "compIncrt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "incrtNumber",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "interval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nonSphereAsFictious",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "outputFile",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stateFileName",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stateNumber",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

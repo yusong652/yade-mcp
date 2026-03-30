@@ -1,0 +1,83 @@
+{
+  "name": "WirePhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "dL",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "displForceValues",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initD",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isDoubleTwist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isLinked",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isShifted",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "limitFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "plastD",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stiffnessValues",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

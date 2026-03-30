@@ -1,0 +1,28 @@
+{
+  "name": "Law2_ScGeom_VirtualLubricationPhys",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "MaxDist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateRollLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateTangencialLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "activateTwistLubrication",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

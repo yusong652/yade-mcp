@@ -1,0 +1,23 @@
+{
+  "name": "Law2_VolumeGeom_FrictPhys_Elastic",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumePower",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

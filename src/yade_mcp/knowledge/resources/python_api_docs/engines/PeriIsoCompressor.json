@@ -1,0 +1,58 @@
+{
+  "name": "PeriIsoCompressor",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "charLen",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "currUnbalanced",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "doneHook",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "globalUpdateInt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "keepProportions",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxSpan",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxUnbalanced",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigma",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "state",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stresses",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

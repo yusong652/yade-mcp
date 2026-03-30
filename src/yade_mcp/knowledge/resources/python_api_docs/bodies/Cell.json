@@ -1,0 +1,88 @@
+{
+  "name": "Cell",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "flipFlippable",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hSize",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hSize0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "homoDeform",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "nextVelGrad",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevHSize",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevVelGrad",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refHSize",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "refSize",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearTrsf",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "size",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "trsf",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "unshearTrsf",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "velGrad",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "velGradChanged",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volume",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

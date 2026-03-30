@@ -1,0 +1,7 @@
+{
+  "name": "FieldApplier",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,343 @@
+{
+  "name": "HydrodynamicsLawLBM",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "ConvergenceThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "CstBodyForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DemIterLbmIterRatio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "EndTime",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "EngineIsActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "IterMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "IterPrint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "IterSave",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "IterSubCyclingStart",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "LBMSavedData",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Nu",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Nx",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ObservedNode",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ObservedPtc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "RadFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Rho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SaveGridRatio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SaveMode",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "TimeSave",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "VbCutOff",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "VelocityThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallXm_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallXp_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallYm_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallYp_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallZm_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "WallZp_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmBcRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmYmZmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmYmZpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmYpZmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XmYpZpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpBcRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpYmZmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpYmZpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpYpZmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "XpYpZpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YmBcRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YmBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YpBcRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "YpBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ZmBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ZmBcRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ZmBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ZpBCType",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ZpBcVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "applyForcesAndTorques",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "dP",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "defaultLbmInitMode",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "model",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "periodicity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "removingCriterion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tau",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallXm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallXp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallYm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallYp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallZm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useWallZp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zpBcRho",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

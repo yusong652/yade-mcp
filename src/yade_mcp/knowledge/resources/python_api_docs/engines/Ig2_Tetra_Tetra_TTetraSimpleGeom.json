@@ -1,0 +1,7 @@
+{
+  "name": "Ig2_Tetra_Tetra_TTetraSimpleGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,58 @@
+{
+  "name": "RungeKuttaCashKarp54Integrator",
+  "category": "engines",
+  "parent": "Integrator",
+  "description": "",
+  "attributes": [
+    {
+      "name": "a_dxdt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "a_x",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "abs_err",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "active",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "integrationsteps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxVelocitySq",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rel_err",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "slaves",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stepsize",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

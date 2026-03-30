@@ -1,0 +1,23 @@
+{
+  "name": "Law2_L6Geom_FrictPhys_Linear",
+  "category": "interactions",
+  "parent": "Law2_L3Geom_FrictPhys_ElPerfPl",
+  "description": "",
+  "attributes": [
+    {
+      "name": "charLen",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "noBreak",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "noSlip",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

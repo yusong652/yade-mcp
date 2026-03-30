@@ -1,0 +1,38 @@
+{
+  "name": "Law2_ScGeom_ViscoFrictPhys_CundallStrack",
+  "category": "interactions",
+  "parent": "Law2_ScGeom_FrictPhys_CundallStrack",
+  "description": "",
+  "attributes": [
+    {
+      "name": "creepStiffness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearCreep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sphericalBodies",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscosity",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

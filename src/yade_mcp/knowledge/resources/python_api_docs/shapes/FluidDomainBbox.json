@@ -1,0 +1,48 @@
+{
+  "name": "FluidDomainBbox",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "bIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "hasIntersection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxBound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minBound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minMaxisSet",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

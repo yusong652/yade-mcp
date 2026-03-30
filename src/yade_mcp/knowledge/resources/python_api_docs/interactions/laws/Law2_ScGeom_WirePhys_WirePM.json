@@ -1,0 +1,13 @@
+{
+  "name": "Law2_ScGeom_WirePhys_WirePM",
+  "category": "interactions",
+  "parent": "LawFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "linkThresholdIteration",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

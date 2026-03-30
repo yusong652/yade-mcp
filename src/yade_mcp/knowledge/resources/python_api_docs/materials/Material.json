@@ -1,0 +1,13 @@
+{
+  "name": "Material",
+  "category": "materials",
+  "parent": "instance",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

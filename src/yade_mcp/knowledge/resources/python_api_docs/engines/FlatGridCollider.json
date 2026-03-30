@@ -1,0 +1,38 @@
+{
+  "name": "FlatGridCollider",
+  "category": "engines",
+  "parent": "Collider",
+  "description": "",
+  "attributes": [
+    {
+      "name": "aabbMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "aabbMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "avoidSelfInteractionMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundDispatcher",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "step",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "verletDist",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "BicyclePedalEngine",
+  "category": "engines",
+  "parent": "KinematicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "angularVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "radius",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rotationAxis",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

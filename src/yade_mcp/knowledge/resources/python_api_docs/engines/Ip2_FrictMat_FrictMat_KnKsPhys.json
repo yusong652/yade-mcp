@@ -1,0 +1,73 @@
+{
+  "name": "Ip2_FrictMat_FrictMat_KnKsPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Knormal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Kshear",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "brittleLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cohesion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cohesionBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn_i",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks_i",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxClosure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phi_b",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tensionBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useFaceProperties",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousDamping",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

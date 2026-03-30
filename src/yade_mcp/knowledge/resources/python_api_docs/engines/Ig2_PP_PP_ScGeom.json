@@ -1,0 +1,38 @@
+{
+  "name": "Ig2_PP_PP_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "accuracyTol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "areaStep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "calContactArea",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twoDdir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twoDimension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "unitWidth2D",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

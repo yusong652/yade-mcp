@@ -1,0 +1,93 @@
+{
+  "name": "CapillaryPhysDelaunay",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Delta1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Delta2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SInterface",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "arcLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "computeBridge",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fCap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fusionNumber",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meniscus",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vMeniscus",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

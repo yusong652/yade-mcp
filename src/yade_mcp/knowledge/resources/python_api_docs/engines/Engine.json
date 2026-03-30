@@ -1,0 +1,7 @@
+{
+  "name": "Engine",
+  "category": "engines",
+  "parent": "instance",
+  "description": "",
+  "attributes": []
+}

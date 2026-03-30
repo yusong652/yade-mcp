@@ -1,0 +1,13 @@
+{
+  "name": "ElasticContactLaw",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

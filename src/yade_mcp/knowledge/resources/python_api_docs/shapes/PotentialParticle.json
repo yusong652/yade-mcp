@@ -1,0 +1,103 @@
+{
+  "name": "PotentialParticle",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "AabbMinMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "R",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "a",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryNormal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fixedNormal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isBoundary",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxAabb",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxAabbRotated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minAabb",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minAabbRotated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "r",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vertices",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Law2_MultiScGeom_MultiFrictPhys_CundallStrack",
+  "category": "interactions",
+  "parent": "Law2_ScGeom_FrictPhys_CundallStrack",
+  "description": "",
+  "attributes": [
+    {
+      "name": "neverErase",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sphericalBodies",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "traceEnergy",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

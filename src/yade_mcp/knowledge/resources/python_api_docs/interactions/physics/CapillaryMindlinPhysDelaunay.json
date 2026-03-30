@@ -1,0 +1,203 @@
+{
+  "name": "CapillaryMindlinPhysDelaunay",
+  "category": "interactions",
+  "parent": "MindlinPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Delta1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Delta2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "Fs",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "SInterface",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "adhesionForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "arcLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "beta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betan",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "betas",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "computeBridge",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fCap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fusionNumber",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initD",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isAdhesive",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isSliding",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kno",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kr",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kso",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ktw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxBendPl",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meniscus",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "momentBend",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "momentTwist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalViscous",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "prevU",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "radius",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearElastic",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearViscous",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "usElastic",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "usTotal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "vMeniscus",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

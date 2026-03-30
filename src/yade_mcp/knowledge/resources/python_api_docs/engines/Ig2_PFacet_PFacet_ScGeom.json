@@ -1,0 +1,18 @@
+{
+  "name": "Ig2_PFacet_PFacet_ScGeom",
+  "category": "engines",
+  "parent": "Ig2_Sphere_PFacet_ScGridCoGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shrinkFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "halfLengthContacts",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

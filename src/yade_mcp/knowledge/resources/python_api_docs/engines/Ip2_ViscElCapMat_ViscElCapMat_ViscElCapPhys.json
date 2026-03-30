@@ -1,0 +1,28 @@
+{
+  "name": "Ip2_ViscElCapMat_ViscElCapMat_ViscElCapPhys",
+  "category": "engines",
+  "parent": "Ip2_ViscElMat_ViscElMat_ViscElPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "en",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "et",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tc",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

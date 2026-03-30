@@ -1,0 +1,78 @@
+{
+  "name": "MortarPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "compressiveStrength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crossSection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ellAspect",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "neverDamage",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigmaN",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sigmaT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tensileStrength",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

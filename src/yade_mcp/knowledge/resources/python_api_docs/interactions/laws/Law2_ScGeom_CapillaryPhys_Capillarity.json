@@ -1,0 +1,38 @@
+{
+  "name": "Law2_ScGeom_CapillaryPhys_Capillarity",
+  "category": "interactions",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "binaryFusion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "createDistantMeniscii",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fusionDetection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "suffCapFiles",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "surfaceTension",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

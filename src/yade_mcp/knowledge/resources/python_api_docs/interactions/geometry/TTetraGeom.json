@@ -1,0 +1,43 @@
+{
+  "name": "TTetraGeom",
+  "category": "interactions",
+  "parent": "IGeom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "contactPoint",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "equivalentCrossSection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "equivalentPenetrationDepth",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxPenetrationDepthA",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxPenetrationDepthB",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normal",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "penetrationVolume",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

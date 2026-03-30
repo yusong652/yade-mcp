@@ -1,0 +1,63 @@
+{
+  "name": "Subdomain",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "boundsMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundsMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "color",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "comm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "extraLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "highlight",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "intersections",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mirrorIntersections",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "subdomains",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wire",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

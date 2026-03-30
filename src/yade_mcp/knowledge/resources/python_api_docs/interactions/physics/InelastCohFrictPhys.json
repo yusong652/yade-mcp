@@ -1,0 +1,213 @@
+{
+  "name": "InelastCohFrictPhys",
+  "category": "interactions",
+  "parent": "RotStiffFrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesionBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isBroken",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kDam",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kRCrp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kRUnld",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kTCrp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kTUnld",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kTwCrp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kTwUnld",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "knC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "knT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kr",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ktw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxBendMom",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxContract",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxCrpRchdB",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxCrpRchdC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxCrpRchdT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxCrpRchdTw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxElB",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxElC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxElT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxElTw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxExten",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxTwist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "moment_bending",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "moment_twist",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onPlastB",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onPlastC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onPlastT",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "onPlastTw",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pureCreep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearAdhesion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "unp",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

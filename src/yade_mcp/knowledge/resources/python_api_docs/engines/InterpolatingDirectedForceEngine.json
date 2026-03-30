@@ -1,0 +1,38 @@
+{
+  "name": "InterpolatingDirectedForceEngine",
+  "category": "engines",
+  "parent": "ForceEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "direction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "force",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "magnitudes",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "times",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wrap",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

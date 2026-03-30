@@ -1,0 +1,28 @@
+{
+  "name": "Ig2_Sphere_Sphere_L6Geom",
+  "category": "engines",
+  "parent": "Ig2_Sphere_Sphere_L3Geom",
+  "description": "",
+  "attributes": [
+    {
+      "name": "approxMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "distFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "noRatch",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "trsfRenorm",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

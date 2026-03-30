@@ -1,0 +1,113 @@
+{
+  "name": "UniaxialStrainer",
+  "category": "engines",
+  "parent": "BoundaryController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "absSpeed",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "active",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "asymmetry",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "avgStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "axis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockDisplacements",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockRotations",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "crossSectionArea",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "currentStrainRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "idleIterations",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initAccelTime",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "limitStrain",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "negIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "notYetReversed",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "originalLength",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "posIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "setSpeeds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stopStrain",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strain",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strainRate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressUpdateInterval",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

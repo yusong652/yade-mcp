@@ -1,0 +1,308 @@
+{
+  "name": "ThreeDTriaxialEngine",
+  "category": "engines",
+  "parent": "TriaxialStressController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "UnbalancedForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boxVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "computeStressStrainInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "currentStrainRate1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "currentStrainRate2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "currentStrainRate3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "depth",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "depth0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "externalWork",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "finalMaxMultiplier",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictionAngleDegree",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "goal1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "goal2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "goal3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "height",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "height0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "internalCompaction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "legacyStressDamping",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxMultiplier",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max_vel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max_vel1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max_vel2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "max_vel3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "particlesVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "porosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "previousMultiplier",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "previousStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "radiusControlInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "spheresVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stiffnessUpdateInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strain",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strainDamping",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strainRate1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strainRate2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "strainRate3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressControl_1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressControl_2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressControl_3",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressDamping",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stressMask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thickness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updateFrictionAngle",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updatePorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumetricStrain",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_back_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_back_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_bottom_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_bottom_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_front_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_front_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_left_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_left_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_right_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_right_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_top_activated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wall_top_id",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "width",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "width0",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

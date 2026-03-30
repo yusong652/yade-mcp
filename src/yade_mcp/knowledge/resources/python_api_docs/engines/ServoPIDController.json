@@ -1,0 +1,88 @@
+{
+  "name": "ServoPIDController",
+  "category": "engines",
+  "parent": "TranslationEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "axis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "curVel",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "current",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "errorCur",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "errorPrev",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iTerm",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPeriod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterPrevStart",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kD",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kI",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kP",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "target",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "translationAxis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "velocity",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

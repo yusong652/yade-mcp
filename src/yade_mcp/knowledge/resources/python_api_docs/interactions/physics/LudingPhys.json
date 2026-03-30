@@ -1,0 +1,98 @@
+{
+  "name": "LudingPhys",
+  "category": "interactions",
+  "parent": "FrictPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "DeltMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DeltMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DeltNull",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DeltPMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DeltPNull",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "DeltPrev",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "G0",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "PhiF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "frictDissip",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k1",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "k2",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kc",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kn",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "kp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ks",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

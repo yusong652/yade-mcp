@@ -1,0 +1,33 @@
+{
+  "name": "LinIsoRayleighDampElastMat",
+  "category": "materials",
+  "parent": "LinIsoElastMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "beta",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "density",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "poissonratio",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "youngmodulus",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

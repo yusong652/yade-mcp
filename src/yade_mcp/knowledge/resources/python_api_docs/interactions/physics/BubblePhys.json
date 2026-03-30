@@ -1,0 +1,43 @@
+{
+  "name": "BubblePhys",
+  "category": "interactions",
+  "parent": "IPhys",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Dmax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fN",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "newtonIter",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "newtonTol",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "rAvg",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "surfaceTension",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Ig2_Sphere_GridConnection_ScGridCoGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

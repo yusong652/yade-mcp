@@ -1,0 +1,13 @@
+{
+  "name": "Ig2_Sphere_ChainedCylinder_CylScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "interactionDetectionFactor",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

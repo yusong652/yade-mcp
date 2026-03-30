@@ -1,0 +1,7 @@
+{
+  "name": "BoundFunctor",
+  "category": "engines",
+  "parent": "Functor",
+  "description": "",
+  "attributes": []
+}

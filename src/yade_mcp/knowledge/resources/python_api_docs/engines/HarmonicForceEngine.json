@@ -1,0 +1,28 @@
+{
+  "name": "HarmonicForceEngine",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "A",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fi",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}

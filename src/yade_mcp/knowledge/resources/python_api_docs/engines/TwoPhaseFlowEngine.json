@@ -1,0 +1,703 @@
+{
+  "name": "TwoPhaseFlowEngine",
+  "category": "engines",
+  "parent": "TwoPhaseFlowEngineT",
+  "description": "",
+  "attributes": [
+    {
+      "name": "accumulativeDeformationFlux",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "accumulativeFlux",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "airWaterInterfacialArea",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaBound",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "alphaBoundValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "areaAveragedPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "averageCavityPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "blockHook",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondIsPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondIsTemperature",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondIsWaterReservoir",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "bndCondValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryUseMaxMin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryVelocity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "boundaryXPos",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "breakControlledRemesh",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFluidDensity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "cavityFlux",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "centroidAverageWaterPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "clampKValues",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "computeForceActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "controlCavityPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "controlCavityVolumeChange",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "convertClumps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "debug",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "debugTPF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "decoupleForces",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "defTolerance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "deformation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "deltaTimeTruncation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "desiredPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "doInterpolate",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "drainageFirst",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "dt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "dtDynTPF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "entryMethodCorrection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "entryPressureMethod",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "eps",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "epsVolMax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "first",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "firstDynTPF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fixTriUpdatePermInt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fixedAlpha",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "flatThreshold",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidBulkModulus",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidCp",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluidRho",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fluxInViaWBC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "forceMetis",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "fractionMinSaturationInvasion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "getCHOLMODPerfTimings",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "getQuantitiesUpdateCont",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "idOffset",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ids",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ignoredBody",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iniVoidVolumes",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialPC",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "initialWetting",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isCellLabelActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isDrainageActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isImbibitionActivated",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isInvadeBoundary",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "isPhaseTrapped",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "iterationTPF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "keepTriangulation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "mask",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxIDMergedCells",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maxKdivKmean",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "maximumRatioPoreThroatoverPoreBody",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanKStat",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meanK_opt",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "meshUpdateInterval",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minKdivKmean",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "minimumPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "modelRunName",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "multithread",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "normalLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numFactorizeThreads",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numSolveThreads",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "numberOfPores",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permeabilityFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "permeabilityMap",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "phiZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "porosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pressureForce",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "primaryTPF",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "pumpTorque",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "recursiveInvasion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "relax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "remesh",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "safetyFactorTimeStep",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "setFractionParticles",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "shearLubrication",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "simpleWaterPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sineAverage",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "sineMagnitude",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "slipBoundary",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "solvePressureSwitch",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stiffness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "stopSimulation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "surfaceTension",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "swelling",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tZero",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tempDependentViscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalBndCondValue",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalEngine",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "thermalPorosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "tolerance",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "totalWaterVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "truncationPrecision",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "twistTorque",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "updateTriangulation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useFastInvasion",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "useSolver",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscosity",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousNormalBodyStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousShear",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "viscousShearBodyStress",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "voidVolume",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumeCorrection",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "volumeFactor",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wallIds",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "wallThickness",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterBoundaryPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterPressure",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterPressurePartiallySatPores",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterSaturation",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waterVolumeTruncatedLost",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "waveAction",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "xmax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "xmin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ymax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "ymin",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zmax",
+      "type": "auto",
+      "default": ""
+    },
+    {
+      "name": "zmin",
+      "type": "auto",
+      "default": ""
+    }
+  ]
+}
