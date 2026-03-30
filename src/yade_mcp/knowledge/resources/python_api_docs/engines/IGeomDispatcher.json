@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "functors",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     }
   ]
 }

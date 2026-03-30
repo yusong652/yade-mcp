@@ -6,78 +6,78 @@
   "attributes": [
     {
       "name": "binaryFusion",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "capillaryPressure",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "createDistantMeniscii",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "disp",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "epsilonMean",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "fusionDetection",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "hertzInitialized",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "hertzOn",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "imposePressure",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "initialized",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "inputFilename",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'capillaryfile.txt'"
     },
     {
       "name": "interactionDetectionFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.5"
     },
     {
       "name": "liquidTension",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.073"
     },
     {
       "name": "totalVolumeConstant",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "totalVolumeofWater",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     }
   ]
 }

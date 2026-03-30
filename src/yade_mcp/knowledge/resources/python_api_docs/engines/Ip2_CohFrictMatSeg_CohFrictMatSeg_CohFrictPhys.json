@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "setCohesionNow",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "setCohesionOnNewContacts",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

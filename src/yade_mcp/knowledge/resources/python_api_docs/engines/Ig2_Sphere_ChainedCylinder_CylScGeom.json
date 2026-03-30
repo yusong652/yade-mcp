@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "interactionDetectionFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

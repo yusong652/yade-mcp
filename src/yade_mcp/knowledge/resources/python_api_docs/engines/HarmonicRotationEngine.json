@@ -6,43 +6,43 @@
   "attributes": [
     {
       "name": "A",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "angularVelocity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "f",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "fi",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.5707963267948966"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "rotateAroundZero",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "rotationAxis",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
     },
     {
       "name": "zeroPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     }
   ]
 }

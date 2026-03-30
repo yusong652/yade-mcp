@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "MaxDist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "2.0"
     },
     {
       "name": "activateRollLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "activateTangencialLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "activateTwistLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     }
   ]
 }

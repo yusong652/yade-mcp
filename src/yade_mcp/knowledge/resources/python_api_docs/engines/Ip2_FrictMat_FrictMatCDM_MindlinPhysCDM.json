@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "frictAngle",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     }
   ]
 }

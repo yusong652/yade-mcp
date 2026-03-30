@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "avoidGranularRatcheting",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "creep",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "interactionDetectionFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "updateRotations",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     }
   ]
 }

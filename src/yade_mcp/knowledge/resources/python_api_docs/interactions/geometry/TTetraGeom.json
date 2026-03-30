@@ -6,38 +6,38 @@
   "attributes": [
     {
       "name": "contactPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(-4516999929266176,1.287677866613876784e-290,-65536.047607421875)"
     },
     {
       "name": "equivalentCrossSection",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "equivalentPenetrationDepth",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "maxPenetrationDepthA",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "maxPenetrationDepthB",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "normal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(8.557478558370078878e-311,0,6.924272242393752482e-310)"
     },
     {
       "name": "penetrationVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     }
   ]
 }

@@ -6,43 +6,43 @@
   "attributes": [
     {
       "name": "frictDissip",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "kn",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "kr",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ks",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ktw",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "normalForce",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "shearForce",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "tangensOfFrictionAngle",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     }
   ]
 }

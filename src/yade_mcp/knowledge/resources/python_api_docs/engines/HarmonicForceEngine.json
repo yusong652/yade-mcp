@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "A",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "f",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "fi",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     }
   ]
 }

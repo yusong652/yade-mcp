@@ -6,98 +6,98 @@
   "attributes": [
     {
       "name": "angMom",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "angVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "blockedDOFs",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "damageTensor",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "densityScaling",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "epsVolumetric",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "inertia",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "isDamped",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "mass",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "normDmg",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "numBrokenCohesive",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "numContacts",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "ori",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "pos",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "refOri",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "refPos",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "se3",
-      "type": "auto",
-      "default": ""
+      "type": "tuple",
+      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))"
     },
     {
       "name": "stress",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "vel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     }
   ]
 }

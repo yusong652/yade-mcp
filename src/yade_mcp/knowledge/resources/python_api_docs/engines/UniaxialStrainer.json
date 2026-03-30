@@ -6,108 +6,108 @@
   "attributes": [
     {
       "name": "absSpeed",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "active",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "asymmetry",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "avgStress",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "axis",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "blockDisplacements",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "blockRotations",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "crossSectionArea",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "currentStrainRate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "idleIterations",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "initAccelTime",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-200.0"
     },
     {
       "name": "limitStrain",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "negIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "notYetReversed",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "originalLength",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "posIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "setSpeeds",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "stopStrain",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "strain",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "strainRate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "stressUpdateInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "10"
     }
   ]
 }

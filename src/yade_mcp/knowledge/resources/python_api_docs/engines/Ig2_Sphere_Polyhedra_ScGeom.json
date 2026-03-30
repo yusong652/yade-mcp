@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "edgeCoeff",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "vertexCoeff",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

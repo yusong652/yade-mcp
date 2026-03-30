@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "hertzian",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "shrinkFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

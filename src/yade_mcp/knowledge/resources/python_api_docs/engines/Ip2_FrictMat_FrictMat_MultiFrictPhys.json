@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "kn",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ks",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

@@ -6,83 +6,83 @@
   "attributes": [
     {
       "name": "axis",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "curVel",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "current",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "errorCur",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "errorPrev",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "iTerm",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     },
     {
       "name": "iterPrevStart",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "kD",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "kI",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "kP",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "maxVelocity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "target",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "translationAxis",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(6.91630760659163825e-310,6.916325544482055346e-310,6.916325476112856022e"
     },
     {
       "name": "velocity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "accuracyTol",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-07"
     },
     {
       "name": "areaStep",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5"
     },
     {
       "name": "calContactArea",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "twoDdir",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,1,0)"
     },
     {
       "name": "twoDimension",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "unitWidth2D",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

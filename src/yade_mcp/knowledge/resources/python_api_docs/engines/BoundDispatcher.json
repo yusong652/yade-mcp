@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "functors",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "minSweepDistFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.2"
     },
     {
       "name": "sweepDist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "targetInterv",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "updatingDispFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     }
   ]
 }

@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "nRefineOctree",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5"
     },
     {
       "name": "smearCoeffOctree",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "useAABE",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

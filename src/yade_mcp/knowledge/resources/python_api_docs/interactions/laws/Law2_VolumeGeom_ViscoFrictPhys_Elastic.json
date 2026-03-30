@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "creepStiffness",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "neverErase",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "shearCreep",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "traceEnergy",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "viscosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "volumePower",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

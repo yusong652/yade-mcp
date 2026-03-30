@@ -6,338 +6,338 @@
   "attributes": [
     {
       "name": "ConvergenceThreshold",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "CstBodyForce",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "DemIterLbmIterRatio",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "EndTime",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "EngineIsActivated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "IterMax",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "IterPrint",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "IterSave",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     },
     {
       "name": "IterSubCyclingStart",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "LBMSavedData",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "' '"
     },
     {
       "name": "Nu",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "Nx",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1000"
     },
     {
       "name": "ObservedNode",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "ObservedPtc",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "RadFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "Rho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000.0"
     },
     {
       "name": "SaveGridRatio",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "SaveMode",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "TimeSave",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "VbCutOff",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "VelocityThreshold",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "WallXm_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "WallXp_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "3"
     },
     {
       "name": "WallYm_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "WallYp_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "WallZm_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "4"
     },
     {
       "name": "WallZp_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5"
     },
     {
       "name": "XmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "XmBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "XmBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "XmYmZmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "XmYmZpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "XmYpZmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "XmYpZpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "XpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "XpBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "XpBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "XpYmZmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "XpYmZpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "XpYpZmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "XpYpZpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "YmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "YmBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "YmBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "YpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "YpBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "YpBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "ZmBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "ZmBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "ZmBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "ZpBCType",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "ZpBcVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "applyForcesAndTorques",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "bc",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "' '"
     },
     {
       "name": "dP",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "defaultLbmInitMode",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "model",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'d2q9'"
     },
     {
       "name": "periodicity",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "' '"
     },
     {
       "name": "removingCriterion",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "tau",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.6"
     },
     {
       "name": "useWallXm",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "useWallXp",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "useWallYm",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "useWallYp",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "useWallZm",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "useWallZp",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "zpBcRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     }
   ]
 }

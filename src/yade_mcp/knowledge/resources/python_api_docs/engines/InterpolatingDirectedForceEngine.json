@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "direction",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
     },
     {
       "name": "force",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "magnitudes",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "times",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "wrap",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

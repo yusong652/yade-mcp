@@ -6,143 +6,143 @@
   "attributes": [
     {
       "name": "PSDcalculateMass",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "PSDcum",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "PSDsizes",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "blockedDOFs",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "center",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "color",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(-1,-1,-1)"
     },
     {
       "name": "exactDiam",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "extents",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "goalMass",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "mask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "massFlowRate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "materialId",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "maxAttempt",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5000"
     },
     {
       "name": "maxMass",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "maxParticles",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     },
     {
       "name": "normal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "normalVel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "numParticles",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "rMax",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "rMin",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "silent",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "stopIfFailed",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "totalMass",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "totalVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "vAngle",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "vMax",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "vMin",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     }
   ]
 }

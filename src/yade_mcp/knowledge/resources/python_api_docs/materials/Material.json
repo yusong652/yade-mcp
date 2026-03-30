@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "density",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000.0"
     }
   ]
 }

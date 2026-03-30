@@ -6,38 +6,38 @@
   "attributes": [
     {
       "name": "avgRelResidual",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "initRun",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "maxOmega",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "nDo",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "realPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "virtPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

@@ -6,48 +6,48 @@
   "attributes": [
     {
       "name": "betan",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "betas",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "en",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "es",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "eta",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "frictAngle",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "gamma",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "krot",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ktwist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

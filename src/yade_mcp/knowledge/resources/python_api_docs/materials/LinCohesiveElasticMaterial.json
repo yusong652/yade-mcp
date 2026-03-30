@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "density",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000.0"
     },
     {
       "name": "poissonratio",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.33"
     },
     {
       "name": "youngmodulus",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "78000.0"
     }
   ]
 }

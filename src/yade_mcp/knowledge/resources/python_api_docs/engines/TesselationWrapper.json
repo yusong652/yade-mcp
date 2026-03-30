@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "alphaCapsVol",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "far",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "10000.0"
     },
     {
       "name": "grad_u",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "groupMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "mma",
@@ -31,8 +31,8 @@
     },
     {
       "name": "n_spheres",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     }
   ]
 }

@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "neverErase",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "nonLin",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     }
   ]
 }

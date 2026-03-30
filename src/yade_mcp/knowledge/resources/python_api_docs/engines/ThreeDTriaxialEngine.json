@@ -6,303 +6,303 @@
   "attributes": [
     {
       "name": "Key",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "UnbalancedForce",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "boxVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "computeStressStrainInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "10"
     },
     {
       "name": "currentStrainRate1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "currentStrainRate2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "currentStrainRate3",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "depth",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "depth0",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "externalWork",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "finalMaxMultiplier",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.00001"
     },
     {
       "name": "frictionAngleDegree",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "goal1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "goal2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "goal3",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "height",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "height0",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "internalCompaction",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "legacyStressDamping",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "maxMultiplier",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.001"
     },
     {
       "name": "max_vel",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "max_vel1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "max_vel2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "max_vel3",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "meanStress",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "particlesVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "porosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "previousMultiplier",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "previousStress",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "radiusControlInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "10"
     },
     {
       "name": "spheresVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "stiffnessUpdateInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "10"
     },
     {
       "name": "strain",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "strainDamping",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.9997"
     },
     {
       "name": "strainRate1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "strainRate2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "strainRate3",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "stressControl_1",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "stressControl_2",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "stressControl_3",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "stressDamping",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.25"
     },
     {
       "name": "stressMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "7"
     },
     {
       "name": "thickness",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "updateFrictionAngle",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "updatePorosity",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "volumetricStrain",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "wall_back_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_back_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "4"
     },
     {
       "name": "wall_bottom_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_bottom_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "wall_front_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_front_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5"
     },
     {
       "name": "wall_left_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_left_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "wall_right_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_right_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "wall_top_activated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "wall_top_id",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "3"
     },
     {
       "name": "width",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "width0",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

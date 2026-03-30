@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "allowBiggerThanPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "avoidSelfInteractionMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "boundDispatcher",
@@ -21,83 +21,83 @@
     },
     {
       "name": "doSort",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "fastestBodyMaxDist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "keepListsShort",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "minSweepDistFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.1"
     },
     {
       "name": "newton",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "numAction",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "numReinit",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "overlapTolerance",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-07"
     },
     {
       "name": "periodic",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "smartInsertErase",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "sortAxis",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "sortThenCollide",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "strideActive",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "targetInterv",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     },
     {
       "name": "updatingDispFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "verletDist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-0.5"
     }
   ]
 }

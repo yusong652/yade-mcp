@@ -6,38 +6,38 @@
   "attributes": [
     {
       "name": "Dmax",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "fN",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "newtonIter",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "50"
     },
     {
       "name": "newtonTol",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "normalForce",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "rAvg",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "surfaceTension",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     }
   ]
 }

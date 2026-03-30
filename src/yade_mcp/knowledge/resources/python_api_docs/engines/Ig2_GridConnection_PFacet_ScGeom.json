@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "interactionDetectionFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "shrinkFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "charLen",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "noBreak",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "noSlip",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

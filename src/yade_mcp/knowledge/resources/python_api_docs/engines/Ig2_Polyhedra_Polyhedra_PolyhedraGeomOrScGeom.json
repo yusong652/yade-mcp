@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "createScGeom",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "ig2polyhedraGeom",
-      "type": "auto",
-      "default": ""
+      "type": "Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
+      "default": "<Ig2_Polyhedra_Polyhedra_PolyhedraGeom instance at 0x1f18cb0>"
     },
     {
       "name": "ig2scGeom",
-      "type": "auto",
-      "default": ""
+      "type": "Ig2_Polyhedra_Polyhedra_ScGeom",
+      "default": "<Ig2_Polyhedra_Polyhedra_ScGeom instance at 0x1f283b0>"
     }
   ]
 }

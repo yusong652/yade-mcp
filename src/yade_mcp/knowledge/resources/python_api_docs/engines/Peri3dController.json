@@ -6,148 +6,148 @@
   "attributes": [
     {
       "name": "doneHook",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "goal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "lenPe",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "lenPs",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "maxStrain",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000000.0"
     },
     {
       "name": "maxStrainRate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000.0"
     },
     {
       "name": "mod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.1"
     },
     {
       "name": "nSteps",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1000"
     },
     {
       "name": "pathSizes",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6i",
+      "default": "Vector6i(0,0,0, 0,0,0)"
     },
     {
       "name": "pathsCounter",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6i",
+      "default": "Vector6i(0,0,0, 0,0,0)"
     },
     {
       "name": "pe",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6i",
+      "default": "Vector6i(0,0,0, 0,0,0)"
     },
     {
       "name": "poissonEstimation",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.25"
     },
     {
       "name": "progress",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ps",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6i",
+      "default": "Vector6i(0,0,0, 0,0,0)"
     },
     {
       "name": "strain",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "strainGoal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "strainRate",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "stress",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "stressGoal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "stressIdeal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "stressMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "stressRate",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "xxPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     },
     {
       "name": "xyPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     },
     {
       "name": "youngEstimation",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e+20"
     },
     {
       "name": "yyPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     },
     {
       "name": "yzPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     },
     {
       "name": "zxPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     },
     {
       "name": "zzPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector2(1,1)]"
     }
   ]
 }

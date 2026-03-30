@@ -6,103 +6,103 @@
   "attributes": [
     {
       "name": "disPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "displIsRel",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "doneHook",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "hooks",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "idWeight",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "pathSteps",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[1]"
     },
     {
       "name": "ptGeom",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "ptOurs",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "refLength",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "renderLength",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "rotGeom",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "rotOurs",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "rotPath",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "rotWeight",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "step",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "trsf",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1.39804328609528886e-76,1.39804328609528886e-76,1.39804328609528886e-76,"
     },
     {
       "name": "uGeom",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "uTest",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     },
     {
       "name": "uuPrev",
-      "type": "auto",
-      "default": ""
+      "type": "Vector6",
+      "default": "Vector6(0,0,0, 0,0,0)"
     }
   ]
 }

@@ -6,43 +6,43 @@
   "attributes": [
     {
       "name": "compDeformation",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "compIncrt",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "incrtNumber",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "interval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     },
     {
       "name": "nonSphereAsFictious",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "outputFile",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'MicroMacroAnalysis'"
     },
     {
       "name": "stateFileName",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'state'"
     },
     {
       "name": "stateNumber",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     }
   ]
 }

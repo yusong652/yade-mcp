@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "approxMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "distFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "noRatch",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "trsfRenorm",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "100"
     }
   ]
 }

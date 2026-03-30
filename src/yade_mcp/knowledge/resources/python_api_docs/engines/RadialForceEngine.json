@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "axisDir",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
     },
     {
       "name": "axisPt",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "fNorm",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     }
   ]
 }

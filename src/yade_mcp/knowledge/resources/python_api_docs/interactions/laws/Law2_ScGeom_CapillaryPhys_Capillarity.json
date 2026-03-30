@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "binaryFusion",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "capillaryPressure",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "createDistantMeniscii",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "fusionDetection",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "suffCapFiles",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "surfaceTension",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.073"
     }
   ]
 }

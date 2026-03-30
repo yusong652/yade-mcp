@@ -6,28 +6,28 @@
   "attributes": [
     {
       "name": "bIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "c1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "c2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "k1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "k2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

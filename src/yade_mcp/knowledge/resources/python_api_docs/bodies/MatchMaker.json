@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "algo",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'avg'"
     },
     {
       "name": "matches",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "val",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     }
   ]
 }

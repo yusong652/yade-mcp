@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "fileName",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "initRun",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "nDo",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "realPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "virtPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

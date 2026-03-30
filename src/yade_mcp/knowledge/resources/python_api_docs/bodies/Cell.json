@@ -6,83 +6,83 @@
   "attributes": [
     {
       "name": "flipFlippable",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "hSize",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "hSize0",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "homoDeform",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "nextVelGrad",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "prevHSize",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "prevVelGrad",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "refHSize",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "refSize",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
     },
     {
       "name": "shearTrsf",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "size",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
     },
     {
       "name": "trsf",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "unshearTrsf",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
     },
     {
       "name": "velGrad",
-      "type": "auto",
-      "default": ""
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
     },
     {
       "name": "velGradChanged",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "volume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

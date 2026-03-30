@@ -6,18 +6,18 @@
   "attributes": [
     {
       "name": "eps",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.001"
     },
     {
       "name": "eta",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "keps",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

@@ -6,48 +6,48 @@
   "attributes": [
     {
       "name": "cellDist",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3i",
+      "default": "Vector3i(0,0,0)"
     },
     {
       "name": "geom",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "id1",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "id2",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "isActive",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "isReal",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "iterBorn",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "iterMadeReal",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "phys",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     }
   ]
 }

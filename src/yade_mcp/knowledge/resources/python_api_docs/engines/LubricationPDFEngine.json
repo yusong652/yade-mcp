@@ -6,48 +6,48 @@
   "attributes": [
     {
       "name": "filename",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'PDF.txt'"
     },
     {
       "name": "initRun",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "nDo",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "numDiscretizeAnglePhi",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "20"
     },
     {
       "name": "numDiscretizeAngleTheta",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "20"
     },
     {
       "name": "realPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "virtPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "warnedOnce",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

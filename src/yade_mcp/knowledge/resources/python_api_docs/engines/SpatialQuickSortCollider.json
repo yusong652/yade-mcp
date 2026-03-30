@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "avoidSelfInteractionMask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "boundDispatcher",

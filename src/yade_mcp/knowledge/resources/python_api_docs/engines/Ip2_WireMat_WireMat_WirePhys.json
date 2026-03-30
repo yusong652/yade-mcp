@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "linkThresholdIteration",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     }
   ]
 }

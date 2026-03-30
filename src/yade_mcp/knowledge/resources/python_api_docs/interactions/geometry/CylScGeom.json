@@ -6,68 +6,68 @@
   "attributes": [
     {
       "name": "contactPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(7.358764612016615951e+223,1.469156144216717157e+195,4.335995304281835601"
     },
     {
       "name": "end",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "id3",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "isDuplicate",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "normal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1.126469672518042121e-321,0,3.074371915223671133e-27)"
     },
     {
       "name": "onNode",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "penetrationDepth",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "refR1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "refR2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "relPos",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "shearInc",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "start",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "trueInt",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     }
   ]
 }

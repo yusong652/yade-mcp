@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "NLiqBridg",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "VLiqBridg",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

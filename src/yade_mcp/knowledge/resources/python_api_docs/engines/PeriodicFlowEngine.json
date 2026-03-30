@@ -6,458 +6,458 @@
   "attributes": [
     {
       "name": "alphaBound",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "alphaBoundValue",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "averageCavityPressure",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "blockHook",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "bndCondIsPressure",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[False, False, False, False, False, False]"
     },
     {
       "name": "bndCondIsTemperature",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[False, False, False, False, False, False]"
     },
     {
       "name": "bndCondValue",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
     },
     {
       "name": "boundaryPressure",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "boundaryUseMaxMin",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[True, True, True, True, True, True]"
     },
     {
       "name": "boundaryVelocity",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0),"
     },
     {
       "name": "boundaryXPos",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "breakControlledRemesh",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "cavityFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "cavityFluidDensity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "cavityFlux",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "clampKValues",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "controlCavityPressure",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "controlCavityVolumeChange",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "convertClumps",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "debug",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "decoupleForces",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "defTolerance",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "desiredPorosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "doInterpolate",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "dt",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "duplicateThreshold",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.06"
     },
     {
       "name": "eps",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-05"
     },
     {
       "name": "epsVolMax",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "first",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "fixTriUpdatePermInt",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "fixedAlpha",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "flatThreshold",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "-1.0"
     },
     {
       "name": "fluidBulkModulus",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "fluidCp",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "4181.3"
     },
     {
       "name": "fluidRho",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1000.0"
     },
     {
       "name": "forceMetis",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "getCHOLMODPerfTimings",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "gradP",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "idOffset",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "ignoredBody",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "iniVoidVolumes",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "isActivated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "mask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "maxKdivKmean",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "100.0"
     },
     {
       "name": "meanKStat",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "meanK_opt",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "meshUpdateInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1000"
     },
     {
       "name": "minKdivKmean",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0001"
     },
     {
       "name": "minimumPorosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "multithread",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "normalLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "numFactorizeThreads",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "numSolveThreads",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "pZero",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "permeabilityFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "permeabilityMap",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "phiZero",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "porosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "pressureForce",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "pumpTorque",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "relax",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.9"
     },
     {
       "name": "shearLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "sineAverage",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "sineMagnitude",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "slipBoundary",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "stiffness",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "10000.0"
     },
     {
       "name": "tZero",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "tempDependentViscosity",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "thermalBndCondValue",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
     },
     {
       "name": "thermalEngine",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "thermalPorosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "tolerance",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "twistTorque",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "updateTriangulation",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "useSolver",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "3"
     },
     {
       "name": "viscosity",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "viscousNormalBodyStress",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "viscousShear",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "viscousShearBodyStress",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "volumeCorrection",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "volumeFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "wallIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[-1, -1, -1, -1, -1, -1]"
     },
     {
       "name": "wallThickness",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "waveAction",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "xmax",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     },
     {
       "name": "xmin",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "ymax",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "3"
     },
     {
       "name": "ymin",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "2"
     },
     {
       "name": "zmax",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "5"
     },
     {
       "name": "zmin",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "4"
     }
   ]
 }

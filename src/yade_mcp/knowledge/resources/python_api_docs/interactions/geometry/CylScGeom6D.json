@@ -6,93 +6,93 @@
   "attributes": [
     {
       "name": "bending",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "contactPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(2.480212208881640212e+180,4.952700289780979808e+223,4.087753971936289502"
     },
     {
       "name": "end",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "id3",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "initialOrientation1",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "initialOrientation2",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "isDuplicate",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "normal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(3.583388044894712576e+246,5.484697491455950555e+241,6.964131901691139479"
     },
     {
       "name": "onNode",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "penetrationDepth",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "refR1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "refR2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "relPos",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "shearInc",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "start",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "trueInt",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "twist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "twistCreep",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     }
   ]
 }

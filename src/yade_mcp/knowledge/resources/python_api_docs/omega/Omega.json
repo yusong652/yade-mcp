@@ -6,62 +6,62 @@
     {
       "name": "bodies",
       "type": "BodyContainer",
-      "default": ""
+      "default": "<yade.wrapper.BodyContainer object at 0x7f9108a56740>"
     },
     {
       "name": "interactions",
       "type": "InteractionContainer",
-      "default": ""
+      "default": "<yade.wrapper.InteractionContainer object at 0x7f910960bbc0>"
     },
     {
       "name": "materials",
       "type": "MaterialContainer",
-      "default": ""
+      "default": "<yade.wrapper.MaterialContainer object at 0x7f9107ec1200>"
     },
     {
       "name": "engines",
       "type": "list",
-      "default": ""
+      "default": "[<ForceResetter instance at 0x18c94d0>, <InsertionSortCollider instance at 0x161"
     },
     {
       "name": "dt",
       "type": "float",
-      "default": ""
+      "default": "1e-08"
     },
     {
       "name": "iter",
       "type": "int",
-      "default": ""
+      "default": "0"
     },
     {
       "name": "time",
       "type": "float",
-      "default": ""
+      "default": "0.0"
     },
     {
       "name": "realtime",
       "type": "float",
-      "default": ""
+      "default": "0.226"
     },
     {
       "name": "periodic",
       "type": "bool",
-      "default": ""
+      "default": "False"
     },
     {
       "name": "cell",
       "type": "NoneType",
-      "default": ""
+      "default": "None"
     },
     {
       "name": "trackEnergy",
       "type": "bool",
-      "default": ""
+      "default": "False"
     },
     {
       "name": "tags",
       "type": "TagsWrapper",
-      "default": ""
+      "default": "<yade.wrapper.TagsWrapper object at 0x7f9107ec1200>"
     }
   ],
   "methods": [

@@ -6,43 +6,43 @@
   "attributes": [
     {
       "name": "bIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "color",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
     },
     {
       "name": "hasIntersection",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "highlight",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "maxBound",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "minBound",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(-nan,-nan,-nan)"
     },
     {
       "name": "minMaxisSet",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "wire",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     }
   ]
 }

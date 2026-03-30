@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "hertzian",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "interactionDetectionFactor",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     }
   ]
 }

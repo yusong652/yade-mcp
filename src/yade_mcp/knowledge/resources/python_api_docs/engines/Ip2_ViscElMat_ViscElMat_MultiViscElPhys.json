@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "en",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "et",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "kn",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "ks",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     }
   ]
 }

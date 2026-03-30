@@ -6,83 +6,83 @@
   "attributes": [
     {
       "name": "alpha",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "45.0"
     },
     {
       "name": "alphaResolution",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "50"
     },
     {
       "name": "beta",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "45.0"
     },
     {
       "name": "betaResolution",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "50"
     },
     {
       "name": "feedRate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "initRun",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "lostVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "nDo",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "pos",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "prevTime",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "realPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "refDir",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,-1)"
     },
     {
       "name": "releasedVolume",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "versors",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "virtPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

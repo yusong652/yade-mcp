@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "acceleration",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "axisDirection",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
     },
     {
       "name": "axisPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "mask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     }
   ]
 }

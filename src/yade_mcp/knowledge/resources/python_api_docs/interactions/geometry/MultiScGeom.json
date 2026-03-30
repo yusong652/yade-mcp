@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "contacts",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "nodesIds",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     }
   ]
 }

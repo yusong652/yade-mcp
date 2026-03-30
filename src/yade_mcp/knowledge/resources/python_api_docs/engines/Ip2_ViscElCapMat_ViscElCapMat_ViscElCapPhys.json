@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "en",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "et",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "frictAngle",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "tc",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     }
   ]
 }

@@ -6,48 +6,48 @@
   "attributes": [
     {
       "name": "MaxDist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "2.0"
     },
     {
       "name": "MaxIter",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "30"
     },
     {
       "name": "SolutionTol",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-08"
     },
     {
       "name": "activateRollLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "activateTangencialLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "activateTwistLubrication",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "maxSubSteps",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "4"
     },
     {
       "name": "resolution",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "theta",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.55"
     }
   ]
 }

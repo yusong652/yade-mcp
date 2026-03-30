@@ -6,78 +6,78 @@
   "attributes": [
     {
       "name": "REC_COLORS",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "REC_ID",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "REC_INTERACTION",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "REC_VELOCITY",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "fileName",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "''"
     },
     {
       "name": "initRun",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "iterPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "maxDimension",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "30.0"
     },
     {
       "name": "nDo",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "-1"
     },
     {
       "name": "realPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "sampleX",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "30"
     },
     {
       "name": "sampleY",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "30"
     },
     {
       "name": "sampleZ",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "30"
     },
     {
       "name": "twoDimension",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "virtPeriod",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

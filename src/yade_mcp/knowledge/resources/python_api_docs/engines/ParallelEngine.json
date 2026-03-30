@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "slaves",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     }
   ]
 }

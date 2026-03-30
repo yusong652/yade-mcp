@@ -6,53 +6,53 @@
   "attributes": [
     {
       "name": "accel",
-      "type": "auto",
-      "default": ""
+      "type": "Vector2i",
+      "default": "Vector2i(0,0)"
     },
     {
       "name": "calibrate",
-      "type": "auto",
-      "default": ""
+      "type": "Vector2i",
+      "default": "Vector2i(0,0)"
     },
     {
       "name": "calibrated",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "False"
     },
     {
       "name": "gravity",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "hdapsDir",
-      "type": "auto",
-      "default": ""
+      "type": "str",
+      "default": "'/sys/devices/platform/hdaps'"
     },
     {
       "name": "mask",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "msecUpdate",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "50.0"
     },
     {
       "name": "updateThreshold",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "4"
     },
     {
       "name": "warnOnce",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "zeroGravity",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,-1)"
     }
   ]
 }

@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "pctMaxForce",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.1"
     },
     {
       "name": "surfaceTension",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.07197"
     }
   ]
 }

@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "computeDefault",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "frictAngle",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "kn",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "ks",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     }
   ]
 }

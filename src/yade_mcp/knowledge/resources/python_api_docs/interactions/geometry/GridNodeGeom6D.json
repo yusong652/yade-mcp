@@ -6,63 +6,63 @@
   "attributes": [
     {
       "name": "bending",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "connectionBody",
-      "type": "auto",
-      "default": ""
+      "type": "NoneType",
+      "default": "None"
     },
     {
       "name": "contactPoint",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "initialOrientation1",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "initialOrientation2",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     },
     {
       "name": "normal",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "penetrationDepth",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "refR1",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "refR2",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "shearInc",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
     },
     {
       "name": "twist",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "twistCreep",
-      "type": "auto",
-      "default": ""
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
     }
   ]
 }

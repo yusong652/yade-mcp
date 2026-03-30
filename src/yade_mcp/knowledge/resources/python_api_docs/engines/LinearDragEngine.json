@@ -6,13 +6,13 @@
   "attributes": [
     {
       "name": "ids",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "nu",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.001"
     }
   ]
 }

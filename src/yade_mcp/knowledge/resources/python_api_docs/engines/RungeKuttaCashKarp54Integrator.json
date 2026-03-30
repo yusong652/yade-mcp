@@ -6,53 +6,53 @@
   "attributes": [
     {
       "name": "a_dxdt",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "a_x",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1.0"
     },
     {
       "name": "abs_err",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "active",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "integrationsteps",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "maxVelocitySq",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "rel_err",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "slaves",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "stepsize",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "1e-06"
     },
     {
       "name": "timeStepUpdateInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     }
   ]
 }

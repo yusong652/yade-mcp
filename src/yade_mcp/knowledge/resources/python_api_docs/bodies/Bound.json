@@ -6,33 +6,33 @@
   "attributes": [
     {
       "name": "color",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
     },
     {
       "name": "lastUpdateIter",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "max",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "min",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "refPos",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
     },
     {
       "name": "sweepLength",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     }
   ]
 }

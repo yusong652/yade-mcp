@@ -6,28 +6,28 @@
   "attributes": [
     {
       "name": "active",
-      "type": "auto",
-      "default": ""
+      "type": "bool",
+      "default": "True"
     },
     {
       "name": "integrationsteps",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0"
     },
     {
       "name": "maxVelocitySq",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "nan"
     },
     {
       "name": "slaves",
-      "type": "auto",
-      "default": ""
+      "type": "list",
+      "default": "[]"
     },
     {
       "name": "timeStepUpdateInterval",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "1"
     }
   ]
 }

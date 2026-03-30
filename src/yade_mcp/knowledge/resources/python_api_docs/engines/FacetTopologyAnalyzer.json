@@ -6,23 +6,23 @@
   "attributes": [
     {
       "name": "commonEdgesFound",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "commonVerticesFound",
-      "type": "auto",
-      "default": ""
+      "type": "int",
+      "default": "0"
     },
     {
       "name": "projectionAxis",
-      "type": "auto",
-      "default": ""
+      "type": "Vector3",
+      "default": "Vector3(1,0,0)"
     },
     {
       "name": "relTolerance",
-      "type": "auto",
-      "default": ""
+      "type": "float",
+      "default": "0.0001"
     }
   ]
 }
