@@ -1,6 +1,6 @@
 {
   "name": "BubbleMat",
-  "category": "materials",
+  "category": "engines",
   "parent": "Material",
   "description": "",
   "attributes": [

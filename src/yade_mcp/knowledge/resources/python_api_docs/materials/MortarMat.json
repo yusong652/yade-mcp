@@ -1,6 +1,6 @@
 {
   "name": "MortarMat",
-  "category": "materials",
+  "category": "engines",
   "parent": "FrictMat",
   "description": "",
   "attributes": [

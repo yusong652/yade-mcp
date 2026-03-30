@@ -1,6 +1,6 @@
 {
   "name": "Cylinder",
-  "category": "shapes",
+  "category": "engines",
   "parent": "Sphere",
   "description": "",
   "attributes": [
