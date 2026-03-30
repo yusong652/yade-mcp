@@ -17,6 +17,7 @@ from yade_mcp.tools import (
     execute_task,
     interrupt_task,
     list_tasks,
+    query_api,
 )
 
 mcp = FastMCP(
@@ -33,6 +34,7 @@ logger = logging.getLogger("yade-mcp.server")
 
 # Register documentation tools
 browse_api.register(mcp)
+query_api.register(mcp)
 
 # Register execution tools
 execute_task.register(mcp)

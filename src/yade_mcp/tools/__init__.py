@@ -7,10 +7,12 @@ from . import (
     execute_task,
     interrupt_task,
     list_tasks,
+    query_api,
 )
 
 __all__ = [
     "browse_api",
+    "query_api",
     "execute_task",
     "check_task_status",
     "list_tasks",
