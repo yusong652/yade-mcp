@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yade-mcp-bridge"
+dynamic = ["version"]
+description = "WebSocket bridge for YADE MCP server - runs inside YADE Python environment"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name= "Yusong Han", email = "yusong.han.652@gmail.com" }]
+dependencies = [
+    "websockets>=9.1,<13",
+]
+
+[project.scripts]
+yade-mcp-bridge = "yade_mcp_bridge.__main__:main"
+
+[tool.hatch.version]
+path = "src/yade_mcp_bridge/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yade_mcp_bridge"]

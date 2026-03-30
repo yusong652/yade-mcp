@@ -1,0 +1,1 @@
+"""YADE documentation knowledge system."""

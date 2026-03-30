@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yade-mcp"
+dynamic = ["version"]
+description = "MCP server for YADE open-source discrete element method simulation"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name= "Yusong Han", email = "yusong.han.652@gmail.com" }]
+keywords = ["yade", "dem", "mcp", "simulation", "discrete-element", "granular"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastmcp>=2.14.0",
+    "pydantic>=2.12.0",
+    "websockets>=15.0.1",
+]
+readme = "README.md"
+
+[project.scripts]
+yade-mcp = "yade_mcp.server:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.9.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "N"]
+ignore = [
+    "E501",
+    "SIM105",
+    "SIM102",
+    "SIM103",
+    "SIM108",
+    "N806",
+    "B008",
+    "B905",
+]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.hatch.version]
+path = "src/yade_mcp/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yade_mcp"]
