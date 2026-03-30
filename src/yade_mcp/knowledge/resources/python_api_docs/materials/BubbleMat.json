@@ -2,7 +2,7 @@
   "name": "BubbleMat",
   "category": "engines",
   "parent": "Material",
-  "description": "",
+  "description": "material for bubble interactions, for use with other Bubble classes",
   "attributes": [
     {
       "name": "density",

@@ -2,7 +2,7 @@
   "name": "Law2_L6Geom_FrictPhys_Linear",
   "category": "interactions",
   "parent": "Law2_L3Geom_FrictPhys_ElPerfPl",
-  "description": "",
+  "description": "Basic law for testing L6Geom -- linear in both normal and shear sense, without slip or breakage.",
   "attributes": [
     {
       "name": "charLen",

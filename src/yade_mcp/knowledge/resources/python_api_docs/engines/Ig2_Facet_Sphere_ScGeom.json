@@ -2,7 +2,7 @@
   "name": "Ig2_Facet_Sphere_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update a ScGeom instance representing intersection of Facet and Sphere. Denoting $u_n$ the corresponding overlap<ScGeom.penetrationDepth>, $\\vec{C}$ the contact point<ScGeom.contactPoint> and $\\vec{n}$ the contact normal<ScGeom.normal> while $\\vec{S}$ stands for sphere's center, $\\vec{H}$...",
   "attributes": [
     {
       "name": "hertzian",

@@ -2,6 +2,6 @@
   "name": "Ig2_Wall_Polyhedra_PolyhedraGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update geometry of collision between Wall and Polyhedra",
   "attributes": []
 }

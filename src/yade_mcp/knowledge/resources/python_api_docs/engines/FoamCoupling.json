@@ -2,7 +2,7 @@
   "name": "FoamCoupling",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "An engine for coupling Yade with the finite volume fluid solver OpenFOAM in parallel. \n Requirements : Yade compiled with MPI libs, OpenFOAM-6 (openfoam is not required for compilation).Yade is executed under MPI environment with OpenFOAM simultaneously, and using MPI communication  routines data...",
   "attributes": [
     {
       "name": "comm",

@@ -2,7 +2,7 @@
   "name": "CpmState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "State information about body use by cpm-model<CpmMat>.\n\nNone of that is used for computation (at least not now), only for post-processing.",
   "attributes": [
     {
       "name": "angMom",

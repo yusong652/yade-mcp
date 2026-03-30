@@ -2,7 +2,7 @@
   "name": "KinematicEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Abstract engine for applying prescribed displacement.\n\n.. note:: Derived classes should override the ``apply`` with given list of ``ids`` (not ``action`` with PartialEngine.ids), so that they work when combined together; velocity<State.vel> and angular velocity<State.angVel> of all subscribed...",
   "attributes": [
     {
       "name": "ids",

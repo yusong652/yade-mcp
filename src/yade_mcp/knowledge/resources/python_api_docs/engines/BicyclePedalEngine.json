@@ -2,7 +2,7 @@
   "name": "BicyclePedalEngine",
   "category": "engines",
   "parent": "KinematicEngine",
-  "description": "",
+  "description": "Engine applying the linear motion of ``bicycle pedal`` e.g. moving points around the axis without rotation",
   "attributes": [
     {
       "name": "angularVelocity",

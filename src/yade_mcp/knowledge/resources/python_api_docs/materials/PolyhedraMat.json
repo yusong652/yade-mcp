@@ -2,7 +2,7 @@
   "name": "PolyhedraMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Elastic material with Coulomb friction.",
   "attributes": [
     {
       "name": "IsSplitable",

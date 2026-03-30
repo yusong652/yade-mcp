@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_ViscElCapPhys_Basic",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Extended version of Linear viscoelastic model with capillary parameters.",
   "attributes": [
     {
       "name": "NLiqBridg",

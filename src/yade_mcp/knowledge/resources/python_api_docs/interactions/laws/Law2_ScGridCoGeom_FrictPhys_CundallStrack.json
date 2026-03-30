@@ -2,7 +2,7 @@
   "name": "Law2_ScGridCoGeom_FrictPhys_CundallStrack",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Law between a frictional GridConnection and a frictional Sphere. Almost the same than Law2_ScGeom_FrictPhys_CundallStrack, but the force is divided and applied on the two GridNodes<GridNode> only.",
   "attributes": [
     {
       "name": "neverErase",

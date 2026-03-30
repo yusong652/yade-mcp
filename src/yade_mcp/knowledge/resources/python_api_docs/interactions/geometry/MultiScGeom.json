@@ -2,7 +2,7 @@
   "name": "MultiScGeom",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "A set of ScGeom for describing the kinematics of an interaction with multiple contact points between two LevelSet bodies, as a set of ScGeom items in contacts<MultiScGeom.contacts>. To combine with MultiFrictPhys and associated classes.",
   "attributes": [
     {
       "name": "contacts",

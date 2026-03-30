@@ -2,7 +2,7 @@
   "name": "LinCohesiveStiffPropDampElastMat",
   "category": "materials",
   "parent": "LinCohesiveElasticMaterial",
-  "description": "",
+  "description": "Elastic material with Rayleigh Damping.",
   "attributes": [
     {
       "name": "alpha",

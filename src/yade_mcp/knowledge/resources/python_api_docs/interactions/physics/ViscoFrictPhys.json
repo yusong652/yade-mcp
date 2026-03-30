@@ -2,7 +2,7 @@
   "name": "ViscoFrictPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Temporary version of FrictPhys for compatibility reasons",
   "attributes": [
     {
       "name": "creepedShear",

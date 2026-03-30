@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_MindlinPhys_Mindlin",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Constitutive law for the Hertz-Mindlin formulation. It includes non linear elasticity in the normal direction as predicted by Hertz for two non-conforming elastic contact bodies. In the shear direction, instead, it reseambles the simplified case without slip discussed in Mindlin's paper, where a...",
   "attributes": [
     {
       "name": "calcEnergy",

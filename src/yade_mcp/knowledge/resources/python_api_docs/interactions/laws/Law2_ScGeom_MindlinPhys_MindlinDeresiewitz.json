@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_MindlinPhys_MindlinDeresiewitz",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Hertz-Mindlin contact law with partial slip solution, as described in [Thornton1991]_.",
   "attributes": [
     {
       "name": "neverErase",

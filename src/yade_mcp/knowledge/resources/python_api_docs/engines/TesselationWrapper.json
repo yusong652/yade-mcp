@@ -2,7 +2,7 @@
   "name": "TesselationWrapper",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Handle the triangulation of spheres in a scene, build tesselation on request, and give access to computed quantities (see also the dedicated section in user manual <MicroStressAndMicroStrain>). The calculation of microstrain is explained in [Catalano2014a]_ \n\nSee example usage in script...",
   "attributes": [
     {
       "name": "alphaCapsVol",

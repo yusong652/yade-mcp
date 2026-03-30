@@ -2,6 +2,6 @@
   "name": "Ig2_Wall_LevelSet_MultiScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Creates or updates a MultiScGeom instance representing the multiple contact points interaction kinematics of one LevelSet body with one Wall body, extending Ig2_Wall_LevelSet_ScGeom to non-convex LevelSet-shaped bodies. Relative orientation of wall wrt global axes is again not supported. TODO: time...",
   "attributes": []
 }

@@ -2,7 +2,7 @@
   "name": "PotentialParticle2AABB",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "EXPERIMENTAL. Functor creating Aabb from PotentialParticle.",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

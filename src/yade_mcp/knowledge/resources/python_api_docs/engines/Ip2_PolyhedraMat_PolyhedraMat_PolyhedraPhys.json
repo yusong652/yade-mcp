@@ -2,6 +2,6 @@
   "name": "Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Computes the interaction properties<PolyhedraPhys> from the material properties<PolyhedraMat> of the two interacting bodies 1,2. Contact friction angle is taken as the minimum of the two frictionAngle<PolyhedraMat.frictionAngle>, and contact stiffnesses kn<PolyhedraPhys.kn> and ks<PolyhedraPhys.ks>...",
   "attributes": []
 }

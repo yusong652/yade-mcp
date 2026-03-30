@@ -2,7 +2,7 @@
   "name": "ThermalState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "State containing quantities for thermal physics.",
   "attributes": [
     {
       "name": "Cp",

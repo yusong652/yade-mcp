@@ -2,7 +2,7 @@
   "name": "UnsaturatedEngine",
   "category": "engines",
   "parent": "TwoPhaseFlowEngine",
-  "description": "",
+  "description": "Preliminary version engine of a drainage model for unsaturated soils. Note:Air reservoir is on the top; water reservoir is on the bottom.(deprecated engine, use TwoPhaseFlowEngine instead)",
   "attributes": [
     {
       "name": "accumulativeDeformationFlux",

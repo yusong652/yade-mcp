@@ -2,7 +2,7 @@
   "name": "Law2_SCG_KnKsPhys_KnKsLaw",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Law for linear compression, without cohesion and Mohr-Coulomb plasticity surface.\n\n.. note::\n This law uses ScGeom; there is also functionally equivalent Law2_Dem3DofGeom_FrictPhys_Basic, which uses Dem3DofGeom (sphere-box interactions are not implemented for the latest).",
   "attributes": [
     {
       "name": "Talesnick",

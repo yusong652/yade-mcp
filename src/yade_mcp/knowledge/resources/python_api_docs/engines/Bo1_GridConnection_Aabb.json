@@ -2,7 +2,7 @@
   "name": "Bo1_GridConnection_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Functor creating Aabb from a GridConnection.",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

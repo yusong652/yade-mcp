@@ -2,7 +2,7 @@
   "name": "AxialGravityEngine",
   "category": "engines",
   "parent": "FieldApplier",
-  "description": "",
+  "description": "Apply acceleration (independent of distance) directed towards an axis.",
   "attributes": [
     {
       "name": "acceleration",

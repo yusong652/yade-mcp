@@ -2,7 +2,7 @@
   "name": "ViscElMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material for simple viscoelastic model of contact from analytical solution of a pair spheres interaction problem  [Pournin2001]_ .",
   "attributes": [
     {
       "name": "cn",

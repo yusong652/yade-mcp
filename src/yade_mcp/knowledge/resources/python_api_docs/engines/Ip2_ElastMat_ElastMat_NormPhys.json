@@ -2,6 +2,6 @@
   "name": "Ip2_ElastMat_ElastMat_NormPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Create a NormPhys from two ElastMats<ElastMat>. TODO. EXPERIMENTAL",
   "attributes": []
 }

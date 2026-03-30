@@ -2,6 +2,6 @@
   "name": "Bo1_LevelSet_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Creates/updates an Aabb of a LevelSet",
   "attributes": []
 }

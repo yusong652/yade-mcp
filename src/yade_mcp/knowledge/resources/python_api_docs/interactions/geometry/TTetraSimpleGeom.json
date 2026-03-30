@@ -2,7 +2,7 @@
   "name": "TTetraSimpleGeom",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "EXPERIMENTAL. Geometry of interaction between 2 tetrahedra<Tetra>",
   "attributes": [
     {
       "name": "contactPoint",

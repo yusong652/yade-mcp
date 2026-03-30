@@ -2,7 +2,7 @@
   "name": "CircularFactory",
   "category": "engines",
   "parent": "SpheresFactory",
-  "description": "",
+  "description": "Circular geometry of the SpheresFactory region. It can be disk (given by radius and center), or cylinder (given by radius, length and center).",
   "attributes": [
     {
       "name": "PSDcalculateMass",

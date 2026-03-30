@@ -2,6 +2,6 @@
   "name": "Ig2_LevelSet_LevelSet_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Creates or updates a ScGeom instance representing the contact of two convex LevelSet-shaped bodies after executing a master-slave algorithm that combines distance function $\\phi$ (LevelSet.distField) with surface nodes $\\vec{N}$ (LevelSet.surfNodes) [Duriez2021a]_ [Duriez2021b]_. Denoting $S$,...",
   "attributes": []
 }

@@ -2,7 +2,7 @@
   "name": "Disp2DPropLoadEngine",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "Disturbs a simple shear sample in a given displacement direction\n\nThis engine allows one to apply, on a simple shear sample, a loading controlled by du/dgamma = cste, which is equivalent to du + cste' * dgamma = 0 (proportionnal path loadings).\nTo do so, the upper plate of the simple shear box is...",
   "attributes": [
     {
       "name": "Key",

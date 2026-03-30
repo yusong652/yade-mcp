@@ -2,7 +2,7 @@
   "name": "Ip2_ViscElCapMat_ViscElCapMat_ViscElCapPhys",
   "category": "engines",
   "parent": "Ip2_ViscElMat_ViscElMat_ViscElPhys",
-  "description": "",
+  "description": "Convert 2 instances of ViscElCapMat to ViscElCapPhys using the rule of consecutive connection.",
   "attributes": [
     {
       "name": "en",

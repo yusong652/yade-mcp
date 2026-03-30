@@ -2,7 +2,7 @@
   "name": "JCFpmMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Possibly jointed, cohesive frictional material, for use with other JCFpm classes",
   "attributes": [
     {
       "name": "cohesion",

@@ -2,7 +2,7 @@
   "name": "InterpolatingHelixEngine",
   "category": "engines",
   "parent": "HelixEngine",
-  "description": "",
+  "description": "Engine applying spiral motion, finding current angular velocity by linearly interpolating in times and velocities and translation by using slope parameter. \n\n The interpolation assumes the margin value before the first time point and last value after the last time point. If wrap is specified, time...",
   "attributes": [
     {
       "name": "angleTurned",

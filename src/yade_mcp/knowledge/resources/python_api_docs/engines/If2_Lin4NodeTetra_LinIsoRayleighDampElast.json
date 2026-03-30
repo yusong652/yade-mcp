@@ -2,6 +2,6 @@
   "name": "If2_Lin4NodeTetra_LinIsoRayleighDampElast",
   "category": "engines",
   "parent": "InternalForceFunctor",
-  "description": "",
+  "description": "Apply internal forces of the tetrahedral element using lumped mass theory",
   "attributes": []
 }

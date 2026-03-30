@@ -2,7 +2,7 @@
   "name": "Ig2_Wall_PFacet_ScGeom",
   "category": "engines",
   "parent": "Ig2_Wall_Sphere_ScGeom",
-  "description": "",
+  "description": "Create/update a ScGeom instance representing intersection of Wall and PFacet.",
   "attributes": [
     {
       "name": "hertzian",

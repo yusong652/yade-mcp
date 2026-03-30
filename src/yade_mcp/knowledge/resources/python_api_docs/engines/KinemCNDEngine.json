@@ -2,7 +2,7 @@
   "name": "KinemCNDEngine",
   "category": "engines",
   "parent": "KinemSimpleShearBox",
-  "description": "",
+  "description": "To apply a Constant Normal Displacement (CND) shear for a parallelogram box\n\n \tThis engine, designed for simulations implying a simple shear box (see SimpleShear Preprocessor or the :ysrc:`simpleShear.py<examples/simpleShearNonPeri/simpleShear.py>` script), allows one to perform a constant normal...",
   "attributes": [
     {
       "name": "Key",

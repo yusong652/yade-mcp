@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_FrictViscoPhys_CundallStrackVisco",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Constitutive law for the FrictViscoPM. Corresponds to Law2_ScGeom_FrictPhys_CundallStrack with the only difference that viscous damping in normal direction can be considered.",
   "attributes": [
     {
       "name": "neverErase",

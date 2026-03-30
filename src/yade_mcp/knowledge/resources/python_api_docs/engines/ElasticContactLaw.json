@@ -2,7 +2,7 @@
   "name": "ElasticContactLaw",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "[DEPRECATED] Loop over interactions applying Law2_ScGeom_FrictPhys_CundallStrack on all interactions.\n\n.. note::\n  Use InteractionLoop and Law2_ScGeom_FrictPhys_CundallStrack instead of this class for performance reasons.",
   "attributes": [
     {
       "name": "neverErase",

@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_CapillaryPhys_Capillarity",
   "category": "interactions",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "This engine allows one to take into account capillary forces/effects between spheres coming from the presence of distinct interparticular liquid bridges (menisci) at existing interactions (between particle pairs, in the so-called pendular regime). In order to allow capillary forces between distant...",
   "attributes": [
     {
       "name": "binaryFusion",

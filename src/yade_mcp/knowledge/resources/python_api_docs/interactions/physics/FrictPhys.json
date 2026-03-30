@@ -2,7 +2,7 @@
   "name": "FrictPhys",
   "category": "interactions",
   "parent": "NormShearPhys",
-  "description": "",
+  "description": "The simple linear elastic-plastic interaction with friction angle, like in the traditional [CundallStrack1979]_",
   "attributes": [
     {
       "name": "frictDissip",

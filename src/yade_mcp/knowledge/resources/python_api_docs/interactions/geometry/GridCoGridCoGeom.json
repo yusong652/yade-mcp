@@ -2,7 +2,7 @@
   "name": "GridCoGridCoGeom",
   "category": "interactions",
   "parent": "ScGeom",
-  "description": "",
+  "description": "Geometry of a GridConnection-GridConnection contact.",
   "attributes": [
     {
       "name": "contactPoint",

@@ -2,6 +2,6 @@
   "name": "Ig2_Tetra_Tetra_TTetraGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update geometry of collision between 2 tetrahedra<Tetra> (TTetraGeom instance)",
   "attributes": []
 }

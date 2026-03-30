@@ -2,7 +2,7 @@
   "name": "FrictViscoMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material for use with the FrictViscoPM classes",
   "attributes": [
     {
       "name": "betan",

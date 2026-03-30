@@ -2,7 +2,7 @@
   "name": "CpmMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Concrete material, for use with other Cpm classes. \n\n.. note::\n\n\tDensity<Material::density> is initialized to 4800 kgm\u207b\u00b3automatically, which gives approximate 2800 kgm\u207b\u00b3 on 0.5 density packing.\n\nConcrete Particle Model (CPM)\n\n\nCpmMat is particle material, Ip2_CpmMat_CpmMat_CpmPhys averages two...",
   "attributes": [
     {
       "name": "damLaw",

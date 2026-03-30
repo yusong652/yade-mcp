@@ -2,7 +2,7 @@
   "name": "Polyhedra",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Polyhedral (convex) geometry.",
   "attributes": [
     {
       "name": "color",

@@ -2,7 +2,7 @@
   "name": "MindlinPhysCDM",
   "category": "interactions",
   "parent": "MindlinPhys",
-  "description": "",
+  "description": "Representation of an interaction of an extended  Hertz-Mindlin type. Normal direction:  parameters for Conical Damage Model  (Harkness et al. 2016, Suhr & Six 2017). Tangential direction: parameters for stress dependent interparticle friction coefficient (Suhr & Six 2016). Both models can be...",
   "attributes": [
     {
       "name": "E",

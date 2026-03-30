@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_Sphere_L3Geom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Functor for computing incrementally configuration of 2 Spheres<Sphere> stored in L3Geom; the configuration is positioned in global space by local origin $\\vec{c}$ (contact point) and rotation matrix $\\mat{T}$ (orthonormal transformation matrix), and its degrees of freedom are local displacement...",
   "attributes": [
     {
       "name": "approxMask",

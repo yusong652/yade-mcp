@@ -2,7 +2,7 @@
   "name": "TriaxialCompressionEngine",
   "category": "engines",
   "parent": "TriaxialStressController",
-  "description": "",
+  "description": "The engine is a state machine with the following states; transitions my be automatic, see below.\n\n#. STATE_ISO_COMPACTION: isotropic compaction (compression) until the prescribed mean pressue sigmaIsoCompaction is reached and the packing is stable. The compaction happens either by straining the...",
   "attributes": [
     {
       "name": "Key",

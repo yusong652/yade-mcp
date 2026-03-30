@@ -2,7 +2,7 @@
   "name": "Shape",
   "category": "shapes",
   "parent": "instance",
-  "description": "",
+  "description": "Geometry of a body",
   "attributes": [
     {
       "name": "color",

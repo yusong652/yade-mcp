@@ -2,7 +2,7 @@
   "name": "Bo1_PFacet_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Functor creating Aabb from a PFacet.",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

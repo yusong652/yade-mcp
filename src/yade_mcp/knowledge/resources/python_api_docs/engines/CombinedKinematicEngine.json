@@ -2,7 +2,7 @@
   "name": "CombinedKinematicEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Engine for applying combined displacements on pre-defined bodies. Constructed using ``+`` operator on regular KinematicEngines<KinematicEngine>. The ``ids`` operated on are those of the first engine in the combination (assigned automatically).",
   "attributes": [
     {
       "name": "comb",

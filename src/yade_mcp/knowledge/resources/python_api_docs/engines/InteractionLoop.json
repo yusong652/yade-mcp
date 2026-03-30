@@ -2,7 +2,7 @@
   "name": "InteractionLoop",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Unified dispatcher for handling interaction loop at every step, for parallel performance reasons.\n\n.. admonition:: Special constructor\n\n\tConstructs from 3 lists of Ig2<IGeomFunctor>, Ip2<IPhysFunctor>, Law2<LawFunctor> functors respectively; they will be passed to internal dispatchers, which you...",
   "attributes": [
     {
       "name": "callbacks",

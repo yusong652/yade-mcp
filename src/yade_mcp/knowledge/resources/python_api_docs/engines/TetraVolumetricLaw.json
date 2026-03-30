@@ -2,6 +2,6 @@
   "name": "TetraVolumetricLaw",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Calculate physical response of 2 tetrahedra<Tetra> in interaction, based on penetration configuration given by TTetraGeom.",
   "attributes": []
 }

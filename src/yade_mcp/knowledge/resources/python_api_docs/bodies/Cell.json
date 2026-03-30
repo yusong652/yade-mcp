@@ -2,7 +2,7 @@
   "name": "Cell",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Parameters of periodic boundary conditions<sect-PBC>. Only applies if O.isPeriodic==True.",
   "attributes": [
     {
       "name": "flipFlippable",

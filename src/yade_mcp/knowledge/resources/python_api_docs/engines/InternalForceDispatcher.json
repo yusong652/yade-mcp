@@ -2,7 +2,7 @@
   "name": "InternalForceDispatcher",
   "category": "engines",
   "parent": "Dispatcher",
-  "description": "",
+  "description": "Dispatcher calling functors<InternalForceFunctor> based on received argument type(s).",
   "attributes": [
     {
       "name": "functors",

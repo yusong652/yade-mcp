@@ -2,7 +2,7 @@
   "name": "Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Converts 2 FrictViscoMat instances to FrictViscoPhys with corresponding parameters. Basically this functor corresponds to Ip2_FrictMat_FrictMat_FrictPhys with the only difference that damping in normal direction can be considered.",
   "attributes": [
     {
       "name": "frictAngle",

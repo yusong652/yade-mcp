@@ -2,7 +2,7 @@
   "name": "FlatGridCollider",
   "category": "engines",
   "parent": "Collider",
-  "description": "",
+  "description": "Non-optimized grid collider, storing grid as dense flat array. Each body is assigned to (possibly multiple) cells, which are arranged in regular grid between *aabbMin* and *aabbMax*, with cell size *step* (same in all directions). Bodies outsize (*aabbMin*, *aabbMax*) are handled gracefully,...",
   "attributes": [
     {
       "name": "aabbMax",

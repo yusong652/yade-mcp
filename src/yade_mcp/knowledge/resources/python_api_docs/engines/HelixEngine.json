@@ -2,7 +2,7 @@
   "name": "HelixEngine",
   "category": "engines",
   "parent": "RotationEngine",
-  "description": "",
+  "description": "Engine applying both rotation and translation, along the same axis, whence the name HelixEngine",
   "attributes": [
     {
       "name": "angleTurned",

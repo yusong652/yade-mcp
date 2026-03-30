@@ -2,7 +2,7 @@
   "name": "PotentialParticleVTKRecorder",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Engine recording potential blocks as surfaces into files with given periodicity.",
   "attributes": [
     {
       "name": "REC_COLORS",

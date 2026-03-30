@@ -2,7 +2,7 @@
   "name": "WirePhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Representation of a single interaction of the WirePM type, storage for relevant parameters",
   "attributes": [
     {
       "name": "dL",

@@ -2,7 +2,7 @@
   "name": "SegmentedState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "State information about body coating map used by CohFrictMatSeg. It allows spheres or facets to store information about the coating thickness. The coating thickness for the facets is stored in two fields (positive and negative side of the facets). In the case of spheres, the surface of sphere is...",
   "attributes": [
     {
       "name": "allowMatExchange",

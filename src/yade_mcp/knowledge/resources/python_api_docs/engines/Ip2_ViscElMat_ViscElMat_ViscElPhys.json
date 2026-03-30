@@ -2,7 +2,7 @@
   "name": "Ip2_ViscElMat_ViscElMat_ViscElPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Convert 2 instances of ViscElMat to ViscElPhys using the rule of consecutive connection.",
   "attributes": [
     {
       "name": "en",

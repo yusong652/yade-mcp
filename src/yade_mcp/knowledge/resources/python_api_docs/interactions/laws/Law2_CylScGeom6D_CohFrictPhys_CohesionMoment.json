@@ -2,7 +2,7 @@
   "name": "Law2_CylScGeom6D_CohFrictPhys_CohesionMoment",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "This law generalises Law2_CylScGeom_FrictPhys_CundallStrack by adding cohesion and moments at contact.",
   "attributes": [
     {
       "name": "always_use_moment_law",

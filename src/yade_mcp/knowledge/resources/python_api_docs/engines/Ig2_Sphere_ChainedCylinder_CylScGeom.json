@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_ChainedCylinder_CylScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update a ScGeom instance representing intersection of two Spheres<Sphere>.",
   "attributes": [
     {
       "name": "interactionDetectionFactor",

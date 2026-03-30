@@ -2,7 +2,7 @@
   "name": "MultiPhys",
   "category": "interactions",
   "parent": "IPhys",
-  "description": "",
+  "description": "Describes the physical part of an interaction with multiple contact points, e.g., between two LevelSet bodies, as a set of IPhys items. This class is actually not intended to be used directly but to serve as a common ancestor for children classes such as MultiFrictPhys.",
   "attributes": [
     {
       "name": "contacts",

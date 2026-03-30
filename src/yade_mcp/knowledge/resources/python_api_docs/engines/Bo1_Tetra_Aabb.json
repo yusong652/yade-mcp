@@ -2,6 +2,6 @@
   "name": "Bo1_Tetra_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Create/update Aabb of a Tetra",
   "attributes": []
 }

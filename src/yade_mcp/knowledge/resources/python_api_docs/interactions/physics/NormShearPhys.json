@@ -2,7 +2,7 @@
   "name": "NormShearPhys",
   "category": "interactions",
   "parent": "NormPhys",
-  "description": "",
+  "description": "Abstract class for interactions that have shear stiffnesses, in addition to normal stiffness. This class is used in the PFC3d-style stiffness timestepper<GlobalStiffnessTimeStepper>.",
   "attributes": [
     {
       "name": "kn",

@@ -2,7 +2,7 @@
   "name": "ScGridCoGeom",
   "category": "interactions",
   "parent": "ScGeom6D",
-  "description": "",
+  "description": "Geometry of a GridConnection-Sphere contact.",
   "attributes": [
     {
       "name": "bending",

@@ -2,7 +2,7 @@
   "name": "PyRunner",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Execute a python command periodically, with defined (and adjustable) periodicity. See PeriodicEngine documentation for details.",
   "attributes": [
     {
       "name": "command",

@@ -2,7 +2,7 @@
   "name": "PeriTriaxController",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "Engine for independently controlling stress or strain in periodic simulations.\n\n PeriTriaxController.goal contains absolute values for the controlled quantity, and PeriTriaxController.stressMask determines meaning of those values (0 for strain, 1 for stress): e.g. ``( 1<<0 | 1<<2 ) = 1 | 4 = 5``...",
   "attributes": [
     {
       "name": "absStressTol",

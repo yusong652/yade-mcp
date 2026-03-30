@@ -2,7 +2,7 @@
   "name": "Ig2_Facet_Sphere_ScGeom6D",
   "category": "engines",
   "parent": "Ig2_Facet_Sphere_ScGeom",
-  "description": "",
+  "description": "Create an interaction geometry ScGeom6D from Facet and Sphere, representing the Facet with a projected virtual sphere of same radius.",
   "attributes": [
     {
       "name": "hertzian",

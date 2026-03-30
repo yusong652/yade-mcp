@@ -2,7 +2,7 @@
   "name": "Ip2_JCFpmMat_JCFpmMat_JCFpmPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Converts 2 JCFpmMat instances to one JCFpmPhys instance, with corresponding parameters. See JCFpmMat and [Duriez2016]_ for details",
   "attributes": [
     {
       "name": "cohesiveTresholdIteration",

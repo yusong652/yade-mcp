@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_LubricationPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Ip2 creating LubricationPhys from two Material instances.",
   "attributes": [
     {
       "name": "eps",

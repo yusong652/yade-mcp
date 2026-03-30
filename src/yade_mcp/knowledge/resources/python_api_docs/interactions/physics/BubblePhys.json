@@ -2,7 +2,7 @@
   "name": "BubblePhys",
   "category": "interactions",
   "parent": "IPhys",
-  "description": "",
+  "description": "Physics of bubble-bubble interactions, for use with BubbleMat",
   "attributes": [
     {
       "name": "Dmax",

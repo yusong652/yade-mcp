@@ -2,7 +2,7 @@
   "name": "CapillaryMindlinPhysDelaunay",
   "category": "interactions",
   "parent": "MindlinPhys",
-  "description": "",
+  "description": "An extended version of \u0300(iPhysType), adding capillary data for CapillarityEngine.",
   "attributes": [
     {
       "name": "Delta1",

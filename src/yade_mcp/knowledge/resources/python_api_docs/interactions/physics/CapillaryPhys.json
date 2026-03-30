@@ -2,7 +2,7 @@
   "name": "CapillaryPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Physics (of interaction) for Law2_ScGeom_CapillaryPhys_Capillarity.",
   "attributes": [
     {
       "name": "Delta1",

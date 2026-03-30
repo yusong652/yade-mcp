@@ -2,7 +2,7 @@
   "name": "CapillaryStressRecorder",
   "category": "engines",
   "parent": "Recorder",
-  "description": "",
+  "description": "Records information from capillary meniscii on samples submitted to triaxial compressions. Classical sign convention (tension positiv) is used for capillary stresses. -> New formalism needs to be tested!!!",
   "attributes": [
     {
       "name": "addIterNum",

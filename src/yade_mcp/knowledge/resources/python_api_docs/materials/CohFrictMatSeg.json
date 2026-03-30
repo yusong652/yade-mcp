@@ -2,7 +2,7 @@
   "name": "CohFrictMatSeg",
   "category": "materials",
   "parent": "CohFrictMat",
-  "description": "",
+  "description": "Material extending CohFrictMat to use dual material properties with segmented bodies (transition between properties depends on the coating thickness). Should be used with Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys to benefit from dual material capabilites. The other functors can be the same as...",
   "attributes": [
     {
       "name": "alphaKr",

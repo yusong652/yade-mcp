@@ -2,7 +2,7 @@
   "name": "Interaction",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Interaction between pair of bodies.",
   "attributes": [
     {
       "name": "cellDist",

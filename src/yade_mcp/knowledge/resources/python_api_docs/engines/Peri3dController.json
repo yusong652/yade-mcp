@@ -2,7 +2,7 @@
   "name": "Peri3dController",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "Class for controlling independently all 6 components of \"engineering\" stress<Peri3dController.stress> and strain<Peri3dController.strain> of periodic Cell. goal<Peri3dController.goal> are the goal values, while stressMask<Peri3dController.stressMask> determines which components prescribe stress and...",
   "attributes": [
     {
       "name": "doneHook",

@@ -2,7 +2,7 @@
   "name": "RotationEngine",
   "category": "engines",
   "parent": "KinematicEngine",
-  "description": "",
+  "description": "Engine applying rotation (by setting angular velocity) to subscribed bodies. If rotateAroundZero<RotationEngine.rotateAroundZero> is set, then each body is also displaced around zeroPoint<RotationEngine.zeroPoint>.",
   "attributes": [
     {
       "name": "angularVelocity",

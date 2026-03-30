@@ -2,7 +2,7 @@
   "name": "Ip2_CpmMat_CpmMat_CpmPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Convert 2 CpmMat instances to CpmPhys with corresponding parameters. Uses simple (arithmetic) averages if material are different. Simple copy of parameters is performed if the material<CpmMat> is shared between both particles. See cpm-model<CpmMat> for detals.",
   "attributes": [
     {
       "name": "E",

@@ -2,6 +2,6 @@
   "name": "Ig2_LevelSet_LevelSet_LSnodeGeom",
   "category": "engines",
   "parent": "Ig2_LevelSet_LevelSet_ScGeom",
-  "description": "",
+  "description": "Same as Ig2_LevelSet_LevelSet_ScGeom except for the additional information in LSnodeGeom which should enable faster simulations, provided that Law2_ScGeom_FrictPhys_CundallStrack.neverErase is defined as True. This functor actually creates an interaction geom, enabling the interaction to turn real,...",
   "attributes": []
 }

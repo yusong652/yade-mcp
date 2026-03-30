@@ -2,7 +2,7 @@
   "name": "TwoPhaseFlowEngineT",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "A generic engine from wich more specialized engines can inherit. It is defined for the sole purpose of inserting the right data classes CellInfo and VertexInfo in the triangulation, and it should not be used directly. Instead, look for specialized engines, e.g. FlowEngine, PeriodicFlowEngine, or...",
   "attributes": [
     {
       "name": "alphaBound",

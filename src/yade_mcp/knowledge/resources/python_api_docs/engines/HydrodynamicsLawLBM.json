@@ -2,7 +2,7 @@
   "name": "HydrodynamicsLawLBM",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Engine to simulate fluid flow (with the lattice Boltzmann method) with a coupling with the discrete element method.\n If you use this Engine, please cite and refer to F. Lomin\u00e9 et al. International Journal For Numerical and Analytical Method in Geomechanics, 2012, doi: 10.1002/nag.1109",
   "attributes": [
     {
       "name": "ConvergenceThreshold",

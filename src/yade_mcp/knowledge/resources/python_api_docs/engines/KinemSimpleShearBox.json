@@ -2,7 +2,7 @@
   "name": "KinemSimpleShearBox",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "This class is supposed to be a mother class for all Engines performing loadings on the simple shear box of SimpleShear. It is not intended to be used by itself, but its declaration and implentation will thus contain all what is useful for all these Engines. The script...",
   "attributes": [
     {
       "name": "Key",

@@ -2,7 +2,7 @@
   "name": "KinemCNLEngine",
   "category": "engines",
   "parent": "KinemSimpleShearBox",
-  "description": "",
+  "description": "To apply a constant normal stress shear (i.e. Constant Normal Load : CNL) for a parallelogram box (simple shear box : SimpleShear Preprocessor or scripts/simpleShear.py)\n\nThis engine allows one to translate horizontally the upper plate while the lateral ones rotate so that they always keep contact...",
   "attributes": [
     {
       "name": "Key",

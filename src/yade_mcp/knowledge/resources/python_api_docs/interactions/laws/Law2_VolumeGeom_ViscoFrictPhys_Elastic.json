@@ -2,7 +2,7 @@
   "name": "Law2_VolumeGeom_ViscoFrictPhys_Elastic",
   "category": "interactions",
   "parent": "Law2_VolumeGeom_FrictPhys_Elastic",
-  "description": "",
+  "description": "Law similar to Law2_VolumeGeom_FrictPhys_Elastic with the addition of shear creep at contacts.",
   "attributes": [
     {
       "name": "creepStiffness",

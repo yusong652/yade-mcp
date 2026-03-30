@@ -2,7 +2,7 @@
   "name": "MeasureCapStress",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Post-processing engine giving the capillary stress tensor<MeasureCapStress.sigmaCap> (the fluids mixture contribution to the total stress in unsaturated, i.e. triphasic, conditions) according to the $\\mu$UNSAT expression detailled in [Duriez2017c]_. Although this expression differs in nature from...",
   "attributes": [
     {
       "name": "capillaryPressure",

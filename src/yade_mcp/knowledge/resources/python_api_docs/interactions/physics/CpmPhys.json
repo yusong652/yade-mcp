@@ -2,7 +2,7 @@
   "name": "CpmPhys",
   "category": "interactions",
   "parent": "NormShearPhys",
-  "description": "",
+  "description": "Representation of a single interaction of the Cpm type: storage for relevant parameters.\n\n Evolution of the contact is governed by Law2_ScGeom_CpmPhys_Cpm, that includes damage effects and chages of parameters inside CpmPhys. See cpm-model<CpmMat> for details.",
   "attributes": [
     {
       "name": "E",

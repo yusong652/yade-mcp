@@ -2,7 +2,7 @@
   "name": "KinemCTDEngine",
   "category": "engines",
   "parent": "KinemSimpleShearBox",
-  "description": "",
+  "description": "To compress a simple shear sample by moving the upper box in a vertical way only, so that the tangential displacement (defined by the horizontal gap between the upper and lower boxes) remains constant (thus, the CTD = Constant Tangential Displacement).\n \t The lateral boxes move also to keep always...",
   "attributes": [
     {
       "name": "Key",

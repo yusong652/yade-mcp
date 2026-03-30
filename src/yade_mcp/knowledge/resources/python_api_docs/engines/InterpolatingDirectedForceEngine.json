@@ -2,7 +2,7 @@
   "name": "InterpolatingDirectedForceEngine",
   "category": "engines",
   "parent": "ForceEngine",
-  "description": "",
+  "description": "Engine for applying force of varying magnitude but constant direction on subscribed bodies. times and magnitudes must have the same length, direction (normalized automatically) gives the orientation. \n\n\t\tAs usual with interpolating engines: the first magnitude is used before the first time point,...",
   "attributes": [
     {
       "name": "direction",

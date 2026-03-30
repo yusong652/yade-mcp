@@ -2,7 +2,7 @@
   "name": "HdapsGravityEngine",
   "category": "engines",
   "parent": "GravityEngine",
-  "description": "",
+  "description": "Read accelerometer in Thinkpad laptops (`HDAPS <http://en.wikipedia.org/wiki/Active_hard_drive_protection>`__ and accordingly set gravity within the simulation. This code draws from `hdaps-gl <https://sourceforge.net/project/showfiles.php?group_id=138242>`__ . See :ysrc:`scripts/test/hdaps.py` for...",
   "attributes": [
     {
       "name": "accel",

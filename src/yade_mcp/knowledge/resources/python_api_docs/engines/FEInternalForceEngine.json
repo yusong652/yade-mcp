@@ -2,7 +2,7 @@
   "name": "FEInternalForceEngine",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Unified dispatcher for handling Finite Element internal force loop at every step, for parallel performance reasons.\n\n.. admonition:: Special constructor\n\n\tConstructs from 3 lists of Ig2<IGeomFunctor>, Ip2<IPhysFunctor>, Law<LawFunctor> functors respectively; they will be passed to interal...",
   "attributes": [
     {
       "name": "internalforcedispatcher",

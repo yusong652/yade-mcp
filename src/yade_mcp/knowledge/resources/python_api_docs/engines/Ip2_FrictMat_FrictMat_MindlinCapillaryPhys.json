@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_MindlinCapillaryPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "RelationShips to use with Law2_ScGeom_CapillaryPhys_Capillarity\n\n In these RelationShips all the interaction attributes are computed. \n\n.. warning::\n\tas in the others Ip2 functors<IPhysFunctor>, most of the attributes are computed only once, when the interaction is new.",
   "attributes": [
     {
       "name": "betan",

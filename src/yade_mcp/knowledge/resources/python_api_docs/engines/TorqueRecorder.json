@@ -2,7 +2,7 @@
   "name": "TorqueRecorder",
   "category": "engines",
   "parent": "Recorder",
-  "description": "",
+  "description": "Engine saves the total torque according to the given axis and ZeroPoint, the force is taken from bodies, listed in `ids`  For instance, can be useful for defining the torque, which affects on ball mill during its work.",
   "attributes": [
     {
       "name": "addIterNum",

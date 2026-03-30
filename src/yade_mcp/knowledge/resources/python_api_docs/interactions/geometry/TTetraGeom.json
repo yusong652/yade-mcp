@@ -2,7 +2,7 @@
   "name": "TTetraGeom",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "Geometry of interaction between 2 tetrahedra<Tetra>, including volumetric characteristics",
   "attributes": [
     {
       "name": "contactPoint",

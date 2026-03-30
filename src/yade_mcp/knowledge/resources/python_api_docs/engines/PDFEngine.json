@@ -2,7 +2,7 @@
   "name": "PDFEngine",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Base class for spectrums calculations. Compute Probability Density Functions of normalStress, shearStress, distance, velocity and interactions in spherical coordinates and write result to a file. Column name format is: Data(theta, phi). Convention used: x: phi = 0, y: theta = 0, z: phi = pi/2",
   "attributes": [
     {
       "name": "filename",

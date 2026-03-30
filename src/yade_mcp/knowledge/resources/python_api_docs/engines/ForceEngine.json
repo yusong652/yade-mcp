@@ -2,7 +2,7 @@
   "name": "ForceEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply contact force on some particles at each step.",
   "attributes": [
     {
       "name": "force",

@@ -2,7 +2,7 @@
   "name": "DragEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply `drag force <http://en.wikipedia.org/wiki/Drag_equation>`__ on some particles at each step, decelerating them proportionally to their linear velocities. The applied force reads\n\n.. math:: F_{d}=-\\frac{\\vec{v}}{|\\vec{v}|}\\frac{1}{2}\\rho|\\vec{v}|^2 C_d A\n\nwhere $\\rho$ is the medium density...",
   "attributes": [
     {
       "name": "Cd",

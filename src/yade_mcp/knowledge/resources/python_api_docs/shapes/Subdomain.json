@@ -2,7 +2,7 @@
   "name": "Subdomain",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "The bounding box of a mpi subdomain. Stores internals and provides optimized functions for communications between workers. This class may not be used directly. Instead, Subdomains are appended automatically to the scene bodies when using mpy.mpirun",
   "attributes": [
     {
       "name": "boundsMax",

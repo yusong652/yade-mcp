@@ -2,7 +2,7 @@
   "name": "LudingPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "IPhys created from LudingMat, for use with Law2_ScGeom_LudingPhys_Basic.",
   "attributes": [
     {
       "name": "DeltMax",

@@ -2,7 +2,7 @@
   "name": "GridConnection",
   "category": "shapes",
   "parent": "Sphere",
-  "description": "",
+  "description": "GridConnection shape (see [Effeindzourou2016]_, [Bourrier2013]_). Component of a grid designed to link two GridNodes<GridNode>. It is highly recommended to use yade.gridpfacet.gridConnection to generate correct GridConnections<GridConnection>.",
   "attributes": [
     {
       "name": "cellDist",

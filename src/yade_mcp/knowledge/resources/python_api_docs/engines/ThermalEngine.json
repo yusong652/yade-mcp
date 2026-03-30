@@ -2,7 +2,7 @@
   "name": "ThermalEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "An engine typically used in combination with FlowEngine to simulate thermal-hydraulic-mechanical processes. Framework description and demonstration presented within the following paper [Caulk2019a]_ :Caulk, R.A. and Chareyre, B. (2019) An open framework for the simulation of...",
   "attributes": [
     {
       "name": "advection",

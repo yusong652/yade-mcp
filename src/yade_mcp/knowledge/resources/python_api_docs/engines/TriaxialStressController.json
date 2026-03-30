@@ -2,7 +2,7 @@
   "name": "TriaxialStressController",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "An engine maintaining constant stresses or constant strain rates on some boundaries of a parallepipedic packing. The stress/strain control is defined for each axis using TriaxialStressController::stressMask (a bitMask) and target values are defined by goal1,goal2, and goal3. The sign conventions of...",
   "attributes": [
     {
       "name": "boxVolume",

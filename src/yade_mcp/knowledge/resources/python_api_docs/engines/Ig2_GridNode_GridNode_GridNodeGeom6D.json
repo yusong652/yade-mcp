@@ -2,7 +2,7 @@
   "name": "Ig2_GridNode_GridNode_GridNodeGeom6D",
   "category": "engines",
   "parent": "Ig2_Sphere_Sphere_ScGeom",
-  "description": "",
+  "description": "Create/update a GridNodeGeom6D instance representing the geometry of a contact point between two GridNode<GridNode>, including relative rotations.",
   "attributes": [
     {
       "name": "avoidGranularRatcheting",

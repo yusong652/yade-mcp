@@ -2,7 +2,7 @@
   "name": "Bo1_Polyhedra_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Create/update Aabb of a Polyhedra",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

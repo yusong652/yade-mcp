@@ -2,7 +2,7 @@
   "name": "LinIsoElastMat",
   "category": "materials",
   "parent": "DeformableElementMaterial",
-  "description": "",
+  "description": "Linear Isotropic Elastic material",
   "attributes": [
     {
       "name": "density",

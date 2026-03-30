@@ -2,7 +2,7 @@
   "name": "Bound",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Object bounding part of space taken by associated body; might be larger, used to optimalize collision detection",
   "attributes": [
     {
       "name": "color",

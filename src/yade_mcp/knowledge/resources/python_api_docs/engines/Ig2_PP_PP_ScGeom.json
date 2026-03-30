@@ -2,7 +2,7 @@
   "name": "Ig2_PP_PP_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "EXPERIMENTAL. IGeom functor for PotentialParticle - PotentialParticle pair",
   "attributes": [
     {
       "name": "accuracyTol",

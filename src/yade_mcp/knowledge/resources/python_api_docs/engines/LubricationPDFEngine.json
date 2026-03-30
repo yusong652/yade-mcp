@@ -2,7 +2,7 @@
   "name": "LubricationPDFEngine",
   "category": "engines",
   "parent": "PDFEngine",
-  "description": "",
+  "description": "Implementation of PDFEngine for Lubrication law",
   "attributes": [
     {
       "name": "filename",

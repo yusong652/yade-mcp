@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_MindlinPhys_HertzWithLinearShear",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Constitutive law for the Hertz formulation (using MindlinPhys.kno) and linear behavior in shear (using MindlinPhys.kso for stiffness and FrictPhys.tangensOfFrictionAngle). \n\n.. note:: No viscosity or damping. If you need those, look at  Law2_ScGeom_MindlinPhys_Mindlin, which also includes...",
   "attributes": [
     {
       "name": "neverErase",

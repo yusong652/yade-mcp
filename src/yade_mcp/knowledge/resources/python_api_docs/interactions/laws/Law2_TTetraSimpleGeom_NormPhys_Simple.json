@@ -2,6 +2,6 @@
   "name": "Law2_TTetraSimpleGeom_NormPhys_Simple",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "EXPERIMENTAL. TODO",
   "attributes": []
 }

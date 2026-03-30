@@ -2,7 +2,7 @@
   "name": "Ip2_MortarMat_MortarMat_MortarPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Ip2 creating MortarPhys from two MortarMat instances.",
   "attributes": [
     {
       "name": "cohesiveThresholdIter",

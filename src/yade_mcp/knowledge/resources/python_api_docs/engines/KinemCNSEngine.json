@@ -2,7 +2,7 @@
   "name": "KinemCNSEngine",
   "category": "engines",
   "parent": "KinemSimpleShearBox",
-  "description": "",
+  "description": "To apply a Constant Normal Stifness (CNS) shear for a parallelogram box (simple shear)\n\nThis engine, to use in simulations implying one deformable parallelepipedic box, allows one to translate horizontally the upper plate while the lateral ones rotate so that they always keep contact with the lower...",
   "attributes": [
     {
       "name": "Key",

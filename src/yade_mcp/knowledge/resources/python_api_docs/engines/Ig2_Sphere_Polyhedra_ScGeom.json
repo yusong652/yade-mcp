@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_Polyhedra_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update geometry of collision between Sphere and Polyhedra",
   "attributes": [
     {
       "name": "edgeCoeff",

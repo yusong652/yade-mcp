@@ -2,7 +2,7 @@
   "name": "LudingMat",
   "category": "materials",
   "parent": "Material",
-  "description": "",
+  "description": "Material for simple Luding`s model of contact [Luding2008]_ ,[Singh2013]_ .",
   "attributes": [
     {
       "name": "G0",

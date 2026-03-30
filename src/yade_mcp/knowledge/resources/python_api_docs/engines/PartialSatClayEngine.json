@@ -2,7 +2,7 @@
   "name": "PartialSatClayEngine",
   "category": "engines",
   "parent": "PartialSatClayEngineT",
-  "description": "",
+  "description": "Engine designed to simulate the partial saturation of clay and associated swelling.",
   "attributes": [
     {
       "name": "Ka",

@@ -2,7 +2,7 @@
   "name": "ParallelEngine",
   "category": "engines",
   "parent": "Engine",
-  "description": "",
+  "description": "Engine for running other Engine in parallel.",
   "attributes": [
     {
       "name": "slaves",

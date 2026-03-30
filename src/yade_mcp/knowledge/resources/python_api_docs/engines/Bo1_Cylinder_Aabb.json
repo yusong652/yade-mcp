@@ -2,7 +2,7 @@
   "name": "Bo1_Cylinder_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Functor creating Aabb from Cylinder.",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

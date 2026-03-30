@@ -2,7 +2,7 @@
   "name": "SpatialQuickSortCollider",
   "category": "engines",
   "parent": "Collider",
-  "description": "",
+  "description": "Collider using quicksort along axes at each step, using Aabb bounds. \n\n Its performance is lower than that of InsertionSortCollider (see `Colliders' performance <https://yade-dem.org/wiki/Colliders_performace>`_), but the algorithm is simple enought to make it good for checking other collider's...",
   "attributes": [
     {
       "name": "avoidSelfInteractionMask",

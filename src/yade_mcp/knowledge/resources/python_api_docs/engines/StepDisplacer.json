@@ -2,7 +2,7 @@
   "name": "StepDisplacer",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply generalized displacement (displacement or rotation) stepwise on subscribed bodies. Could be used for purposes of contact law tests (by moving one sphere compared to another), but in this case, see rather LawTester",
   "attributes": [
     {
       "name": "ids",

@@ -2,7 +2,7 @@
   "name": "Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update geometry of collision between 2 Polyhedras",
   "attributes": [
     {
       "name": "interactionDetectionFactor",

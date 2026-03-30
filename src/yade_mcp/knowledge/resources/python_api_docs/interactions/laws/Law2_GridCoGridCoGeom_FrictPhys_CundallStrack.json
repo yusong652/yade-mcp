@@ -2,7 +2,7 @@
   "name": "Law2_GridCoGridCoGeom_FrictPhys_CundallStrack",
   "category": "interactions",
   "parent": "Law2_ScGeom_FrictPhys_CundallStrack",
-  "description": "",
+  "description": "Frictional elastic contact law between two gridConnection . See Law2_ScGeom_FrictPhys_CundallStrack for more details.",
   "attributes": [
     {
       "name": "neverErase",

@@ -2,7 +2,7 @@
   "name": "ChainedState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "State of a chained bodies, containing information on connectivity in order to track contacts jumping over contiguous elements. Chains are 1D lists from which id of chained bodies are retrieved via rank<ChainedState::rank> and chainNumber<ChainedState::chainNumber>.",
   "attributes": [
     {
       "name": "angMom",

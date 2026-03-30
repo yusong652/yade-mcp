@@ -2,7 +2,7 @@
   "name": "MindlinCapillaryPhys",
   "category": "interactions",
   "parent": "MindlinPhys",
-  "description": "",
+  "description": "Adds capillary physics to Mindlin's interaction physics.",
   "attributes": [
     {
       "name": "Delta1",

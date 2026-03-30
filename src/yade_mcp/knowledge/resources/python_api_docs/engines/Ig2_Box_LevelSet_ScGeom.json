@@ -2,6 +2,6 @@
   "name": "Ig2_Box_LevelSet_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Creates or updates a ScGeom instance representing the intersection of one LevelSet body with one Box body. Normal is given by the box geometry while overlap and contact points are defined likewise to Ig2_LevelSet_LevelSet_ScGeom. Restricted to the case of Boxes for which local and global axes...",
   "attributes": []
 }

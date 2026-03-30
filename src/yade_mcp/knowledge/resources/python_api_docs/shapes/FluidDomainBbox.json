@@ -2,7 +2,7 @@
   "name": "FluidDomainBbox",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "The bounding box of a fluid grid from one OpenFOAM/YALES2 proc",
   "attributes": [
     {
       "name": "bIds",

@@ -2,7 +2,7 @@
   "name": "GridNodeGeom6D",
   "category": "interactions",
   "parent": "ScGeom6D",
-  "description": "",
+  "description": "Geometry of a GridNode-GridNode contact. Inherits almost everything from ScGeom6D.",
   "attributes": [
     {
       "name": "bending",

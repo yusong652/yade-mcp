@@ -2,7 +2,7 @@
   "name": "Cylinder",
   "category": "engines",
   "parent": "Sphere",
-  "description": "",
+  "description": "Geometry of a cylinder, as Minkowski sum of line and sphere.",
   "attributes": [
     {
       "name": "color",

@@ -2,7 +2,7 @@
   "name": "CpmStateUpdater",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Update CpmState of bodies based on state variables in CpmPhys of interactions with this bod. In particular, bodies' colors and CpmState::normDmg depending on average damage<CpmPhys::omega> of their interactions and number of interactions that were already fully broken and have disappeared is...",
   "attributes": [
     {
       "name": "avgRelResidual",

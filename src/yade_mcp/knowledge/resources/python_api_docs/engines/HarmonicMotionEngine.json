@@ -2,7 +2,7 @@
   "name": "HarmonicMotionEngine",
   "category": "engines",
   "parent": "KinematicEngine",
-  "description": "",
+  "description": "This engine implements the harmonic oscillation of bodies. See also HarmonicForceEngine that applies a harmonic force, see also the `dynamics of harmonic motion <http://en.wikipedia.org/wiki/Simple_harmonic_motion#Dynamics_of_simple_harmonic_motion>`__",
   "attributes": [
     {
       "name": "A",

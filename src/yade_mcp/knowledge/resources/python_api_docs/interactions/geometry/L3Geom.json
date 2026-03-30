@@ -2,7 +2,7 @@
   "name": "L3Geom",
   "category": "interactions",
   "parent": "GenericSpheresContact",
-  "description": "",
+  "description": "Geometry of contact given in local coordinates with 3 degress of freedom: normal and two in shear plane. [experimental]",
   "attributes": [
     {
       "name": "F",

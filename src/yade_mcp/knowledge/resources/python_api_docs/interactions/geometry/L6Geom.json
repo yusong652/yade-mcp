@@ -2,7 +2,7 @@
   "name": "L6Geom",
   "category": "interactions",
   "parent": "L3Geom",
-  "description": "",
+  "description": "Geometric of contact in local coordinates with 6 degrees of freedom. [experimental]",
   "attributes": [
     {
       "name": "F",

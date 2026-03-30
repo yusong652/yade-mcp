@@ -2,7 +2,7 @@
   "name": "LawTester",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Prescribe and apply deformations of an interaction in terms of local mutual displacements and rotations. The loading path is specified either using path<LawTester.path> (as sequence of 6-vectors containing generalized displacements $u_x$, $u_y$, $u_z$, $\\phi_x$, $\\phi_y$, $\\phi_z$) or...",
   "attributes": [
     {
       "name": "disPath",

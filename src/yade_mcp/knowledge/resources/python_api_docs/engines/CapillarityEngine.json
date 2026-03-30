@@ -2,7 +2,7 @@
   "name": "CapillarityEngine",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "This engine loops over interactions with physics CapillaryPhysDelaunay and it assign pendular bridges to them. It is a reimplementation of [Scholtes2009b]_, adding the option of imposing the bridge volume (instead of only capillary pressure) and enabling using unstructured input data by...",
   "attributes": [
     {
       "name": "binaryFusion",

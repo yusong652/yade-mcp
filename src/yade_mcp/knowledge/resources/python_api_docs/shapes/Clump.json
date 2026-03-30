@@ -2,7 +2,7 @@
   "name": "Clump",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Rigid aggregate of bodies whose usage is detailed here<ClumpSection>",
   "attributes": [
     {
       "name": "color",

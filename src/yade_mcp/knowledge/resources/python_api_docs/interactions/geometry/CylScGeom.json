@@ -2,7 +2,7 @@
   "name": "CylScGeom",
   "category": "interactions",
   "parent": "ScGeom",
-  "description": "",
+  "description": "Geometry of a cylinder-sphere contact.",
   "attributes": [
     {
       "name": "contactPoint",

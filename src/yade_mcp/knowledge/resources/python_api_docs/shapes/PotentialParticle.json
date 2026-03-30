@@ -2,7 +2,7 @@
   "name": "PotentialParticle",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "EXPERIMENTAL. Geometry of PotentialParticle.",
   "attributes": [
     {
       "name": "AabbMinMax",

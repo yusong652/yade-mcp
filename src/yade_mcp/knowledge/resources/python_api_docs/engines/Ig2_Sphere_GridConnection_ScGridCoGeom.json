@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_GridConnection_ScGridCoGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update a ScGridCoGeom6D instance representing the geometry of a contact point between a GricConnection and a Sphere including relative rotations.",
   "attributes": [
     {
       "name": "interactionDetectionFactor",

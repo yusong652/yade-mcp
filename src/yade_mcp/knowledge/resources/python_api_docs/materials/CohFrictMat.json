@@ -2,7 +2,7 @@
   "name": "CohFrictMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material description extending FrictMat with cohesive properties and rotational stiffnesses. For use e.g. with Law2_ScGeom6D_CohFrictPhys_CohesionMoment.",
   "attributes": [
     {
       "name": "alphaKr",

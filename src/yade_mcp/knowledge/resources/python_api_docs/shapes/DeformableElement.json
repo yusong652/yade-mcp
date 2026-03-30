@@ -2,7 +2,7 @@
   "name": "DeformableElement",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Deformable aggregate of nodes",
   "attributes": [
     {
       "name": "color",

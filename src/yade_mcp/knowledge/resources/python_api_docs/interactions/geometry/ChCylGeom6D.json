@@ -2,7 +2,7 @@
   "name": "ChCylGeom6D",
   "category": "interactions",
   "parent": "ScGeom6D",
-  "description": "",
+  "description": "Test",
   "attributes": [
     {
       "name": "bending",

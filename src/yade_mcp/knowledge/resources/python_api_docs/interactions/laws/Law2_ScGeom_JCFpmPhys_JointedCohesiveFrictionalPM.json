@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Interaction law for cohesive frictional material, e.g. rock, possibly presenting joint surfaces, that can be mechanically described with a smooth contact logic [Ivars2011]_ (implemented in Yade in [Scholtes2012]_). See examples/jointedCohesiveFrictionalPM for script examples. Joint surface...",
   "attributes": [
     {
       "name": "Key",

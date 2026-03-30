@@ -2,6 +2,6 @@
   "name": "Ig2_Facet_Polyhedra_PolyhedraGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update geometry of collision between Facet and Polyhedra",
   "attributes": []
 }

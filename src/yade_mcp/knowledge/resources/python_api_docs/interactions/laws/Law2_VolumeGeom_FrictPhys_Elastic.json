@@ -2,7 +2,7 @@
   "name": "Law2_VolumeGeom_FrictPhys_Elastic",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Contact law for elasticity, scaling exponentially with the overlap volume, with Mohr-Coulomb plastic failure without cohesion.\nThis law implements a volumetric variant of the classical elastic-plastic law from [CundallStrack1979]_ (see also [Pfc3dManual30]_). The normal force is $F_n=\\min(k_n...",
   "attributes": [
     {
       "name": "neverErase",

@@ -2,6 +2,6 @@
   "name": "Law2_MultiScGeom_MultiViscElPhys_Basic",
   "category": "interactions",
   "parent": "Law2_ScGeom_ViscElPhys_Basic",
-  "description": "",
+  "description": "Applies Law2_ScGeom_ViscElPhys_Basic at each contact point of a (yref:`MultiScGeom`;yref:`MultiViscElPhys`) contact [Duriez2023]_.",
   "attributes": []
 }

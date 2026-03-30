@@ -2,7 +2,7 @@
   "name": "Ip2_PartialSatMat_PartialSatMat_MindlinPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "PartialSat variant of HertzMindlin \n\n Calculate some physical parameters needed to obtain the normal and shear stiffnesses according to the Hertz-Mindlin formulation (as implemented in PFC).\n\nViscous parameters can be specified either using coefficients of restitution ($e_n$, $e_s$) or viscous...",
   "attributes": [
     {
       "name": "betan",

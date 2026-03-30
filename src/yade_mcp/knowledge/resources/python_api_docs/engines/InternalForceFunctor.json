@@ -2,6 +2,6 @@
   "name": "InternalForceFunctor",
   "category": "engines",
   "parent": "Functor",
-  "description": "",
+  "description": "Functor for creating/updating Body::bound.",
   "attributes": []
 }

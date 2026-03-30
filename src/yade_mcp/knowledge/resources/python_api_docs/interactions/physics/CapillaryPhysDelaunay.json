@@ -2,7 +2,7 @@
   "name": "CapillaryPhysDelaunay",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "An extended version of \u0300FrictPhys, adding capillary data for CapillarityEngine.",
   "attributes": [
     {
       "name": "Delta1",

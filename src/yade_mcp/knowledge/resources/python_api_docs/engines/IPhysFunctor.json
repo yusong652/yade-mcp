@@ -2,6 +2,6 @@
   "name": "IPhysFunctor",
   "category": "engines",
   "parent": "Functor",
-  "description": "",
+  "description": "Functor for creating/updating Interaction::phys objects from bodies' material<Body::material> properties.",
   "attributes": []
 }

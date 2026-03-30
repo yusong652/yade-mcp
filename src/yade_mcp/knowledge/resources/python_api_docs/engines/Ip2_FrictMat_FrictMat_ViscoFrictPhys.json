@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_ViscoFrictPhys",
   "category": "engines",
   "parent": "Ip2_FrictMat_FrictMat_FrictPhys",
-  "description": "",
+  "description": "Create a FrictPhys from two FrictMats<FrictMat>. The compliance of one sphere under symetric point loads is defined here as 1/(E.r), with E the stiffness of the sphere and r its radius, and corresponds to a compliance 1/(2.E.r)=1/(E.D) from each contact point. The compliance of the contact itself...",
   "attributes": [
     {
       "name": "frictAngle",

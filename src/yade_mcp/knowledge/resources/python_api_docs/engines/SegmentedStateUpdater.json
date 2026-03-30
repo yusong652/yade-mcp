@@ -2,7 +2,7 @@
   "name": "SegmentedStateUpdater",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "This class provides methods for setting the coating thickness of bodies and performing the coating material transfer (both interparticle and intraparticle).",
   "attributes": [
     {
       "name": "activateWettability",

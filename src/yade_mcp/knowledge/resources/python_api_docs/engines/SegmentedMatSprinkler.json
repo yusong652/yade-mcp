@@ -2,7 +2,7 @@
   "name": "SegmentedMatSprinkler",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "A periodic engine distributing coating material of particles having CohFrictMatSeg. Determines the particles to cover by ray tracing algorithm.",
   "attributes": [
     {
       "name": "alpha",

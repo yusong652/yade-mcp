@@ -2,7 +2,7 @@
   "name": "NormPhys",
   "category": "interactions",
   "parent": "IPhys",
-  "description": "",
+  "description": "Abstract class for interactions that have normal stiffness.",
   "attributes": [
     {
       "name": "kn",

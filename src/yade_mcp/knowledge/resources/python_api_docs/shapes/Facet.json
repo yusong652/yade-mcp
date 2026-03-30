@@ -2,7 +2,7 @@
   "name": "Facet",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Facet (triangular particle) geometry.",
   "attributes": [
     {
       "name": "area",

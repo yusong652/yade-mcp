@@ -2,7 +2,7 @@
   "name": "ViscElCapMat",
   "category": "materials",
   "parent": "ViscElMat",
-  "description": "",
+  "description": "Material for extended viscoelastic model of contact with capillary parameters.",
   "attributes": [
     {
       "name": "Capillar",

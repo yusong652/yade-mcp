@@ -2,6 +2,6 @@
   "name": "InteractionContainer",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Access to interactions<Interaction> of simulation, by using \n\n#. id's of both Bodies<Body> of the interactions, e.g. ``O.interactions[23,65]``\n#. iteraction over the whole container::\n\n\tfor i in O.interactions: print i.id1,i.id2\n\n.. note::\n\tIteration silently skips interactions that are virtual...",
   "attributes": []
 }

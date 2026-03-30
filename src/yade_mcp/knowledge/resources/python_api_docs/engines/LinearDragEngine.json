@@ -2,7 +2,7 @@
   "name": "LinearDragEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply `viscous resistance or linear drag <http://en.wikipedia.org/wiki/Drag_%28physics%29#Very_low_Reynolds_numbers_.E2.80.94_Stokes.27_drag>`__ on some particles at each step, decelerating them proportionally to their linear velocities. The applied force reads\n\n.. math:: F_{d}=-b{\\vec{v}} \n\nwhere...",
   "attributes": [
     {
       "name": "ids",

@@ -2,7 +2,7 @@
   "name": "ViscElCapPhys",
   "category": "interactions",
   "parent": "ViscElPhys",
-  "description": "",
+  "description": "IPhys created from ViscElCapMat, for use with Law2_ScGeom_ViscElCapPhys_Basic.",
   "attributes": [
     {
       "name": "Capillar",

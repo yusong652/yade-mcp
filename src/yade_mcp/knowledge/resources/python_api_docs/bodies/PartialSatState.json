@@ -2,7 +2,7 @@
   "name": "PartialSatState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "Hertz mindlin state information about each body. Only active if partially saturated clay model is active.",
   "attributes": [
     {
       "name": "angMom",

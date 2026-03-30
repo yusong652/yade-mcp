@@ -2,7 +2,7 @@
   "name": "KnKsPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "EXPERIMENTAL. IPhys for PotentialParticle.",
   "attributes": [
     {
       "name": "brittleLength",

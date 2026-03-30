@@ -2,7 +2,7 @@
   "name": "Box",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Box (cuboid) particle geometry. (Avoid using in new code, prefer Facet instead.)",
   "attributes": [
     {
       "name": "color",

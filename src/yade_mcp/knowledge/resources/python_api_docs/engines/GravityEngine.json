@@ -2,7 +2,7 @@
   "name": "GravityEngine",
   "category": "engines",
   "parent": "FieldApplier",
-  "description": "",
+  "description": "Engine applying constant acceleration to all bodies. DEPRECATED, use Newton::gravity unless you need energy tracking or selective gravity application using groupMask).",
   "attributes": [
     {
       "name": "gravity",

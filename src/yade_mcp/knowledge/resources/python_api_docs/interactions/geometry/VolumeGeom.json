@@ -2,7 +2,7 @@
   "name": "VolumeGeom",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "Geometry of the interaction between two LevelSet bodies when using volume-based interactions. Will soon become the general class for volume interaction, such that it works for polyhedra as well.",
   "attributes": [
     {
       "name": "averagePenetrationDepth",

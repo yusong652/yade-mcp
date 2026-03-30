@@ -2,7 +2,7 @@
   "name": "MortarMat",
   "category": "engines",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material for mortar interface, used in Ip2_MortarMat_MortarMat_MortarPhys and Law2_ScGeom_MortarPhys_Lourenco. Default values according to",
   "attributes": [
     {
       "name": "cohesion",

@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_CpmMat_FrictPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Convert CpmMat instance and FrictMat instance to FrictPhys with corresponding parameters (young, poisson, frictionAngle). Uses simple (arithmetic) averages if material parameters are different.",
   "attributes": [
     {
       "name": "frictAngle",

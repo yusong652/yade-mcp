@@ -2,7 +2,7 @@
   "name": "MindlinPhys",
   "category": "interactions",
   "parent": "RotStiffFrictPhys",
-  "description": "",
+  "description": "Representation of an interaction of the Hertz-Mindlin type.",
   "attributes": [
     {
       "name": "Fs",

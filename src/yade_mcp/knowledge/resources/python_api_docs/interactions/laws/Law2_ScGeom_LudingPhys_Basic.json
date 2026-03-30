@@ -2,6 +2,6 @@
   "name": "Law2_ScGeom_LudingPhys_Basic",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Linear viscoelastic model operating on ScGeom and LudingPhys. See [Luding2008]_ ,[Singh2013]_ for more details.",
   "attributes": []
 }

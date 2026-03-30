@@ -2,7 +2,7 @@
   "name": "JCFpmPhys",
   "category": "interactions",
   "parent": "NormShearPhys",
-  "description": "",
+  "description": "Representation of a single interaction of the JCFpm type, storage for relevant parameters",
   "attributes": [
     {
       "name": "FnMax",

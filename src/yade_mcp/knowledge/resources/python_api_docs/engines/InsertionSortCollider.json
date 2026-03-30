@@ -2,7 +2,7 @@
   "name": "InsertionSortCollider",
   "category": "engines",
   "parent": "Collider",
-  "description": "",
+  "description": "Collider with O(n log(n)) complexity, using Aabb for bounds.\t\t\n\n\t\tAt the initial step, Bodies' bounds (along sortAxis<InsertionSortCollider.sortAxis>) are first std::sort'ed along this (sortAxis) axis, then collided. The initial sort has :math:`O(n^2)` complexity, see `Colliders' performance...",
   "attributes": [
     {
       "name": "allowBiggerThanPeriod",

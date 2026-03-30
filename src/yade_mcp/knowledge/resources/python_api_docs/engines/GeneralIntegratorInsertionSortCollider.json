@@ -2,7 +2,7 @@
   "name": "GeneralIntegratorInsertionSortCollider",
   "category": "engines",
   "parent": "InsertionSortCollider",
-  "description": "",
+  "description": "This class is the adaptive version of the InsertionSortCollider and changes the NewtonIntegrator dependency of the collider algorithms to the Integrator interface which is more general.",
   "attributes": [
     {
       "name": "allowBiggerThanPeriod",

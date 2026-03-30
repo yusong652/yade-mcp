@@ -2,7 +2,7 @@
   "name": "PeriIsoCompressor",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "Compress/decompress cloud of spheres by controlling periodic cell size until it reaches prescribed average stress, then moving to next stress value in given stress series.",
   "attributes": [
     {
       "name": "charLen",

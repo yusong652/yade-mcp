@@ -2,7 +2,7 @@
   "name": "Sphere",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Geometry of spherical particle.",
   "attributes": [
     {
       "name": "color",

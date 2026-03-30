@@ -2,7 +2,7 @@
   "name": "ScGeom",
   "category": "interactions",
   "parent": "GenericSpheresContact",
-  "description": "",
+  "description": "Class representing geometry<IGeom> of a contact point between two bodies<Body>. It is more general than sphere-sphere contact even though it is primarily focused on spheres contact interactions (reason for the 'Sc' naming); it is also used for representing contacts of a Sphere with non-spherical...",
   "attributes": [
     {
       "name": "contactPoint",

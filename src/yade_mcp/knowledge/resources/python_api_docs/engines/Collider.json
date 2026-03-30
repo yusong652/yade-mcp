@@ -2,7 +2,7 @@
   "name": "Collider",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Abstract class for finding spatial collisions between bodies. \n\n.. admonition:: Special constructor\n\n\tDerived colliders (unless they override ``pyHandleCustomCtorArgs``) can be given list of BoundFunctors <BoundFunctor> which is used to initialize the internal boundDispatcher...",
   "attributes": [
     {
       "name": "avoidSelfInteractionMask",

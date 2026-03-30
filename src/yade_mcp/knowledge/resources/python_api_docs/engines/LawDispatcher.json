@@ -2,7 +2,7 @@
   "name": "LawDispatcher",
   "category": "engines",
   "parent": "Dispatcher",
-  "description": "",
+  "description": "Dispatcher calling functors<LawFunctor> based on received argument type(s).",
   "attributes": [
     {
       "name": "functors",

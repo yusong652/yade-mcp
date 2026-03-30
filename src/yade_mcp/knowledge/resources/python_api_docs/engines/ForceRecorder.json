@@ -2,7 +2,7 @@
   "name": "ForceRecorder",
   "category": "engines",
   "parent": "Recorder",
-  "description": "",
+  "description": "Engine saves the resultant force affecting to bodies, listed in `ids`. For instance, can be useful for defining the forces, which affects to _buldozer_ during its work.",
   "attributes": [
     {
       "name": "addIterNum",

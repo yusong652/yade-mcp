@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_FrictPhys_CundallStrack",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Law for linear compression, and Mohr-Coulomb plasticity surface without cohesion.\nThis law implements the classical linear elastic-plastic law from [CundallStrack1979]_ (see also [Pfc3dManual30]_). The normal force is (with the convention of positive tensile forces) $F_n=\\min(k_n u_n, 0)$. The...",
   "attributes": [
     {
       "name": "neverErase",

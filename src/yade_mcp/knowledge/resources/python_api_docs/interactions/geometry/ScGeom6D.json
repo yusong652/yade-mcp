@@ -2,7 +2,7 @@
   "name": "ScGeom6D",
   "category": "interactions",
   "parent": "ScGeom",
-  "description": "",
+  "description": "Class representing geometry<IGeom> of two bodies<Body> in contact. The contact has 6 DOFs (normal, 2\u00d7shear, twist, 2xbending) and uses ScGeom incremental algorithm for updating shear.",
   "attributes": [
     {
       "name": "bending",

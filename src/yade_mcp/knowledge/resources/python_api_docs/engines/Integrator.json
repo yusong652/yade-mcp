@@ -2,7 +2,7 @@
   "name": "Integrator",
   "category": "engines",
   "parent": "TimeStepper",
-  "description": "",
+  "description": "Integration Engine Interface.",
   "attributes": [
     {
       "name": "active",

@@ -2,7 +2,7 @@
   "name": "HarmonicRotationEngine",
   "category": "engines",
   "parent": "RotationEngine",
-  "description": "",
+  "description": "This engine implements the harmonic-rotation oscillation of bodies, see also the `dynamics of harmonic motion <http://en.wikipedia.org/wiki/Simple_harmonic_motion#Dynamics_of_simple_harmonic_motion>`__ ; please, set dynamic=False for bodies, droven by this engine, otherwise amplitude will be 2x...",
   "attributes": [
     {
       "name": "A",

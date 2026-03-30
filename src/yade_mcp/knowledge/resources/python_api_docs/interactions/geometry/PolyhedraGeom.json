@@ -2,7 +2,7 @@
   "name": "PolyhedraGeom",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "Geometry of interaction between 2 Polyhedra, including volumetric characteristics",
   "attributes": [
     {
       "name": "contactPoint",

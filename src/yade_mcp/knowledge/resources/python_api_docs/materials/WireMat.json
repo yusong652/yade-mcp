@@ -2,7 +2,7 @@
   "name": "WireMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material for use with the Wire classes. In conjunction with the corresponding functors it can be used to model steel wire meshes [Thoeni2014]_, geotextiles [Cheng2016]_ and more.",
   "attributes": [
     {
       "name": "as",

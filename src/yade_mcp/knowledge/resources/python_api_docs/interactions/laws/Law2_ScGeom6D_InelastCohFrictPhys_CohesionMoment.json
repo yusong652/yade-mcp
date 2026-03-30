@@ -2,6 +2,6 @@
   "name": "Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "This law is currently under developpement. Final version and documentation will come before the end of 2014.",
   "attributes": []
 }

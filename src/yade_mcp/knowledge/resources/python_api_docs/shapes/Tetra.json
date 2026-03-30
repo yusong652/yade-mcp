@@ -2,7 +2,7 @@
   "name": "Tetra",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Tetrahedron geometry.",
   "attributes": [
     {
       "name": "color",

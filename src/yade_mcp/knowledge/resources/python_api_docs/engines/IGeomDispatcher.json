@@ -2,7 +2,7 @@
   "name": "IGeomDispatcher",
   "category": "engines",
   "parent": "Dispatcher",
-  "description": "",
+  "description": "Dispatcher calling functors<IGeomFunctor> based on received argument type(s).",
   "attributes": [
     {
       "name": "functors",

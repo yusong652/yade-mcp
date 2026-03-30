@@ -2,6 +2,6 @@
   "name": "Law2_ScGeom_MortarPhys_Lourenco",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Material law for mortar layer according to [Lourenco1994]_. The contact behaves elastic until brittle failure when reaching strength envelope. The envelope has three parts.\n\nTensile with condition $\\sigma_N-f_t$.\n\nShear part with Mohr-Coulomb condition...",
   "attributes": []
 }

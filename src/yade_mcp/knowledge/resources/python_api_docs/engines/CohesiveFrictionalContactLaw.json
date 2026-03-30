@@ -2,7 +2,7 @@
   "name": "CohesiveFrictionalContactLaw",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "[DEPRECATED] Loop over interactions applying Law2_ScGeom6D_CohFrictPhys_CohesionMoment on all interactions.\n\n.. note::\n  Use InteractionLoop and Law2_ScGeom6D_CohFrictPhys_CohesionMoment instead of this class for performance reasons.",
   "attributes": [
     {
       "name": "always_use_moment_law",

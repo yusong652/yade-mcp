@@ -2,7 +2,7 @@
   "name": "RotStiffFrictPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Version of FrictPhys with a rotational stiffness",
   "attributes": [
     {
       "name": "frictDissip",

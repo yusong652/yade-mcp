@@ -2,6 +2,6 @@
   "name": "IGeomFunctor",
   "category": "engines",
   "parent": "Functor",
-  "description": "",
+  "description": "Functor for creating/updating Interaction::geom objects.",
   "attributes": []
 }

@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_CpmPhys_Cpm",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Constitutive law for the cpm-model<CpmMat>.",
   "attributes": [
     {
       "name": "epsSoft",

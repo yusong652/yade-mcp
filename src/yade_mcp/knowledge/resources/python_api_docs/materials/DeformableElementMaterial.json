@@ -2,7 +2,7 @@
   "name": "DeformableElementMaterial",
   "category": "materials",
   "parent": "Material",
-  "description": "",
+  "description": "Deformable Element Material.",
   "attributes": [
     {
       "name": "density",

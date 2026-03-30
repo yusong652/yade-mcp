@@ -2,7 +2,7 @@
   "name": "Ig2_Wall_LevelSet_VolumeGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Creates or updates a VolumeGeom instance representing the intersection of one LevelSet body with one Wall body, where overlap is chosen to occur on the opposite wall side than the LevelSet body's center. Contact normal<VolumeGeom.normal> is given by the wall normal while...",
   "attributes": [
     {
       "name": "nRefineOctree",

@@ -2,7 +2,7 @@
   "name": "Wall",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Object representing infinite plane aligned with the coordinate system (axis-aligned wall).",
   "attributes": [
     {
       "name": "axis",

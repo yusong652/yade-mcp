@@ -2,7 +2,7 @@
   "name": "Ig2_LevelSet_LevelSet_VolumeGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Creates or updates a VolumeGeom instance representing the contact of two LevelSet bodies of arbitrary shape.\tAn algorithm is used that recursively evaluates the signed distance function $\\phi$ (LevelSet.distField) at increasingly finer mesh sizes to compute the overlap volume $V$. Surface nodes are...",
   "attributes": [
     {
       "name": "nRefineOctree",

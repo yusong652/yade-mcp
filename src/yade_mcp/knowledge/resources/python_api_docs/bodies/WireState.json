@@ -2,7 +2,7 @@
   "name": "WireState",
   "category": "bodies",
   "parent": "State",
-  "description": "",
+  "description": "Wire state information of each body.\n\nNone of that is used for computation (at least not now), only for post-processing.",
   "attributes": [
     {
       "name": "angMom",

@@ -2,6 +2,6 @@
   "name": "Law2_ScGeom_ViscElPhys_Basic",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Linear viscoelastic model operating on ScGeom and ViscElPhys. The contact law is visco-elastic in the normal direction, and visco-elastic frictional in the tangential direction. The normal contact is modelled as a spring of equivalent stiffness $k_n$, placed in parallel with a viscous damper of...",
   "attributes": []
 }

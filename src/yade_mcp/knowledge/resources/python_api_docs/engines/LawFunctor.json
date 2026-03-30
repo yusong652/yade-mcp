@@ -2,6 +2,6 @@
   "name": "LawFunctor",
   "category": "engines",
   "parent": "Functor",
-  "description": "",
+  "description": "Functor for applying constitutive laws on interactions<Interaction>.",
   "attributes": []
 }

@@ -2,7 +2,7 @@
   "name": "MicroMacroAnalyser",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "compute fabric tensor, local porosity, local deformation, and other micromechanicaly defined quantities based on triangulation/tesselation of the packing.",
   "attributes": [
     {
       "name": "compDeformation",

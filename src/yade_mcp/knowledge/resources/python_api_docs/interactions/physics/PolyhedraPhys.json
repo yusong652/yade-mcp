@@ -2,7 +2,7 @@
   "name": "PolyhedraPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Simple elastic material with friction for volumetric constitutive laws",
   "attributes": [
     {
       "name": "frictDissip",

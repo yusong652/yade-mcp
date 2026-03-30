@@ -2,7 +2,7 @@
   "name": "VTKRecorder",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Engine recording snapshots of simulation into series of \\*.vtu files, readable by VTK-based postprocessing programs such as Paraview. Both bodies (depending on their shapes<Shape>) and interactions can be recorded, with various vector/scalar quantities that are defined on...",
   "attributes": [
     {
       "name": "Key",

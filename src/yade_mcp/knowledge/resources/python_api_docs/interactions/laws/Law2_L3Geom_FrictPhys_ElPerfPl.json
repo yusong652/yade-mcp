@@ -2,7 +2,7 @@
   "name": "Law2_L3Geom_FrictPhys_ElPerfPl",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Basic law for testing L3Geom; it bears no cohesion (unless *noBreak* is ``True``), and plastic slip obeys the Mohr-Coulomb criterion (unless *noSlip* is ``True``).",
   "attributes": [
     {
       "name": "noBreak",

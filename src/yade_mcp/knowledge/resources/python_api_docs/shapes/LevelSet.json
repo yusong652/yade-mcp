@@ -2,7 +2,7 @@
   "name": "LevelSet",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "A level set description of particle shape based on a discrete distance field<LevelSet.distField> (denoting $\\phi$ the underlying signed distance function) and surface nodes<LevelSet.surfNodes> [Duriez2021a]_ [Duriez2021b]_. See :ysrc:`examples/levelSet` for example scripts.",
   "attributes": [
     {
       "name": "axesAABE",

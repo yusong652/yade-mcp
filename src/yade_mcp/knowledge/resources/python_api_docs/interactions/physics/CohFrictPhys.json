@@ -2,7 +2,7 @@
   "name": "CohFrictPhys",
   "category": "interactions",
   "parent": "RotStiffFrictPhys",
-  "description": "",
+  "description": "An interaction physics<IPhys> that extends RotStiffFrictPhys adding a breakable cohesive nature. Used e.g. by Law2_ScGeom6D_CohFrictPhys_CohesionMoment.",
   "attributes": [
     {
       "name": "cohesionBroken",

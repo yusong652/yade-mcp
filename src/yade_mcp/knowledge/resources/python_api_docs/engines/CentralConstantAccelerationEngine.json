@@ -2,7 +2,7 @@
   "name": "CentralConstantAccelerationEngine",
   "category": "engines",
   "parent": "FieldApplier",
-  "description": "",
+  "description": "Engine applying constant acceleration to all bodies, towards a central body. Ignoring the distance between them.",
   "attributes": [
     {
       "name": "accel",

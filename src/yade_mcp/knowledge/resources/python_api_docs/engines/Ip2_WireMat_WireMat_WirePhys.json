@@ -2,7 +2,7 @@
   "name": "Ip2_WireMat_WireMat_WirePhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Converts 2 WireMat instances to WirePhys with corresponding parameters.",
   "attributes": [
     {
       "name": "linkThresholdIteration",

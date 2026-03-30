@@ -2,7 +2,7 @@
   "name": "MortarPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "IPhys class containing parameters of MortarMat. Used by Law2_ScGeom_MortarPhys_Lourenco.",
   "attributes": [
     {
       "name": "cohesion",

@@ -2,7 +2,7 @@
   "name": "LinIsoRayleighDampElastMat",
   "category": "materials",
   "parent": "LinIsoElastMat",
-  "description": "",
+  "description": "Elastic material with Rayleigh Damping.",
   "attributes": [
     {
       "name": "alpha",

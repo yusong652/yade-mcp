@@ -2,6 +2,6 @@
   "name": "Ig2_LevelSet_LevelSet_MultiScGeom",
   "category": "engines",
   "parent": "Ig2_LevelSet_LevelSet_ScGeom",
-  "description": "",
+  "description": "Multiple contact points version of Ig2_LevelSet_LevelSet_ScGeom for a MultiScGeom description of a contact between two (non-convex typically) LevelSet-shaped bodies (with a ScGeom interaction at each contacting surface node). Does not support periodic boundary conditions at the moment. It is...",
   "attributes": []
 }

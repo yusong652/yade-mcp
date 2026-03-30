@@ -2,7 +2,7 @@
   "name": "JCFpmState",
   "category": "bodies",
   "parent": "ThermalState",
-  "description": "",
+  "description": "JCFpm state information about each body.",
   "attributes": [
     {
       "name": "Cp",

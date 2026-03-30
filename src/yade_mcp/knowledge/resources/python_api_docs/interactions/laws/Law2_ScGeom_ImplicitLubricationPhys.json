@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_ImplicitLubricationPhys",
   "category": "interactions",
   "parent": "Law2_ScGeom_VirtualLubricationPhys",
-  "description": "",
+  "description": "Material law for lubrication and contact between two spheres, solved using implicit method. The full description of this contact law is available in [Chevremont2020]_ . Several resolution methods are available. Iterative exact, solving the 2nd order polynomia. Other resolutions methods are...",
   "attributes": [
     {
       "name": "MaxDist",

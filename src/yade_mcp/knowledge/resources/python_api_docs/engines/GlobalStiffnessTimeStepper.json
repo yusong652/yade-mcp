@@ -2,7 +2,7 @@
   "name": "GlobalStiffnessTimeStepper",
   "category": "engines",
   "parent": "TimeStepper",
-  "description": "",
+  "description": "An engine assigning the time-step as a fraction of the minimum eigen-period in the problem. The derivation is detailed in the chapter on DEM formulation <DEMSimulations>. The viscEl option enables to evaluate the timestep in a similar way for the visco-elastic contact law...",
   "attributes": [
     {
       "name": "active",

@@ -2,7 +2,7 @@
   "name": "Ig2_Polyhedra_Polyhedra_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "EXPERIMENTAL. Ig2 functor creating ScGeom from two Polyhedra shapes. The radii are computed as a distance of contact point (computed using Ig2_Polyhedra_Polyhedra_PolyhedraGeom) and center of particle. Tested only for face-face contacts (like brick wall).",
   "attributes": [
     {
       "name": "interactionDetectionFactor",

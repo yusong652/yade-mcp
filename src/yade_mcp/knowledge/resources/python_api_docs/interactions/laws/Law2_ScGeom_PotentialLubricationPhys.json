@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_PotentialLubricationPhys",
   "category": "interactions",
   "parent": "Law2_ScGeom_ImplicitLubricationPhys",
-  "description": "",
+  "description": "Material law for lubrication + potential between two spheres. The potential model include contact. This material law will solve the system with lubrication and the provided potential.",
   "attributes": [
     {
       "name": "MaxDist",

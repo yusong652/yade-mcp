@@ -2,7 +2,7 @@
   "name": "GridNode",
   "category": "shapes",
   "parent": "Sphere",
-  "description": "",
+  "description": "GridNode shape, component of a grid.\nTo create a Grid, place the nodes first, they will define the spacial discretisation of it. It is highly recommended to use yade.gridpfacet.gridNode to generate correct GridNodes<GridNode>. Note that the GridNodes should only be in an Interaction with other...",
   "attributes": [
     {
       "name": "color",

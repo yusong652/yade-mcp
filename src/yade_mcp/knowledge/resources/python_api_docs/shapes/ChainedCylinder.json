@@ -2,7 +2,7 @@
   "name": "ChainedCylinder",
   "category": "shapes",
   "parent": "Cylinder",
-  "description": "",
+  "description": "Geometry of a deformable chained cylinder, using geometry Cylinder.",
   "attributes": [
     {
       "name": "chainedOrientation",

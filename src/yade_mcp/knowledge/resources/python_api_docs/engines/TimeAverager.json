@@ -2,7 +2,7 @@
   "name": "TimeAverager",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Average data over time for specific sphere identified by ids. Data are position, velocity, angular velocity, global resultant force and torque, resultant force and torque computed from contacts only and contact force field (see description below). The data must be first initialized with its...",
   "attributes": [
     {
       "name": "computeContactForceField",

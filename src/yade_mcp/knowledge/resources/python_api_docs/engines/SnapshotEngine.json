@@ -2,7 +2,7 @@
   "name": "SnapshotEngine",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Periodically save snapshots of GLView(s) as .png files. Files are named *fileBase* + *counter* + '.png' (counter is left-padded by 0s, i.e. snap00004.png).",
   "attributes": [
     {
       "name": "counter",

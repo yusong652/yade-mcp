@@ -2,6 +2,6 @@
   "name": "Bo1_Box_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Create/update an Aabb of a Box.",
   "attributes": []
 }

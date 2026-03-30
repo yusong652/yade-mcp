@@ -2,7 +2,7 @@
   "name": "MultiViscElPhys",
   "category": "interactions",
   "parent": "MultiPhys",
-  "description": "",
+  "description": "Describes the physical part of an interaction with multiple viscoelastic frictional contact points, e.g., between two LevelSet bodies, through a set of ViscElPhys instances in contacts<MultiViscElPhys.contacts>. To combine with MultiScGeom and associated classes.",
   "attributes": [
     {
       "name": "contacts",

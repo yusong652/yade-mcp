@@ -2,7 +2,7 @@
   "name": "UniaxialStrainer",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "",
+  "description": "Axial displacing two groups of bodies in the opposite direction with given strain rate.",
   "attributes": [
     {
       "name": "absSpeed",

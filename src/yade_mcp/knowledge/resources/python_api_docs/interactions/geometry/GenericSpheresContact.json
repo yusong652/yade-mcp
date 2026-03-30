@@ -2,7 +2,7 @@
   "name": "GenericSpheresContact",
   "category": "interactions",
   "parent": "IGeom",
-  "description": "",
+  "description": "Class uniting ScGeom and L3Geom, for the purposes of GlobalStiffnessTimeStepper. (It might be removed in the future). Do not use this class directly.",
   "attributes": [
     {
       "name": "contactPoint",

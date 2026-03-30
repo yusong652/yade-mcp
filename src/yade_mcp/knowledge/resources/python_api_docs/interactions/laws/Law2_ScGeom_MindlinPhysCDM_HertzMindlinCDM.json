@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Hertz-Mindlin model extended: Normal direction: conical damage model from Harkness et al. 2016./ Suhr & Six 2017. Tangential direction: stress dependent interparticle friction coefficient, Suhr & Six 2016. Both models can be switched on/off separately. In this version there is NO damping (neither...",
   "attributes": [
     {
       "name": "neverErase",

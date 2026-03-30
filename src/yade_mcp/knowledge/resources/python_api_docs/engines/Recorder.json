@@ -2,7 +2,7 @@
   "name": "Recorder",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Engine periodically storing some data to (one) external file. In addition PeriodicEngine, it handles opening the file as needed. See PeriodicEngine for controlling periodicity.",
   "attributes": [
     {
       "name": "addIterNum",

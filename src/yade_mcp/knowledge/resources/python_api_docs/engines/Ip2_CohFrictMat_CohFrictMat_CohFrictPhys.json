@@ -2,7 +2,7 @@
   "name": "Ip2_CohFrictMat_CohFrictMat_CohFrictPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Generates cohesive-frictional interactions with moments, used in the contact law Law2_ScGeom6D_CohFrictPhys_CohesionMoment. The normal/shear stiffness and friction definitions are the same as in Ip2_FrictMat_FrictMat_FrictPhys, check the documentation there for details.\n\nAdhesions related to the...",
   "attributes": [
     {
       "name": "frictAngle",

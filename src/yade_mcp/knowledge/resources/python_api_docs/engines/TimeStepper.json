@@ -2,7 +2,7 @@
   "name": "TimeStepper",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Engine defining time-step (fundamental class)",
   "attributes": [
     {
       "name": "active",

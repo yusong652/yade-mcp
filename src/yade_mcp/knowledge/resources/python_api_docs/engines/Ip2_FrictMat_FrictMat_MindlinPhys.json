@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_MindlinPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Calculate physical parameters needed to obtain the normal and shear stiffness values according to the Hertz-Mindlin formulation (no slip solution).\\\\\n\nThere are two available viscous damping models for (1) constant and (2) velocity-dependent coefficient of restitution. In both cases, the viscous...",
   "attributes": [
     {
       "name": "betan",

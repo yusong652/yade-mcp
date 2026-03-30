@@ -2,6 +2,6 @@
   "name": "Ip2_LudingMat_LudingMat_LudingPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Convert 2 instances of LudingMat to LudingPhys using the rule of consecutive connection.",
   "attributes": []
 }

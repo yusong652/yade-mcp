@@ -2,7 +2,7 @@
   "name": "SplitPolyMohrCoulomb",
   "category": "engines",
   "parent": "PolyhedraSplitter",
-  "description": "",
+  "description": "Split polyhedra according to Mohr-Coulomb criterion.",
   "attributes": [
     {
       "name": "fileName",

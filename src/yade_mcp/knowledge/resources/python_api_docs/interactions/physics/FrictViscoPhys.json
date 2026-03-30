@@ -2,7 +2,7 @@
   "name": "FrictViscoPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "Representation of a single interaction of the FrictViscoPM type, storage for relevant parameters",
   "attributes": [
     {
       "name": "cn",

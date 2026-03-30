@@ -2,7 +2,7 @@
   "name": "EnergyTracker",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Storage for tracing energies. Only to be used if O.trackEnergy<Omega.trackEnergy> is True.",
   "attributes": [
     {
       "name": "energies",

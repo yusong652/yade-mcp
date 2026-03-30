@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_MultiFrictPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Handles the MultiFrictPhys physical description of the contact between two FrictMats<FrictMat>. Contact stiffnesses (for every contact<MultiFrictPhys.contacts>) are directly assigned from below attributes, independent of FrictMat properties. Contact friction angle is taken as the minimum of the 2...",
   "attributes": [
     {
       "name": "kn",

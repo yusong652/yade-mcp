@@ -2,7 +2,7 @@
   "name": "FrictMatCDM",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material to be used for extended Hertz-Mindlin contact law. Normal direction:  parameters for Conical Damage Model  (Harkness et al. 2016, Suhr & Six 2017). Tangential direction: parameters for stress dependent interparticle friction coefficient (Suhr & Six 2016). Both models can be switched on/off...",
   "attributes": [
     {
       "name": "alpha",

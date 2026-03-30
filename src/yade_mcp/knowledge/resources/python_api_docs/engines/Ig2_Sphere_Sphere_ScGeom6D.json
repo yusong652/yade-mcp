@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_Sphere_ScGeom6D",
   "category": "engines",
   "parent": "Ig2_Sphere_Sphere_ScGeom",
-  "description": "",
+  "description": "Create/update a ScGeom6D instance representing the geometry of a contact point between two Spheres<Sphere>, including relative rotations.",
   "attributes": [
     {
       "name": "avoidGranularRatcheting",

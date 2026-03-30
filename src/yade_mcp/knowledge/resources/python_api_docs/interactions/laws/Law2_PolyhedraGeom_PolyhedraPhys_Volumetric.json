@@ -2,7 +2,7 @@
   "name": "Law2_PolyhedraGeom_PolyhedraPhys_Volumetric",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Calculate physical response of 2 Polyhedra in interaction, based on penetration configuration given by PolyhedraGeom. Normal force is proportional to the volume of intersection",
   "attributes": [
     {
       "name": "traceEnergy",

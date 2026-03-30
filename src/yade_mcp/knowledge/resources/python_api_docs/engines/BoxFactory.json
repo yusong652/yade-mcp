@@ -2,7 +2,7 @@
   "name": "BoxFactory",
   "category": "engines",
   "parent": "SpheresFactory",
-  "description": "",
+  "description": "Box geometry of the SpheresFactory region, given by extents and center",
   "attributes": [
     {
       "name": "PSDcalculateMass",

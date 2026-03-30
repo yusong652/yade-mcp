@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_CapillaryMindlinPhysDelaunay",
   "category": "engines",
   "parent": "Ip2_FrictMat_FrictMat_MindlinPhys",
-  "description": "",
+  "description": "Variant of Ip2_(matType)_(matType)_(iPhysType) to be used with CapillarityEngine.",
   "attributes": [
     {
       "name": "betan",

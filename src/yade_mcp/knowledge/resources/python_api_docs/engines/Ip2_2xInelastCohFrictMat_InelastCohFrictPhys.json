@@ -2,6 +2,6 @@
   "name": "Ip2_2xInelastCohFrictMat_InelastCohFrictPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Generates cohesive-frictional interactions with moments. Used in the contact law Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment.",
   "attributes": []
 }

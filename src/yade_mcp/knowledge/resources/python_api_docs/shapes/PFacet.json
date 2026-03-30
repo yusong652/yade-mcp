@@ -2,7 +2,7 @@
   "name": "PFacet",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "PFacet (particle facet) geometry (see [Effeindzourou2016]_, [Effeindzourou2015a]_). It is highly recommended to use the helper functions in yade.gridpfacet (e.g., gridpfacet.pfacetCreator1-4) to generate correct PFacet<PFacet> elements.",
   "attributes": [
     {
       "name": "area",

@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_VirtualLubricationPhys",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Virtual class for sheared lubrication functions. This don't do any computation and shouldn't be used directly!",
   "attributes": [
     {
       "name": "MaxDist",

@@ -2,7 +2,7 @@
   "name": "LinCohesiveElasticMaterial",
   "category": "materials",
   "parent": "CohesiveDeformableElementMaterial",
-  "description": "",
+  "description": "Linear Isotropic Elastic material",
   "attributes": [
     {
       "name": "density",

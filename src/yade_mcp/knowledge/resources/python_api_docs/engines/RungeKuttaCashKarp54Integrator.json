@@ -2,7 +2,7 @@
   "name": "RungeKuttaCashKarp54Integrator",
   "category": "engines",
   "parent": "Integrator",
-  "description": "",
+  "description": "RungeKuttaCashKarp54Integrator engine.",
   "attributes": [
     {
       "name": "a_dxdt",

@@ -2,6 +2,6 @@
   "name": "IGeom",
   "category": "interactions",
   "parent": "instance",
-  "description": "",
+  "description": "Geometrical configuration of interaction",
   "attributes": []
 }

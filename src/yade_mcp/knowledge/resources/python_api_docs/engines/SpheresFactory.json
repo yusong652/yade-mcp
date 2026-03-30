@@ -2,7 +2,7 @@
   "name": "SpheresFactory",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Engine for spitting spheres based on mass flow rate, particle size distribution etc. Initial velocity of particles is given by *vMin*, *vMax*, the *massFlowRate* determines how many particles to generate at each step. When *goalMass* is attained or positive *maxParticles* is reached, the engine...",
   "attributes": [
     {
       "name": "PSDcalculateMass",

@@ -2,7 +2,7 @@
   "name": "ThreeDTriaxialEngine",
   "category": "engines",
   "parent": "TriaxialStressController",
-  "description": "",
+  "description": "The engine perform a triaxial compression with a control in direction 'i' in stress (if stressControl_i) else in strain.\n\nFor a stress control the imposed stress is specified by 'sigma_i' with a 'max_veli' depending on 'strainRatei'. To obtain the same strain rate in stress control than in strain...",
   "attributes": [
     {
       "name": "Key",

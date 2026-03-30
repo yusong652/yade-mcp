@@ -2,7 +2,7 @@
   "name": "TorqueEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply given torque (momentum) value at every subscribed particle, at every step.",
   "attributes": [
     {
       "name": "ids",

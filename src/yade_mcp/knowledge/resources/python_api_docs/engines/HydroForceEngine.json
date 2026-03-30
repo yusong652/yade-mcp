@@ -2,7 +2,7 @@
   "name": "HydroForceEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Engine performing a coupling of the DEM with a volume-averaged 1D fluid resolution to simulate steady uniform unidirectional fluid flow. It has been developed and used to model steady uniform gravity-driven turbulent bedload transport [Maurin2015b]_ [Maurin2016]_ [Maurin2018]_, but can be also used...",
   "attributes": [
     {
       "name": "Cl",

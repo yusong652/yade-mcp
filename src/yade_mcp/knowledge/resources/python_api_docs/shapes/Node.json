@@ -2,7 +2,7 @@
   "name": "Node",
   "category": "shapes",
   "parent": "Shape",
-  "description": "",
+  "description": "Geometry of node particle.",
   "attributes": [
     {
       "name": "color",

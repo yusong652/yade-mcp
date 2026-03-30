@@ -2,7 +2,7 @@
   "name": "SplitPolyTauMax",
   "category": "engines",
   "parent": "PolyhedraSplitter",
-  "description": "",
+  "description": "Split polyhedra along TauMax.",
   "attributes": [
     {
       "name": "initRun",

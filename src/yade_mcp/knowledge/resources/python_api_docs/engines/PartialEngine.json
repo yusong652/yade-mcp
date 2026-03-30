@@ -2,7 +2,7 @@
   "name": "PartialEngine",
   "category": "engines",
   "parent": "Engine",
-  "description": "",
+  "description": "Engine affecting only particular bodies in the simulation, namely those defined in ids attribute<PartialEngine::ids>. See also GlobalEngine.",
   "attributes": [
     {
       "name": "ids",

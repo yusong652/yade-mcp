@@ -2,6 +2,6 @@
   "name": "FieldApplier",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Base for engines applying force files on particles. Not to be used directly.",
   "attributes": []
 }

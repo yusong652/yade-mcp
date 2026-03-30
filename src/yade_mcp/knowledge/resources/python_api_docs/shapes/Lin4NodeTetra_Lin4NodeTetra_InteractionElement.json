@@ -2,7 +2,7 @@
   "name": "Lin4NodeTetra_Lin4NodeTetra_InteractionElement",
   "category": "shapes",
   "parent": "DeformableCohesiveElement",
-  "description": "",
+  "description": "Tetrahedral Deformable Element Composed of Nodes",
   "attributes": [
     {
       "name": "color",

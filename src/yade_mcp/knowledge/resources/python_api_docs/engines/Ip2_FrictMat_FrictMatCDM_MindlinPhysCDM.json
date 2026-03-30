@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMatCDM_MindlinPhysCDM",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Create a MindlinPhysCDM from one FrictMat and one FrictMatCDM instance.",
   "attributes": [
     {
       "name": "frictAngle",

@@ -2,7 +2,7 @@
   "name": "FrictMat",
   "category": "materials",
   "parent": "ElastMat",
-  "description": "",
+  "description": "Elastic material with contact friction. See also ElastMat.",
   "attributes": [
     {
       "name": "density",

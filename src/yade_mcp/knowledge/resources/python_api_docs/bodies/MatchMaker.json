@@ -2,7 +2,7 @@
   "name": "MatchMaker",
   "category": "bodies",
   "parent": "instance",
-  "description": "",
+  "description": "Class matching pair of ids to return pre-defined (for a pair of ids defined in matches<MatchMaker.matches>) or derived value (computed using algo<MatchMaker.algo>) of a scalar parameter. It can be called (``id1``, ``id2``, ``val1=NaN``, ``val2=NaN``) in both python and c++. \n\n.. note:: There is a...",
   "attributes": [
     {
       "name": "algo",

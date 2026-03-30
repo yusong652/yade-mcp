@@ -2,7 +2,7 @@
   "name": "Aabb",
   "category": "bodies",
   "parent": "Bound",
-  "description": "",
+  "description": "Axis-aligned bounding box, for use with InsertionSortCollider. (This class is quasi-redundant since min,max are already contained in Bound itself. That might change at some point, though.)",
   "attributes": [
     {
       "name": "color",

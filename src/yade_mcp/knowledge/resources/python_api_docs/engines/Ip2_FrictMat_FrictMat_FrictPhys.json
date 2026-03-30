@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_FrictPhys",
   "category": "engines",
   "parent": "IPhysFunctor",
-  "description": "",
+  "description": "Create a FrictPhys from two FrictMats<FrictMat>. The compliance of one sphere under point load is defined here as $1/(E.D)$, with $E$ the stiffness of the sphere and $D$ its diameter. The compliance of the contact itself is taken as the sum of compliances from each sphere, i.e....",
   "attributes": [
     {
       "name": "frictAngle",

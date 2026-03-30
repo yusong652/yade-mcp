@@ -2,6 +2,6 @@
   "name": "Engine",
   "category": "engines",
   "parent": "instance",
-  "description": "",
+  "description": "Basic execution unit of simulation, called from the simulation loop (O.engines)",
   "attributes": []
 }

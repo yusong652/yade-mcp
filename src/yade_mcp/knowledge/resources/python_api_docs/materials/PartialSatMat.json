@@ -2,7 +2,7 @@
   "name": "PartialSatMat",
   "category": "materials",
   "parent": "FrictMat",
-  "description": "",
+  "description": "Material used for PartialSatClayEngine. Necessary for the custom PartialSatState.",
   "attributes": [
     {
       "name": "density",

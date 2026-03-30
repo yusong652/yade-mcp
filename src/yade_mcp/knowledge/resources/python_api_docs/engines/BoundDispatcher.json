@@ -2,7 +2,7 @@
   "name": "BoundDispatcher",
   "category": "engines",
   "parent": "Dispatcher",
-  "description": "",
+  "description": "Dispatcher calling functors<BoundFunctor> based on received argument type(s).",
   "attributes": [
     {
       "name": "activated",

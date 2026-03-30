@@ -2,7 +2,7 @@
   "name": "PolyhedraSplitter",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Engine that splits polyhedras.\n\n.. warning:: PolyhedraSplitter returns different results depending on CGAL version! For details see https://gitlab.com/yade-dev/trunk/issues/45",
   "attributes": [
     {
       "name": "initRun",

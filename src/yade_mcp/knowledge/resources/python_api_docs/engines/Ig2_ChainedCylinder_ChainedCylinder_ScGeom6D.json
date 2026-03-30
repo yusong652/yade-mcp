@@ -2,7 +2,7 @@
   "name": "Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update a ScGeom instance representing connexion between chained cylinders<ChainedCylinder>.",
   "attributes": [
     {
       "name": "halfLengthContacts",

@@ -2,7 +2,7 @@
   "name": "FlowEngine",
   "category": "engines",
   "parent": "FlowEngineT",
-  "description": "",
+  "description": "An engine to solve flow problem in saturated granular media. Model description can be found in [Chareyre2012a]_ and [Catalano2014a]_. See the example script FluidCouplingPFV/oedometer.py. More documentation to come.\n\n.. note::Multi-threading seems to work fine for Cholesky decomposition, but it...",
   "attributes": [
     {
       "name": "alphaBound",

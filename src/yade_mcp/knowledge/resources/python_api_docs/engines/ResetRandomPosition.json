@@ -2,7 +2,7 @@
   "name": "ResetRandomPosition",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Creates spheres during simulation, placing them at random positions. Every time called, one new sphere will be created and inserted in the simulation.",
   "attributes": [
     {
       "name": "angularVelocity",

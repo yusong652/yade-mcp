@@ -2,7 +2,7 @@
   "name": "ElastMat",
   "category": "materials",
   "parent": "Material",
-  "description": "",
+  "description": "Purely elastic material. The material parameters may have different meanings depending on the IPhysFunctor used : true Young and Poisson in Ip2_FrictMat_FrictMat_MindlinPhys, or contact stiffnesses in Ip2_FrictMat_FrictMat_FrictPhys.",
   "attributes": [
     {
       "name": "density",

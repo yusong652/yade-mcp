@@ -2,7 +2,7 @@
   "name": "Ig2_Sphere_Sphere_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create/update a ScGeom instance representing the geometry of a contact point between two Spheres<Sphere> s.",
   "attributes": [
     {
       "name": "avoidGranularRatcheting",

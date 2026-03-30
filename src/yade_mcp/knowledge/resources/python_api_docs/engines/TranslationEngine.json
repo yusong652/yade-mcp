@@ -2,7 +2,7 @@
   "name": "TranslationEngine",
   "category": "engines",
   "parent": "KinematicEngine",
-  "description": "",
+  "description": "Engine applying translation motion (by setting linear velocity) to subscribed bodies.",
   "attributes": [
     {
       "name": "ids",

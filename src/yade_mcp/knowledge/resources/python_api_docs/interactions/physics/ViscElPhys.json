@@ -2,7 +2,7 @@
   "name": "ViscElPhys",
   "category": "interactions",
   "parent": "FrictPhys",
-  "description": "",
+  "description": "IPhys created from ViscElMat, for use with Law2_ScGeom_ViscElPhys_Basic.",
   "attributes": [
     {
       "name": "Fn",

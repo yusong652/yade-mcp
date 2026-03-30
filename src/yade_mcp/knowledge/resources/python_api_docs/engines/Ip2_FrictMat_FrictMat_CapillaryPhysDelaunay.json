@@ -2,7 +2,7 @@
   "name": "Ip2_FrictMat_FrictMat_CapillaryPhysDelaunay",
   "category": "engines",
   "parent": "Ip2_FrictMat_FrictMat_FrictPhys",
-  "description": "",
+  "description": "Variant of Ip2_FrictMat_FrictMat_FrictPhys to be used with CapillarityEngine.",
   "attributes": [
     {
       "name": "computeDefault",

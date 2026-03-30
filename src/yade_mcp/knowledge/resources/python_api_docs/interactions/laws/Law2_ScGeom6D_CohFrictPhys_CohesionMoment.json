@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
   "category": "interactions",
   "parent": "LawFunctor",
-  "description": "",
+  "description": "Law for linear traction-compression-bending-twisting, with cohesion+friction and Mohr-Coulomb plasticity surface. This law adds adhesion and moments to Law2_ScGeom_FrictPhys_CundallStrack.\n\nThe normal force is (with the convention of positive tensile forces) $F_n=min(k_n*(u_n-u_n^p), a_n)$, with...",
   "attributes": [
     {
       "name": "always_use_moment_law",

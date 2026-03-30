@@ -2,7 +2,7 @@
   "name": "DomainLimiter",
   "category": "engines",
   "parent": "PeriodicEngine",
-  "description": "",
+  "description": "Delete particles that are out of axis-aligned box given by *lo* and *hi*.",
   "attributes": [
     {
       "name": "hi",

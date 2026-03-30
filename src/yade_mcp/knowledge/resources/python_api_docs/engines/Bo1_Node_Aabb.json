@@ -2,7 +2,7 @@
   "name": "Bo1_Node_Aabb",
   "category": "engines",
   "parent": "BoundFunctor",
-  "description": "",
+  "description": "Functor creating Aabb from Node.",
   "attributes": [
     {
       "name": "aabbEnlargeFactor",

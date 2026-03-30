@@ -2,7 +2,7 @@
   "name": "Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "EXPERIMENTAL. A hacky helper Ig2 functor combining two Polyhedra shapes to give, according to the settings, either ScGeom or PolyhedraGeom, through appropriate use of either Ig2_Polyhedra_Polyhedra_ScGeom (through ig2scGeom<Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom.ig2scGeom> attribute) or...",
   "attributes": [
     {
       "name": "createScGeom",

@@ -2,6 +2,6 @@
   "name": "ForceResetter",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "",
+  "description": "Reset all forces stored in Scene::forces (``O.forces`` in python). Typically, this is the first engine to be run at every step. In addition, reset those energies that should be reset, if energy tracing is enabled.",
   "attributes": []
 }

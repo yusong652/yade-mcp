@@ -2,7 +2,7 @@
   "name": "PeriodicFlowEngine",
   "category": "engines",
   "parent": "FlowEngine_PeriodicInfo",
-  "description": "",
+  "description": "A variant of FlowEngine implementing periodic boundary conditions. The API is very similar.",
   "attributes": [
     {
       "name": "alphaBound",

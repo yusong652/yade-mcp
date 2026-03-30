@@ -2,7 +2,7 @@
   "name": "RadialForceEngine",
   "category": "engines",
   "parent": "PartialEngine",
-  "description": "",
+  "description": "Apply force of given magnitude directed away from spatial axis.",
   "attributes": [
     {
       "name": "axisDir",

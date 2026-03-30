@@ -2,7 +2,7 @@
   "name": "Law2_ScGeom_ViscoFrictPhys_CundallStrack",
   "category": "interactions",
   "parent": "Law2_ScGeom_FrictPhys_CundallStrack",
-  "description": "",
+  "description": "Law similar to Law2_ScGeom_FrictPhys_CundallStrack with the addition of shear creep at contacts.",
   "attributes": [
     {
       "name": "creepStiffness",

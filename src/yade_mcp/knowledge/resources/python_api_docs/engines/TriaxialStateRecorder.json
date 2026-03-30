@@ -2,7 +2,7 @@
   "name": "TriaxialStateRecorder",
   "category": "engines",
   "parent": "Recorder",
-  "description": "",
+  "description": "Engine recording triaxial variables (see the variables list in the first line of the output file). This recorder needs TriaxialCompressionEngine or ThreeDTriaxialEngine present in the simulation).",
   "attributes": [
     {
       "name": "addIterNum",

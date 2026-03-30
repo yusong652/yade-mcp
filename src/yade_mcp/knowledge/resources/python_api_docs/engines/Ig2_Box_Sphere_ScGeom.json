@@ -2,7 +2,7 @@
   "name": "Ig2_Box_Sphere_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "",
+  "description": "Create an interaction geometry ScGeom from Box and Sphere, representing the box with a projected virtual sphere of same radius.",
   "attributes": [
     {
       "name": "hertzian",

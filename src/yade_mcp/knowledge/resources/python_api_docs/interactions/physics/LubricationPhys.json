@@ -2,7 +2,7 @@
   "name": "LubricationPhys",
   "category": "interactions",
   "parent": "ViscElPhys",
-  "description": "",
+  "description": "IPhys class for Lubrication w/o FlowEngine. Used by Law2_ScGeom_ImplicitLubricationPhys.",
   "attributes": [
     {
       "name": "Fn",

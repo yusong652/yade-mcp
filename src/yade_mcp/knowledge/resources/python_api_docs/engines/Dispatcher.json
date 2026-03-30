@@ -2,6 +2,6 @@
   "name": "Dispatcher",
   "category": "engines",
   "parent": "Engine",
-  "description": "",
+  "description": "Engine dispatching control to its associated functors, based on types of argument it receives. This abstract base class provides no functionality in itself.",
   "attributes": []
 }

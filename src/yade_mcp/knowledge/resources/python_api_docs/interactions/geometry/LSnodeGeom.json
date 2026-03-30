@@ -2,7 +2,7 @@
   "name": "LSnodeGeom",
   "category": "interactions",
   "parent": "ScGeom",
-  "description": "",
+  "description": "Extends ScGeom for faster LevelSet-based simulations of convex bodies while storing previous closest node in surfNodeIdx<LSnodeGeom.surfNodeIdx>, for an optimal contact detection.",
   "attributes": [
     {
       "name": "contactPoint",
