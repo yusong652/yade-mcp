@@ -1,0 +1,18 @@
+{
+  "name": "BubbleMat",
+  "category": "materials",
+  "parent": "Material",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "surfaceTension",
+      "type": "float",
+      "default": "0.07197"
+    }
+  ]
+}

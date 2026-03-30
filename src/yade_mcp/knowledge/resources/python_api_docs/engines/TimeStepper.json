@@ -1,0 +1,18 @@
+{
+  "name": "TimeStepper",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "active",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "int",
+      "default": "1"
+    }
+  ]
+}

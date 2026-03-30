@@ -1,0 +1,23 @@
+{
+  "name": "DragEngine",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Cd",
+      "type": "float",
+      "default": "0.47"
+    },
+    {
+      "name": "Rho",
+      "type": "float",
+      "default": "1.225"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    }
+  ]
+}

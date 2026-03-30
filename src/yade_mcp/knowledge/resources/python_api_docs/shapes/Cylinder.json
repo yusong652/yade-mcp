@@ -1,0 +1,38 @@
+{
+  "name": "Cylinder",
+  "category": "shapes",
+  "parent": "Sphere",
+  "description": "",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "length",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "segment",
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

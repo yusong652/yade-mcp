@@ -268,8 +268,9 @@ def start(
     # Install PyRunner for interrupt checking + task queue processing during simulation
     pyrunner_ok = _install_pyrunner(main_executor, interrupt_check_period, logger)
 
-    # Port availability check
+    # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
         sock.bind((host, port))
     except OSError:

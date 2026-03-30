@@ -1,0 +1,13 @@
+{
+  "name": "Bo1_Polyhedra_Aabb",
+  "category": "engines",
+  "parent": "BoundFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "aabbEnlargeFactor",
+      "type": "float",
+      "default": "-1.0"
+    }
+  ]
+}

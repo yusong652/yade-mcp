@@ -1,0 +1,118 @@
+{
+  "name": "ViscElCapMat",
+  "category": "materials",
+  "parent": "ViscElMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Capillar",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "CapillarType",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "Vb",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "cn",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "dcap",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "en",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "et",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "gamma",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "lubrication",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "mR",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "mRtype",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "roughnessScale",
+      "type": "float",
+      "default": "0.001"
+    },
+    {
+      "name": "tc",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "theta",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "viscoDyn",
+      "type": "float",
+      "default": "0.001"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

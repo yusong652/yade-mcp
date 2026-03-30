@@ -1,0 +1,33 @@
+{
+  "name": "PeriodicEngine",
+  "category": "engines",
+  "parent": "GlobalEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

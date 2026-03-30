@@ -1,0 +1,53 @@
+{
+  "name": "MortarMat",
+  "category": "engines",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "1000000.0"
+    },
+    {
+      "name": "compressiveStrength",
+      "type": "float",
+      "default": "10000000.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "ellAspect",
+      "type": "float",
+      "default": "3.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "neverDamage",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "tensileStrength",
+      "type": "float",
+      "default": "1000000.0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": []
+}

@@ -1,0 +1,28 @@
+{
+  "name": "StepDisplacer",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "mov",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "rot",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "setVelocities",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

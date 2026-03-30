@@ -1,0 +1,368 @@
+{
+  "name": "TriaxialCompressionEngine",
+  "category": "engines",
+  "parent": "TriaxialStressController",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "StabilityCriterion",
+      "type": "float",
+      "default": "0.001"
+    },
+    {
+      "name": "UnbalancedForce",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "autoCompressionActivation",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "autoStopSimulation",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "autoUnload",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "boxVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "computeStressStrainInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "currentState",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "currentStrainRate",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "depth",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "depth0",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "epsilonMax",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "externalWork",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "finalMaxMultiplier",
+      "type": "float",
+      "default": "1.00001"
+    },
+    {
+      "name": "fixedPoroCompaction",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "fixedPorosity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "frictionAngleDegree",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "goal1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "goal2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "goal3",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "height",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "height0",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "internalCompaction",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "isAxisymetric",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "legacyStressDamping",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "maxMultiplier",
+      "type": "float",
+      "default": "1.001"
+    },
+    {
+      "name": "maxStress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "max_vel",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "max_vel1",
+      "type": "float",
+      "default": "6.9408649922977e-310"
+    },
+    {
+      "name": "max_vel2",
+      "type": "float",
+      "default": "2.3519985075986855e-42"
+    },
+    {
+      "name": "max_vel3",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "meanStress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "noFiles",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "particlesVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "porosity",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "previousMultiplier",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "previousSigmaIso",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "previousState",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "previousStress",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "radiusControlInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "sigmaIsoCompaction",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "sigmaLateralConfinement",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "sigma_iso",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "spheresVolume",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "stiffnessUpdateInterval",
+      "type": "int",
+      "default": "10"
+    },
+    {
+      "name": "strain",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)"
+    },
+    {
+      "name": "strainDamping",
+      "type": "float",
+      "default": "0.99"
+    },
+    {
+      "name": "strainRate",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "stressDamping",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "stressMask",
+      "type": "int",
+      "default": "7"
+    },
+    {
+      "name": "testEquilibriumInterval",
+      "type": "int",
+      "default": "20"
+    },
+    {
+      "name": "thickness",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "translationAxis",
+      "type": "Vector3",
+      "default": "Vector3(0,1,0)"
+    },
+    {
+      "name": "uniaxialEpsilonCurr",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "updatePorosity",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "volumetricStrain",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "wall_back_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_back_id",
+      "type": "int",
+      "default": "4"
+    },
+    {
+      "name": "wall_bottom_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_bottom_id",
+      "type": "int",
+      "default": "2"
+    },
+    {
+      "name": "wall_front_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_front_id",
+      "type": "int",
+      "default": "5"
+    },
+    {
+      "name": "wall_left_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_left_id",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "wall_right_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_right_id",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "wall_top_activated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "wall_top_id",
+      "type": "int",
+      "default": "3"
+    },
+    {
+      "name": "warn",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "width",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "width0",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

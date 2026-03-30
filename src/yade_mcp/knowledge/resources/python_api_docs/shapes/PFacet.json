@@ -1,0 +1,73 @@
+{
+  "name": "PFacet",
+  "category": "shapes",
+  "parent": "Shape",
+  "description": "",
+  "attributes": [
+    {
+      "name": "area",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "cellDist",
+      "type": "Vector3i",
+      "default": "Vector3i(0,0,0)"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "conn1",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "conn2",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "conn3",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "node1",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "node2",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "node3",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

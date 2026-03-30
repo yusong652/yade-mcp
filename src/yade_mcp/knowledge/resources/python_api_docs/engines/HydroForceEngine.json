@@ -1,0 +1,368 @@
+{
+  "name": "HydroForceEngine",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "Cl",
+      "type": "float",
+      "default": "0.2"
+    },
+    {
+      "name": "ReynoldStresses",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "averageDrag",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "averageDrag1",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "averageDrag2",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "bedElevation",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "channelWidth",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "compatibilityOldVersion",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "convAcc",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "convAccOption",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "deltaZ",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "densFluid",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "dpdx",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "dtFluct",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "enableMultiClassAverage",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "expoRZ",
+      "type": "float",
+      "default": "3.1"
+    },
+    {
+      "name": "fluctTime",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "fluidFrictionCoef",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "fluidWallFriction",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "gravity",
+      "type": "Vector3",
+      "default": "Vector3(0,0,-9.810000000000000497)"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "ilm",
+      "type": "int",
+      "default": "2"
+    },
+    {
+      "name": "irheolf",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "iturbu",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "iusl",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "kappa",
+      "type": "float",
+      "default": "0.41"
+    },
+    {
+      "name": "lift",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "lubrication",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "multiDragPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "multiPhiPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "multiVxPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "multiVyPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "multiVzPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "nCell",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "nbAverageT",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "phiBed",
+      "type": "float",
+      "default": "0.08"
+    },
+    {
+      "name": "phiMax",
+      "type": "float",
+      "default": "0.64"
+    },
+    {
+      "name": "phiPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "phiPart1",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "phiPart2",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "pointParticleAverage",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "radiusPart",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "radiusPart1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "radiusPart2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "radiusParts",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "roughnessPartScale",
+      "type": "float",
+      "default": "0.001"
+    },
+    {
+      "name": "steadyFlow",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "taufsi",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "turbulentViscosity",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "twoSize",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "uTop",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "unCorrelatedFluctuations",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "vCell",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "vFluctX",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vFluctY",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vFluctZ",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "velFluct",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "viscoDyn",
+      "type": "float",
+      "default": "0.001"
+    },
+    {
+      "name": "viscousSubLayer",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "vxFluid",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vxPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vxPart1",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vxPart2",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vyPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vyPart1",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vyPart2",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vzPart",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vzPart1",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "vzPart2",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "wallFrictionModel",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "zRef",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

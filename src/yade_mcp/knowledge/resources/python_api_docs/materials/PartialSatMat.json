@@ -1,0 +1,33 @@
+{
+  "name": "PartialSatMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "num",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

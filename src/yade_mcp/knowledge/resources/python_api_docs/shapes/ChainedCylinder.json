@@ -1,0 +1,48 @@
+{
+  "name": "ChainedCylinder",
+  "category": "shapes",
+  "parent": "Cylinder",
+  "description": "",
+  "attributes": [
+    {
+      "name": "chainedOrientation",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "initLength",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "length",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "segment",
+      "type": "Vector3",
+      "default": "Vector3(nan,nan,nan)"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

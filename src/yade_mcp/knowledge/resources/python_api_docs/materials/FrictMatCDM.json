@@ -1,0 +1,48 @@
+{
+  "name": "FrictMatCDM",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alpha",
+      "type": "float",
+      "default": "1e-06"
+    },
+    {
+      "name": "c1",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "c2",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "sigmaMax",
+      "type": "float",
+      "default": "1e+99"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

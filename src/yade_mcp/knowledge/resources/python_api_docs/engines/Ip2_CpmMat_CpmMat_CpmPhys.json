@@ -1,0 +1,18 @@
+{
+  "name": "Ip2_CpmMat_CpmMat_CpmPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "E",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "cohesiveThresholdIter",
+      "type": "int",
+      "default": "10"
+    }
+  ]
+}

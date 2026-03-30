@@ -1,0 +1,73 @@
+{
+  "name": "SnapshotEngine",
+  "category": "engines",
+  "parent": "PeriodicEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "counter",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "deadTimeout",
+      "type": "float",
+      "default": "3.0"
+    },
+    {
+      "name": "fileBase",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "format",
+      "type": "str",
+      "default": "'PNG'"
+    },
+    {
+      "name": "ignoreErrors",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "msecSleep",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "plot",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "snapshots",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "name": "CohFrictMatSeg",
+  "category": "materials",
+  "parent": "CohFrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alphaKr",
+      "type": "float",
+      "default": "2.0"
+    },
+    {
+      "name": "alphaKtw",
+      "type": "float",
+      "default": "2.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "etaRoll",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "etaTwist",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "fragile",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "isCohesive",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "maxThickness",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "minThickness",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "momentRotationLaw",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "normalCohesion",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "secondaryFrictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "secondaryNormalCohesion",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "secondaryPoisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "secondaryShearCohesion",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "secondaryYoung",
+      "type": "float",
+      "default": "1000000000.0"
+    },
+    {
+      "name": "shearCohesion",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

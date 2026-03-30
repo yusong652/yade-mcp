@@ -1,0 +1,28 @@
+{
+  "name": "Ip2_ViscElMat_ViscElMat_ViscElPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "en",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "et",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "frictAngle",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "tc",
+      "type": "NoneType",
+      "default": "None"
+    }
+  ]
+}

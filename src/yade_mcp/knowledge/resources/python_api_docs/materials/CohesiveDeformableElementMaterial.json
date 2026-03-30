@@ -1,0 +1,13 @@
+{
+  "name": "CohesiveDeformableElementMaterial",
+  "category": "materials",
+  "parent": "Material",
+  "description": "",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    }
+  ]
+}

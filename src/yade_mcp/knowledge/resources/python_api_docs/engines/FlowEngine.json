@@ -1,0 +1,453 @@
+{
+  "name": "FlowEngine",
+  "category": "engines",
+  "parent": "FlowEngineT",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alphaBound",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "alphaBoundValue",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "averageCavityPressure",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "blockHook",
+      "type": "str",
+      "default": "''"
+    },
+    {
+      "name": "bndCondIsPressure",
+      "type": "list",
+      "default": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "bndCondIsTemperature",
+      "type": "list",
+      "default": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "bndCondValue",
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "name": "boundaryPressure",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "boundaryUseMaxMin",
+      "type": "list",
+      "default": "[True, True, True, True, True, True]"
+    },
+    {
+      "name": "boundaryVelocity",
+      "type": "list",
+      "default": "[Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0),"
+    },
+    {
+      "name": "boundaryXPos",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "breakControlledRemesh",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "cavityFactor",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "cavityFluidDensity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "cavityFlux",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "clampKValues",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "controlCavityPressure",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "controlCavityVolumeChange",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "convertClumps",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "debug",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "decoupleForces",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "defTolerance",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "desiredPorosity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "doInterpolate",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "dt",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "eps",
+      "type": "float",
+      "default": "1e-05"
+    },
+    {
+      "name": "epsVolMax",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "first",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "fixTriUpdatePermInt",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "fixedAlpha",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "flatThreshold",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "fluidBulkModulus",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "fluidCp",
+      "type": "float",
+      "default": "4181.3"
+    },
+    {
+      "name": "fluidRho",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "forceMetis",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "getCHOLMODPerfTimings",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "idOffset",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "ignoredBody",
+      "type": "int",
+      "default": "-1"
+    },
+    {
+      "name": "iniVoidVolumes",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "isActivated",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "maxKdivKmean",
+      "type": "float",
+      "default": "100.0"
+    },
+    {
+      "name": "meanKStat",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "meanK_opt",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "meshUpdateInterval",
+      "type": "int",
+      "default": "1000"
+    },
+    {
+      "name": "minKdivKmean",
+      "type": "float",
+      "default": "0.0001"
+    },
+    {
+      "name": "minimumPorosity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "multithread",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "normalLubrication",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "numFactorizeThreads",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "numSolveThreads",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "pZero",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "permeabilityFactor",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "permeabilityMap",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "phiZero",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "porosity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "pressureForce",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "pumpTorque",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "relax",
+      "type": "float",
+      "default": "1.9"
+    },
+    {
+      "name": "shearLubrication",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "sineAverage",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "sineMagnitude",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "slipBoundary",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "stiffness",
+      "type": "float",
+      "default": "10000.0"
+    },
+    {
+      "name": "tZero",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "tempDependentViscosity",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "thermalBndCondValue",
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "name": "thermalEngine",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "thermalPorosity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "tolerance",
+      "type": "float",
+      "default": "1e-06"
+    },
+    {
+      "name": "twistTorque",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "updateTriangulation",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "useSolver",
+      "type": "int",
+      "default": "3"
+    },
+    {
+      "name": "viscosity",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "viscousNormalBodyStress",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "viscousShear",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "viscousShearBodyStress",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "volumeCorrection",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "volumeFactor",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "wallIds",
+      "type": "list",
+      "default": "[0, 1, 2, 3, 4, 5]"
+    },
+    {
+      "name": "wallThickness",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "waveAction",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "xmax",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "xmin",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "ymax",
+      "type": "int",
+      "default": "3"
+    },
+    {
+      "name": "ymin",
+      "type": "int",
+      "default": "2"
+    },
+    {
+      "name": "zmax",
+      "type": "int",
+      "default": "5"
+    },
+    {
+      "name": "zmin",
+      "type": "int",
+      "default": "4"
+    }
+  ]
+}

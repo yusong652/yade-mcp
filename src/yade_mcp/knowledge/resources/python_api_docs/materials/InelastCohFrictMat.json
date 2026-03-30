@@ -1,0 +1,128 @@
+{
+  "name": "InelastCohFrictMat",
+  "category": "materials",
+  "parent": "FrictMat",
+  "description": "",
+  "attributes": [
+    {
+      "name": "alphaKr",
+      "type": "float",
+      "default": "2.0"
+    },
+    {
+      "name": "alphaKtw",
+      "type": "float",
+      "default": "2.0"
+    },
+    {
+      "name": "compressionModulus",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "creepBending",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "creepTension",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "creepTwist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000.0"
+    },
+    {
+      "name": "epsilonMaxCompression",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "epsilonMaxTension",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "etaMaxBending",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "etaMaxTwist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": "0.5"
+    },
+    {
+      "name": "nuBending",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "nuTwist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": "0.25"
+    },
+    {
+      "name": "shearCohesion",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "shearModulus",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "sigmaCompression",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "sigmaTension",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "tensionModulus",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "unloadBending",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "unloadTension",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "unloadTwist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1000000000.0"
+    }
+  ]
+}

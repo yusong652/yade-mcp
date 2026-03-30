@@ -1,0 +1,48 @@
+{
+  "name": "GridConnection",
+  "category": "shapes",
+  "parent": "Sphere",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cellDist",
+      "type": "Vector3i",
+      "default": "Vector3i(0,0,0)"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "node1",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "node2",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "nan"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}

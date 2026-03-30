@@ -1,0 +1,33 @@
+{
+  "name": "Ip2_JCFpmMat_JCFpmMat_JCFpmPhys",
+  "category": "engines",
+  "parent": "IPhysFunctor",
+  "description": "",
+  "attributes": [
+    {
+      "name": "cohesiveTresholdIteration",
+      "type": "int",
+      "default": "1"
+    },
+    {
+      "name": "weibullCutOffMax",
+      "type": "float",
+      "default": "10.0"
+    },
+    {
+      "name": "weibullCutOffMin",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "xSectionWeibullScaleParameter",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "xSectionWeibullShapeParameter",
+      "type": "float",
+      "default": "0.0"
+    }
+  ]
+}

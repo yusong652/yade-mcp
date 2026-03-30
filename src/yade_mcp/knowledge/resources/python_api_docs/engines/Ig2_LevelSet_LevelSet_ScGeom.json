@@ -1,0 +1,7 @@
+{
+  "name": "Ig2_LevelSet_LevelSet_ScGeom",
+  "category": "engines",
+  "parent": "IGeomFunctor",
+  "description": "",
+  "attributes": []
+}

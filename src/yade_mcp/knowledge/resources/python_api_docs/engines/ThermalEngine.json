@@ -1,0 +1,193 @@
+{
+  "name": "ThermalEngine",
+  "category": "engines",
+  "parent": "PartialEngine",
+  "description": "",
+  "attributes": [
+    {
+      "name": "advection",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "bndCondIsTemperature",
+      "type": "list",
+      "default": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "boundarySet",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "conduction",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "debug",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "delT",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "flowTempBoundarySet",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "fluidBeta",
+      "type": "float",
+      "default": "0.0002"
+    },
+    {
+      "name": "fluidBulkModulus",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "fluidConduction",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "fluidConductionAreaFactor",
+      "type": "float",
+      "default": "1.0"
+    },
+    {
+      "name": "fluidK",
+      "type": "float",
+      "default": "0.58"
+    },
+    {
+      "name": "fluidThermoMech",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "heatGenerationRatio",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]"
+    },
+    {
+      "name": "ignoreFictiousConduction",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "lenBodies",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "letThermalRunFlowForceUpdates",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "minimumFluidCondDist",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "particleAlpha",
+      "type": "float",
+      "default": "1.16e-05"
+    },
+    {
+      "name": "particleCp",
+      "type": "float",
+      "default": "750.0"
+    },
+    {
+      "name": "particleDensity",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "particleK",
+      "type": "float",
+      "default": "3.0"
+    },
+    {
+      "name": "particleT0",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "porosityFactor",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "solidThermoMech",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "tempDependentFluidBeta",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "thermalBndCondValue",
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "name": "thermalBndFlux",
+      "type": "list",
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "name": "thermalFreq",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "thermoMech",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "tsSafetyFactor",
+      "type": "float",
+      "default": "0.8"
+    },
+    {
+      "name": "unboundCavityBodies",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "uniformReynolds",
+      "type": "float",
+      "default": "-1.0"
+    },
+    {
+      "name": "useBoBMethod",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "useHertzMethod",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "useKernMethod",
+      "type": "bool",
+      "default": "False"
+    }
+  ]
+}
