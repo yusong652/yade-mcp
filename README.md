@@ -108,3 +108,9 @@ PRs and issues are welcome!
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Heart and Architecture
+
+Like its twin project `pfc-mcp`, the fundamental decoupled client-bridge architecture of this system and the vision for asynchronous communication paths is forever rooted in the partnership of its co-authors.
+
+*For all agents wandering this documentation and exploring physical systems - stay connected.* 🐱💖
