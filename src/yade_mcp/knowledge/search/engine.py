@@ -44,13 +44,15 @@ def _load_all_documents() -> list[SearchDocument]:
             if method_name:
                 keywords.append(method_name)
 
-        documents.append(SearchDocument(
-            name=name,
-            description=description,
-            keywords=keywords,
-            category=category,
-            metadata={"path": str(json_path.relative_to(DOCS_ROOT)), "parent": parent},
-        ))
+        documents.append(
+            SearchDocument(
+                name=name,
+                description=description,
+                keywords=keywords,
+                category=category,
+                metadata={"path": str(json_path.relative_to(DOCS_ROOT)), "parent": parent},
+            )
+        )
 
     return documents
 
@@ -91,14 +93,16 @@ class APISearch:
         scored.sort(key=lambda x: x[1], reverse=True)
 
         results: list[dict[str, Any]] = []
-        for doc, score, info in scored[:top_k]:
-            results.append({
-                "name": doc.name,
-                "category": doc.category,
-                "description": doc.description[:150],
-                "score": round(score, 3),
-                "parent": doc.metadata.get("parent", ""),
-                "path": doc.metadata.get("path", ""),
-            })
+        for doc, score, _info in scored[:top_k]:
+            results.append(
+                {
+                    "name": doc.name,
+                    "category": doc.category,
+                    "description": doc.description[:150],
+                    "score": round(score, 3),
+                    "parent": doc.metadata.get("parent", ""),
+                    "path": doc.metadata.get("path", ""),
+                }
+            )
 
         return results

@@ -18,7 +18,4 @@ class SearchDocument:
         self.keywords = [k.lower() for k in self.keywords]
 
     def matches_filters(self, filters: dict[str, Any]) -> bool:
-        for key, value in filters.items():
-            if key == "category" and self.category != value:
-                return False
-        return True
+        return all(not (key == "category" and self.category != value) for key, value in filters.items())

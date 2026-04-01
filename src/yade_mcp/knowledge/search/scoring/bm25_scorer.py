@@ -30,9 +30,7 @@ class BM25Scorer:
         desc_score = self._score_field(query_tokens, doc_id, "description")
         kw_score = self._score_field(query_tokens, doc_id, "keywords")
 
-        total = (self.WEIGHT_NAME * name_score
-                 + self.WEIGHT_DESCRIPTION * desc_score
-                 + self.WEIGHT_KEYWORDS * kw_score)
+        total = self.WEIGHT_NAME * name_score + self.WEIGHT_DESCRIPTION * desc_score + self.WEIGHT_KEYWORDS * kw_score
 
         return total, {
             "field_scores": {
@@ -61,7 +59,9 @@ class BM25Scorer:
             total += idf * saturated_tf
         return total
 
-    def batch_score(self, query: str, documents: list[SearchDocument]) -> list[tuple[SearchDocument, float, dict[str, Any]]]:
+    def batch_score(
+        self, query: str, documents: list[SearchDocument]
+    ) -> list[tuple[SearchDocument, float, dict[str, Any]]]:
         results = []
         for doc in documents:
             s, info = self.score(query, doc)

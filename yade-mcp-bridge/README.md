@@ -1,0 +1,72 @@
+# yade-mcp-bridge
+
+[![PyPI](https://img.shields.io/pypi/v/yade-mcp-bridge)](https://pypi.org/project/yade-mcp-bridge/)
+
+WebSocket bridge that runs inside a YADE process and enables execution tools for [yade-mcp](https://pypi.org/project/yade-mcp/).
+
+## Quick Start
+
+```bash
+pip install yade-mcp-bridge
+```
+
+Then in a YADE Python console:
+
+```python
+import yade_mcp_bridge
+yade_mcp_bridge.start()
+```
+
+The bridge auto-detects the runtime: Qt timer in GUI mode, blocking poll in console mode.
+
+Expected output:
+
+```text
+============================================================
+YADE MCP Bridge Server
+============================================================
+  URL:         ws://localhost:9002
+  Log:         /your-working-dir/.yade-mcp/bridge.log
+  PyRunner:    installed (period=1)
+============================================================
+```
+
+## Options
+
+```python
+yade_mcp_bridge.start(
+    host="localhost",           # Server host
+    port=9002,                  # Server port
+    mode="auto",                # "auto", "gui", or "console"
+    interrupt_check_period=1,   # PyRunner checks every N iterations
+)
+```
+
+## Requirements
+
+- Python >= 3.8
+- YADE with Python bindings
+- `websockets >= 9.1, < 13`
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| Port in use | `yade_mcp_bridge.start(port=9003)`, then set `YADE_MCP_BRIDGE_URL=ws://localhost:9003` |
+| Connection failed | Check bridge is running, see `.yade-mcp/bridge.log` |
+| PyRunner not available | YADE installation may lack PyRunner; interrupt checking during `O.run()` will be disabled |
+
+## Development
+
+Run the bridge from source inside YADE:
+
+```python
+import sys
+sys.path.insert(0, '/path/to/yade-mcp/yade-mcp-bridge/src')
+import yade_mcp_bridge
+yade_mcp_bridge.start()
+```
+
+For full MCP client setup, see [yade-mcp](https://pypi.org/project/yade-mcp/).
+
+License: MIT ([LICENSE](https://github.com/yusong652/yade-mcp/blob/main/LICENSE)).

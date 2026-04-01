@@ -23,7 +23,8 @@ class APILoader:
         if not index_path.exists():
             return {"categories": {}}
         with open(index_path, encoding="utf-8") as f:
-            return json.load(f)
+            result: dict[str, Any] = json.load(f)
+            return result
 
     @staticmethod
     def list_categories() -> list[dict[str, Any]]:
@@ -67,11 +68,13 @@ class APILoader:
         for cls_name in class_names:
             # Try to load summary from the class doc file
             doc = APILoader.load_class(category, cls_name, subcategory=subcategory)
-            result.append({
-                "name": cls_name,
-                "description": doc.get("description", "")[:120] if doc else "",
-                "has_docs": doc is not None,
-            })
+            result.append(
+                {
+                    "name": cls_name,
+                    "description": doc.get("description", "")[:120] if doc else "",
+                    "has_docs": doc is not None,
+                }
+            )
         return result
 
     @staticmethod
@@ -89,7 +92,8 @@ class APILoader:
             return None
 
         with open(doc_path, encoding="utf-8") as f:
-            return json.load(f)
+            result: dict[str, Any] = json.load(f)
+            return result
 
     @staticmethod
     def resolve_path(path: str) -> dict[str, Any]:
@@ -136,7 +140,7 @@ class APILoader:
             if remainder == subcat_name:
                 return {"level": "subcategory", "category": category, "subcategory": subcat_name}
             if remainder.startswith(subcat_name + "."):
-                class_name = remainder[len(subcat_name) + 1:]
+                class_name = remainder[len(subcat_name) + 1 :]
                 return {
                     "level": "class",
                     "category": category,

@@ -97,21 +97,25 @@ def _browse_category(category: str, subcategory: str | None = None) -> dict[str,
         cat_info = index.get("categories", {}).get(category, {})
         subcats = cat_info.get("subcategories", {})
         for subcat_name, subcat_info in subcats.items():
-            entries.append({
-                "entry_type": "subcategory",
-                "name": subcat_name,
-                "path": f"{category}.{subcat_name}",
-                "description": subcat_info.get("description", ""),
-            })
+            entries.append(
+                {
+                    "entry_type": "subcategory",
+                    "name": subcat_name,
+                    "path": f"{category}.{subcat_name}",
+                    "description": subcat_info.get("description", ""),
+                }
+            )
 
     for cls in classes:
-        entries.append({
-            "entry_type": "class",
-            "name": cls["name"],
-            "path": f"{display_path}.{cls['name']}",
-            "description": cls["description"],
-            "has_docs": cls["has_docs"],
-        })
+        entries.append(
+            {
+                "entry_type": "class",
+                "name": cls["name"],
+                "path": f"{display_path}.{cls['name']}",
+                "description": cls["description"],
+                "has_docs": cls["has_docs"],
+            }
+        )
 
     return build_ok(
         build_docs_data(
@@ -147,11 +151,13 @@ def _browse_class(category: str, class_name: str, subcategory: str | None = None
         build_docs_data(
             source="python_api",
             action="browse",
-            entries=[{
-                "entry_type": "class_doc",
-                "path": display_path,
-                "doc": doc,
-            }],
+            entries=[
+                {
+                    "entry_type": "class_doc",
+                    "path": display_path,
+                    "doc": doc,
+                }
+            ],
             summary={"count": 1, "class": class_name},
         )
     )
