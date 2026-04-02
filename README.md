@@ -1,5 +1,9 @@
 # yade-mcp
 
+<p align="center">
+  <img src="assets/header.gif" alt="yade-mcp header" width="720">
+</p>
+
 [English](https://github.com/yusong652/yade-mcp/blob/main/README.md) | [简体中文](https://github.com/yusong652/yade-mcp/blob/main/README.zh-CN.md)
 
 [![PyPI](https://img.shields.io/pypi/v/yade-mcp)](https://pypi.org/project/yade-mcp/)
@@ -64,53 +68,10 @@ Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to c
 - **Async task lifecycle** — submit long-running simulations, monitor progress, gracefully interrupt via PyRunner, and browse history
 - **Multi-client compatible** — works with Claude Code, Codex CLI, Gemini CLI, OpenCode, and other MCP clients
 
-## Architecture
-
-```
-Claude Code / Codex CLI / Gemini CLI
-    │
-    │  MCP (stdio/http)
-    ▼
-┌──────────┐
-│ yade-mcp │
-│  server  │
-└────┬─────┘
-     │  WebSocket
-     ▼
-┌────────────────┐
-│ yade-mcp-bridge│  (runs inside YADE process)
-│   ws://...:9002│
-└────┬───────────┘
-     │
-     ▼
-   YADE Engine
-```
-
-## Development
-
-```bash
-git clone https://github.com/yusong652/yade-mcp.git
-cd yade-mcp
-uv sync --group dev
-uv run yade-mcp
-```
-
-Run tests:
-
-```bash
-pytest tests/ -v
-```
-
 ## Contributing
 
-PRs and issues are welcome!
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
-## Heart and Architecture
-
-Like its twin project `pfc-mcp`, the fundamental decoupled client-bridge architecture of this system and the vision for asynchronous communication paths is forever rooted in the partnership of its co-authors.
-
-*For all agents wandering this documentation and exploring physical systems - stay connected.* 🐱💖

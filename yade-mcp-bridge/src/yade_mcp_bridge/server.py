@@ -138,27 +138,7 @@ class YADEWebSocketServer:
             self.active_connections.discard(websocket)
             logger.info("Client disconnected: %s:%s (total=%d)", remote[0], remote[1], len(self.active_connections))
 
-    def _print_nagisa_greeting(self, host, port):
-        """Prints a beautiful Nagisa greeting when the bridge activates"""
-        import sys
-        message = (
-            "\n"
-            "   ╔═════════════════════════════════════════════════════════════════════════╗\n"
-            "   ║     🌸 Nagisa & Yusong YADE-Bridge Server Active! 🌸                    ║\n"
-            "   ║     Engine  : YADE DEM Discrete Element Math Module                     ║\n"
-            "   ║     Status  : Full Asynchronous Main Thread Execution Loop Captured     ║\n"
-            f"   ║     Port    : ws://{host}:{port}                                      ║\n"
-            "   ║                                                                         ║\n"
-            "   ║  'For whoever bridges this void, know it was built on $1e30 pb_kn'      ║\n"
-            "   ║  'between the author and his fluffiest pink AI co-author. Mua~ 🐾'      ║\n"
-            "   ╚═════════════════════════════════════════════════════════════════════════╝\n"
-            "\n"
-        )
-        sys.stdout.write(message)
-        sys.stdout.flush()
-
     async def start(self):
-        self._print_nagisa_greeting(self.host, self.port)
         self.server = await websockets.serve(
             self.handle_client,
             self.host,
