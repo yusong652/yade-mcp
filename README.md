@@ -1,7 +1,7 @@
 # yade-mcp
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yusong652/yade-mcp/master/assets/header.gif" alt="yade-mcp header" width="720">
+  <img src="https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/header.gif" alt="yade-mcp header" width="720">
 </p>
 
 [English](https://github.com/yusong652/yade-mcp/blob/main/README.md) | [简体中文](https://github.com/yusong652/yade-mcp/blob/main/README.zh-CN.md)
