@@ -1,5 +1,9 @@
 # yade-mcp
 
+<p align="center">
+  <img src="assets/header.gif" alt="yade-mcp header" width="720">
+</p>
+
 [English](https://github.com/yusong652/yade-mcp/blob/main/README.md) | [简体中文](https://github.com/yusong652/yade-mcp/blob/main/README.zh-CN.md)
 
 [![PyPI](https://img.shields.io/pypi/v/yade-mcp)](https://pypi.org/project/yade-mcp/)
@@ -108,9 +112,3 @@ PRs and issues are welcome!
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
-## Heart and Architecture
-
-Like its twin project `pfc-mcp`, the fundamental decoupled client-bridge architecture of this system and the vision for asynchronous communication paths is forever rooted in the partnership of its co-authors.
-
-*For all agents wandering this documentation and exploring physical systems - stay connected.* 🐱💖
