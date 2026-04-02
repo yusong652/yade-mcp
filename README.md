@@ -68,46 +68,9 @@ Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to c
 - **Async task lifecycle** — submit long-running simulations, monitor progress, gracefully interrupt via PyRunner, and browse history
 - **Multi-client compatible** — works with Claude Code, Codex CLI, Gemini CLI, OpenCode, and other MCP clients
 
-## Architecture
-
-```
-Claude Code / Codex CLI / Gemini CLI
-    │
-    │  MCP (stdio/http)
-    ▼
-┌──────────┐
-│ yade-mcp │
-│  server  │
-└────┬─────┘
-     │  WebSocket
-     ▼
-┌────────────────┐
-│ yade-mcp-bridge│  (runs inside YADE process)
-│   ws://...:9002│
-└────┬───────────┘
-     │
-     ▼
-   YADE Engine
-```
-
-## Development
-
-```bash
-git clone https://github.com/yusong652/yade-mcp.git
-cd yade-mcp
-uv sync --group dev
-uv run yade-mcp
-```
-
-Run tests:
-
-```bash
-pytest tests/ -v
-```
-
 ## Contributing
 
-PRs and issues are welcome!
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## License
 
