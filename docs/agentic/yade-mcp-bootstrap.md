@@ -55,22 +55,28 @@ When editing MCP config, use this order:
 
 [AGENT]
 
-YADE uses the system Python 3 interpreter. Install `yade-mcp-bridge` with `--user`:
+YADE links to the Python interpreter it was compiled against, which may differ from the default `python3` or `pip3` on the system (e.g. conda can shadow system Python). To install into the correct environment:
+
+1. Determine which Python YADE uses. Check the YADE launcher script or try common paths:
 
 ```bash
-pip3 install --user yade-mcp-bridge
+head -1 "$(which yade 2>/dev/null)"   # shebang shows the interpreter
+python3.8 --version 2>/dev/null       # common on Ubuntu 20.04
+python3.10 --version 2>/dev/null      # common on Ubuntu 22.04
 ```
 
-Verify:
+2. Install using that specific interpreter:
 
 ```bash
-python3 -c "import yade_mcp_bridge; print(yade_mcp_bridge.__version__)"
+python3.8 -m pip install --user yade-mcp-bridge
 ```
 
-If `pip3` is not found, try:
+If you cannot determine YADE's Python version, `pip3 install --user yade-mcp-bridge` is a reasonable default.
+
+3. Verify:
 
 ```bash
-python3 -m pip install --user yade-mcp-bridge
+python3.8 -c "import yade_mcp_bridge; print(yade_mcp_bridge.__version__)"
 ```
 
 ## Step 3 - Start Bridge in YADE
