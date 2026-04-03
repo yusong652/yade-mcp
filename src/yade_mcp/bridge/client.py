@@ -105,8 +105,7 @@ class YADEBridgeClient:
         except websockets.exceptions.PayloadTooBig as exc:
             logger.warning("Bridge response exceeded WebSocket size limit: %s", exc)
             error = BridgeResponseTooLargeError(
-                "Task output exceeds WebSocket size limit. "
-                "Consider writing output to file instead of printing."
+                "Task output exceeds WebSocket size limit. Consider writing output to file instead of printing."
             )
         except Exception as exc:
             logger.warning("Bridge receive loop stopped: %s", exc)
