@@ -29,6 +29,15 @@
 - 已安装 **[YADE](https://yade-dem.org/doc/installation.html)**
 - 已安装 **[uv](https://docs.astral.sh/uv/getting-started/installation/)**（用于 `uvx`）
 
+### 智能体配置（推荐）
+
+将以下内容复制给你的 AI 智能体，让它自动完成配置：
+
+```text
+Fetch and follow this bootstrap guide end-to-end:
+https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap.md
+```
+
 ### 手动配置
 
 **1. 在客户端配置中注册 MCP 服务器：**

@@ -29,6 +29,15 @@
 - **[YADE](https://yade-dem.org/doc/installation.html)** installed
 - **[uv](https://docs.astral.sh/uv/getting-started/installation/)** installed (for `uvx`)
 
+### Agentic Setup (Recommended)
+
+Copy this to your AI agent and let it self-configure:
+
+```text
+Fetch and follow this bootstrap guide end-to-end:
+https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap.md
+```
+
 ### Manual Setup
 
 **1. Register the MCP server** in your client config:
