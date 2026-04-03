@@ -62,19 +62,19 @@ class TestTruncateResponse:
         assert "[TRUNCATED" not in result["data"]["output"]
 
 
-class TestBridgeResponseTooLarge:
-    """Test that BridgeResponseTooLarge produces correct error output."""
+class TestBridgeResponseTooLargeError:
+    """Test that BridgeResponseTooLargeError produces correct error output."""
 
     def test_exception_is_connection_error(self):
-        from yade_mcp.bridge.client import BridgeResponseTooLarge
-        exc = BridgeResponseTooLarge("test")
+        from yade_mcp.bridge.client import BridgeResponseTooLargeError
+        exc = BridgeResponseTooLargeError("test")
         assert isinstance(exc, ConnectionError)
 
     def test_build_bridge_error_response_too_large(self):
-        from yade_mcp.bridge.client import BridgeResponseTooLarge
+        from yade_mcp.bridge.client import BridgeResponseTooLargeError
         from yade_mcp.formatting import build_bridge_error
 
-        exc = BridgeResponseTooLarge("output exceeds limit")
+        exc = BridgeResponseTooLargeError("output exceeds limit")
         result = build_bridge_error(exc, task_id="task-123")
 
         assert result["ok"] is False

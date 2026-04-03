@@ -102,8 +102,8 @@ class TestBuildBridgeError:
         assert "cannot connect" in result["error"]["details"]["reason"]
 
     def test_response_too_large(self):
-        from yade_mcp.bridge.client import BridgeResponseTooLarge
-        result = build_bridge_error(BridgeResponseTooLarge("output exceeds limit"), task_id="t1")
+        from yade_mcp.bridge.client import BridgeResponseTooLargeError
+        result = build_bridge_error(BridgeResponseTooLargeError("output exceeds limit"), task_id="t1")
         assert result["error"]["code"] == "response_too_large"
         assert result["error"]["details"]["task_id"] == "t1"
         assert "write to file" in result["error"]["details"]["action"]

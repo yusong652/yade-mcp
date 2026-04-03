@@ -13,7 +13,7 @@ from yade_mcp.config import get_bridge_config
 logger = logging.getLogger("yade-mcp.bridge")
 
 
-class BridgeResponseTooLarge(ConnectionError):
+class BridgeResponseTooLargeError(ConnectionError):
     """Raised when a bridge response exceeds the WebSocket size limit."""
 
 
@@ -104,7 +104,7 @@ class YADEBridgeClient:
             raise
         except websockets.exceptions.PayloadTooBig as exc:
             logger.warning("Bridge response exceeded WebSocket size limit: %s", exc)
-            error = BridgeResponseTooLarge(
+            error = BridgeResponseTooLargeError(
                 "Task output exceeds WebSocket size limit. "
                 "Consider writing output to file instead of printing."
             )

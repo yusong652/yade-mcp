@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from yade_mcp.bridge.client import (
-    BridgeResponseTooLarge,
+    BridgeResponseTooLargeError,
     YADEBridgeClient,
     close_bridge_client,
     get_bridge_client,
