@@ -52,13 +52,35 @@ class YADEWebSocketServer:
             "ping": handle_ping,
         }
 
+    _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB safety margin (max_size is 50 MB)
+
     async def _send_response(self, websocket, response, request_id="unknown"):
         try:
-            await websocket.send(json.dumps(response))
+            payload = json.dumps(response)
+            if len(payload) > self._MAX_RESPONSE_BYTES:
+                logger.warning("[%s] Response too large (%d bytes), truncating output", request_id[:8], len(payload))
+                response = self._truncate_response(response, self._MAX_RESPONSE_BYTES)
+                payload = json.dumps(response)
+            await websocket.send(payload)
             return True
         except websockets.exceptions.ConnectionClosed:
             logger.warning("Cannot send result, connection closed: %s", request_id)
             return False
+
+    @staticmethod
+    def _truncate_response(response, max_bytes):
+        """Truncate large response data to fit within WebSocket limits."""
+        data = response.get("data", {})
+        if isinstance(data, dict) and "output" in data:
+            output = data["output"]
+            if isinstance(output, str) and len(output) > 10000:
+                data["output"] = output[:10000] + (
+                    f"\n\n... [TRUNCATED: output was {len(output)} chars, "
+                    f"exceeds WebSocket size limit. "
+                    f"Consider writing output to file instead of printing.]"
+                )
+                response["data"] = data
+        return response
 
     def _summarize_request(self, msg_type, data):
         """Build a short log summary for an incoming request."""
@@ -145,6 +167,7 @@ class YADEWebSocketServer:
             self.port,
             ping_interval=self.ping_interval,
             ping_timeout=self.ping_timeout,
+            max_size=50 * 2**20,
         )
 
     def set_runtime_mode(self, runtime_mode):

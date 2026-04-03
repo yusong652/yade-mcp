@@ -13,6 +13,10 @@ from yade_mcp.config import get_bridge_config
 logger = logging.getLogger("yade-mcp.bridge")
 
 
+class BridgeResponseTooLarge(ConnectionError):
+    """Raised when a bridge response exceeds the WebSocket size limit."""
+
+
 class YADEBridgeClient:
     """Async request/response client for yade-mcp-bridge WebSocket protocol."""
 
@@ -43,7 +47,7 @@ class YADEBridgeClient:
         async with self._lock:
             if self._websocket is not None:
                 return
-            self._websocket = await websockets.connect(self.url, compression=None)
+            self._websocket = await websockets.connect(self.url, compression=None, max_size=50 * 2**20)
             self._receiver_task = asyncio.create_task(self._receive_loop())
             logger.info("Connected to yade-mcp-bridge at %s", self.url)
 
@@ -83,6 +87,7 @@ class YADEBridgeClient:
 
     async def _receive_loop(self) -> None:
         assert self._websocket is not None
+        error: Exception = ConnectionError("Bridge connection lost")
         try:
             async for raw_message in self._websocket:
                 payload = json.loads(raw_message)
@@ -97,13 +102,22 @@ class YADEBridgeClient:
                     future.set_result(payload)
         except asyncio.CancelledError:
             raise
+        except websockets.exceptions.PayloadTooBig as exc:
+            logger.warning("Bridge response exceeded WebSocket size limit: %s", exc)
+            error = BridgeResponseTooLarge(
+                "Task output exceeds WebSocket size limit. "
+                "Consider writing output to file instead of printing."
+            )
         except Exception as exc:
             logger.warning("Bridge receive loop stopped: %s", exc)
+            error = ConnectionError("Bridge connection lost")
+        else:
+            error = ConnectionError("Bridge connection lost")
         finally:
             async with self._lock:
                 self._websocket = None
                 self._receiver_task = None
-            self._fail_pending(ConnectionError("Bridge connection lost"))
+            self._fail_pending(error)
 
     async def _send_request(self, message: dict[str, Any], timeout_s: float) -> dict[str, Any]:
         await self._ensure_connected()
