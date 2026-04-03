@@ -15,7 +15,8 @@ class SearchDocument:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        self.keywords = [k.lower() for k in self.keywords]
+        # Preserve original case for CamelCase splitting in tokenizer
+        self.keywords = list(self.keywords)
 
     def matches_filters(self, filters: dict[str, Any]) -> bool:
         return all(not (key == "category" and self.category != value) for key, value in filters.items())

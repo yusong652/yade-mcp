@@ -20,6 +20,8 @@ class BM25Scorer:
         self.indexer = indexer
         self.tokenizer = TextTokenizer()
 
+    EXACT_NAME_BOOST = 2.0
+
     def score(self, query: str, document: SearchDocument) -> tuple[float, dict[str, Any]]:
         query_tokens = set(self.tokenizer.tokenize(query))
         if not query_tokens:
@@ -31,6 +33,10 @@ class BM25Scorer:
         kw_score = self._score_field(query_tokens, doc_id, "keywords")
 
         total = self.WEIGHT_NAME * name_score + self.WEIGHT_DESCRIPTION * desc_score + self.WEIGHT_KEYWORDS * kw_score
+
+        # Boost exact name matches: "sphere" → Sphere, "FrictMat" → FrictMat
+        if document.name.lower() in query_tokens:
+            total *= self.EXACT_NAME_BOOST
 
         return total, {
             "field_scores": {

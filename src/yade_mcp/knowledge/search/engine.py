@@ -29,12 +29,15 @@ def _load_all_documents() -> list[SearchDocument]:
         category = doc.get("category", "")
         parent = doc.get("parent", "")
 
-        # Build keywords from: name parts + parent + attribute names + category
+        # Build keywords from: name, parent, category, attribute names/descriptions, method names
         keywords: list[str] = [name, category, parent]
         for attr in doc.get("attributes", []):
             attr_name = attr.get("name", "")
             if attr_name:
                 keywords.append(attr_name)
+            attr_desc = attr.get("description", "")
+            if attr_desc:
+                keywords.append(attr_desc)
         for func in doc.get("functions", []):
             func_name = func.get("name", "")
             if func_name:

@@ -14,7 +14,44 @@ class TextTokenizer:
 
     WORD_PATTERN = re.compile(r"\b[\w.-]+\b")
     NUMERIC_PATTERN = re.compile(r"^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$")
-    TECHNICAL_SINGLE_CHARS = {"x", "y", "z", "r", "n", "t"}
+    TECHNICAL_SINGLE_CHARS = {"x", "y", "z", "r", "n", "t", "o"}
+
+    # YADE abbreviation expansions: short CamelCase parts → full words
+    _ABBREVIATIONS: dict[str, str] = {
+        "mat": "material",
+        "phys": "physics",
+        "geom": "geometry",
+        "sc": "scalar",
+        "coh": "cohesive",
+        "frict": "friction",
+        "visc": "viscous",
+        "elast": "elastic",
+        "damp": "damping",
+        "disp": "dispatcher",
+    }
+
+    # Suffixes to strip, ordered longest-first to avoid partial matches
+    _SUFFIX_RULES = [
+        "ment",
+        "ness",
+        "able",
+        "ible",
+        "ious",
+        "ous",
+        "ive",
+        "ful",
+        "less",
+        "ing",
+        "ion",
+        "ity",
+        "ial",
+        "al",
+        "ic",
+        "ly",
+        "er",
+        "ed",
+        "es",
+    ]
 
     def __init__(self, remove_stopwords: bool = True, min_length: int = 2):
         self.remove_stopwords = remove_stopwords
@@ -44,22 +81,62 @@ class TextTokenizer:
                 for part in word.split("-"):
                     if self._is_valid(part, technical=True):
                         tokens.append(part)
+                        self._add_stem(part, tokens)
             else:
-                for part in self._split_camel(original_word):
+                parts = self._split_camel(original_word)
+                # Emit full compound word alongside parts for exact name matching
+                if len(parts) > 1:
+                    full = original_word.lower()
+                    if self._is_valid(full):
+                        tokens.append(full)
+                for part in parts:
                     if self._is_valid(part):
                         tokens.append(part)
+                        self._add_stem(part, tokens)
 
         return tokens
 
     def _split_and_add(self, original: str, lowered: str, tokens: list[str]) -> None:
         """Split a word part (may contain CamelCase) and add valid tokens."""
-        for part in self._split_camel(original):
+        parts = self._split_camel(original)
+        if len(parts) > 1:
+            full = original.lower()
+            if self._is_valid(full, technical=True):
+                tokens.append(full)
+        for part in parts:
             if self._is_valid(part, technical=True):
                 tokens.append(part)
+                self._add_stem(part, tokens)
+
+    def _stem(self, word: str) -> str | None:
+        """Simple suffix-stripping stemmer for search matching."""
+        for suffix in self._SUFFIX_RULES:
+            if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+                return word[: -len(suffix)]
+        return None
+
+    def _add_stem(self, word: str, tokens: list[str]) -> None:
+        """Add stemmed form and abbreviation expansion if applicable."""
+        stem = self._stem(word)
+        if stem and stem != word and self._is_valid(stem):
+            tokens.append(stem)
+        # Expand YADE abbreviations (both directions)
+        if word in self._ABBREVIATIONS:
+            tokens.append(self._ABBREVIATIONS[word])
+        for abbr, full in self._ABBREVIATIONS.items():
+            if word == full and abbr not in tokens:
+                tokens.append(abbr)
 
     def _split_camel(self, word: str) -> list[str]:
-        """Split CamelCase: NewtonIntegrator → ['newton', 'integrator']."""
-        spaced = re.sub(r"(?<!^)(?=[A-Z])", " ", word)
+        """Split CamelCase, keeping uppercase runs together.
+
+        VTKRecorder → ['vtk', 'recorder']
+        NewtonIntegrator → ['newton', 'integrator']
+        ScGeom6D → ['sc', 'geom6d']
+        """
+        # Insert space before uppercase-lowercase transitions and between lower-upper
+        spaced = re.sub(r"([A-Z]+)(?=[A-Z][a-z])", r"\1 ", word)
+        spaced = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", spaced)
         parts = spaced.split()
         if len(parts) > 1:
             return [p.lower() for p in parts]

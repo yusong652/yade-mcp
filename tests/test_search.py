@@ -67,9 +67,9 @@ class TestTextTokenizer:
 # =========================================================================
 
 class TestSearchDocument:
-    def test_keywords_lowercased(self):
+    def test_keywords_preserved(self):
         doc = _make_doc("Test", keywords=["Sphere", "GRAVITY"])
-        assert doc.keywords == ["sphere", "gravity"]
+        assert doc.keywords == ["Sphere", "GRAVITY"]
 
     def test_matches_filters_category(self):
         doc = _make_doc("Test", category="engines")
