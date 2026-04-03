@@ -37,11 +37,8 @@ Both use trusted publishing (PyPI OIDC). Version is defined in `__init__.py` of 
 - Ruff for linting and formatting (N818: exception names must end with `Error`)
 - Async-first: bridge client uses websockets with asyncio
 - Response envelope: all tools return via `build_ok()` / `build_error()` from contracts.py
-- WebSocket max_size is 50MB; bridge truncates responses > 40MB before sending
 
 ## Key architectural decisions
 
-- Bridge server truncates large output at `_send_response` level (40MB threshold)
-- `BridgeResponseTooLargeError` propagates clearly to LLM with actionable advice
 - BM25 search rebuilds index per query (~50ms for 350 docs, no stale state)
 - README header GIF is served from assets branch via raw.githubusercontent.com URL
