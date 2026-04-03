@@ -7,12 +7,14 @@
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "surfaceTension",
       "type": "float",
-      "default": "0.07197"
+      "default": "0.07197",
+      "description": "The surface tension in the fluid surrounding the bubbles. The default value is that of water at 25 degrees Celcius."
     }
   ]
 }

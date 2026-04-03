@@ -7,12 +7,14 @@
     {
       "name": "angularVelocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Angular velocity. [rad/s]"
     },
     {
       "name": "fi",
       "type": "float",
-      "default": "1.5707963267948966"
+      "default": "1.5707963267948966",
+      "description": "Initial phase [radians]"
     },
     {
       "name": "ids",
@@ -22,12 +24,14 @@
     {
       "name": "radius",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Rotation radius. [m]"
     },
     {
       "name": "rotationAxis",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "Axis of rotation (direction); will be normalized automatically."
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "name": "LBMnode",
+  "category": "engines",
+  "parent": "",
+  "description": "Node class for Lattice Boltzmann Method",
+  "attributes": []
+}

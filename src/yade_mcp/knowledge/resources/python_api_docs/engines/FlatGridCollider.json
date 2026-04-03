@@ -7,17 +7,20 @@
     {
       "name": "aabbMax",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Upper corner of grid (approximate, might be rouded up to *minStep*."
     },
     {
       "name": "aabbMin",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Lower corner of grid."
     },
     {
       "name": "avoidSelfInteractionMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "This mask is used to avoid the interactions inside a group of particles. To do so, the particles must have the exact same mask and that mask should have one bit in common with this"
     },
     {
       "name": "boundDispatcher",
@@ -27,12 +30,14 @@
     {
       "name": "step",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Step in the grid (cell size)"
     },
     {
       "name": "verletDist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Length by which enlarge space occupied by each particle; avoids running collision detection at every step."
     }
   ]
 }

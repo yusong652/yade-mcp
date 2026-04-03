@@ -7,207 +7,248 @@
     {
       "name": "FnMax",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "positiv value computed from"
     },
     {
       "name": "FsMax",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "computed from"
     },
     {
       "name": "checkedForCluster",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Have we checked if this int belongs in cluster?"
     },
     {
       "name": "clusterInts",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "vector of pointers to the broken interactions nearby constituting a cluster"
     },
     {
       "name": "clusteredEvent",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "is this interaction part of a cluster?"
     },
     {
       "name": "computedCentroid",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Flag for moment calculation"
     },
     {
       "name": "crackJointAperture",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Relative displacement between 2 spheres (in case of a crack it is equivalent of the crack aperture)"
     },
     {
       "name": "crossSection",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "crossSection=pi*Rmin^2. [m2]"
     },
     {
       "name": "dilation",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "defines the normal displacement in the joint after sliding treshold. [m]"
     },
     {
       "name": "elapsedIter",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "number of elapsed iterations for moment calculation"
     },
     {
       "name": "eventBeginTime",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "The time at which event initiated"
     },
     {
       "name": "eventNumber",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "cluster event number"
     },
     {
       "name": "firstMomentCalc",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Flag for moment calculation |yupdate|"
     },
     {
       "name": "initD",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "equilibrium distance for interacting particles. Computed as the interparticular distance at first contact detection."
     },
     {
       "name": "interactionsAdded",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "have we added the ints associated with this event?"
     },
     {
       "name": "isBroken",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "flag for broken interactions"
     },
     {
       "name": "isCohesive",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If false, particles interact in a frictional way. If true, particles are bonded regarding the given"
     },
     {
       "name": "isOnJoint",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "defined as true when both interacting particles are"
     },
     {
       "name": "isOnSlot",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "defined as true when interaction is located in the perforation slot (surface)."
     },
     {
       "name": "jointCumulativeSliding",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "sliding distance for particles interacting on a joint. Used, when"
     },
     {
       "name": "jointNormal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "normal direction to the joint, deduced from e.g."
     },
     {
       "name": "kineticEnergy",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "kinetic energy of the two spheres participating in the interaction (easiest to store this value with interaction instead of spheres since we are using this information for moment magnitude estimations and associated interaction searches)"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "momentBroken",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Flag for moment calculation"
     },
     {
       "name": "momentCalculated",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Flag for moment calculation to avoid repeating twice the operations |yupdate|"
     },
     {
       "name": "momentCentroid",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "centroid of the AE event (avg location of clustered breaks)"
     },
     {
       "name": "momentEnergy",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "reference strain (or kinetic) energy of surrounding interactions (particles)"
     },
     {
       "name": "momentEnergyChange",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "storage of the maximum strain (or kinetic) energy change for surrounding interactions (particles)"
     },
     {
       "name": "momentMagnitude",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Moment magnitude of a failed interaction"
     },
     {
       "name": "more",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "specifies if the interaction is crossed by more than 3 joints. If true, interaction is deleted (temporary solution)."
     },
     {
       "name": "nearbyFound",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Count used to debug moment calc"
     },
     {
       "name": "nearbyInts",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "vector of pointers to the nearby ints used for moment calc"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "originalClusterEvent",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "the original AE event for a cluster"
     },
     {
       "name": "originalEvent",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "pointer to the original interaction of a cluster"
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "strainEnergy",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "strain energy of interaction"
     },
     {
       "name": "tanDilationAngle",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "tangent of the angle defining the dilatancy of the joint surface (auto. computed from"
     },
     {
       "name": "tanFrictionAngle",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "tangent of Coulomb friction angle for this interaction (auto. computed). [-]"
     },
     {
       "name": "temporalWindow",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "temporal window for the clustering algorithm"
     }
   ]
 }

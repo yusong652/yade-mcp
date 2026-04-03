@@ -7,22 +7,26 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(1.188927870455225817e-316,0,0)"
+      "default": "Vector3(1.188927870455225817e-316,0,0)",
+      "description": "Contact point (global coords)"
     },
     {
       "name": "flag",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "TODO"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(1,1000,1000000000)"
+      "default": "Vector3(1,1000,1000000000)",
+      "description": "Normal of the interaction TODO"
     },
     {
       "name": "penetrationVolume",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Volume of overlap [m\u00b3]"
     }
   ]
 }

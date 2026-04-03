@@ -1,0 +1,14 @@
+{
+  "name": "GlBoundFunctor",
+  "category": "engines",
+  "parent": "Functor",
+  "description": "Abstract functor for rendering Bound objects.",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

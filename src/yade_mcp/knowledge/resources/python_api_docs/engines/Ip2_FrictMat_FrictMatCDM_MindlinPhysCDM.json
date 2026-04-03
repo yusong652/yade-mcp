@@ -7,7 +7,8 @@
     {
       "name": "frictAngle",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     }
   ]
 }

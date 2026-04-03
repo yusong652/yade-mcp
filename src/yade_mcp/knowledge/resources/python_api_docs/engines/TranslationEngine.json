@@ -12,12 +12,14 @@
     {
       "name": "translationAxis",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Direction of imposed translation [Vector3]"
     },
     {
       "name": "velocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Scalar value of the imposed velocity [m/s]. Imposed vector velocity is"
     }
   ]
 }

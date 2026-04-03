@@ -7,207 +7,248 @@
     {
       "name": "cohesionBroken",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "is cohesion active? will be set false when a fragile contact is broken"
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "isBroken",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if compression plastic fracture achieved"
     },
     {
       "name": "kDam",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Damage coefficient on bending, computed from maximum bending moment reached and pure creep behaviour. Its values will vary between"
     },
     {
       "name": "kRCrp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bending creep stiffness"
     },
     {
       "name": "kRUnld",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bending plastic unload stiffness"
     },
     {
       "name": "kTCrp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension/compression creep stiffness"
     },
     {
       "name": "kTUnld",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension/compression plastic unload stiffness"
     },
     {
       "name": "kTwCrp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Twist creep stiffness"
     },
     {
       "name": "kTwUnld",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Twist plastic unload stiffness"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "knC",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "compression stiffness"
     },
     {
       "name": "knT",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "tension stiffness"
     },
     {
       "name": "kr",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "rotational stiffness [N.m/rad]"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "shear stiffness"
     },
     {
       "name": "ktw",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "twist stiffness [N.m/rad]"
     },
     {
       "name": "maxBendMom",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Plastic failure bending moment."
     },
     {
       "name": "maxContract",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Plastic failure contraction (shrinkage)."
     },
     {
       "name": "maxCrpRchdB",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "maximal bending moment reached on plastic deformation."
     },
     {
       "name": "maxCrpRchdC",
       "type": "Vector2",
-      "default": "Vector2(0,0)"
+      "default": "Vector2(0,0)",
+      "description": "maximal compression reached on plastic deformation. maxCrpRchdC[0] stores un and maxCrpRchdC[1] stores Fn."
     },
     {
       "name": "maxCrpRchdT",
       "type": "Vector2",
-      "default": "Vector2(0,0)"
+      "default": "Vector2(0,0)",
+      "description": "maximal extension reached on plastic deformation. maxCrpRchdT[0] stores un and maxCrpRchdT[1] stores Fn."
     },
     {
       "name": "maxCrpRchdTw",
       "type": "Vector2",
-      "default": "Vector2(0,0)"
+      "default": "Vector2(0,0)",
+      "description": "maximal twist reached on plastic deformation. maxCrpRchdTw[0] stores twist angle and maxCrpRchdTw[1] stores twist moment."
     },
     {
       "name": "maxElB",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximum bending elastic moment."
     },
     {
       "name": "maxElC",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximum compression elastic force."
     },
     {
       "name": "maxElT",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximum tension elastic force."
     },
     {
       "name": "maxElTw",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximum twist elastic moment."
     },
     {
       "name": "maxExten",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Plastic failure extension (stretching)."
     },
     {
       "name": "maxTwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Plastic failure twist angle"
     },
     {
       "name": "moment_bending",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Bending moment"
     },
     {
       "name": "moment_twist",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Twist moment"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "onPlastB",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if plasticity achieved on bending"
     },
     {
       "name": "onPlastC",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if plasticity achieved on compression"
     },
     {
       "name": "onPlastT",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if plasticity achieved on traction"
     },
     {
       "name": "onPlastTw",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if plasticity achieved on twisting"
     },
     {
       "name": "pureCreep",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Pure creep curve, used for comparison in calculation."
     },
     {
       "name": "shearAdhesion",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximum elastic shear force (cohesion)."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     },
     {
       "name": "twp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "plastic twist penetration depth describing the equilibrium state."
     },
     {
       "name": "unp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "plastic normal penetration depth describing the equilibrium state."
     }
   ]
 }

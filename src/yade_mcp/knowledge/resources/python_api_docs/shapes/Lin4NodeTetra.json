@@ -7,7 +7,8 @@
     {
       "name": "color",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "elementframe",
@@ -17,22 +18,52 @@
     {
       "name": "faces",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Faces of the element for drawing"
     },
     {
       "name": "highlight",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "localmap",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Ids and relative positions+orientations of members of the deformable element (should not be accessed directly)"
     },
     {
       "name": "wire",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "addFace",
+      "description": "Add a face into the element"
+    },
+    {
+      "name": "addNode",
+      "description": "Add a node shared_pt<:yref:'Body'>& as into the element"
+    },
+    {
+      "name": "delNode",
+      "description": "Remove a node shared_pt<:yref:'Body'>& from the element"
+    },
+    {
+      "name": "getNode",
+      "description": "Get a node shared_pt<:yref:'Body'>& as into the element"
+    },
+    {
+      "name": "getVolume",
+      "description": "Get volume of the element"
+    },
+    {
+      "name": "removeLastFace",
+      "description": "Remove a face from the element"
     }
   ]
 }

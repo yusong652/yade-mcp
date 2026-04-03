@@ -1,0 +1,14 @@
+{
+  "name": "CundallStrackPotential",
+  "category": "engines",
+  "parent": "GenericPotential",
+  "description": "Potential with only Cundall-and-Strack-like contact.",
+  "attributes": [
+    {
+      "name": "alpha",
+      "type": "Real",
+      "default": "1",
+      "description": "Bulk-to-roughness stiffness ratio"
+    }
+  ]
+}

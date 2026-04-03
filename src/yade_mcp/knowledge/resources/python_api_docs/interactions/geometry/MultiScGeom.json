@@ -7,12 +7,14 @@
     {
       "name": "contacts",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "The actual list of"
     },
     {
       "name": "nodesIds",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of"
     }
   ]
 }

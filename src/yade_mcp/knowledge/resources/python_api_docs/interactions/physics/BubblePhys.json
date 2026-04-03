@@ -7,37 +7,50 @@
     {
       "name": "Dmax",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum penetrationDepth of the bubbles before the force displacement curve changes to an artificial exponential curve. Setting this value will have no effect. See Law2_ScGeom_BubblePhys_Bubble::pctMaxForce for more information"
     },
     {
       "name": "fN",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Contact normal force"
     },
     {
       "name": "newtonIter",
       "type": "int",
-      "default": "50"
+      "default": "50",
+      "description": "Maximum number of force iterations allowed"
     },
     {
       "name": "newtonTol",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "Convergence criteria for force iterations"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force"
     },
     {
       "name": "rAvg",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Average radius of the two interacting bubbles"
     },
     {
       "name": "surfaceTension",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Surface tension of the surrounding liquid"
+    }
+  ],
+  "methods": [
+    {
+      "name": "computeForce",
+      "description": "Computes the normal force acting between the two interacting bubbles using the Newton-Rhapson method"
     }
   ]
 }

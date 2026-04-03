@@ -7,22 +7,36 @@
     {
       "name": "MaxDist",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Maximum distance (d/a) for the interaction"
     },
     {
       "name": "activateRollLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate roll lubrication (default: true)"
     },
     {
       "name": "activateTangencialLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate tangencial lubrication (default: true)"
     },
     {
       "name": "activateTwistLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate twist lubrication (default: true)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "getStressForEachBody",
+      "description": "Get stresses tensors for each bodies: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
+    },
+    {
+      "name": "getTotalStresses",
+      "description": "Get total stresses tensors: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
     }
   ]
 }

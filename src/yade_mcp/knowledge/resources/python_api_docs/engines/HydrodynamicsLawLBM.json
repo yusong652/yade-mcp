@@ -12,332 +12,398 @@
     {
       "name": "CstBodyForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "A constant body force (=that does not vary in time or space, otherwise the implementation introduces errors)"
     },
     {
       "name": "DemIterLbmIterRatio",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Ratio between DEM and LBM iterations for subcycling"
     },
     {
       "name": "EndTime",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "the time to stop the simulation"
     },
     {
       "name": "EngineIsActivated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "To activate (or not) the engine"
     },
     {
       "name": "IterMax",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "This variable can be used to do several LBM iterations during one DEM iteration."
     },
     {
       "name": "IterPrint",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Print info on screen every IterPrint iterations"
     },
     {
       "name": "IterSave",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "Data are saved every IterSave LBM iteration (or see TimeSave)"
     },
     {
       "name": "IterSubCyclingStart",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Iteration number when the subcycling process starts"
     },
     {
       "name": "LBMSavedData",
       "type": "str",
-      "default": "' '"
+      "default": "' '",
+      "description": "a list of data that will be saved. Can use velocity,velXY,forces,rho,bodies,nodeBD,newNode,observedptc,observednode,contacts,spheres,bz2"
     },
     {
       "name": "Nu",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "Fluid kinematic viscosity"
     },
     {
       "name": "Nx",
       "type": "int",
-      "default": "1000"
+      "default": "1000",
+      "description": "The number of grid division in x direction"
     },
     {
       "name": "ObservedNode",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "The identifier of the node that will be observed (-1 means none)"
     },
     {
       "name": "ObservedPtc",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "The identifier of the particle that will be observed (-1 means the first one)"
     },
     {
       "name": "RadFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "The radius of DEM particules seen by the LBM is the real radius of particules*RadFactor"
     },
     {
       "name": "Rho",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Fluid density"
     },
     {
       "name": "SaveGridRatio",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Grid data are saved every SaveGridRatio * IterSave LBM iteration (with SaveMode=1)"
     },
     {
       "name": "SaveMode",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Save Mode (1-> default, 2-> in time (not yet implemented)"
     },
     {
       "name": "TimeSave",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Data are saved at constant time interval  (or see IterSave)"
     },
     {
       "name": "VbCutOff",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "the minimum boundary velocity that is taken into account"
     },
     {
       "name": "VelocityThreshold",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Velocity threshold when removingCriterion=2"
     },
     {
       "name": "WallXm_id",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Identifier of the X- wall"
     },
     {
       "name": "WallXp_id",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "Identifier of the X+ wall"
     },
     {
       "name": "WallYm_id",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Identifier of the Y- wall"
     },
     {
       "name": "WallYp_id",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Identifier of the Y+ wall"
     },
     {
       "name": "WallZm_id",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "Identifier of the Z- wall"
     },
     {
       "name": "WallZp_id",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "Identifier of the Z+ wall"
     },
     {
       "name": "XmBCType",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Boundary condition for the wall in Xm (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XmBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     },
     {
       "name": "XmBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "XmYmZmBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the corner node XmYmZm (not used with d2q9, -1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XmYmZpBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the corner node XmYmZp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XmYpZmBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the corner node XmYpZm (not used with d2q9, -1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XmYpZpBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the corner node XmYpZp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XpBCType",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Boundary condition for the wall in Xp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XpBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     },
     {
       "name": "XpBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "XpYmZmBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the corner node XpYmZm (not used with d2q9, -1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XpYmZpBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the corner node XpYmZp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XpYpZmBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the corner node XpYpZm (not used with d2q9, -1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "XpYpZpBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the corner node XpYpZp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "YmBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the wall in Ym (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "YmBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     },
     {
       "name": "YmBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "YpBCType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Boundary condition for the wall in Yp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "YpBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     },
     {
       "name": "YpBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "ZmBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the wall in Zm (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "ZmBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     },
     {
       "name": "ZmBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "ZpBCType",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Boundary condition for the wall in Zp (-1: unused, 1: pressure condition, 2: velocity condition)."
     },
     {
       "name": "ZpBcVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "(!!! not fully implemented !!) The velocity imposed at the boundary"
     },
     {
       "name": "applyForcesAndTorques",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Switch to apply forces and torques"
     },
     {
       "name": "bc",
       "type": "str",
-      "default": "' '"
+      "default": "' '",
+      "description": "Boundary condition"
     },
     {
       "name": "dP",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Pressure difference between input and output"
     },
     {
       "name": "defaultLbmInitMode",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Switch between the two initialisation methods"
     },
     {
       "name": "model",
       "type": "str",
-      "default": "'d2q9'"
+      "default": "'d2q9'",
+      "description": "The LB model. Until now only d2q9 is implemented"
     },
     {
       "name": "periodicity",
       "type": "str",
-      "default": "' '"
+      "default": "' '",
+      "description": "periodicity"
     },
     {
       "name": "removingCriterion",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Criterion to remove a sphere (1->based on particle position, 2->based on particle velocity"
     },
     {
       "name": "tau",
       "type": "float",
-      "default": "0.6"
+      "default": "0.6",
+      "description": "Relaxation time"
     },
     {
       "name": "useWallXm",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Set true if you want that the LBM see the wall in Xm"
     },
     {
       "name": "useWallXp",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Set true if you want that the LBM see the wall in Xp"
     },
     {
       "name": "useWallYm",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Set true if you want that the LBM see the wall in Ym"
     },
     {
       "name": "useWallYp",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Set true if you want that the LBM see the wall in Yp"
     },
     {
       "name": "useWallZm",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Set true if you want that the LBM see the wall in Zm"
     },
     {
       "name": "useWallZp",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Set true if you want that the LBM see the wall in Zp"
     },
     {
       "name": "zpBcRho",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(!!! not fully implemented !!) The density imposed at the boundary"
     }
   ]
 }

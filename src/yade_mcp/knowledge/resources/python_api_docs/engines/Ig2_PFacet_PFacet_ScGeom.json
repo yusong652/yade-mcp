@@ -7,12 +7,14 @@
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
     },
     {
       "name": "shrinkFactor",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "The radius of the inscribed circle of the facet is decreased by the value of the sphere's radius multipled by *shrinkFactor*. From the definition of contact point on the surface made of facets, the given surface is not continuous and becomes in effect surface covered with triangular tiles, with gap between the separate tiles equal to the sphere's radius multiplied by 2\u00d7*shrinkFactor*. If zero, no shrinking is done."
     }
   ]
 }

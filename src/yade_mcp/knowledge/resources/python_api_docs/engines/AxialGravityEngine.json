@@ -7,22 +7,26 @@
     {
       "name": "acceleration",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Acceleration magnitude [kgms\u207b\u00b2]"
     },
     {
       "name": "axisDirection",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "direction of the gravity axis (will be normalized automatically)"
     },
     {
       "name": "axisPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Point through which the axis is passing."
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
     }
   ]
 }

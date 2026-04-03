@@ -7,62 +7,92 @@
     {
       "name": "activateWettability",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If true, particles are wettable (coating material is distributed over particles with time). It works only for spherical particles. For clumps of spheres it is recommended to set false."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "interParticleExchangeCoeff",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Rate of coating material exchange rate coefficient between two contacting particles."
     },
     {
       "name": "intraParticleExchangeCoeff",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Rate of coating material exchange rate coefficient between two segments of the same particle."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "phiResolution",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "In how many regions a coating map of sphere should be divided horizontally (phi is azimuthal angle ranging from 0 to 360 degrees)."
     },
     {
       "name": "prevTime",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Virtual time of the last run. Compared to the"
     },
     {
       "name": "reInitCohesion",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "This parameter is introduced to reinitialize the cohesion after two bodies exchange the coating material. That means it sets"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "thetaResolution",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "In how many regions a coating map of sphere should be divided vertically (theta is polar angle ranging from 0 to 180 degrees)."
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "initialize",
+      "description": "Initializes SegmentedState::coatingThickness, so it has a proper length and next, sets the same thickness to all the segments. Not initialized bodies cannot exchange the coating material."
+    },
+    {
+      "name": "setThicknessToFacetSide",
+      "description": "Set thickness to facet side (0 to negative side, 1 to positive side, according to facet normal)."
+    },
+    {
+      "name": "setThicknessToSphereSeg",
+      "description": "Set thickness to the segment of sphere at position given by phi and theta."
+    },
+    {
+      "name": "setThicknessToSpheres",
+      "description": "For each sphere from provided list (of Ids) set thickness at some range of segments specified by minimum and maximum theta and phi."
     }
   ]
 }

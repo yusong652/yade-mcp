@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_Box",
+  "category": "engines",
+  "parent": "GlShapeFunctor",
+  "description": "Renders Box object",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

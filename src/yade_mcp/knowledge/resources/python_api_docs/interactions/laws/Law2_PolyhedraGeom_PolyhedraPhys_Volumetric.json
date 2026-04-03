@@ -7,12 +7,28 @@
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing"
     },
     {
       "name": "volumePower",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Power of volume used in evaluation of normal force. Default is 1.0 - normal force is linearly proportional to volume. 1.0/3.0 would mean that normal force is proportional to the cube root of volume, approximation of penetration depth."
+    }
+  ],
+  "methods": [
+    {
+      "name": "elasticEnergy",
+      "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts"
+    },
+    {
+      "name": "initPlasticDissipation",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+    },
+    {
+      "name": "plasticDissipation",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_PolyhedraGeom_PolyhedraPhys_Volumetric::traceEnergy is true."
     }
   ]
 }

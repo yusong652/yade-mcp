@@ -7,7 +7,8 @@
     {
       "name": "cohesiveThresholdIter",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "Should new contacts be cohesive? They will before this iter#, they will not be afterwards. If <=0, they will never be."
     }
   ]
 }

@@ -7,42 +7,60 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(6.933197526920783737e-310,6.933197526922364747e-310,6.933197526923945757"
+      "default": "Vector3(6.933197526920783737e-310,6.933197526922364747e-310,6.933197526923945757",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(6.933197526916040707e-310,6.933197526917621717e-310,6.933197526919202727"
+      "default": "Vector3(6.933197526916040707e-310,6.933197526917621717e-310,6.933197526919202727",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
     },
     {
       "name": "penetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Penetration distance of spheres (positive if overlapping)"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|"
     },
     {
       "name": "relPos1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "position of the contact on the first connection (0: node-, 1:node+) |yupdate|"
     },
     {
       "name": "relPos2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "position of the contact on the first connection (0: node-, 1:node+) |yupdate|"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step"
+    }
+  ],
+  "methods": [
+    {
+      "name": "incidentVel",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+    },
+    {
+      "name": "relAngVel",
+      "description": "Return relative angular velocity of the interaction."
     }
   ]
 }

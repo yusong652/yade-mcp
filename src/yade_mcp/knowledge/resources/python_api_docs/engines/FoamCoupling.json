@@ -17,12 +17,14 @@
     {
       "name": "fluidDensity",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "fluidDensity"
     },
     {
       "name": "fluidDomains",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "list of fluid domain bounding fictitious fluid bodies that has the fluid mesh bounds"
     },
     {
       "name": "foamDeltaT",
@@ -32,12 +34,14 @@
     {
       "name": "foamPath",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "path to OpenFoam"
     },
     {
       "name": "foamVersion",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "version of OpenFoam environment"
     },
     {
       "name": "isGaussianInterp",
@@ -47,12 +51,56 @@
     {
       "name": "numParticles",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "number of particles in coupling."
     },
     {
       "name": "particleDensity",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "particle Density"
+    }
+  ],
+  "methods": [
+    {
+      "name": "SetOpenFoamSolver",
+      "description": "Starts the Yade coupled OpenFOAM solver with the requested number of processes"
+    },
+    {
+      "name": "StartFoamSolver",
+      "description": "Starts the OpenFOAM solver"
+    },
+    {
+      "name": "eraseId",
+      "description": "remove a body from hydrodynamic force coupling"
+    },
+    {
+      "name": "getFluidDomainBbox",
+      "description": "get the fluid domain bounding boxes, called once during simulation initialization."
+    },
+    {
+      "name": "getIdList",
+      "description": "get the ids of bodies in coupling"
+    },
+    {
+      "name": "getNumBodies",
+      "description": "get the number of bodies in the coupling"
+    },
+    {
+      "name": "insertBodyId",
+      "description": "insert a new body id for hydrodynamic force coupling"
+    },
+    {
+      "name": "killMPI",
+      "description": "Destroy MPI, to be called at the end of the simulation, from killMPI<FoamCoupling::killMPI>"
+    },
+    {
+      "name": "setIdList",
+      "description": "list of body ids in hydroForce coupling. (links to :yref: `FoamCoupling::bodyList` vector, used to build particle data FoamCoupling::particleData. FoamCoupling::particleData contains the particle pos, vel, angvel, radius and this is sent to foam. )"
+    },
+    {
+      "name": "setNumParticles",
+      "description": "number of particles in coupling"
     }
   ]
 }

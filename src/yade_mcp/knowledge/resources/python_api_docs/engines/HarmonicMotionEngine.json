@@ -7,17 +7,20 @@
     {
       "name": "A",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Amplitude [m]"
     },
     {
       "name": "f",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Frequency [hertz]"
     },
     {
       "name": "fi",
       "type": "Vector3",
-      "default": "Vector3(1.570796326794896558,1.570796326794896558,1.570796326794896558)"
+      "default": "Vector3(1.570796326794896558,1.570796326794896558,1.570796326794896558)",
+      "description": "Initial phase [radians]. By default, the body oscillates around initial position."
     },
     {
       "name": "ids",

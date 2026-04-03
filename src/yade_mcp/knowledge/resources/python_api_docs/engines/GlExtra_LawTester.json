@@ -1,0 +1,20 @@
+{
+  "name": "GlExtra_LawTester",
+  "category": "engines",
+  "parent": "GlExtraDrawer",
+  "description": "Find an instance of LawTester and show visually its data.",
+  "attributes": [
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "Deactivate the object (on error/exception)."
+    },
+    {
+      "name": "tester",
+      "type": "shared_ptr<LawTester>",
+      "default": "",
+      "description": "Associated"
+    }
+  ]
+}

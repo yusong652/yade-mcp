@@ -7,52 +7,62 @@
     {
       "name": "active",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "is the engine active?"
     },
     {
       "name": "defaultDt",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "used as the initial value of the timestep (especially useful in the first steps when no contact exist). If negative, it will be defined by"
     },
     {
       "name": "densityScaling",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "|yupdate| don't modify this value if you don't plan to modify the scaling factor manually for some bodies. In most cases, it is enough to set"
     },
     {
       "name": "maxDt",
       "type": "float",
-      "default": "1.7976931348623157e+308"
+      "default": "1.7976931348623157e+308",
+      "description": "if positive, used as max value of the timestep whatever the computed value"
     },
     {
       "name": "parallelMode",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if parallelMode, dt is set to min of all subdomain dt."
     },
     {
       "name": "previousDt",
       "type": "float",
-      "default": "1.7976931348623157e+308"
+      "default": "1.7976931348623157e+308",
+      "description": "last computed dt |yupdate|"
     },
     {
       "name": "targetDt",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "if"
     },
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "dt update interval"
     },
     {
       "name": "timestepSafetyCoefficient",
       "type": "float",
-      "default": "0.8"
+      "default": "0.8",
+      "description": "safety factor between the minimum eigen-period and the final assigned dt (less than 1)"
     },
     {
       "name": "viscEl",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "To use with"
     }
   ]
 }

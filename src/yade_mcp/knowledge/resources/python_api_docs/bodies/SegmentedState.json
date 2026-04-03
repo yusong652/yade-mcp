@@ -7,17 +7,20 @@
     {
       "name": "allowMatExchange",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, material can be exchanged between bodies.This condition needs to be true for material exchange, but also body state needs to be initialized with"
     },
     {
       "name": "angMom",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Current angular momentum"
     },
     {
       "name": "angVel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Current angular velocity"
     },
     {
       "name": "blockedDOFs",
@@ -27,37 +30,44 @@
     {
       "name": "coatingThickness",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Vector storing information about coating thickness in each segment. It is assumed that the linear unit of coating thickness is 1000 times smaller than the unit of radius (e.g., if the simulation basic unit is meter, then coating thickness is provided in milimeters). It is one-dimensional, hence for easier intepretation can be reshaped based on the information about thetaResolution and phiResolution."
     },
     {
       "name": "coatingVolume",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Vector storing information about coating volume in each segment (unit is $1000^3$ smaller than volume unit of the simulation, see"
     },
     {
       "name": "densityScaling",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per"
     },
     {
       "name": "inertia",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Inertia of associated body, in local coordinate system."
     },
     {
       "name": "isDamped",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Damping in"
     },
     {
       "name": "mass",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Mass of this body"
     },
     {
       "name": "needsInit",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Tells"
     },
     {
       "name": "ori",
@@ -72,27 +82,42 @@
     {
       "name": "refOri",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Reference orientation"
     },
     {
       "name": "refPos",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Reference position"
     },
     {
       "name": "se3",
       "type": "tuple",
-      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))"
+      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))",
+      "description": "Position and"
     },
     {
       "name": "segmentArea",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Area of one segment of the body  (unit is $1000^2$ smaller than surface unit of the simulation, see"
     },
     {
       "name": "vel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Current linear velocity."
+    }
+  ],
+  "methods": [
+    {
+      "name": "displ",
+      "description": "Displacement from reference position<State.refPos> (pos<State.pos> - refPos<State.refPos>)"
+    },
+    {
+      "name": "rot",
+      "description": "Rotation from reference orientation<State.refOri> (as rotation vector)"
     }
   ]
 }

@@ -7,37 +7,70 @@
     {
       "name": "Talesnick",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Use contact law developed for validation against model test"
     },
     {
       "name": "allowBreakage",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Allow cohesion to break. Once broken, cohesion = 0"
     },
     {
       "name": "allowViscousAttraction",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether to allow attractive forces due to viscous damping"
     },
     {
       "name": "initialOverlapDistance",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Initial overlap distance, defining the offset distance for tension overlap, i.e. negative overlap."
     },
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     },
     {
       "name": "preventGranularRatcheting",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "bool to avoid granular ratcheting"
     },
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Define the total energy dissipated in plastic slips at all contacts."
+    }
+  ],
+  "methods": [
+    {
+      "name": "elasticEnergy",
+      "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts. Computed only if Law2_SCG_KnKsPhys_KnKsLaw::traceEnergy is true."
+    },
+    {
+      "name": "initPlasticDissipation",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+    },
+    {
+      "name": "normDampDissip",
+      "description": "Total energy dissipated in normal viscous damping. Computed only if Law2_SCG_KnKsPhys_KnKsLaw::traceEnergy is true."
+    },
+    {
+      "name": "plasticDissipation",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_SCG_KnKsPhys_KnKsLaw::traceEnergy is true."
+    },
+    {
+      "name": "ratioSlidingContacts",
+      "description": "Return the ratio between the number of contacts sliding to the total number at a given time."
+    },
+    {
+      "name": "shearDampDissip",
+      "description": "Total energy dissipated in shear viscous damping. Computed only if Law2_SCG_KnKsPhys_KnKsLaw::traceEnergy is true."
     }
   ]
 }

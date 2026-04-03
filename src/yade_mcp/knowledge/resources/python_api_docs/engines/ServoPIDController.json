@@ -7,32 +7,38 @@
     {
       "name": "axis",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Unit vector along which apply the velocity [-]"
     },
     {
       "name": "curVel",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Current applied velocity [m/s]"
     },
     {
       "name": "current",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Current value for the controller [N]"
     },
     {
       "name": "errorCur",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Current error [N]"
     },
     {
       "name": "errorPrev",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Previous error [N]"
     },
     {
       "name": "iTerm",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Integral term [N]"
     },
     {
       "name": "ids",
@@ -42,47 +48,56 @@
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "Periodicity criterion of velocity correlation [-]"
     },
     {
       "name": "iterPrevStart",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Previous iteration of velocity correlation [-]"
     },
     {
       "name": "kD",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Derivative gain/coefficient for the PID-controller [-]"
     },
     {
       "name": "kI",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Integral gain/coefficient for the PID-controller [-]"
     },
     {
       "name": "kP",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Proportional gain/coefficient for the PID-controller [-]"
     },
     {
       "name": "maxVelocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Velocity [m/s]"
     },
     {
       "name": "target",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Target value for the controller [N]"
     },
     {
       "name": "translationAxis",
       "type": "Vector3",
-      "default": "Vector3(6.91630760659163825e-310,6.916325544482055346e-310,6.916325476112856022e"
+      "default": "Vector3(6.91630760659163825e-310,6.916325544482055346e-310,6.916325476112856022e",
+      "description": "Direction of imposed translation [Vector3]"
     },
     {
       "name": "velocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Scalar value of the imposed velocity [m/s]. Imposed vector velocity is"
     }
   ]
 }

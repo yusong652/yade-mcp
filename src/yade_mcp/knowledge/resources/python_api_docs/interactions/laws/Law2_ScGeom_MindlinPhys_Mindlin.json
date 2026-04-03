@@ -7,37 +7,44 @@
     {
       "name": "calcEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "bool to calculate energy terms (shear potential energy, dissipation of energy due to friction and dissipation of energy due to normal and tangential damping)"
     },
     {
       "name": "frictionDissipation",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Energy dissipation due to sliding"
     },
     {
       "name": "includeAdhesion",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "bool to include the adhesion force following the DMT formulation. If true, also the normal elastic energy takes into account the adhesion effect."
     },
     {
       "name": "includeMoment",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "bool to consider rolling resistance (if"
     },
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     },
     {
       "name": "normDampDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Energy dissipated by normal damping"
     },
     {
       "name": "nothing",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "dummy attribute for declaring preventGranularRatcheting deprecated"
     },
     {
       "name": "preventGranularRatcheting",
@@ -47,12 +54,28 @@
     {
       "name": "shearDampDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Energy dissipated by tangential damping"
     },
     {
       "name": "shearEnergy",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear elastic potential energy"
+    }
+  ],
+  "methods": [
+    {
+      "name": "contactsAdhesive",
+      "description": "Compute total number of adhesive contacts."
+    },
+    {
+      "name": "normElastEnergy",
+      "description": "Compute normal elastic potential energy. It handles the DMT formulation if Law2_ScGeom_MindlinPhys_Mindlin::includeAdhesion is set to true."
+    },
+    {
+      "name": "ratioSlidingContacts",
+      "description": "Return the ratio between the number of contacts sliding to the total number at a given time."
     }
   ]
 }

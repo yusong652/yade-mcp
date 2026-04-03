@@ -1,0 +1,7 @@
+{
+  "name": "SumIntrForcesCb",
+  "category": "engines",
+  "parent": "IntrCallback",
+  "description": "Callback summing magnitudes of forces over all interactions. IPhys of interactions must derive from NormShearPhys (responsability fo the user).",
+  "attributes": []
+}

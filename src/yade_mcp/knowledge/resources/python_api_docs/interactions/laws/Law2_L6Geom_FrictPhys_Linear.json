@@ -7,17 +7,20 @@
     {
       "name": "charLen",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Characteristic length with the meaning of the stiffness ratios bending/shear and torsion/normal."
     },
     {
       "name": "noBreak",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Do not break contacts when particles separate."
     },
     {
       "name": "noSlip",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "No plastic slipping."
     }
   ]
 }

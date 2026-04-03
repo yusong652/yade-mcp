@@ -7,32 +7,48 @@
     {
       "name": "area",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Facet's area"
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Facet's normal $\\vec n$ (in local coordinate system) oriented towards $\\vec{e_0} \\times \\vec {e_1}$ with $\\vec {e_0} = \\vec{V_0V_1}$, $\\vec {e_1} = \\vec{V_1V_2}$ and $\\vec {V_i}$ the"
     },
     {
       "name": "vertices",
       "type": "list",
-      "default": "[Vector3(nan,nan,nan), Vector3(nan,nan,nan), Vector3(nan,nan,nan)]"
+      "default": "[Vector3(nan,nan,nan), Vector3(nan,nan,nan), Vector3(nan,nan,nan)]",
+      "description": "Vertex positions in local coordinates."
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume (0 here)."
+    },
+    {
+      "name": "setVertices",
+      "description": "Defines vertices<Facet.vertices>"
     }
   ]
 }

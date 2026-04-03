@@ -7,12 +7,14 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     },
     {
       "name": "nonLin",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Shear force nonlinearity (the value determines how many features of the non-linearity are taken in account). 1: ks as in HM 2: shearElastic increment computed as in HM 3. granular ratcheting disabled."
     }
   ]
 }

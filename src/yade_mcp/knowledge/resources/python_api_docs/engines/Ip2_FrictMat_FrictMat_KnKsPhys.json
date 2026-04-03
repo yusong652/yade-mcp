@@ -7,67 +7,80 @@
     {
       "name": "Knormal",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volumetric stiffness in the contact normal direction (units: stress/length)"
     },
     {
       "name": "Kshear",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volumetric stiffness in the contact shear direction (units: stress/length)"
     },
     {
       "name": "brittleLength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear length for degradation"
     },
     {
       "name": "cohesion",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Cohesion"
     },
     {
       "name": "cohesionBroken",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether cohesion is already broken"
     },
     {
       "name": "kn_i",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Currently, we assume kn_i and Knormal are adopting the same value in Ip2 initialisation"
     },
     {
       "name": "ks_i",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Currently, we assume ks_i and Kshear are adopting the same value in Ip2 initialisation"
     },
     {
       "name": "maxClosure",
       "type": "float",
-      "default": "0.002"
+      "default": "0.002",
+      "description": "not fully in use"
     },
     {
       "name": "phi_b",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Basic friction angle"
     },
     {
       "name": "tension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension"
     },
     {
       "name": "tensionBroken",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether tension is already broken"
     },
     {
       "name": "useFaceProperties",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to get face properties from the intersecting particles"
     },
     {
       "name": "viscousDamping",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Viscous damping ratio $\\beta_n$, see"
     }
   ]
 }

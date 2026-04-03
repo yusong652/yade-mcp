@@ -1,0 +1,32 @@
+{
+  "name": "MPIBodyContainer",
+  "category": "engines",
+  "parent": "",
+  "description": "a dummy container to serialize and send.",
+  "attributes": [
+    {
+      "name": "bContainer",
+      "type": "vector<shared_ptr<Body>>",
+      "default": "",
+      "description": "a dummy body container to serialize"
+    }
+  ],
+  "methods": [
+    {
+      "name": "clearContainer",
+      "description": "clear bodies in the container"
+    },
+    {
+      "name": "getCount",
+      "description": "get container count"
+    },
+    {
+      "name": "insertBody",
+      "description": "insert a body (by id) in this container"
+    },
+    {
+      "name": "insertBodyListPy",
+      "description": "inset a list of bodies (by ids)"
+    }
+  ]
+}

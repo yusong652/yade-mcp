@@ -7,72 +7,86 @@
     {
       "name": "cohesion",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the maximum admissible tangential force in shear, for Fn=0, in the matrix ("
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "jointCohesion",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the"
     },
     {
       "name": "jointDilationAngle",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the dilatancy of the joint surface (only valid for"
     },
     {
       "name": "jointFrictionAngle",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Defines Coulomb friction on the joint surface. [rad]"
     },
     {
       "name": "jointNormalStiffness",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the normal stiffness on the joint surface. [Pa/m]"
     },
     {
       "name": "jointShearStiffness",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the shear stiffness on the joint surface. [Pa/m]"
     },
     {
       "name": "jointTensileStrength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the"
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "residualFrictionAngle",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Defines the residual friction angle (when contacts are not cohesive). residualFrictionAngle=frictionAngle if not specified. [rad]"
     },
     {
       "name": "tensileStrength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the maximum admissible normal force in traction in the matrix ("
     },
     {
       "name": "type",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If particles of two different types interact, it will be with friction only (no cohesion).[-]"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

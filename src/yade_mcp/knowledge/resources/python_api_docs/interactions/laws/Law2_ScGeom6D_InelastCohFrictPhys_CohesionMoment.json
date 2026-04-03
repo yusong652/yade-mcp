@@ -3,5 +3,15 @@
   "category": "interactions",
   "parent": "LawFunctor",
   "description": "This law is currently under developpement. Final version and documentation will come before the end of 2014.",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "normElastEnergy",
+      "description": "Compute normal elastic energy."
+    },
+    {
+      "name": "shearElastEnergy",
+      "description": "Compute shear elastic energy."
+    }
+  ]
 }

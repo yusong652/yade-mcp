@@ -7,32 +7,44 @@
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "length",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Length [m]"
     },
     {
       "name": "radius",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Radius [m]"
     },
     {
       "name": "segment",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Length vector"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume."
     }
   ]
 }

@@ -12,7 +12,8 @@
     {
       "name": "nu",
       "type": "float",
-      "default": "0.001"
+      "default": "0.001",
+      "description": "Viscosity of the medium."
     }
   ]
 }

@@ -12,17 +12,20 @@
     {
       "name": "mov",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Linear displacement step to be applied per iteration, by addition to"
     },
     {
       "name": "rot",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Rotation step to be applied per iteration (via rotation composition with"
     },
     {
       "name": "setVelocities",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If false, positions and orientations are directly updated, without changing the speeds of concerned bodies. If true, only velocity and angularVelocity are modified. In this second case"
     }
   ]
 }

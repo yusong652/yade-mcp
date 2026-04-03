@@ -17,27 +17,32 @@
     {
       "name": "abs_err",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "Relative integration tolerance"
     },
     {
       "name": "active",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "is the engine active?"
     },
     {
       "name": "integrationsteps",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "all integrationsteps count as all succesfull substeps"
     },
     {
       "name": "maxVelocitySq",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "store square of max. velocity, for informative purposes; computed again at every step. |yupdate|"
     },
     {
       "name": "rel_err",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "Absolute integration tolerance"
     },
     {
       "name": "slaves",
@@ -47,12 +52,14 @@
     {
       "name": "stepsize",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "It is not important for an adaptive integration but important for the observer for setting the found states after integration"
     },
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "dt update interval"
     }
   ]
 }

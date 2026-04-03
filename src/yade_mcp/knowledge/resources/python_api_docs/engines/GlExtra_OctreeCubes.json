@@ -1,0 +1,44 @@
+{
+  "name": "GlExtra_OctreeCubes",
+  "category": "engines",
+  "parent": "GlExtraDrawer",
+  "description": "Render boxed read from file",
+  "attributes": [
+    {
+      "name": "boxesFile",
+      "type": "string",
+      "default": "",
+      "description": "File to read boxes from; ascii files with ``x0 y0 z0 x1 y1 z1 c`` records, where ``c`` is an integer specifying fill (0 for wire, 1 for filled)."
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "Deactivate the object (on error/exception)."
+    },
+    {
+      "name": "fillRangeDraw",
+      "type": "Vector2i",
+      "default": "Vector2i(-2,2)",
+      "description": "Range of fill indices that will be rendered."
+    },
+    {
+      "name": "fillRangeFill",
+      "type": "Vector2i",
+      "default": "Vector2i(2,2)",
+      "description": "Range of fill indices that will be filled."
+    },
+    {
+      "name": "levelRangeDraw",
+      "type": "Vector2i",
+      "default": "Vector2i(-2,2)",
+      "description": "Range of levels that will be rendered."
+    },
+    {
+      "name": "noFillZero",
+      "type": "bool",
+      "default": "true",
+      "description": "Do not fill 0-fill boxed (those that are further subdivided)"
+    }
+  ]
+}

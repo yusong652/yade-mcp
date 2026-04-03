@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_Cylinder",
+  "category": "engines",
+  "parent": "GlShapeFunctor",
+  "description": "Renders Cylinder object\n\n.. ystaticattr:: Gl1_Cylinder.wire(=false)\n\n\tOnly show wireframe (controlled by ``glutSlices`` and ``glutStacks``.\n\n.. ystaticattr:: Gl1_Cylinder.glutNormalize(=true)\n\n\tFix normals for non-wire rendering\n\n.. ystaticattr:: Gl1_Cylinder.glutSlices(=8)\n\n\tNumber of sphere slices.\n\n.. ystaticattr:: Gl1_Cylinder.glutStacks(=4)\n\n\tNumber of sphere stacks.",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

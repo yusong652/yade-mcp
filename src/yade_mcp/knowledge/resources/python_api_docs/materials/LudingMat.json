@@ -7,42 +7,50 @@
     {
       "name": "G0",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Viscous damping"
     },
     {
       "name": "PhiF",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Dimensionless plasticity depth"
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Friction angle [rad]"
     },
     {
       "name": "k1",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of loading plastic branch"
     },
     {
       "name": "kc",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of irreversible, tensile adhesive branch"
     },
     {
       "name": "kp",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of unloading and reloading limit elastic branch"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Shear stiffness"
     }
   ]
 }

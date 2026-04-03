@@ -7,7 +7,8 @@
     {
       "name": "comb",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Kinematic engines that will be combined by this one, run in the order given."
     },
     {
       "name": "ids",

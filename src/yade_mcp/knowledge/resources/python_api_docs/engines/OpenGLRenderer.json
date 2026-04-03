@@ -1,0 +1,182 @@
+{
+  "name": "OpenGLRenderer",
+  "category": "engines",
+  "parent": "",
+  "description": "Class responsible for rendering scene on OpenGL devices.",
+  "attributes": [
+    {
+      "name": "bgColor",
+      "type": "Vector3r",
+      "default": "Vector3r(.2,.2,.2)",
+      "description": "Color of the background canvas (RGB)"
+    },
+    {
+      "name": "blinkHighlight",
+      "type": "BlinkHighlight",
+      "default": "BlinkHighlight::NORMAL",
+      "description": "Adjust blinking of the body selected in the 'Simulation Inspection' window."
+    },
+    {
+      "name": "bound",
+      "type": "bool",
+      "default": "false",
+      "description": "Render body"
+    },
+    {
+      "name": "cellColor",
+      "type": "Vector3r",
+      "default": "Vector3r(1,1,0)",
+      "description": "Color of the periodic cell (RGB)."
+    },
+    {
+      "name": "clipPlaneActive",
+      "type": "vector<bool>",
+      "default": "vector<bool>(numClipPlanes,false)",
+      "description": "Activate/deactivate respective clipping planes"
+    },
+    {
+      "name": "clipPlaneSe3",
+      "type": "vector<Se3r>",
+      "default": "vector<Se3r>(numClipPlanes,Se3r(Vector3r::Zero(),Quaternionr::Identity()))",
+      "description": "Position and orientation of clipping planes"
+    },
+    {
+      "name": "dispScale",
+      "type": "Vector3r",
+      "default": "((void)\"disable scaling\",Vector3r::Ones())",
+      "description": "Artificially enlarge (scale) dispalcements from bodies'"
+    },
+    {
+      "name": "dof",
+      "type": "bool",
+      "default": "false",
+      "description": "Show which degrees of freedom are blocked for each body"
+    },
+    {
+      "name": "extraDrawers",
+      "type": "vector<shared_ptr<GlExtraDrawer> >",
+      "default": "",
+      "description": "Additional rendering components ("
+    },
+    {
+      "name": "ghosts",
+      "type": "bool",
+      "default": "true",
+      "description": "Render objects crossing periodic cell edges by cloning them in multiple places (periodic simulations only)."
+    },
+    {
+      "name": "id",
+      "type": "bool",
+      "default": "false",
+      "description": "Show body id's"
+    },
+    {
+      "name": "intrAllWire",
+      "type": "bool",
+      "default": "false",
+      "description": "Draw wire for all interactions, blue for potential and green for real ones (mostly for debugging)"
+    },
+    {
+      "name": "intrGeom",
+      "type": "bool",
+      "default": "false",
+      "description": "Render"
+    },
+    {
+      "name": "intrPhys",
+      "type": "bool",
+      "default": "false",
+      "description": "Render"
+    },
+    {
+      "name": "intrWire",
+      "type": "bool",
+      "default": "false",
+      "description": "If rendering interactions, use only wires to represent them."
+    },
+    {
+      "name": "light1",
+      "type": "bool",
+      "default": "true",
+      "description": "Turn light 1 on."
+    },
+    {
+      "name": "light2",
+      "type": "bool",
+      "default": "true",
+      "description": "Turn light 2 on."
+    },
+    {
+      "name": "light2Color",
+      "type": "Vector3r",
+      "default": "Vector3r(0.5,0.5,0.1)",
+      "description": "Per-color intensity of secondary light (RGB)."
+    },
+    {
+      "name": "light2Pos",
+      "type": "Vector3r",
+      "default": "Vector3r(-130,75,30)",
+      "description": "Position of secondary OpenGL light source in the scene."
+    },
+    {
+      "name": "lightColor",
+      "type": "Vector3r",
+      "default": "Vector3r(0.6,0.6,0.6)",
+      "description": "Per-color intensity of primary light (RGB)."
+    },
+    {
+      "name": "lightPos",
+      "type": "Vector3r",
+      "default": "Vector3r(75,130,0)",
+      "description": "Position of OpenGL light source in the scene."
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "((void)\"draw everything\",~0)",
+      "description": "Bitmask for showing only bodies where ((mask &"
+    },
+    {
+      "name": "rotScale",
+      "type": "Real",
+      "default": "((void)\"disable scaling\",1.)",
+      "description": "Artificially enlarge (scale) rotations of bodies relative to their"
+    },
+    {
+      "name": "selId",
+      "type": "Body::id_t",
+      "default": "Body::ID_NONE",
+      "description": "Id of particle that was selected by the user."
+    },
+    {
+      "name": "shape",
+      "type": "bool",
+      "default": "true",
+      "description": "Render body"
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "false",
+      "description": "Render all bodies with wire only (faster)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "hideBody",
+      "description": "Hide body from id (see OpenGLRenderer::showBody)"
+    },
+    {
+      "name": "render",
+      "description": "Render the scene in the current OpenGL context."
+    },
+    {
+      "name": "setRefSe3",
+      "description": "Make current positions and orientation reference for scaleDisplacements and scaleRotations."
+    },
+    {
+      "name": "showBody",
+      "description": "Make body visible (see OpenGLRenderer::hideBody)"
+    }
+  ]
+}

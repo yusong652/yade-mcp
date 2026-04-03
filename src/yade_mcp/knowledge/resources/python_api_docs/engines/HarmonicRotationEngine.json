@@ -7,22 +7,26 @@
     {
       "name": "A",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Amplitude [rad]"
     },
     {
       "name": "angularVelocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Angular velocity. [rad/s]"
     },
     {
       "name": "f",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Frequency [hertz]"
     },
     {
       "name": "fi",
       "type": "float",
-      "default": "1.5707963267948966"
+      "default": "1.5707963267948966",
+      "description": "Initial phase [radians]. By default, the body oscillates around initial position."
     },
     {
       "name": "ids",
@@ -32,17 +36,20 @@
     {
       "name": "rotateAroundZero",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If True, bodies will not rotate around their centroids, but rather around ``zeroPoint``."
     },
     {
       "name": "rotationAxis",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "Axis of rotation (direction); will be normalized automatically."
     },
     {
       "name": "zeroPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Point around which bodies will rotate if ``rotateAroundZero`` is True"
     }
   ]
 }

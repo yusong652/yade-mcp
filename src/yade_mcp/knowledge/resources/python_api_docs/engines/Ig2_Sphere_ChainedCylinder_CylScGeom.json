@@ -7,7 +7,8 @@
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
     }
   ]
 }

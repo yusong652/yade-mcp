@@ -7,52 +7,62 @@
     {
       "name": "accel",
       "type": "Vector2i",
-      "default": "Vector2i(0,0)"
+      "default": "Vector2i(0,0)",
+      "description": "reading from the sysfs file"
     },
     {
       "name": "calibrate",
       "type": "Vector2i",
-      "default": "Vector2i(0,0)"
+      "default": "Vector2i(0,0)",
+      "description": "Zero position; if NaN, will be read from the *hdapsDir* / calibrate."
     },
     {
       "name": "calibrated",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether *calibrate* was already updated. Do not set to ``True`` by hand unless you also give a meaningful value for *calibrate*."
     },
     {
       "name": "gravity",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Acceleration [kgms\u207b\u00b2]"
     },
     {
       "name": "hdapsDir",
       "type": "str",
-      "default": "'/sys/devices/platform/hdaps'"
+      "default": "'/sys/devices/platform/hdaps'",
+      "description": "Hdaps directory; contains ``position`` (with accelerometer readings) and ``calibration`` (zero acceleration)."
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
     },
     {
       "name": "msecUpdate",
       "type": "float",
-      "default": "50.0"
+      "default": "50.0",
+      "description": "How often to update the reading."
     },
     {
       "name": "updateThreshold",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "Minimum difference of reading from the file before updating gravity, to avoid jitter."
     },
     {
       "name": "warnOnce",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "For deprecation warning once."
     },
     {
       "name": "zeroGravity",
       "type": "Vector3",
-      "default": "Vector3(0,0,-1)"
+      "default": "Vector3(0,0,-1)",
+      "description": "Gravity if the accelerometer is in flat (zero) position."
     }
   ]
 }

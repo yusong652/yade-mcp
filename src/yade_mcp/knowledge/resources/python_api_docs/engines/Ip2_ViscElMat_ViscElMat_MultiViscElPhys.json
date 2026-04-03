@@ -7,22 +7,26 @@
     {
       "name": "en",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "et",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "kn",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "ks",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     }
   ]
 }

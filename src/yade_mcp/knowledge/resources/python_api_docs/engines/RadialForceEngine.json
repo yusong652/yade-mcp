@@ -7,17 +7,20 @@
     {
       "name": "axisDir",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "Axis direction (normalized automatically)"
     },
     {
       "name": "axisPt",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Point on axis"
     },
     {
       "name": "fNorm",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Applied force magnitude"
     },
     {
       "name": "ids",

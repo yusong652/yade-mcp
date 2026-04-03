@@ -7,27 +7,32 @@
     {
       "name": "always_use_moment_law",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If false, compute moments only for cohesive contacts, broken contacts will have only normal and shear forces. If true, compute bending/twisting moments at all contacts and use the frictional coefficients"
     },
     {
       "name": "creep_viscosity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "creep viscosity [Pa.s/m]. probably should be moved to Ip2_CohFrictMat_CohFrictMat_CohFrictPhys..."
     },
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     },
     {
       "name": "shear_creep",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "activate creep on the shear force, using"
     },
     {
       "name": "twist_creep",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "activate creep on the twisting moment, using"
     }
   ]
 }

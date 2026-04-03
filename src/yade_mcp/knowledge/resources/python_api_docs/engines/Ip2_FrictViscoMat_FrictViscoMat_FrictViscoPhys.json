@@ -7,17 +7,20 @@
     {
       "name": "frictAngle",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "kRatio",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "kn",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     }
   ]
 }

@@ -3,5 +3,51 @@
   "category": "bodies",
   "parent": "instance",
   "description": "",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "addF",
+      "description": "Apply force on body (accumulates). The force applies for one iteration, then it is reset by ForceResetter."
+    },
+    {
+      "name": "addT",
+      "description": "Apply torque on body (accumulates). The torque applies for one iteration, then it is reset by ForceResetter."
+    },
+    {
+      "name": "f",
+      "description": "Resultant force on body, excluding gravity<NewtonIntegrator.gravity>. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
+    },
+    {
+      "name": "getPermForceUsed",
+      "description": "Check wether permanent forces are present."
+    },
+    {
+      "name": "m",
+      "description": "Deprecated alias for t (torque)."
+    },
+    {
+      "name": "permF",
+      "description": "read the value of permanent force on body (set with setPermF())."
+    },
+    {
+      "name": "permT",
+      "description": "read the value of permanent torque on body (set with setPermT())."
+    },
+    {
+      "name": "reset",
+      "description": "Reset the force container, including user defined permanent forces/torques. resetAll=False will keep permanent forces/torques unchanged."
+    },
+    {
+      "name": "setPermF",
+      "description": "set the value of permanent force on body."
+    },
+    {
+      "name": "setPermT",
+      "description": "set the value of permanent torque on body."
+    },
+    {
+      "name": "t",
+      "description": "Torque applied on body. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
+    }
+  ]
 }

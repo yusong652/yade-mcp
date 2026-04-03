@@ -7,42 +7,50 @@
     {
       "name": "command",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Command to be run by python interpreter. Not run if empty."
     },
     {
       "name": "ignoreErrors",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Debug only: set this value to true to tell PyRunner to ignore any errors encountered during command execution."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "updateGlobals",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether to workaround `ipython not recognizing local variables <https://github.com/ipython/ipython/issues/62>`__\nby calling ``globals().update(locals())``. If ``true`` then PyRunner is able to call functions declared later locally in a running **live** yade session.\nThe ``PyRunner`` call is a bit slower because it updates ``globals()`` with recently declared python functions.\n\n.. warning::\n\tWhen ``updateGlobals==False`` and a function was declared inside a *live* yade session (`ipython <http://ipython.org>`_)\n\tthen an error ``NameError: name 'command' is not defined`` will occur unless python ``globals()`` are updated with command\n\n\t.. code-block:: python\n\n\t\tglobals().update(locals())"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     }
   ]
 }

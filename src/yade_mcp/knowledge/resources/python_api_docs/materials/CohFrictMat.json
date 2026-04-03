@@ -7,67 +7,80 @@
     {
       "name": "alphaKr",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Dimensionless rolling stiffness."
     },
     {
       "name": "alphaKtw",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Dimensionless twist stiffness."
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "etaRoll",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Dimensionless rolling (aka 'bending') strength. If negative, rolling moment will be elastic."
     },
     {
       "name": "etaTwist",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Dimensionless twisting strength. If negative, twist moment will be elastic."
     },
     {
       "name": "fragile",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "does cohesion disappear when contact strength is exceeded?"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "isCohesive",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether this body can form possibly cohesive interactions (if true and depending on other parameters such as"
     },
     {
       "name": "momentRotationLaw",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Use bending/twisting moment at contact. The contact may have moments only if both bodies have this flag true. See"
     },
     {
       "name": "normalCohesion",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Tensile strength, homogeneous to a pressure. If negative the normal force is purely elastic."
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "shearCohesion",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Shear strength, homogeneous to a pressure. If negative the shear force is purely elastic."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

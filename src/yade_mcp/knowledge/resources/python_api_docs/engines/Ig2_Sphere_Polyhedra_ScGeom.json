@@ -7,12 +7,14 @@
     {
       "name": "edgeCoeff",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "multiplier of penetrationDepth when sphere contacts edge (simulating smaller volume of actual intersection or when several polyhedrons has common edge)"
     },
     {
       "name": "vertexCoeff",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "multiplier of penetrationDepth when sphere contacts vertex (simulating smaller volume of actual intersection or when several polyhedrons has common vertex)"
     }
   ]
 }

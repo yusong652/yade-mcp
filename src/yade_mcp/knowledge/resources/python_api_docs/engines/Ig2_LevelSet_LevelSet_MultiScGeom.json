@@ -3,5 +3,11 @@
   "category": "engines",
   "parent": "Ig2_LevelSet_LevelSet_ScGeom",
   "description": "Multiple contact points version of Ig2_LevelSet_LevelSet_ScGeom for a MultiScGeom description of a contact between two (non-convex typically) LevelSet-shaped bodies (with a ScGeom interaction at each contacting surface node). Does not support periodic boundary conditions at the moment. It is...",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "normalMismatch",
+      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment."
+    }
+  ]
 }

@@ -7,12 +7,14 @@
     {
       "name": "noBreak",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Do not break contacts when particles separate."
     },
     {
       "name": "noSlip",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "No plastic slipping."
     }
   ]
 }

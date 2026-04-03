@@ -7,27 +7,38 @@
     {
       "name": "axis",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Axis of the normal; can be 0,1,2 for +x, +y, +z respectively (Body's orientation is disregarded for walls)"
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "sense",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Which side of the wall interacts: -1 for negative only, 0 for both, +1 for positive only"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume (0 here)."
     }
   ]
 }

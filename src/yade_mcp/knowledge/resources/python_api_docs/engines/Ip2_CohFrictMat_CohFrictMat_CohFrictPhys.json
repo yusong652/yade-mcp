@@ -7,37 +7,50 @@
     {
       "name": "frictAngle",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "normalCohesion",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "rollingCohesion",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "setCohesionNow",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, assign cohesion to all existing contacts in current time-step. The flag is turned false automatically, so that assignment is done in the current timestep only."
     },
     {
       "name": "setCohesionOnNewContacts",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, assign cohesion at all new contacts. If false, only existing contacts can be cohesive (also see"
     },
     {
       "name": "shearCohesion",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "twistingCohesion",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setCohesion",
+      "description": "Bond or un-bond an interaction with cohesion."
     }
   ]
 }

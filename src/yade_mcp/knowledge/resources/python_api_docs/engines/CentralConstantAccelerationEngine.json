@@ -7,22 +7,26 @@
     {
       "name": "accel",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Acceleration magnitude [kgms\u207b\u00b2]"
     },
     {
       "name": "centralBody",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "The"
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
     },
     {
       "name": "reciprocal",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, acceleration will be applied on the central body as well."
     }
   ]
 }

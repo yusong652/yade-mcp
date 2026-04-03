@@ -7,32 +7,80 @@
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "seed",
       "type": "int",
-      "default": "1774880220"
+      "default": "1774880220",
+      "description": "Seed for random generator."
     },
     {
       "name": "size",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Size of the grain in meters - x,y,z - before random rotation"
     },
     {
       "name": "v",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Polyhedron vertices in local coordinate system."
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "GetCentroid",
+      "description": "return polyhedra's centroid"
+    },
+    {
+      "name": "GetInertia",
+      "description": "return polyhedra's inertia tensor"
+    },
+    {
+      "name": "GetOri",
+      "description": "return polyhedra's orientation"
+    },
+    {
+      "name": "GetSurfaceTriangulation",
+      "description": "triangulation of facets (for plotting)"
+    },
+    {
+      "name": "GetSurfaces",
+      "description": "get indices of surfaces' vertices (for postprocessing)"
+    },
+    {
+      "name": "GetVolume",
+      "description": "return polyhedra's volume"
+    },
+    {
+      "name": "Initialize",
+      "description": "Initialization"
+    },
+    {
+      "name": "getVolume",
+      "description": "Return polyhedra volume (duplicate of GetVolume<Polyhedra.GetVolume>, though with a better syntax)"
+    },
+    {
+      "name": "setVertices",
+      "description": "set vertices and update receiver. Takes a list/tuple of vertices as argument."
+    },
+    {
+      "name": "setVertices4",
+      "description": "set 4 vertices and update receiver. Each vertex is single argument."
     }
   ]
 }

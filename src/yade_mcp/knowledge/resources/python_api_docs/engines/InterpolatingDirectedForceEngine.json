@@ -7,12 +7,14 @@
     {
       "name": "direction",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "Contact force direction (normalized automatically)"
     },
     {
       "name": "force",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Force to apply."
     },
     {
       "name": "ids",
@@ -22,17 +24,20 @@
     {
       "name": "magnitudes",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Force magnitudes readings [N]"
     },
     {
       "name": "times",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Time readings [s]"
     },
     {
       "name": "wrap",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "wrap to the beginning of the sequence if beyond the last time point"
     }
   ]
 }

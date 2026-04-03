@@ -7,92 +7,110 @@
     {
       "name": "DeltMax",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum overlap between particles for a collision"
     },
     {
       "name": "DeltMin",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "MinimalDelta value of delta"
     },
     {
       "name": "DeltNull",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Force free overlap, plastic contact deformation"
     },
     {
       "name": "DeltPMax",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum overlap between particles for the limit case"
     },
     {
       "name": "DeltPNull",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Max force free overlap, plastic contact deformation"
     },
     {
       "name": "DeltPrev",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Previous value of delta"
     },
     {
       "name": "G0",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Viscous damping"
     },
     {
       "name": "PhiF",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Dimensionless plasticity depth"
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "k1",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of loading plastic branch"
     },
     {
       "name": "k2",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of unloading and reloading elastic branch"
     },
     {
       "name": "kc",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of irreversible, tensile adhesive branch"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "kp",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Slope of unloading and reloading limit elastic branch"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     }
   ]
 }

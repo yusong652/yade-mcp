@@ -7,12 +7,14 @@
     {
       "name": "avoidGranularRatcheting",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Define relative velocity so that ratcheting is avoided. It applies for sphere-sphere contacts. It eventualy also apply for sphere-emulating interactions (i.e. convertible into the ScGeom type), if the virtual sphere's motion is defined correctly (see e.g."
     },
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions.\n\nInteractionGeometry will be computed when interactionDetectionFactor*(rad1+rad2) > distance.\n\n.. note::\n\t This parameter is functionally coupled with"
     }
   ]
 }

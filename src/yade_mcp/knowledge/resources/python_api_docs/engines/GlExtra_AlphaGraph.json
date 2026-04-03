@@ -1,0 +1,56 @@
+{
+  "name": "GlExtra_AlphaGraph",
+  "category": "engines",
+  "parent": "GlExtraDrawer",
+  "description": "Display the outer surface defined by alpha contour. Add it to qt.Renderer().extraDrawers. If no instance of TesselationWrapper is provided, the functor will create its own. See :ysrc:`scripts/examples/alphaShapes/GlDrawAlpha.py`.",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3r",
+      "default": "Vector3r(0.3, 0.3, 0.7)",
+      "description": "color"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "Deactivate the object (on error/exception)."
+    },
+    {
+      "name": "lighting",
+      "type": "bool",
+      "default": "true",
+      "description": "lighting of cylinders"
+    },
+    {
+      "name": "lineWidth",
+      "type": "Real",
+      "default": "3",
+      "description": "lineWidth in pixels"
+    },
+    {
+      "name": "radius",
+      "type": "Real",
+      "default": "0",
+      "description": "radius of cylinder representation, if null 1/12th of average diameter will be used"
+    },
+    {
+      "name": "tesselationWrapper",
+      "type": "shared_ptr<TesselationWrapper>",
+      "default": "shared_ptr<TesselationWrapper>()",
+      "description": "Associated instance of TesselationWrapper."
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "false",
+      "description": "display as solid cylinders or lines"
+    }
+  ],
+  "methods": [
+    {
+      "name": "refresh",
+      "description": "Refresh internals. Particularly usefull for correct display after the TesselationWrapper is modified externally, not needed if 'wire'=True"
+    }
+  ]
+}

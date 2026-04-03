@@ -7,42 +7,50 @@
     {
       "name": "alpha",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "[rad] angle of conical asperities, alpha in (0, pi/2)"
     },
     {
       "name": "c1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "[-] parameter of pressure dependent friction model c1, choose 0 for constant interparticle friction coefficient"
     },
     {
       "name": "c2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "[-] parameter of pressure dependent friction model c2, choose 0 for constant interparticle friction coefficient"
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "sigmaMax",
       "type": "float",
-      "default": "1e+99"
+      "default": "1e+99",
+      "description": ">0 [Pa] max compressive strength of material, choose 1e99 to switch off conical damage model"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

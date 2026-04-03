@@ -1,0 +1,84 @@
+{
+  "name": "SimpleShear",
+  "category": "engines",
+  "parent": "FileGenerator",
+  "description": "Preprocessor for a simple shear box model. The packing initially conforms a gas-like, very loose, state (see utils.makeCloud function), but importing some existing packing from a text file can be also performed after little change in the source code. In its current state, the preprocessor carries out an oedometric compression, until a value of normal stress equal to 2 MPa (and a stable mechanical state). Others Engines such as KinemCNDEngine, KinemCNSEngine and KinemCNLEngine, could be used to apply resp. constant normal displacement, constant normal rigidity and constant normal stress paths using such a simple shear box.",
+  "attributes": [
+    {
+      "name": "density",
+      "type": "Real",
+      "default": "2600",
+      "description": "density of the spheres [$kg/m^3$]"
+    },
+    {
+      "name": "gravApplied",
+      "type": "bool",
+      "default": "false",
+      "description": "depending on this,"
+    },
+    {
+      "name": "gravity",
+      "type": "Vector3r",
+      "default": "Vector3r(0,-9.81,0)",
+      "description": "vector corresponding to used gravity (if"
+    },
+    {
+      "name": "height",
+      "type": "Real",
+      "default": "0.02",
+      "description": "initial height (along y-axis) of the shear box [$m$]"
+    },
+    {
+      "name": "length",
+      "type": "Real",
+      "default": "0.1",
+      "description": "initial length (along x-axis) of the shear box [$m$]"
+    },
+    {
+      "name": "matFrictionDeg",
+      "type": "Real",
+      "default": "37",
+      "description": "value of"
+    },
+    {
+      "name": "matPoissonRatio",
+      "type": "Real",
+      "default": "0.04",
+      "description": "value of"
+    },
+    {
+      "name": "matYoungModulus",
+      "type": "Real",
+      "default": "4.0e9",
+      "description": "value of"
+    },
+    {
+      "name": "thickness",
+      "type": "Real",
+      "default": "0.001",
+      "description": "thickness of the boxes constituting the shear box [$m$]"
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "int",
+      "default": "50",
+      "description": "value of"
+    },
+    {
+      "name": "width",
+      "type": "Real",
+      "default": "0.04",
+      "description": "initial width (along z-axis) of the shear box [$m$]"
+    }
+  ],
+  "methods": [
+    {
+      "name": "generate",
+      "description": "Generate scene, save to given file"
+    },
+    {
+      "name": "load",
+      "description": "Generate scene, save to temporary file and load immediately"
+    }
+  ]
+}

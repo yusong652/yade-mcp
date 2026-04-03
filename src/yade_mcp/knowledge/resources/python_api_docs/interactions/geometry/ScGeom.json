@@ -7,32 +7,48 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,-nan,4800)"
+      "default": "Vector3(0,-nan,4800)",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(2.121995790471206669e-314,2.751831419358424755e-316,0)"
+      "default": "Vector3(2.121995790471206669e-314,2.751831419358424755e-316,0)",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
     },
     {
       "name": "penetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Penetration distance of spheres (positive if overlapping)"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step"
+    }
+  ],
+  "methods": [
+    {
+      "name": "incidentVel",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+    },
+    {
+      "name": "relAngVel",
+      "description": "Return relative angular velocity of the interaction."
     }
   ]
 }

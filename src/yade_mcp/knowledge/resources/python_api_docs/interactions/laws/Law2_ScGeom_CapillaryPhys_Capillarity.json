@@ -7,32 +7,38 @@
     {
       "name": "binaryFusion",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, capillary forces are set to zero as soon as, at least, 1 overlap (menisci fusion) is detected. Otherwise"
     },
     {
       "name": "capillaryPressure",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Value of the capillary pressure Uc defined as Uc=Ugas-Uliquid"
     },
     {
       "name": "createDistantMeniscii",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Generate meniscii between distant spheres ? Else only maintain the existing ones. For modeling a wetting path this flag should always be false. For a drying path it should be true for one step (initialization) then false, as in the logic of [Scholtes2009c]_. The engine turns it off automatically after one execution."
     },
     {
       "name": "fusionDetection",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true potential menisci overlaps are checked, computing"
     },
     {
       "name": "suffCapFiles",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Capillary files suffix: M(r=X)suffCapFiles"
     },
     {
       "name": "surfaceTension",
       "type": "float",
-      "default": "0.073"
+      "default": "0.073",
+      "description": "Value of considered surface tension"
     }
   ]
 }

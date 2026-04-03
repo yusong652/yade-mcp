@@ -7,47 +7,56 @@
     {
       "name": "cohesion",
       "type": "float",
-      "default": "1000000.0"
+      "default": "1000000.0",
+      "description": "cohesion [Pa]"
     },
     {
       "name": "compressiveStrength",
       "type": "float",
-      "default": "10000000.0"
+      "default": "10000000.0",
+      "description": "compressiveStrength [Pa]"
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "ellAspect",
       "type": "float",
-      "default": "3.0"
+      "default": "3.0",
+      "description": "aspect ratio of elliptical 'cap'. Value >1 means the ellipse is longer along normal stress axis."
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Friction angle"
     },
     {
       "name": "neverDamage",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, interactions remain elastic regardless stresses"
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Shear to normal modulus ratio"
     },
     {
       "name": "tensileStrength",
       "type": "float",
-      "default": "1000000.0"
+      "default": "1000000.0",
+      "description": "tensileStrength [Pa]"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "Normal elastic modulus [Pa]"
     }
   ]
 }

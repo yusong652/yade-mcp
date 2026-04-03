@@ -7,42 +7,50 @@
     {
       "name": "bIds",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "ids of bodies intersecting with this subdomain,"
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "hasIntersection",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if this Yade subdomain has intersection with this OpenFOAM/YALES2 subdomain"
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "maxBound",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "max bounds of the fluid grid"
     },
     {
       "name": "minBound",
       "type": "Vector3",
-      "default": "Vector3(-nan,-nan,-nan)"
+      "default": "Vector3(-nan,-nan,-nan)",
+      "description": "min bounds of the fluid grid"
     },
     {
       "name": "minMaxisSet",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "flag to check if the min max bounds of this body are set."
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
     }
   ]
 }

@@ -7,87 +7,104 @@
     {
       "name": "Delta1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the surface area wetted by the meniscus on the smallest grains of radius R1 (R1<R2)"
     },
     {
       "name": "Delta2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Defines the surface area wetted by the meniscus on the biggest grains of radius R2 (R1<R2)"
     },
     {
       "name": "SInterface",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Fluid-Gaz Interfacial area"
     },
     {
       "name": "arcLength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Arc Length of the Fluid-Gaz Interface"
     },
     {
       "name": "capillaryPressure",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Value of the capillary pressure Uc defines as Ugas-Uliquid"
     },
     {
       "name": "computeBridge",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, capillary bridge will be computed if not it will be ignored."
     },
     {
       "name": "fCap",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Capillary Force produces by the presence of the meniscus"
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "fusionNumber",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Indicates the number of meniscii that overlap with this one"
     },
     {
       "name": "isBroken",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, capillary force is zero and liquid bridge is inactive."
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "meniscus",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Presence of a meniscus if true"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     },
     {
       "name": "vMeniscus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volume of the menicus"
     }
   ]
 }

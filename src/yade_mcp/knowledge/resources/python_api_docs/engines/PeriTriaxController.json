@@ -7,102 +7,122 @@
     {
       "name": "absStressTol",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Absolute stress tolerance with respect to ``goal``."
     },
     {
       "name": "currUnbalanced",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "current unbalanced force (updated every globUpdate) |yupdate|"
     },
     {
       "name": "doneHook",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "python command to be run when the desired state is reached"
     },
     {
       "name": "dynCell",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Imposed stress can be controlled using the packing stiffness (dynCell = False) or by applying the laws of dynamic (dynCell=true). Don't forget to assign a"
     },
     {
       "name": "externalWork",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Work input from boundary controller."
     },
     {
       "name": "globUpdate",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "How often to recompute average stress, stiffness and unbalaced force."
     },
     {
       "name": "goal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Desired stress or strain values (depending on stressMask), strains defined as ``strain(i)=log(Fii)`` with ``Fii`` the cell transformation matrix.\n\n.. warning:: Strains are relative to the"
     },
     {
       "name": "growDamping",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Damping of cell resizing (0=perfect control, 1=no control at all); see also ``wallDamping`` in"
     },
     {
       "name": "mass",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Mass of the cell (user set); if not set and"
     },
     {
       "name": "maxBodySpan",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "maximum body dimension |ycomp|"
     },
     {
       "name": "maxStrainRate",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Maximum strain rate of the periodic cell."
     },
     {
       "name": "maxUnbalanced",
       "type": "float",
-      "default": "0.0001"
+      "default": "0.0001",
+      "description": "maximum unbalanced force."
     },
     {
       "name": "prevGrow",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "previous cell grow"
     },
     {
       "name": "relStressTol",
       "type": "float",
-      "default": "3e-05"
+      "default": "3e-05",
+      "description": "Relative stress tolerance with respect to ``goal``."
     },
     {
       "name": "stiff",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "average stiffness (only every globUpdate steps recomputed from interactions) |yupdate|"
     },
     {
       "name": "strain",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Cell true strain |yupdate|"
     },
     {
       "name": "strainRate",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "cell strain rate |yupdate|"
     },
     {
       "name": "stress",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "diagonal terms of the stress tensor"
     },
     {
       "name": "stressMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "mask determining strain/stress (0/1) meaning for goal components"
     },
     {
       "name": "stressTensor",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "average stresses, updated at every step (only every globUpdate steps recomputed from interactions if !dynCell)"
     }
   ]
 }

@@ -7,7 +7,8 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     }
   ]
 }

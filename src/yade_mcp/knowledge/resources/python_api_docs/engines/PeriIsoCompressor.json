@@ -7,7 +7,8 @@
     {
       "name": "charLen",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Characteristic length, should be something like mean particle diameter (default -1=invalid value))"
     },
     {
       "name": "currUnbalanced",
@@ -17,27 +18,32 @@
     {
       "name": "doneHook",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Python command to be run when reaching the last specified stress"
     },
     {
       "name": "globalUpdateInt",
       "type": "int",
-      "default": "20"
+      "default": "20",
+      "description": "how often to recompute average stress, stiffness and unbalanced force"
     },
     {
       "name": "keepProportions",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Exactly keep proportions of the cell (stress is controlled based on average, not its components"
     },
     {
       "name": "maxSpan",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Maximum body span in terms of bbox, to prevent periodic cell getting too small. |ycomp|"
     },
     {
       "name": "maxUnbalanced",
       "type": "float",
-      "default": "0.0001"
+      "default": "0.0001",
+      "description": "if actual unbalanced force is smaller than this number, the packing is considered stable,"
     },
     {
       "name": "sigma",
@@ -47,12 +53,14 @@
     {
       "name": "state",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Where are we at in the stress series"
     },
     {
       "name": "stresses",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Stresses that should be reached, one after another"
     }
   ]
 }

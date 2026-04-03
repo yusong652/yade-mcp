@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_Sphere",
+  "category": "engines",
+  "parent": "GlShapeFunctor",
+  "description": "Renders Sphere object\n\n.. ystaticattr:: Gl1_Sphere.quality(=1.0)\n\n\tChange discretization level of spheres. quality>1  for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color spheres are displayed (Gl1_Sphere::stripes = False), quality mutiplies Gl1_Sphere::glutSlices and Gl1_Sphere::glutStacks. If striped spheres are displayed (Gl1_Sphere::stripes = True), only integer increments are meaningfull : quality=1 and quality=1.9 will give the same result, quality=2 will give finer result.\n\n.. ystaticattr:: Gl1_Sphere.wire(=false)\n\n\tOnly show wireframe (controlled by ``glutSlices`` and ``glutStacks``.\n\n.. ystaticattr:: Gl1_Sphere.stripes(=true)\n\n\tIn non-wire rendering, show stripes clearly showing particle rotation.\n\n.. ystaticattr:: Gl1_Sphere.localSpecView(=true)\n\n\tCompute specular light in local eye coordinate system.\n\n.. ystaticattr:: Gl1_Sphere.glutSlices(=12)\n\n\tBase number of sphere slices, multiplied by Gl1_Sphere::quality before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)\n\n.. ystaticattr:: Gl1_Sphere.glutStacks(=6)\n\n\tBase number of sphere stacks, multiplied by Gl1_Sphere::quality before use; not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)\n\n.. ystaticattr:: Gl1_Sphere.circleView(=false)\n\n\tFor 2D simulations : display tori instead of spheres, so they will appear like circles if the viewer is looking in the right direction. In this case, remember to disable perspective by pressing \"t\"-key in the viewer.\n\n.. ystaticattr:: Gl1_Sphere.circleRelThickness(=0.2)\n\n\tIf Gl1_Sphere::circleView is enabled, this is the torus diameter relative to the sphere radius (i.e. the circle relative thickness).\n\n.. ystaticattr:: Gl1_Sphere.circleAllowedRotationAxis(='z')\n\n\tIf Gl1_Sphere::circleView is enabled, this is the only axis ('x', 'y' or 'z') along which rotation is allowed for the 2D simulation. It allows right orientation of the tori to appear like circles in the viewer. For example, if circleAllowedRotationAxis='x' is set, blockedDOFs=\"YZ\" should also be set for all your particles.",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

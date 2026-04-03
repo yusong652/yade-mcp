@@ -7,17 +7,34 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
     },
     {
       "name": "sphericalBodies",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, compute branch vectors from radii (faster), else use contactPoint-position. Turning this flag true is safe for sphere-sphere contacts and a few other specific cases. It will give wrong values of torques on facets or boxes."
     },
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing"
+    }
+  ],
+  "methods": [
+    {
+      "name": "elasticEnergy",
+      "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts"
+    },
+    {
+      "name": "initPlasticDissipation",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+    },
+    {
+      "name": "plasticDissipation",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
     }
   ]
 }

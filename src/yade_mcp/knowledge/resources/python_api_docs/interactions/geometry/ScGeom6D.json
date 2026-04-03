@@ -7,57 +7,78 @@
     {
       "name": "bending",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Bending at contact as a vector defining axis of rotation and angle (angle=norm)."
     },
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,1,1)"
+      "default": "Vector3(0,1,1)",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "initialOrientation1",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Orientation of body 1 one at initialisation time |yupdate|"
     },
     {
       "name": "initialOrientation2",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Orientation of body 2 one at initialisation time |yupdate|"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
     },
     {
       "name": "penetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Penetration distance of spheres (positive if overlapping)"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step"
     },
     {
       "name": "twist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Elastic twist angle (around"
     },
     {
       "name": "twistCreep",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Stored creep, substracted from total relative rotation for computation of elastic moment |yupdate|"
+    }
+  ],
+  "methods": [
+    {
+      "name": "incidentVel",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+    },
+    {
+      "name": "relAngVel",
+      "description": "Return relative angular velocity of the interaction."
     }
   ]
 }

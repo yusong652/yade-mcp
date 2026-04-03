@@ -7,77 +7,92 @@
     {
       "name": "capillaryPressure",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Capillary pressure $u_c$, to be defined equal to"
     },
     {
       "name": "debug",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "To output some debugging messages."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "muGamma",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "Tensorial contribution to"
     },
     {
       "name": "muSnw",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "Tensorial contribution to"
     },
     {
       "name": "muSsw",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "Tensorial contribution to"
     },
     {
       "name": "muVw",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "Tensorial contribution (spherical i.e. isotropic) to"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "sigmaCap",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "The capillary stress tensor $\\boldsymbol{\\sigma^{cap}}$ itself, expressed as $\\boldsymbol{\\sigma^{cap}} = 1/V \\, [ u_c (\\boldsymbol{\\mu_{Vw}} + \\boldsymbol{\\mu_{Ssw}}) + \\gamma_{nw} (\\boldsymbol{\\mu_{Snw}} + \\boldsymbol{\\mu_{\\Gamma}}) ]$ where the four microstructure tensors $\\boldsymbol{\\mu_{Vw}}, \\boldsymbol{\\mu_{Ssw}}, \\boldsymbol{\\mu_{Snw}}, \\boldsymbol{\\mu_{\\Gamma}}$ correspond to"
     },
     {
       "name": "surfaceTension",
       "type": "float",
-      "default": "0.073"
+      "default": "0.073",
+      "description": "Fluid-fluid surface tension $\\gamma_{nw}$, to be defined equal to"
     },
     {
       "name": "vW",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Wetting fluid volume, summing"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     },
     {
       "name": "wettAngle",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Wetting, i.e. contact, angle value (radians). To be defined consistently with the value upon which the capillary files (used by"
     }
   ]
 }

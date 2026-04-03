@@ -7,7 +7,8 @@
     {
       "name": "E",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "normal modulus (stiffness / crossSection) [Pa]"
     },
     {
       "name": "Fn",
@@ -22,12 +23,14 @@
     {
       "name": "G",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "shear modulus [Pa]"
     },
     {
       "name": "crossSection",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "equivalent cross-section associated with this contact [m\u00b2]"
     },
     {
       "name": "cummBetaCount",
@@ -42,37 +45,44 @@
     {
       "name": "damLaw",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Law for softening part of uniaxial tension. 0 for linear, 1 for exponential (default)"
     },
     {
       "name": "dmgOverstress",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "damage viscous overstress (at previous step or at current step)"
     },
     {
       "name": "dmgRateExp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "exponent in the rate-dependent damage evolution"
     },
     {
       "name": "dmgStrain",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "damage strain (at previous or current step)"
     },
     {
       "name": "dmgTau",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "characteristic time for damage (if non-positive, the law without rate-dependence is used)"
     },
     {
       "name": "epsCrackOnset",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "strain at which the material starts to behave non-linearly"
     },
     {
       "name": "epsFracture",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "strain at which the bond is fully broken [-]"
     },
     {
       "name": "epsN",
@@ -97,17 +107,20 @@
     {
       "name": "equivStrainShearContrib",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Coefficient of shear contribution to equivalent strain"
     },
     {
       "name": "isCohesive",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if not cohesive, interaction is deleted when distance is greater than zero."
     },
     {
       "name": "isoPrestress",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "\"prestress\" of this link (used to simulate isotropic stress)"
     },
     {
       "name": "kappaD",
@@ -117,22 +130,26 @@
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "neverDamage",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "the damage evolution function will always return virgin state"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "omega",
@@ -142,27 +159,32 @@
     {
       "name": "plRateExp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "exponent in the rate-dependent viscoplasticity"
     },
     {
       "name": "plTau",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "characteristic time for viscoplasticity (if non-positive, no rate-dependence for shear)"
     },
     {
       "name": "refLength",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "initial length of interaction [m]"
     },
     {
       "name": "refPD",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "initial penetration depth of interaction [m] (used with ScGeom)"
     },
     {
       "name": "relDuctility",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Relative ductility of bonds in normal direction"
     },
     {
       "name": "relResidualStrength",
@@ -172,7 +194,8 @@
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "sigmaN",
@@ -187,12 +210,32 @@
     {
       "name": "tanFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tangens of internal friction angle [-]"
     },
     {
       "name": "undamagedCohesion",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "virgin material cohesion [Pa]"
+    }
+  ],
+  "methods": [
+    {
+      "name": "funcG",
+      "description": "Damage evolution law, evaluating the $\\omega$ parameter. $\\kappa_D$ is historically maximum strain, *epsCrackOnset* ($\\varepsilon_0$) = CpmPhys.epsCrackOnset, *epsFracture* = CpmPhys.epsFracture; if *neverDamage* is ``True``, the value returned will always be 0 (no damage). TODO"
+    },
+    {
+      "name": "funcGInv",
+      "description": "Inversion of damage evolution law, evaluating the $\\kappa_D$ parameter. $\\omega$ is damage, for other parameters see funcG function"
+    },
+    {
+      "name": "setDamage",
+      "description": "TODO"
+    },
+    {
+      "name": "setRelResidualStrength",
+      "description": "TODO"
     }
   ]
 }

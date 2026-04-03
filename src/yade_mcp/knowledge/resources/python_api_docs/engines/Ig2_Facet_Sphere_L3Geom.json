@@ -7,22 +7,26 @@
     {
       "name": "approxMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled.\n\n== ===============================================================\n1  use previous transformation to transform velocities (which are known at mid-steps), instead of mid-step transformation computed as quaternion slerp at t=0.5.\n2  do not take average (mid-step) normal when computing relative shear displacement, use previous value instead\n4  do not re-normalize average (mid-step) normal, if used.\u2026\n== ===============================================================\n\nBy default, the mask is zero, wherefore none of these approximations is used."
     },
     {
       "name": "distFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Create interaction if spheres are not futher than *distFactor* \\*(r1+r2). If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the ''zero'' one)."
     },
     {
       "name": "noRatch",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "See"
     },
     {
       "name": "trsfRenorm",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "How often to renormalize"
     }
   ]
 }

@@ -7,17 +7,20 @@
     {
       "name": "active",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "is the engine active?"
     },
     {
       "name": "integrationsteps",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "all integrationsteps count as all succesfull substeps"
     },
     {
       "name": "maxVelocitySq",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "store square of max. velocity, for informative purposes; computed again at every step. |yupdate|"
     },
     {
       "name": "slaves",
@@ -27,7 +30,8 @@
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "dt update interval"
     }
   ]
 }

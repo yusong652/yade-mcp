@@ -1,0 +1,20 @@
+{
+  "name": "CundallStrackAdhesivePotential",
+  "category": "engines",
+  "parent": "CundallStrackPotential",
+  "description": "CundallStrack model with adhesive part. Contact is created when $u/a-\\varepsilon < 0$ and released when $u/a-\\varepsilon > l_{adh}$, where $l_{adh} = f_{adh}/k_n$. This lead to an hysteretic attractive part.",
+  "attributes": [
+    {
+      "name": "alpha",
+      "type": "Real",
+      "default": "1",
+      "description": "Bulk-to-roughness stiffness ratio"
+    },
+    {
+      "name": "fadh",
+      "type": "Real",
+      "default": "0",
+      "description": "Adhesion force."
+    }
+  ]
+}

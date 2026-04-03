@@ -7,22 +7,26 @@
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

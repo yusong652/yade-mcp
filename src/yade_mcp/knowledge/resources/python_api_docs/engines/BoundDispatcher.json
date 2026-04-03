@@ -7,7 +7,8 @@
     {
       "name": "activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether the engine is activated (only should be changed by the collider)"
     },
     {
       "name": "functors",
@@ -17,22 +18,36 @@
     {
       "name": "minSweepDistFactor",
       "type": "float",
-      "default": "0.2"
+      "default": "0.2",
+      "description": "Minimal distance by which enlarge all bounding boxes; superseeds computed value of sweepDist when lower that (minSweepDistFactor x sweepDist). Updated by the collider. |yupdate|."
     },
     {
       "name": "sweepDist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Distance by which enlarge all bounding boxes, to prevent collider from being run at every step (only should be changed by the collider)."
     },
     {
       "name": "targetInterv",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "see"
     },
     {
       "name": "updatingDispFactor",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "see"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispFunctor",
+      "description": "Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws."
+    },
+    {
+      "name": "dispMatrix",
+      "description": "Return dictionary with contents of the dispatch matrix."
     }
   ]
 }

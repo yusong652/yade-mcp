@@ -7,27 +7,32 @@
     {
       "name": "bIds",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "IDs of bodies that should be attached to supports."
     },
     {
       "name": "c1",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Damping coeff. of dashpot #1 (the one in Maxwell branch). Negative value turns off the dashpot. [N*s/m]"
     },
     {
       "name": "c2",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Damping coeff. of dashpot #2 (the one in Kelvin-Voigt branch). Negative value turns off whole Kelvin-Voigt branch. [N*s/m]"
     },
     {
       "name": "k1",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Stiffness of spring #1 (the one in Maxwell branch) [N/m]"
     },
     {
       "name": "k2",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Stiffness of spring #2 (the one in Kelvin-Voigt branch) [N/m]"
     }
   ]
 }

@@ -7,32 +7,48 @@
     {
       "name": "epsSoft",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Strain at which softening in compression starts (non-negative to deactivate). The default value is such that plasticity does not occur"
     },
     {
       "name": "omegaThreshold",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "damage after which the contact disappears (<1), since omega reaches 1 only for strain \u2192+\u221e"
     },
     {
       "name": "relKnSoft",
       "type": "float",
-      "default": "0.3"
+      "default": "0.3",
+      "description": "Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)"
     },
     {
       "name": "yieldEllipseShift",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)"
     },
     {
       "name": "yieldLogSpeed",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)"
     },
     {
       "name": "yieldSurfType",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log"
+    }
+  ],
+  "methods": [
+    {
+      "name": "elasticEnergy",
+      "description": "Compute and return the total elastic energy in all \"CpmPhys\" contacts"
+    },
+    {
+      "name": "yieldSigmaTMagnitude",
+      "description": "Return radius of yield surface for given material and state parameters; uses attributes of the current instance (*yieldSurfType* etc), change them before calling if you need that."
     }
   ]
 }

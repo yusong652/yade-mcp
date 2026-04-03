@@ -7,122 +7,146 @@
     {
       "name": "alphaKr",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Dimensionless coefficient used for the rolling stiffness."
     },
     {
       "name": "alphaKtw",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Dimensionless coefficient used for the twist stiffness."
     },
     {
       "name": "compressionModulus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Compresion elasticity modulus"
     },
     {
       "name": "creepBending",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bending creeping coefficient. Usual values between 0 and 1."
     },
     {
       "name": "creepTension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension/compression creeping coefficient. Usual values between 0 and 1."
     },
     {
       "name": "creepTwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Twist creeping coefficient. Usual values between 0 and 1."
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "epsilonMaxCompression",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximal plastic strain compression"
     },
     {
       "name": "epsilonMaxTension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximal plastic strain tension"
     },
     {
       "name": "etaMaxBending",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximal plastic bending strain"
     },
     {
       "name": "etaMaxTwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximal plastic twist strain"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "nuBending",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bending elastic stress limit"
     },
     {
       "name": "nuTwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Twist elastic stress limit"
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "shearCohesion",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear elastic stress limit"
     },
     {
       "name": "shearModulus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "shear elasticity modulus"
     },
     {
       "name": "sigmaCompression",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Compression elastic stress limit"
     },
     {
       "name": "sigmaTension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension elastic stress limit"
     },
     {
       "name": "tensionModulus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension elasticity modulus"
     },
     {
       "name": "unloadBending",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bending plastic unload coefficient. Usual values between 0 and +infinity."
     },
     {
       "name": "unloadTension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Tension/compression plastic unload coefficient. Usual values between 0 and +infinity."
     },
     {
       "name": "unloadTwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Twist plastic unload coefficient. Usual values between 0 and +infinity."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

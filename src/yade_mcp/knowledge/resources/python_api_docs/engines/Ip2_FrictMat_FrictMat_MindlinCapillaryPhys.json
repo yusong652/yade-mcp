@@ -7,42 +7,50 @@
     {
       "name": "betan",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Normal viscous damping ratio $\\beta_n$."
     },
     {
       "name": "betas",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Shear viscous damping ratio $\\beta_s$."
     },
     {
       "name": "en",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Normal coefficient of restitution $e_n$."
     },
     {
       "name": "es",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Shear coefficient of restitution $e_s$."
     },
     {
       "name": "eta",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Coefficient to determine the plastic bending moment"
     },
     {
       "name": "gamma",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Surface energy parameter [J/m^2] per each unit contact surface, to derive DMT formulation from HM"
     },
     {
       "name": "krot",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Rotational stiffness for moment contact law"
     },
     {
       "name": "ktwist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Torsional stiffness for moment contact law"
     }
   ]
 }

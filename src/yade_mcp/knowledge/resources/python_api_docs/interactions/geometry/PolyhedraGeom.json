@@ -7,22 +7,26 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Contact point (global coords), centroid of the overlapping polyhedron"
     },
     {
       "name": "equivalentCrossSection",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Cross-section area of the overlap (perpendicular to the normal) - not used"
     },
     {
       "name": "equivalentPenetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "volume / equivalentCrossSection - not used"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal direction of the interaction"
     },
     {
       "name": "orthonormal_axis",
@@ -32,12 +36,14 @@
     {
       "name": "penetrationVolume",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Volume of overlap [m\u00b3]"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step"
     },
     {
       "name": "twist_axis",

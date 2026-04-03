@@ -7,12 +7,14 @@
     {
       "name": "halfLengthContacts",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If True, Cylinders nodes interact like spheres of radius 0.5*length, else one node has size length while the other has size 0. The difference is mainly the locus of rotation definition."
     },
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
     }
   ]
 }

@@ -7,42 +7,64 @@
     {
       "name": "cellDist",
       "type": "Vector3i",
-      "default": "Vector3i(0,0,0)"
+      "default": "Vector3i(0,0,0)",
+      "description": "Distance of bodies in cell size units, if using periodic boundary conditions. Note that periodic boundary conditions for GridConnections have not yet been fully implemented."
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "node1",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "First"
     },
     {
       "name": "node2",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Second"
     },
     {
       "name": "periodic",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true if two nodes from different periods are connected."
     },
     {
       "name": "radius",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Radius [m]"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "addPFacet",
+      "description": "Add a PFacet to the GridConnection."
+    },
+    {
+      "name": "getPFacets",
+      "description": "get list of linked PFacets."
+    },
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume."
     }
   ]
 }

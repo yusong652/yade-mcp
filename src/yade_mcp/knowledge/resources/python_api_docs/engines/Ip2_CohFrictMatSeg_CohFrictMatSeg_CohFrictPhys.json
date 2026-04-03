@@ -7,12 +7,14 @@
     {
       "name": "setCohesionNow",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, assign cohesion to all existing contacts in current time-step. The flag is turned false automatically, so that assignment is done in the current timestep only."
     },
     {
       "name": "setCohesionOnNewContacts",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, assign cohesion at all new contacts. If false, only existing contacts can be cohesive (also see"
     }
   ]
 }

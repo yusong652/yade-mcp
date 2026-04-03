@@ -7,17 +7,20 @@
     {
       "name": "createScGeom",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "When true (resp. false), new contacts'"
     },
     {
       "name": "ig2polyhedraGeom",
       "type": "Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
-      "default": "<Ig2_Polyhedra_Polyhedra_PolyhedraGeom instance at 0x1f18cb0>"
+      "default": "<Ig2_Polyhedra_Polyhedra_PolyhedraGeom instance at 0x1f18cb0>",
+      "description": "Helper Ig2 functor responsible for handling"
     },
     {
       "name": "ig2scGeom",
       "type": "Ig2_Polyhedra_Polyhedra_ScGeom",
-      "default": "<Ig2_Polyhedra_Polyhedra_ScGeom instance at 0x1f283b0>"
+      "default": "<Ig2_Polyhedra_Polyhedra_ScGeom instance at 0x1f283b0>",
+      "description": "Helper Ig2 functor responsible for handling"
     }
   ]
 }

@@ -7,82 +7,98 @@
     {
       "name": "Key",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Necessary if"
     },
     {
       "name": "ascii",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``)"
     },
     {
       "name": "compress",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Compress output XML files [experimental]."
     },
     {
       "name": "fileName",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Base file name; it will be appended with {lsBody*,spheres,intrs,facets}.243100.vtu (unless *multiblock* or *multiblockLS* is ``True``) depending on active recorders and step number (243100 in this case). It can contain slashes, but the directory must exist already."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be exported. If 0, all bodies will be exported."
     },
     {
       "name": "multiblock",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Use multi-block (``.vtm``) files to store data, rather than separate ``.vtu`` files."
     },
     {
       "name": "multiblockLS",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "For executing, when True and with lsBodies in *recorders*, a serial export of the"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "parallelMode",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "For MPI parallel runs, each proc writes their own vtu/vtp files. Master proc writes a pvtu/pvtp file containing metadata about worker vtu files. load the pvtu/pvtp in paraview for visualization."
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "recorders",
       "type": "list",
-      "default": "['all']"
+      "default": "['all']",
+      "description": "List of active recorders (as strings). ``all`` (the default value) enables all base (``lsBodies'' excepted) and generic recorders.\n\n**Base recorders**\n\n\tBase recorders save the geometry (unstructured or structured grids) on which other data is defined. They are implicitly activated by many of the other recorders. Each of them creates a new file (or a block, if"
     },
     {
       "name": "skipFacetIntr",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Skip interactions that are not of sphere-sphere type (e.g. sphere-facet, sphere-box...), when saving interactions"
     },
     {
       "name": "skipNondynamic",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Skip non-dynamic spheres (but not facets)."
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     }
   ]
 }

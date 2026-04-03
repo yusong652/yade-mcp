@@ -7,22 +7,26 @@
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "v",
       "type": "list",
-      "default": "[Vector3(2.928517594614104652e-316,0,2.93104800122584518e-316), Vector3(6.944534"
+      "default": "[Vector3(2.928517594614104652e-316,0,2.93104800122584518e-316), Vector3(6.944534",
+      "description": "Tetrahedron vertices (in local coordinate system)."
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_CpmPhys",
+  "category": "engines",
+  "parent": "GlIPhysFunctor",
+  "description": "Render CpmPhys objects of interactions.\n\n.. ystaticattr:: Gl1_CpmPhys.contactLine(=true)\n\n\tShow contact line\n\n.. ystaticattr:: Gl1_CpmPhys.dmgLabel(=true)\n\n\tNumerically show contact damage parameter\n\n.. ystaticattr:: Gl1_CpmPhys.dmgPlane(=false)\n\n\t[what is this?]\n\n.. ystaticattr:: Gl1_CpmPhys.epsT(=false)\n\n\tShow shear strain \n\n.. ystaticattr:: Gl1_CpmPhys.epsTAxes(=false)\n\n\tShow axes of shear plane \n\n.. ystaticattr:: Gl1_CpmPhys.normal(=false)\n\n\tShow contact normal\n\n.. ystaticattr:: Gl1_CpmPhys.colorStrainRatio(=-1)\n\n\tIf positive, set the interaction (wire) color based on $\\eps_N$ normalized by $\\eps_0$ x colorStrainRatio<CpmPhys.colorStrainRatio> ($\\eps_0$ = CpmPhys.epsCrackOnset ). Otherwise, color based on the residual strength.\n\n.. ystaticattr:: Gl1_CpmPhys.epsNLabel(=false)\n\n\tNumerically show normal strain",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

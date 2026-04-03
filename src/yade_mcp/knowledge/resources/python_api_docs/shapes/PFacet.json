@@ -7,67 +7,80 @@
     {
       "name": "area",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "PFacet's area"
     },
     {
       "name": "cellDist",
       "type": "Vector3i",
-      "default": "Vector3i(0,0,0)"
+      "default": "Vector3i(0,0,0)",
+      "description": "Distance of bodies in cell size units, if using periodic boundary conditions. Note that periodic boundary conditions for PFacets have not yet been fully implemented."
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "conn1",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "First"
     },
     {
       "name": "conn2",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Second"
     },
     {
       "name": "conn3",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "third"
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "node1",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "First"
     },
     {
       "name": "node2",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Second"
     },
     {
       "name": "node3",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "third"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "PFacet's normal (in local coordinate system)"
     },
     {
       "name": "radius",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "PFacet's radius"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
     }
   ]
 }

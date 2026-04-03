@@ -7,142 +7,170 @@
     {
       "name": "PSDcalculateMass",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "PSD-Input is in mass (true), otherwise the number of particles will be considered."
     },
     {
       "name": "PSDcum",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "PSD-dispersion, cumulative procent meanings [-]"
     },
     {
       "name": "PSDsizes",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "PSD-dispersion, sizes of cells, Diameter [m]"
     },
     {
       "name": "blockedDOFs",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Blocked degress of freedom"
     },
     {
       "name": "center",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Center of the region"
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(-1,-1,-1)"
+      "default": "Vector3(-1,-1,-1)",
+      "description": "Use the color for newly created particles, if specified"
     },
     {
       "name": "exactDiam",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, the particles only with the defined in PSDsizes diameters will be created. Otherwise the diameter will be randomly chosen in the range [PSDsizes[i-1]:PSDsizes[i]], in this case the length of PSDsizes should be  more on 1, than the length of PSDcum."
     },
     {
       "name": "extents",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Extents of the region"
     },
     {
       "name": "goalMass",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Total mass that should be attained at the end of the current step. |yupdate|"
     },
     {
       "name": "ids",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "ids of created bodies"
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "groupMask to apply for newly created spheres"
     },
     {
       "name": "massFlowRate",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Mass flow rate [kg/s]"
     },
     {
       "name": "materialId",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Shared material id to use for newly created spheres (can be negative to count from the end)"
     },
     {
       "name": "maxAttempt",
       "type": "int",
-      "default": "5000"
+      "default": "5000",
+      "description": "Maximum number of attempts to position a new sphere randomly."
     },
     {
       "name": "maxMass",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Maximal mass at which to stop generating new particles regardless of massFlowRate. if maxMass=-1 - this parameter is ignored."
     },
     {
       "name": "maxParticles",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "The number of particles at which to stop generating new ones regardless of massFlowRate. if maxParticles=-1 - this parameter is ignored ."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Orientation of the region's geometry, direction of particle's velocites if normalVel is not set."
     },
     {
       "name": "normalVel",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)"
+      "default": "Vector3(nan,nan,nan)",
+      "description": "Direction of particle's velocites."
     },
     {
       "name": "numParticles",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Cummulative number of particles produces so far |yupdate|"
     },
     {
       "name": "rMax",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum radius of generated spheres (uniform distribution)"
     },
     {
       "name": "rMin",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Minimum radius of generated spheres (uniform distribution)"
     },
     {
       "name": "silent",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true no complain about excessing maxAttempt but disable the factory (by set massFlowRate=0)."
     },
     {
       "name": "stopIfFailed",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, the SpheresFactory stops (sets massFlowRate=0), when maximal number of attempts to insert particle exceed."
     },
     {
       "name": "totalMass",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Mass of spheres that was produced so far. |yupdate|"
     },
     {
       "name": "totalVolume",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volume of spheres that was produced so far. |yupdate|"
     },
     {
       "name": "vAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum angle by which the initial sphere velocity deviates from the normal."
     },
     {
       "name": "vMax",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Maximum velocity norm of generated spheres (uniform distribution)"
     },
     {
       "name": "vMin",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Minimum velocity norm of generated spheres (uniform distribution)"
     }
   ]
 }

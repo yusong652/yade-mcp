@@ -7,12 +7,14 @@
     {
       "name": "active",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "is the engine active?"
     },
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "dt update interval"
     }
   ]
 }

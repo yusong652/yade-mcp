@@ -7,77 +7,92 @@
     {
       "name": "REC_COLORS",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to record colors"
     },
     {
       "name": "REC_ID",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether to record id"
     },
     {
       "name": "REC_INTERACTION",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to record contact point and forces"
     },
     {
       "name": "REC_VELOCITY",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to record velocity"
     },
     {
       "name": "fileName",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "File prefix to save to"
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "maxDimension",
       "type": "float",
-      "default": "30.0"
+      "default": "30.0",
+      "description": "Maximum allowed distance between consecutive grid lines"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "sampleX",
       "type": "int",
-      "default": "30"
+      "default": "30",
+      "description": "Number of divisions in the X direction for triangulation"
     },
     {
       "name": "sampleY",
       "type": "int",
-      "default": "30"
+      "default": "30",
+      "description": "Number of divisions in the Y direction for triangulation"
     },
     {
       "name": "sampleZ",
       "type": "int",
-      "default": "30"
+      "default": "30",
+      "description": "Number of divisions in the Z direction for triangulation"
     },
     {
       "name": "twoDimension",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to render the particles as 2-D"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     }
   ]
 }

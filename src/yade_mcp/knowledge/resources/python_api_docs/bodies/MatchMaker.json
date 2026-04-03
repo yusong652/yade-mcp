@@ -7,17 +7,26 @@
     {
       "name": "algo",
       "type": "str",
-      "default": "'avg'"
+      "default": "'avg'",
+      "description": "Algorithm used to compute value when no match for ids is found within"
     },
     {
       "name": "matches",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Array of ``(id1,id2,value)`` items; queries matching ``id1`` + ``id2`` or ``id2`` + ``id1`` will return ``value``"
     },
     {
       "name": "val",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Constant value returned if there is no match and"
+    }
+  ],
+  "methods": [
+    {
+      "name": "computeFallback",
+      "description": "Compute algo value for *val1* and *val2*, using algorithm specified by algo<MatchMaker.algo>."
     }
   ]
 }

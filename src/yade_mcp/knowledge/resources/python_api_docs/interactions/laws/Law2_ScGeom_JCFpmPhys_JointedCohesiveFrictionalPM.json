@@ -7,92 +7,110 @@
     {
       "name": "Key",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "string specifying the name of saved file 'cracks___.txt', when"
     },
     {
       "name": "clusterMoments",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "computer clustered moments? (on by default"
     },
     {
       "name": "computedCentroid",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "computer clustered moments?"
     },
     {
       "name": "cracksFileExist",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true (and if"
     },
     {
       "name": "eventNumber",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "cluster event number (used for clustering and paraview visualization of groups)."
     },
     {
       "name": "momentFudgeFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Fudge factor used by Hazzard and Damjanac 2013 to improve moment size accuracy (set to 1 for no impact by default)"
     },
     {
       "name": "momentRadiusFactor",
       "type": "float",
-      "default": "5.0"
+      "default": "5.0",
+      "description": "Average particle diameter multiplier for moment magnitude calculation"
     },
     {
       "name": "momentsFileExist",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true (and if"
     },
     {
       "name": "nbShearCracks",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "number of shear microcracks."
     },
     {
       "name": "nbTensCracks",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "number of tensile microcracks."
     },
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene"
     },
     {
       "name": "recordCracks",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, data about interactions that lose their cohesive feature are stored in the text file cracksKey.txt (see"
     },
     {
       "name": "recordMoments",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Combines with"
     },
     {
       "name": "smoothJoint",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, interactions of particles belonging to joint surface ("
     },
     {
       "name": "totalCracksSurface",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "calculate the total cracked surface."
     },
     {
       "name": "totalShearCracksE",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "calculate the overall energy dissipated by interparticle microcracking in shear."
     },
     {
       "name": "totalTensCracksE",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "calculate the overall energy dissipated by interparticle microcracking in tension."
     },
     {
       "name": "useStrainEnergy",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "use strain energy for moment magnitude estimation (if false, use kinetic energy)"
     }
   ]
 }

@@ -3,5 +3,11 @@
   "category": "engines",
   "parent": "Ig2_LevelSet_LevelSet_ScGeom",
   "description": "Same as Ig2_LevelSet_LevelSet_ScGeom except for the additional information in LSnodeGeom which should enable faster simulations, provided that Law2_ScGeom_FrictPhys_CundallStrack.neverErase is defined as True. This functor actually creates an interaction geom, enabling the interaction to turn real,...",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "normalMismatch",
+      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment."
+    }
+  ]
 }

@@ -7,97 +7,116 @@
     {
       "name": "AabbMinMax",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether the exact Aabb should be calculated. If false, an approximate cubic Aabb is defined with edges of ``2R``"
     },
     {
       "name": "R",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "R in Potential Particles"
     },
     {
       "name": "a",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of a coefficients of plane normals"
     },
     {
       "name": "b",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of b coefficients of plane normals"
     },
     {
       "name": "boundaryNormal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal direction of boundary if fixedNormal=True"
     },
     {
       "name": "c",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of c coefficients of plane normals"
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "d",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of d coefficients of plane normals"
     },
     {
       "name": "fixedNormal",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to fix the contact normal at a boundary, using boundaryNormal"
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "isBoundary",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether the particle is part of a boundary particle"
     },
     {
       "name": "k",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "k in Potential Particles"
     },
     {
       "name": "maxAabb",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Max from box centre: Used for visualisation in vtk and qt"
     },
     {
       "name": "maxAabbRotated",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Max from box centre: Used for primary contact detection"
     },
     {
       "name": "minAabb",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Min from box centre: Used for visualisation in vtk and qt"
     },
     {
       "name": "minAabbRotated",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Min from box centre: Used for primary contact detection"
     },
     {
       "name": "r",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "r in Potential Particles"
     },
     {
       "name": "vertices",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Vertices"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
     }
   ]
 }

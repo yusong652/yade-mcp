@@ -7,12 +7,14 @@
     {
       "name": "hertzian",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If True, the equivalent radius for the Box ("
     },
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Enlarge sphere radii by this factor (if >1), to permit creation of distant interactions.\n\nInteractionGeometry will be computed when interactionDetectionFactor*(rad) > distance.\n\n.. note::\n\t This parameter is functionally coupled with"
     }
   ]
 }

@@ -7,67 +7,90 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(7.358764612016615951e+223,1.469156144216717157e+195,4.335995304281835601"
+      "default": "Vector3(7.358764612016615951e+223,1.469156144216717157e+195,4.335995304281835601",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "end",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "position of 2nd node |yupdate|"
     },
     {
       "name": "id3",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "id of next chained cylinder |yupdate|"
     },
     {
       "name": "isDuplicate",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "this flag is turned true (1) automatically if the contact is shared between two chained cylinders. A duplicated interaction will be skipped once by the constitutive law, so that only one contact at a time is effective. If isDuplicate=2, it means one of the two duplicates has no longer geometric interaction, and should be erased by the constitutive laws."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(1.126469672518042121e-321,0,3.074371915223671133e-27)"
+      "default": "Vector3(1.126469672518042121e-321,0,3.074371915223671133e-27)",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
     },
     {
       "name": "onNode",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "contact on node?"
     },
     {
       "name": "penetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Penetration distance of spheres (positive if overlapping)"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|"
     },
     {
       "name": "relPos",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "position of the contact on the cylinder (0: node-, 1:node+) |yupdate|"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step"
     },
     {
       "name": "start",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "position of 1st node |yupdate|"
     },
     {
       "name": "trueInt",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Defines the body id of the cylinder where the contact is real, when"
+    }
+  ],
+  "methods": [
+    {
+      "name": "incidentVel",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+    },
+    {
+      "name": "relAngVel",
+      "description": "Return relative angular velocity of the interaction."
     }
   ]
 }

@@ -7,337 +7,404 @@
     {
       "name": "Ka",
       "type": "float",
-      "default": "101000.0"
+      "default": "101000.0",
+      "description": "bulk modulus of air used for equivalent compressibility model"
     },
     {
       "name": "Ks",
       "type": "float",
-      "default": "21200000000.0"
+      "default": "21200000000.0",
+      "description": "bulkmodulus of solid used for equivalent compressibility model"
     },
     {
       "name": "Kw",
       "type": "float",
-      "default": "2150000000.0"
+      "default": "2150000000.0",
+      "description": "bulkmodulus of water used for equivalent compressibility model"
     },
     {
       "name": "Po",
       "type": "float",
-      "default": "1500000.0"
+      "default": "1500000.0",
+      "description": "Po parameter for Van Genuchten model, Free swelling 0.04e6. If porosity is distributed, this value becomes cell based."
     },
     {
       "name": "SrM",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "residual saturation for empirical relative saturation based permeability relationship"
     },
     {
       "name": "SsM",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "saturated saturation for empirical relative saturation based permeability relationship"
     },
     {
       "name": "a",
       "type": "float",
-      "default": "6.8"
+      "default": "6.8",
+      "description": "parameter a for evolution of Po as a function of porosity"
     },
     {
       "name": "airViscosity",
       "type": "float",
-      "default": "1.8e-05"
+      "default": "1.8e-05",
+      "description": "Used with"
     },
     {
       "name": "allCellsFractured",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use to simulate all pores fractured for debugging purposes only"
     },
     {
       "name": "alphaBound",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "if 0, use an alphaBoundary condition where CGAL finds minimum alpha necessary for a single solid object. Any positive value will be used for the alpha. All negative values deactivate the functionality."
     },
     {
       "name": "alphaBoundValue",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "value of alpha constant pressure condition"
     },
     {
       "name": "alphaExpRate",
       "type": "float",
-      "default": "0.353"
+      "default": "0.353",
+      "description": "rate of exponential distribution for porosity distribution"
     },
     {
       "name": "alpham",
       "type": "float",
-      "default": "2.6048e-08"
+      "default": "2.6048e-08",
+      "description": "alpha parameter for particle volumetric strain model MPa^-1"
     },
     {
       "name": "apertureFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "factor to consider tortuosity"
     },
     {
       "name": "averageCavityPressure",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "true means the pressure in the cavity will be averaged each iteration."
     },
     {
       "name": "b",
       "type": "float",
-      "default": "-1.5"
+      "default": "-1.5",
+      "description": "parameter b for evolution of lambda as a function of porosity"
     },
     {
       "name": "bIntrinsicPerm",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "b parameter for dependency of intrinsic permeability on macroporosity Gens 2011. Not active if 0 (default). Mokni2016 uses 8"
     },
     {
       "name": "betaExpRate",
       "type": "float",
-      "default": "0.353"
+      "default": "0.353",
+      "description": "rate of exponential distribution for porosity distribution"
     },
     {
       "name": "betaLaplaceShape",
       "type": "float",
-      "default": "0.23"
+      "default": "0.23",
+      "description": "shape of laplace distribution used for porosity distribution"
     },
     {
       "name": "betam",
       "type": "float",
-      "default": "2.10206e-08"
+      "default": "2.10206e-08",
+      "description": "beta parameter for particle volumetric strain model MPa^-1"
     },
     {
       "name": "blockCellPoroThreshold",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, any cell above this porosity will be blocked from the beginning (partially sat crack should not participate)."
     },
     {
       "name": "blockHook",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Python command to be run when remeshing. Anticipated usage: define blocked cells (see also"
     },
     {
       "name": "blockIsoCells",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "search for cells that might be surrounded by blocked (minerals or cracks) and block them to avoid numerical instabilities."
     },
     {
       "name": "bndCondIsPressure",
       "type": "list",
-      "default": "[False, False, False, False, False, False]"
+      "default": "[False, False, False, False, False, False]",
+      "description": "defines the type of boundary condition for each side. True if pressure is imposed, False for no-flux. Indexes can be retrieved with"
     },
     {
       "name": "bndCondIsTemperature",
       "type": "list",
-      "default": "[False, False, False, False, False, False]"
+      "default": "[False, False, False, False, False, False]",
+      "description": "defines the type of boundary condition for each side of triangulation (used with"
     },
     {
       "name": "bndCondValue",
       "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
+      "description": "Imposed value of a boundary condition. Only applies if the boundary condition is imposed pressure, else the imposed flux is always zero presently (may be generalized to non-zero imposed fluxes in the future)."
     },
     {
       "name": "boundaryPressure",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "values defining pressure along x-axis for the top surface. See also"
     },
     {
       "name": "boundaryUseMaxMin",
       "type": "list",
-      "default": "[True, True, True, True, True, True]"
+      "default": "[True, True, True, True, True, True]",
+      "description": "If true (default value) bounding sphere is added as function of max/min sphere coord, if false as function of yade wall position"
     },
     {
       "name": "boundaryVelocity",
       "type": "list",
-      "default": "[Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0),"
+      "default": "[Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0),",
+      "description": "velocity on top boundary, only change it using"
     },
     {
       "name": "boundaryXPos",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "values of the x-coordinate for which pressure is defined. See also"
     },
     {
       "name": "breakControlledRemesh",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If true, remesh will occur everytime a break occurs in JCFpmPhys. Designed to increase accuracy and efficiency in hydraulic fracture simulations."
     },
     {
       "name": "brokenBondsRemoveCapillaryforces",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, broken bonds will also remove any capillary forces associated with the area of the crack"
     },
     {
       "name": "calcCrackArea",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "The amount of crack per pore is updated if calcCrackArea=True"
     },
     {
       "name": "cavityFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Permeability/viscosity for cavity cell neighbors (arbitrarily high to model triangulated fluid filled cavity)."
     },
     {
       "name": "cavityFluidDensity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": ">0 means cavity compressibility model considers density changes instead of volume changes."
     },
     {
       "name": "cavityFlux",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "For adding flux to pressuremanaged cavity model ("
     },
     {
       "name": "changeCrackSaturation",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if cell becomes cracked, its saturation is reduced to residual saturation (warning this is not conservative). Useful for reducing partial sat permeability in these cells."
     },
     {
       "name": "clampKValues",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true, clamp local permeabilities in [minKdivKmean,maxKdivKmean]*globalK. This clamping can avoid singular values in the permeability matrix and may reduce numerical errors in the solve phase. It will also hide junk values if they exist, or bias all values in very heterogeneous problems. So, use this with care."
     },
     {
       "name": "collectedDT",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "this is the exact time step that is computed, it enables the stiffness timestep estimate to change dynamically while maintaining an exact match for the flow timestep"
     },
     {
       "name": "computeFracturePaths",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, fracture paths connecting to boundary conditions will become pcondition cells and forces will be computed using atmospheric pressure."
     },
     {
       "name": "constantPorosity",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use the meanInitialPorosity everywhere instead of random distribution"
     },
     {
       "name": "controlCavityPressure",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use full cavity flux and fluidbulkmodulus to control cavity as dynamic pressure (dirichlet) boundary condition."
     },
     {
       "name": "controlCavityVolumeChange",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "cavity imposes a volume change on neighbor cells (shouldnt be used with controlCavityPressure)"
     },
     {
       "name": "convertClumps",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "If true the clumps will be temptatively converted into equivalent spheres in the triangulation, and clump members are skipped. Else clumps are ignored and spherical clump members are triangulated as independent bodies."
     },
     {
       "name": "crackAreaFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Factors the area used for crack geometry computations and capillary force removal inside cracks"
     },
     {
       "name": "crackCellPoroThreshold",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, any cell above this porosity will follow crack logic from the beginning. (~0.35 for pellet imagery)"
     },
     {
       "name": "crackModelActive",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Activates the parallel plate approximation model for facets connected to cohesionBroken edges"
     },
     {
       "name": "crackedCellTotal",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "total number of cracked cells"
     },
     {
       "name": "debug",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Activate debug messages"
     },
     {
       "name": "decoupleForces",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, viscous and pressure forces are not imposed on particles. Useful for speeding up simulations in ultra-stiff cohesive materials."
     },
     {
       "name": "defTolerance",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Cumulated deformation threshold for which retriangulation of pore space is performed. If negative, the triangulation update will occure with a fixed frequency on the basis of"
     },
     {
       "name": "desiredPorosity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Correct the cell volumes to reflect this desired porosity (not active by default (0))."
     },
     {
       "name": "directlyModifySatFromPoro",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, changes in porosity are used to directly change porosity. Normally, the water retention curve is taking care of this on its own."
     },
     {
       "name": "displacementBasedCracks",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "fracture criteria will be based on displacement instead of broken bond status"
     },
     {
       "name": "doInterpolate",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Force the interpolation of cell's info while remeshing. By default, interpolation would be done only for compressible fluids. It can be forced with this flag."
     },
     {
       "name": "dt",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "timestep [s]"
     },
     {
       "name": "elapsedIters",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "number of mechanical iters since last flow iter."
     },
     {
       "name": "eps",
       "type": "float",
-      "default": "1e-05"
+      "default": "1e-05",
+      "description": "roughness defined as a fraction of particles size, giving the minimum distance between particles in the lubrication model."
     },
     {
       "name": "epsVolMax",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maximal absolute volumetric strain computed at each iteration. |yupdate|"
     },
     {
       "name": "first",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Controls the initialization/update phases"
     },
     {
       "name": "fixTriUpdatePermInt",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "If positive, triangulation is fixed and DFNFlow trickPermeability is run according to the interval. Activating this automatically sets"
     },
     {
       "name": "fixedAlpha",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, a constant-sized alpha vertex will be placed exactly above each facet. If false, logic is used to improve cell sizes in concave regions."
     },
     {
       "name": "flatThreshold",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "If >=0, pore volumes below flatThreshold value are blocked from flow calc. Useful for compressible flow involving odd triangulations with some very flat pores."
     },
     {
       "name": "fluidBulkModulus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Bulk modulus of fluid (inverse of compressibility) K=-dP*V/dV [Pa]. Flow is compressible if fluidBulkModulus > 0, else incompressible."
     },
     {
       "name": "fluidCp",
       "type": "float",
-      "default": "4181.3"
+      "default": "4181.3",
+      "description": "Heat capacity of fluid (for thermalEngine)."
     },
     {
       "name": "fluidRho",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of fluid (for thermalEngine)."
     },
     {
       "name": "forceConfinement",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, all the boundary particles are locked in place to simulate perfect constant volume."
     },
     {
       "name": "forceMetis",
@@ -347,52 +414,62 @@
     {
       "name": "fracBasedPointSuctionCalc",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, the suction per material point is computed based on fraction shared by incident cell."
     },
     {
       "name": "fracPorosity",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "porosity value used for cracked cells"
     },
     {
       "name": "freeSwelling",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, boundary forces are computed with pAir pressure only"
     },
     {
       "name": "freezePorosity",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "useful for freezing porosity values during stage for reaching initial conditions where volume changes should not impact porosity"
     },
     {
       "name": "freezeSaturation",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, saturation will not change in specimen."
     },
     {
       "name": "gasPermFirst",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Set true each time you want a new gas perm estimate."
     },
     {
       "name": "getCHOLMODPerfTimings",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Print CHOLMOD build, analyze, and factorize timings"
     },
     {
       "name": "getGasPerm",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, a gas permeability will be extracted during next timestep. This involves building another triangulation with a new conductivity matrix, factorizing the matrix, and solving i.e. this will double computational effort if performed every step."
     },
     {
       "name": "homogeneousSuctionValue",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Will override the pressure solver and set all cells to the user provided value. Meant for testing non transient swelling conditions."
     },
     {
       "name": "idOffset",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If the bounding walls of the fluid mesh are not walls of the scene (i.e. are not elements of O.bodies), the offset should be set equal to the size of O.bodies. If the bounding walls are bodies of the scene but are not numbered as 0-5 then offset should be the number of bodies comming before the walls. Set offset<0 to get it set equal to O.bodies.size(), it will also update"
     },
     {
       "name": "ids",
@@ -402,82 +479,98 @@
     {
       "name": "ignoredBody",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "DEPRECATED, USE MASK - Id of a sphere to exclude from the triangulation.)"
     },
     {
       "name": "imageryFilePath",
       "type": "str",
-      "default": "'none'"
+      "default": "'none'",
+      "description": "path to the porosity grid extracted from imagery"
     },
     {
       "name": "iniVoidVolumes",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "activate the computation of the inverse of the initial void volumes in each cell when pore volumes are initialized."
     },
     {
       "name": "isActivated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates Flow Engine"
     },
     {
       "name": "kappaWeibullScale",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "scale of weibull dist, this is the mean correction factor multiplied by"
     },
     {
       "name": "lambdaWeibullShape",
       "type": "float",
-      "default": "6.0"
+      "default": "6.0",
+      "description": "shape of weibull distribution of the correction factor used for porosity distribution."
     },
     {
       "name": "lmbda",
       "type": "float",
-      "default": "0.2"
+      "default": "0.2",
+      "description": "Lambda parameter for Van Genuchten model. Free swelling 0.4. If porosity is distributed, this value becomes cell based."
     },
     {
       "name": "manualCrackPerm",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, it overrides the crack perm calculations (useful for setting cracked cells to extremely low perms to avoid fluid movement)"
     },
     {
       "name": "mask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
     },
     {
       "name": "matricSuctionRatio",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "The ratio of matric:osmotic suction. Facet forces computed for matricSuction fraction only."
     },
     {
       "name": "maxKdivKmean",
       "type": "float",
-      "default": "100.0"
+      "default": "100.0",
+      "description": "define the max K value (see"
     },
     {
       "name": "maxPo",
       "type": "float",
-      "default": "2000000.0"
+      "default": "2000000.0",
+      "description": "Certain boundary situations where a low volume will develop and interpolate from a cell with high initial porosity leading to Po exponential estimate blowing up."
     },
     {
       "name": "maxPoroClamp",
       "type": "float",
-      "default": "0.8"
+      "default": "0.8",
+      "description": "max clamp for distribution of porosity. Value over 0.8 messes with water retention curve"
     },
     {
       "name": "maxPorosity",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "max porosity found during stochastic poro distribution. used for evolution of porosity"
     },
     {
       "name": "meanInitialPorosity",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "if not negative, activates stochastic distribution for porosity. mean value of porosity for specimen"
     },
     {
       "name": "meanKStat",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "report the local permeabilities' correction"
     },
     {
       "name": "meanK_opt",
@@ -487,397 +580,882 @@
     {
       "name": "meanPoreSizeDiameter",
       "type": "float",
-      "default": "1.3e-08"
+      "default": "1.3e-08",
+      "description": "mean pore size diameter, used for stochastic generation of porosity field"
     },
     {
       "name": "meshUpdateInterval",
       "type": "int",
-      "default": "1000"
+      "default": "1000",
+      "description": "Maximum number of timesteps between re-triangulation events (a negative value will never re-triangulate). See also"
     },
     {
       "name": "microStructureAdh",
       "type": "float",
-      "default": "6000000.0"
+      "default": "6000000.0",
+      "description": "Adhesion between microstructure particles"
     },
     {
       "name": "microStructureE",
       "type": "float",
-      "default": "1000000.0"
+      "default": "1000000.0",
+      "description": "The amount of crack per pore is updated if calcCrackArea=True"
     },
     {
       "name": "microStructureNu",
       "type": "float",
-      "default": "0.3"
+      "default": "0.3",
+      "description": "The amount of crack per pore is updated if calcCrackArea=True"
     },
     {
       "name": "microStructurePhi",
       "type": "float",
-      "default": "18.0"
+      "default": "18.0",
+      "description": "The amount of crack per pore is updated if calcCrackArea=True"
     },
     {
       "name": "microStructureRho",
       "type": "float",
-      "default": "2600.0"
+      "default": "2600.0",
+      "description": "The amount of crack per pore is updated if calcCrackArea=True"
     },
     {
       "name": "minCellVol",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Use for avoiding 0 volume cells that will interupt solution of linear system."
     },
     {
       "name": "minKdivKmean",
       "type": "float",
-      "default": "0.0001"
+      "default": "0.0001",
+      "description": "define the min K value (see"
     },
     {
       "name": "minLambdao",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Maybe unnecessary since the lambdao function is a decay exponential for same situation described in maxPo above"
     },
     {
       "name": "minMicroRadFrac",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "Used during sphere insertion checks, if inscribed sphere contacts facet it cannot be reduced further than minMicroRadFrac*originalInscribedRadius"
     },
     {
       "name": "minParticleSwellFactor",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "If prevents particles from decreasing too far as their saturation decreases."
     },
     {
       "name": "minPoroClamp",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "min clamp for distribution of porosity"
     },
     {
       "name": "mineralPoro",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, all cell with porosity below this threshold will be blocked from flow and any associated particles will be clumped together"
     },
     {
       "name": "minimumPorosity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "value used to limit the allowable minimum porosity for pore volume calculations. Particularly useful if very small volumes are impacting stability"
     },
     {
       "name": "multithread",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Build triangulation and factorize in the background (multi-thread mode)"
     },
     {
       "name": "nUnsatPerm",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "n parameter for empirical relative saturation based permeability relationship. Off by default. n=5 in Mokni2016b"
     },
     {
       "name": "normalLubrication",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "compute normal lubrication force as developped by Brule"
     },
     {
       "name": "numFactorizeThreads",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "number of openblas threads in the factorization phase"
     },
     {
       "name": "numSolveThreads",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "number of openblas threads in the solve phase."
     },
     {
       "name": "onlyFractureExposedCracks",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, only the exposed cracks have tricked permeability."
     },
     {
       "name": "pAir",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Air pressure for calculation of capillary pressure (Pair - Pwater)"
     },
     {
       "name": "pZero",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "The value used for initializing pore pressure. It is useless for incompressible fluid, but important for compressible model."
     },
     {
       "name": "partialSatDT",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "time step used for partial sat engine. If >0, the engine will only activate once every partialSatDT/scene->dt steps. Hydromechanical forces estimated and added as persistant forces to particles during non partial sat time steps. This value is not exact, see"
     },
     {
       "name": "partialSatEngine",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates the partial sat clay engine"
     },
     {
       "name": "particleSwelling",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "set false to neglect particle swelling"
     },
     {
       "name": "permAreaFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Factors the area used for representing roughness in cracks that still conduct flux."
     },
     {
       "name": "permClamp",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, it prevents any permeabilities from increasing beyond this value (useful in case of very close cells"
     },
     {
       "name": "permeabilityFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Permability multiplier ($m$): $m=1$ (default) attempts to predicty the actual hydraulic conductivity using a Poiseuille equation; $m>0$ multiplies the default values by $m$; $m<0$ defines the conductivity independently of particle size and viscosity as if the material was a homogeneous continuum of conductivity $-m$"
     },
     {
       "name": "permeabilityMap",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Enable/disable stocking of average permeability scalar in cell infos."
     },
     {
       "name": "phiZero",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "initial porosity of the specimen"
     },
     {
       "name": "porosity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Porosity computed at each retriangulation |yupdate|"
     },
     {
       "name": "pressureForce",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "compute the pressure field and associated fluid forces. WARNING: turning off means fluid flow is not computed at all."
     },
     {
       "name": "pumpTorque",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Compute pump torque applied on particles"
     },
     {
       "name": "relax",
       "type": "float",
-      "default": "1.9"
+      "default": "1.9",
+      "description": "Gauss-Seidel relaxation"
     },
     {
       "name": "resetOriginalParticleValues",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use to reset initial volume and radii values for particles."
     },
     {
       "name": "resetVolumeSolids",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "useful if genesis process was used to reach an initial condition. We don't want the volume changes that occured during geneis to affect porosity evolution."
     },
     {
       "name": "residualAperture",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "residual aperture of induced cracks"
     },
     {
       "name": "shearLubrication",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "compute shear lubrication force as developped by Brule (FIXME: ref.)"
     },
     {
       "name": "sineAverage",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Pressure value (average) when sinusoidal pressure is applied"
     },
     {
       "name": "sineMagnitude",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Pressure value (amplitude) when sinusoidal pressure is applied (p )"
     },
     {
       "name": "slipBoundary",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Controls friction condition on lateral walls"
     },
     {
       "name": "stiffness",
       "type": "float",
-      "default": "10000.0"
+      "default": "10000.0",
+      "description": "equivalent contact stiffness used in the lubrication model"
     },
     {
       "name": "suction",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "turn just particle suction off (for debug)"
     },
     {
       "name": "swelling",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "turn just particle swelling off (for debug)"
     },
     {
       "name": "tZero",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "The value used for initializing pore temperatures in thermalEngine."
     },
     {
       "name": "tempDependentViscosity",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "boolean to vary viscosity (ultimately cell permeability) with cell temperature. Linear model for viscosity b/w 20-70 degC. If true, kFactor must also be set negative, and becomes the darcy permeability."
     },
     {
       "name": "thermalBndCondValue",
       "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
+      "description": "Imposed temperature boundary condition value for the cells in the triangulation (used with"
     },
     {
       "name": "thermalEngine",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "activate thermalEngine within FlowEngine."
     },
     {
       "name": "thermalPorosity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": ">0 means the void volume space will be factored by thermalPorosity for pore internal energy considerations."
     },
     {
       "name": "timeDimension",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Used to determine stability of system, partialSatEngine computes this value automatically."
     },
     {
       "name": "tolerance",
       "type": "float",
-      "default": "1e-06"
+      "default": "1e-06",
+      "description": "Gauss-Seidel tolerance"
     },
     {
       "name": "totalCracks",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "total discretely connected cracks."
     },
     {
       "name": "totalSpecimenVolume",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "report the total specimen volume"
     },
     {
       "name": "totalVolChange",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "tracks the total volumetric strain that occured in each step"
     },
     {
       "name": "twistTorque",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Compute twist torque applied on particles"
     },
     {
       "name": "updateTriangulation",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true the medium is retriangulated. Can be switched on to force retriangulation after some events (else it will be true periodicaly based on"
     },
     {
       "name": "useForceForCracks",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Cracks are only considered if a normal force of 0 is encountered between two particles."
     },
     {
       "name": "useKeq",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use the equivalent bulkmodulus for pressure field"
     },
     {
       "name": "useKozeny",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "use Kozeny for determining the permeability based on porosity (off by default)"
     },
     {
       "name": "useOpeningPressure",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, cracks will be created based on local opening pressure criteria computed by waterSurfaceTension/aperture"
     },
     {
       "name": "useSolver",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "Solver to use. 0:Gauss-Seidel, 3: Cholesky factorization (via Eigen3 interface), 4:multicore CPU or GPU accelerated CHOLMOD (without Eigen3), 1-2: undefined."
     },
     {
       "name": "viscosity",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "viscosity of the fluid"
     },
     {
       "name": "viscousNormalBodyStress",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "compute normal viscous stress applied on each body"
     },
     {
       "name": "viscousShear",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "compute viscous shear terms as developped by Donia Marzougui (FIXME: ref.)"
     },
     {
       "name": "viscousShearBodyStress",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "compute shear viscous stress applied on each body"
     },
     {
       "name": "volumeCorrection",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Volume correction factor (not user controlled. auto computed if"
     },
     {
       "name": "volumeFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Factor used for simulating low porosity (for thermal considerations only) in high porosity DEM packings."
     },
     {
       "name": "volumes",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "turn just particle volumes off (for debug)"
     },
     {
       "name": "wallIds",
       "type": "list",
-      "default": "[0, 1, 2, 3, 4, 5]"
+      "default": "[0, 1, 2, 3, 4, 5]",
+      "description": "body ids of the boundaries (default values are ok only if aabbWalls are appended before spheres, i.e. numbered 0,...,5)"
     },
     {
       "name": "wallThickness",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Walls thickness"
     },
     {
       "name": "waterSurfaceTension",
       "type": "float",
-      "default": "0.0728"
+      "default": "0.0728",
+      "description": "Water surface tension at 20 degC used to determine entry pressure to cracks"
     },
     {
       "name": "waveAction",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Allow sinusoidal pressure condition to simulate ocean waves"
     },
     {
       "name": "xmax",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "See"
     },
     {
       "name": "xmin",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Index of the boundary $x_{min}$. This index is not equal the the id of the corresponding body in general, it may be used to access the corresponding attributes (e.g. flow.bndCondValue[flow.xmin], flow.wallId[flow.xmin],...)."
     },
     {
       "name": "ymax",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "See"
     },
     {
       "name": "ymin",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "See"
     },
     {
       "name": "zmax",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "See"
     },
     {
       "name": "zmin",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "See"
+    }
+  ],
+  "methods": [
+    {
+      "name": "OSI",
+      "description": "Return the number of interactions only between spheres."
+    },
+    {
+      "name": "artificialParticleSwell",
+      "description": "Artificially swell all particles by the strain provided during next time step. Does not reactivate itself for next time step, user must call for each timestep they want to use it."
+    },
+    {
+      "name": "avFlVelOnSph",
+      "description": "compute a sphere-centered average fluid velocity"
+    },
+    {
+      "name": "averagePressure",
+      "description": "Measure averaged pore pressure in the entire volume, the cells adjacent to the boundaries are ignored if includeBoundaries=False"
+    },
+    {
+      "name": "averageSlicePressure",
+      "description": "Measure slice-averaged pore pressure at height posY"
+    },
+    {
+      "name": "averageVelocity",
+      "description": "measure the mean velocity in the period"
+    },
+    {
+      "name": "blockCell",
+      "description": "block cell 'id'. The cell will be excluded from the fluid flow problem and the conductivity of all incident facets will be null. If blockPressure=False, deformation is reflected in the pressure, else it is constantly 0."
+    },
+    {
+      "name": "bodyNormalLubStress",
+      "description": "Return the normal lubrication stress on sphere idSph."
+    },
+    {
+      "name": "bodyShearLubStress",
+      "description": "Return the shear lubrication stress on sphere idSph."
+    },
+    {
+      "name": "cholmodStats",
+      "description": "get statistics of cholmod solver activity"
+    },
+    {
+      "name": "clearImposedFlux",
+      "description": "Clear the list of points with flux imposed."
+    },
+    {
+      "name": "clearImposedPressure",
+      "description": "Clear the list of points with pressure imposed."
+    },
+    {
+      "name": "compTessVolumes",
+      "description": "Like TesselationWrapper::computeVolumes()"
+    },
+    {
+      "name": "edgeSize",
+      "description": "Return the number of interactions."
+    },
+    {
+      "name": "emulateAction",
+      "description": "get scene and run action (may be used to manipulate an engine outside the timestepping loop)."
+    },
+    {
+      "name": "exportMatrix",
+      "description": "Export system matrix to a file with all entries (even zeros will displayed)."
+    },
+    {
+      "name": "exportTriplets",
+      "description": "Export system matrix to a file with only non-zero entries."
+    },
+    {
+      "name": "fluidForce",
+      "description": "Return the fluid force on sphere idSph."
+    },
+    {
+      "name": "getAverageAperture",
+      "description": "get the averageaperture."
+    },
+    {
+      "name": "getAverageSaturation",
+      "description": "Get average saturation of entire specimen."
+    },
+    {
+      "name": "getAverageSuction",
+      "description": "Get average suction of entire specimen."
+    },
+    {
+      "name": "getBoundaryFluidArea",
+      "description": "Get total fluid area associated with boundary defined by its body id."
+    },
+    {
+      "name": "getBoundaryFlux",
+      "description": "Get total flux through boundary defined by its body id."
+    },
+    {
+      "name": "getBoundaryGasFlux",
+      "description": "Get total Gas flux through boundary defined by its body id."
+    },
+    {
+      "name": "getBoundaryVel",
+      "description": "Get total avg cell velocity associated with boundary defined by its body id."
+    },
+    {
+      "name": "getBoundaryVolume",
+      "description": "Get total volume flowing through boundary defined by its body id in current timestep dt."
+    },
+    {
+      "name": "getCavityDensity",
+      "description": "Return the density of cavity fluid."
+    },
+    {
+      "name": "getCavityFlux",
+      "description": "Return the flux through the edge of the cavity."
+    },
+    {
+      "name": "getCell",
+      "description": "get id of the cell containing (X,Y,Z)."
+    },
+    {
+      "name": "getCellBarycenter",
+      "description": "get barycenter of cell 'id'."
+    },
+    {
+      "name": "getCellCenter",
+      "description": "get voronoi center of cell 'id'."
+    },
+    {
+      "name": "getCellCracked",
+      "description": "Get cell cracked in position pos[0],pos[1],pos[2]."
+    },
+    {
+      "name": "getCellFlux",
+      "description": "Get influx in cell associated to an imposed P (indexed using 'cond')."
+    },
+    {
+      "name": "getCellFluxFromId",
+      "description": "Get influx in cell."
+    },
+    {
+      "name": "getCellGasCenter",
+      "description": "Get cell center of gas mesh with id. Can only be used if PartialSatEngine::getGasPerm=True."
+    },
+    {
+      "name": "getCellGasPImposed",
+      "description": "Get pressure condition of gas cell with id. Can only be used if PartialSatEngine::getGasPerm=True."
+    },
+    {
+      "name": "getCellGasVelocity",
+      "description": "Get relative cell gas velocity at position pos[0] pos [1] pos[2]. Can only be used if PartialSatEngine::getGasPerm=True."
+    },
+    {
+      "name": "getCellGasVolume",
+      "description": "Get volume of gas cell with id. Can only be used if PartialSatEngine::getGasPerm=True."
+    },
+    {
+      "name": "getCellInvVoidVolume",
+      "description": "get the inverse of the cell volume for cell 'id' after pore volumes have been initialized and FlowEngine:iniVoidVolumes = True, or compressibility scheme active with FlowEngine::fluidBulkModulus."
+    },
+    {
+      "name": "getCellPImposed",
+      "description": "get the status of cell 'id' wrt imposed pressure."
+    },
+    {
+      "name": "getCellPorosity",
+      "description": "Measure cell porosity in position pos[0],pos[1],pos[2]."
+    },
+    {
+      "name": "getCellPressure",
+      "description": "get pressure by cell 'id'. Note: getting pressure at position (x,y,z) might be more usefull, see :yref`FlowEngine::getPorePressure`:"
+    },
+    {
+      "name": "getCellSaturation",
+      "description": "Measure cell saturation in position pos[0],pos[1],pos[2]"
+    },
+    {
+      "name": "getCellTImposed",
+      "description": "get the status of cell 'id' wrt imposed temperature."
+    },
+    {
+      "name": "getCellTemperature",
+      "description": "get pressure in cell 'id'."
+    },
+    {
+      "name": "getCellVelocity",
+      "description": "Get relative cell velocity at position pos[0] pos [1] pos[2]."
+    },
+    {
+      "name": "getCellVolume",
+      "description": "Get cell volume in position pos[0],pos[1],pos[2]."
+    },
+    {
+      "name": "getConductivity",
+      "description": "get conductivity from cell and throat, with throat between 0 and 3 (same ordering as incident cells)"
+    },
+    {
+      "name": "getConstrictions",
+      "description": "Get the list of constriction radii (inscribed circle) for all finite facets (if all==True) or all facets not incident to a virtual bounding sphere (if all==False).  When all facets are returned, negative radii denote facet incident to one or more fictious spheres."
+    },
+    {
+      "name": "getConstrictionsFull",
+      "description": "Get the list of constrictions (inscribed circle) for all finite facets (if all==True), or all facets not incident to a fictious bounding sphere (if all==False). When all facets are returned, negative radii denote facet incident to one or more fictious spheres. The constrictions are returned in the format {{cell1,cell2}{rad,nx,ny,nz}}"
+    },
+    {
+      "name": "getCrackArea",
+      "description": "get the total cracked area."
+    },
+    {
+      "name": "getCrackFabricVector",
+      "description": "get the crack fabric vector."
+    },
+    {
+      "name": "getCrackVolume",
+      "description": "get the total cracked volume."
+    },
+    {
+      "name": "getDiffusionCoeff",
+      "description": "get the ratio of throat cross-sectional area and distance between two cells"
+    },
+    {
+      "name": "getEnteredThroatRatio",
+      "description": "Get ratio of entered to total cracked cells."
+    },
+    {
+      "name": "getEquivalentCompressibility",
+      "description": "Return the equivalent compressibility used for modeling air water mixture in cavity."
+    },
+    {
+      "name": "getIncidentCells",
+      "description": "get ids of all cells of which vertexId is a vertex. Typical usage is for getting cells indident to a boundary."
+    },
+    {
+      "name": "getNeighbors",
+      "description": "get 4 neigboring cells"
+    },
+    {
+      "name": "getNumCracks",
+      "description": "get the number of cracks."
+    },
+    {
+      "name": "getPorePressure",
+      "description": "Measure pore pressure in position pos[0],pos[1],pos[2]"
+    },
+    {
+      "name": "getPoreTemperature",
+      "description": "Measure pore pressure in position pos[0],pos[1],pos[2]"
+    },
+    {
+      "name": "getTotalSpecimenVolume",
+      "description": "get the total specimen volume"
+    },
+    {
+      "name": "getVertices",
+      "description": "get the vertices of a cell"
+    },
+    {
+      "name": "getWaterVolume",
+      "description": "get the total water volume (entered cracks only)."
+    },
+    {
+      "name": "imposeCavity",
+      "description": "Cell with location 'pos' participates in a cavity (high conductivity and no volume factoring). The index of the condition is returned (for multiple imposed pressures at different points)."
+    },
+    {
+      "name": "imposeFlux",
+      "description": "Impose a flux in cell located  at 'pos' (i.e. add a source term in the flow problem). Outflux positive, influx negative."
+    },
+    {
+      "name": "imposePressure",
+      "description": "Impose pressure in cell of location 'pos'. The index of the condition is returned (for multiple imposed pressures at different points)."
+    },
+    {
+      "name": "imposePressureFromId",
+      "description": "Impose pressure in cell of index 'id' (after remeshing the same condition will apply for the same location, regardless of what the new cell index is at this location). The index of the condition itself is returned (for multiple imposed pressures at different points)."
+    },
+    {
+      "name": "initializeVolumes",
+      "description": "initialize pore volumes."
+    },
+    {
+      "name": "insertMicroPores",
+      "description": "run to inscribe spheres in a desired fraction of existing pores."
+    },
+    {
+      "name": "isCellNeighbor",
+      "description": "check if cell1 and cell2 are neigbors."
+    },
+    {
+      "name": "metisUsed",
+      "description": "check wether metis lib is effectively used"
+    },
+    {
+      "name": "nCells",
+      "description": "get the total number of finite cells in the triangulation."
+    },
+    {
+      "name": "nGasCells",
+      "description": "Get number of cells in gas mesh. Can only be used if PartialSatEngine::getGasPerm=True."
+    },
+    {
+      "name": "normalLubForce",
+      "description": "Return the normal lubrication force on sphere idSph."
+    },
+    {
+      "name": "normalVect",
+      "description": "Return the normal vector between particles."
+    },
+    {
+      "name": "normalVelocity",
+      "description": "Return the normal velocity of the interaction."
+    },
+    {
+      "name": "onlySpheresInteractions",
+      "description": "Return the id of the interaction only between spheres."
+    },
+    {
+      "name": "pressureProfile",
+      "description": "Measure pore pressure in 6 equally-spaced points along the height of the sample"
+    },
+    {
+      "name": "printPorosity",
+      "description": "save the porosity of the cell network."
+    },
+    {
+      "name": "printVertices",
+      "description": "Export vertex positions and types"
+    },
+    {
+      "name": "reloadSolver",
+      "description": "use after reloading a partialSat simulation and before running next step"
+    },
+    {
+      "name": "resetLinearSystem",
+      "description": "trigger rebuild of the linear system while keeping the same triangulation"
+    },
+    {
+      "name": "savePermeabilityNetworkVTK",
+      "description": "Save permeability network as connections between cell centers"
+    },
+    {
+      "name": "saveUnsatVtk",
+      "description": "Save pressure and saturation field in vtk format. Specify a folder name for output. The cells adjacent to the bounding spheres are generated conditionally based on withBoundaries (not compatible with periodic boundaries)"
+    },
+    {
+      "name": "saveVtk",
+      "description": "Save pressure field in vtk format. Specify a folder name for output. The cells adjacent to the bounding spheres are generated conditionally based on FlowEngine::withBoundaries (not compatible with periodic boundaries)"
+    },
+    {
+      "name": "setBoundaryNormal",
+      "description": "define the unit outward-pointing normal of a boundary (0<=index<=5)."
+    },
+    {
+      "name": "setCellPImposed",
+      "description": "make cell 'id' assignable with imposed pressure."
+    },
+    {
+      "name": "setCellPressure",
+      "description": "set pressure in cell 'id'."
+    },
+    {
+      "name": "setCellSaturation",
+      "description": "set temperature in cell 'id'."
+    },
+    {
+      "name": "setCellTImposed",
+      "description": "make cell 'id' assignable with imposed temperature."
+    },
+    {
+      "name": "setCellTemperature",
+      "description": "set temperature in cell 'id'."
+    },
+    {
+      "name": "setImposedPressure",
+      "description": "Set pressure value at the point indexed 'cond'."
+    },
+    {
+      "name": "shearLubForce",
+      "description": "Return the shear lubrication force on sphere idSph."
+    },
+    {
+      "name": "shearLubTorque",
+      "description": "Return the shear lubrication torque on sphere idSph."
+    },
+    {
+      "name": "shearVelocity",
+      "description": "Return the shear velocity of the interaction."
+    },
+    {
+      "name": "surfaceDistanceParticle",
+      "description": "Return the distance between particles."
+    },
+    {
+      "name": "surfaceSolidThroatInPore",
+      "description": "returns solid area in the throat (index 0-3), keeping only that part of the throat in cell."
+    },
+    {
+      "name": "updateBCs",
+      "description": "Update the boundary condition to reflect changes of boundary pressure (needed typically after changing FlowEngine::bndCondValue). It is not sufficient to reflect changes of the type of boundary condition (FlowEngine::bndCondIsPressure), in such case re-triangulation or at least updating the linear system is needed (see FlowEngine::updateTriangulation and FlowEngine::updateLinearSystem). Conversely, the update is not necessary for changing the value of point-wise imposed pressure (FlowEngine::imposePressure)"
+    },
+    {
+      "name": "updateVolumes",
+      "description": "update rates of volume change"
+    },
+    {
+      "name": "volume",
+      "description": "Returns the volume of Voronoi's cell of a sphere."
     }
   ]
 }

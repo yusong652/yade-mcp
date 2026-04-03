@@ -7,17 +7,20 @@
     {
       "name": "angleTurned",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "How much have we turned so far. |yupdate| [rad]"
     },
     {
       "name": "angularVelocities",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of angular velocities; manadatorily of same length as times. [rad/s]"
     },
     {
       "name": "angularVelocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Angular velocity. [rad/s]"
     },
     {
       "name": "ids",
@@ -27,37 +30,44 @@
     {
       "name": "linearVelocity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Linear velocity [m/s]"
     },
     {
       "name": "rotateAroundZero",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If True, bodies will not rotate around their centroids, but rather around ``zeroPoint``."
     },
     {
       "name": "rotationAxis",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)"
+      "default": "Vector3(1,0,0)",
+      "description": "Axis of rotation (direction); will be normalized automatically."
     },
     {
       "name": "slope",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Axial translation per radian turn (can be negative) [m/rad]"
     },
     {
       "name": "times",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "List of time points at which velocities are given; must be increasing [s]"
     },
     {
       "name": "wrap",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Wrap t if t>times_n, i.e. t_wrapped=t-N*(times_n-times_0)"
     },
     {
       "name": "zeroPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Point around which bodies will rotate if ``rotateAroundZero`` is True"
     }
   ]
 }

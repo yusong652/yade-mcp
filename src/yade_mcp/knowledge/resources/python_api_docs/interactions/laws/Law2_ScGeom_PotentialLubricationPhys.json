@@ -7,52 +7,72 @@
     {
       "name": "MaxDist",
       "type": "float",
-      "default": "2.0"
+      "default": "2.0",
+      "description": "Maximum distance (d/a) for the interaction"
     },
     {
       "name": "MaxIter",
       "type": "int",
-      "default": "30"
+      "default": "30",
+      "description": "Maximum iterations for numerical resolution (Dichotomy and Newton-Rafson)"
     },
     {
       "name": "SolutionTol",
       "type": "float",
-      "default": "1e-08"
+      "default": "1e-08",
+      "description": "Tolerance for numerical resolution (Dichotomy and Newton-Rafson)"
     },
     {
       "name": "activateRollLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate roll lubrication (default: true)"
     },
     {
       "name": "activateTangencialLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate tangencial lubrication (default: true)"
     },
     {
       "name": "activateTwistLubrication",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activate twist lubrication (default: true)"
     },
     {
       "name": "maxSubSteps",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "max recursion depth of adaptative timestepping in the theta-method, the minimal time interval is thus"
     },
     {
       "name": "potential",
       "type": "GenericPotential",
-      "default": "<GenericPotential instance at 0x2173040>"
+      "default": "<GenericPotential instance at 0x2173040>",
+      "description": "Physical potential force between spheres."
     },
     {
       "name": "resolution",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Change normal component resolution method, 0: Iterative exact resolution with substepping (theta method, linear contact), 1: Newton-Rafson dimensionless resolution (theta method, linear contact), 2: (default) Dichotomy dimensionless resolution (theta method, linear contact), 3: Exact dimensionless solution with contact prediction (theta method, linear contact). Method 3 is better if the volumic fraction is not too high. Use 2 otherwise."
     },
     {
       "name": "theta",
       "type": "float",
-      "default": "0.55"
+      "default": "0.55",
+      "description": "parameter of the 'theta'-method, 1: backward Euler, 0.5: trapezoidal rule, 0: not used,  0.55: suggested optimum)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "getStressForEachBody",
+      "description": "Get stresses tensors for each bodies: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
+    },
+    {
+      "name": "getTotalStresses",
+      "description": "Get total stresses tensors: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
     }
   ]
 }

@@ -7,12 +7,14 @@
     {
       "name": "Key",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "A string appended at the end of all files, use it to name simulations."
     },
     {
       "name": "UnbalancedForce",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "mean resultant forces divided by mean contact force"
     },
     {
       "name": "boxVolume",
@@ -27,87 +29,104 @@
     {
       "name": "currentStrainRate1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "current strain rate in direction 1 - converging to"
     },
     {
       "name": "currentStrainRate2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "current strain rate in direction 2 - converging to"
     },
     {
       "name": "currentStrainRate3",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "current strain rate in direction 3 - converging to"
     },
     {
       "name": "depth",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "size of the box (2-axis) |yupdate|"
     },
     {
       "name": "depth0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference size for strain definition. See"
     },
     {
       "name": "externalWork",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Mechanical work associated to the boundary conditions, i.e. $\\int_{\\partial \\Omega} \\mat{T} \\cdot  \\mat{u} ds$ with $\\mat{T}$ the surface traction and $\\mat{u}$ the displacement at the boundary. |yupdate|"
     },
     {
       "name": "finalMaxMultiplier",
       "type": "float",
-      "default": "1.00001"
+      "default": "1.00001",
+      "description": "max multiplier of diameters during internal compaction (secondary precise adjustment -"
     },
     {
       "name": "frictionAngleDegree",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Value of friction used in the simulation if (updateFrictionAngle)"
     },
     {
       "name": "goal1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "prescribed stress/strain rate on axis 0, as defined by"
     },
     {
       "name": "goal2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "prescribed stress/strain rate on axis 1, as defined by"
     },
     {
       "name": "goal3",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "prescribed stress/strain rate on axis 2, as defined by"
     },
     {
       "name": "height",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "size of the box (1-axis) |yupdate|"
     },
     {
       "name": "height0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference size for strain definition. See"
     },
     {
       "name": "internalCompaction",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Switch between 'external' (walls) and 'internal' (growth of particles) compaction."
     },
     {
       "name": "legacyStressDamping",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true, the legacy formula behind"
     },
     {
       "name": "maxMultiplier",
       "type": "float",
-      "default": "1.001"
+      "default": "1.001",
+      "description": "max multiplier of diameters during internal compaction (initial fast increase -"
     },
     {
       "name": "max_vel",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Order of magnitude of maximum allowed walls velocity during stress control [m/s]. The corresponding value superseeds the one assigned by the stress controller if the later is higher. max_vel can be set to infinity in many cases, but sometimes helps stabilizing packings. Based on this value, different maxima are computed for each axis based on the dimensions of the sample (while keeping the average value equal to max_vel) so that if each boundary moves at its maximum velocity, the strain rate will be isotropic (see e.g."
     },
     {
       "name": "max_vel1",
@@ -127,7 +146,8 @@
     {
       "name": "meanStress",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Mean stress in the packing. |yupdate|"
     },
     {
       "name": "particlesVolume",
@@ -142,12 +162,14 @@
     {
       "name": "previousMultiplier",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "|yupdate|"
     },
     {
       "name": "previousStress",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "|yupdate|"
     },
     {
       "name": "radiusControlInterval",
@@ -162,7 +184,8 @@
     {
       "name": "stiffnessUpdateInterval",
       "type": "int",
-      "default": "10"
+      "default": "10",
+      "description": "iteration period for measuring the resultant packing-boundaries stiffnesses, for stress servo-control"
     },
     {
       "name": "strain",
@@ -172,137 +195,178 @@
     {
       "name": "strainDamping",
       "type": "float",
-      "default": "0.9997"
+      "default": "0.9997",
+      "description": "factor used for smoothing changes in effective strain rate. If target rate is TR, then (1-damping)*(TR-currentRate) will be added at each iteration. With damping=0, rate=target all the time. With damping=1, it doesn't change."
     },
     {
       "name": "strainRate1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "target strain rate in direction 1 (./s, >0 for compression)"
     },
     {
       "name": "strainRate2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "target strain rate in direction 2 (./s, >0 for compression)"
     },
     {
       "name": "strainRate3",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "target strain rate in direction 3 (./s, >0 for compression)"
     },
     {
       "name": "stressControl_1",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Switch to choose a stress or a strain control in directions 1"
     },
     {
       "name": "stressControl_2",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Switch to choose a stress or a strain control in directions 2"
     },
     {
       "name": "stressControl_3",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Switch to choose a stress or a strain control in directions 3"
     },
     {
       "name": "stressDamping",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "wall damping coefficient for the stress control - wallDamping=0 implies a (theoretical) perfect control, wallDamping=1 means no movement"
     },
     {
       "name": "stressMask",
       "type": "int",
-      "default": "7"
+      "default": "7",
+      "description": "Bitmask determining wether the imposed"
     },
     {
       "name": "thickness",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "thickness of boxes (needed by some functions)"
     },
     {
       "name": "updateFrictionAngle",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Switch to activate the update of the intergranular frictionto the value"
     },
     {
       "name": "updatePorosity",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true,"
     },
     {
       "name": "volumetricStrain",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volumetric strain (see"
     },
     {
       "name": "wall_back_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_back_id",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "id of boundary ; coordinate 2- (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "wall_bottom_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_bottom_id",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "id of boundary ; coordinate 1- (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "wall_front_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_front_id",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "id of boundary ; coordinate 2+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "wall_left_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_left_id",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "id of boundary ; coordinate 0- (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "wall_right_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_right_id",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "id of boundary ; coordinate 0+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "wall_top_activated",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "if true, this wall moves according to the target value (stress or strain rate)."
     },
     {
       "name": "wall_top_id",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "id of boundary ; coordinate 1+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
     },
     {
       "name": "width",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "size of the box (0-axis) |yupdate|"
     },
     {
       "name": "width0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference size for strain definition. See"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setContactProperties",
+      "description": "Assign a new friction angle (degrees) to dynamic bodies and relative interactions"
+    },
+    {
+      "name": "strainRate",
+      "description": "Current strain rate in a vector d/dt(exx,eyy,ezz)."
+    },
+    {
+      "name": "stress",
+      "description": "Returns the average stress on boundary 'id'. Here, 'id' refers to the internal numbering of boundaries, between 0 and 5."
     }
   ]
 }

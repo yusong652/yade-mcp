@@ -7,47 +7,56 @@
     {
       "name": "cn",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Normal viscous constant defined as $\\c_{n}=c_{n,crit}\\beta_n$."
     },
     {
       "name": "cn_crit",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Normal viscous constant for ctitical damping defined as $\\c_{n}=C_{n,crit}\\beta_n$."
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "normalViscous",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal viscous component"
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     }
   ]
 }

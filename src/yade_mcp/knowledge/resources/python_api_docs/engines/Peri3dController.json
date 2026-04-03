@@ -7,147 +7,176 @@
     {
       "name": "doneHook",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Python command (as string) to run when"
     },
     {
       "name": "goal",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Goal state; only the upper triangular matrix is considered; each component is either prescribed stress or strain, depending on"
     },
     {
       "name": "lenPe",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "lenPs",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "maxStrain",
       "type": "float",
-      "default": "1000000.0"
+      "default": "1000000.0",
+      "description": "Maximal asolute value of"
     },
     {
       "name": "maxStrainRate",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Maximal absolute value of strain rate (both normal and shear components of"
     },
     {
       "name": "mod",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "Predictor modificator, by trail-and-error analysis the value 0.1 was found as the best."
     },
     {
       "name": "nSteps",
       "type": "int",
-      "default": "1000"
+      "default": "1000",
+      "description": "Number of steps of the simulation."
     },
     {
       "name": "pathSizes",
       "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)"
+      "default": "Vector6i(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "pathsCounter",
       "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)"
+      "default": "Vector6i(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "pe",
       "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)"
+      "default": "Vector6i(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "poissonEstimation",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Estimation of macroscopic Poisson's ratio, used used for the first simulation step"
     },
     {
       "name": "progress",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Actual progress of the simulation with Controller."
     },
     {
       "name": "ps",
       "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)"
+      "default": "Vector6i(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "strain",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current strain (deformation) vector ($\\varepsilon_x$,$\\varepsilon_y$,$\\varepsilon_z$,$\\gamma_{yz}$,$\\gamma_{zx}$,$\\gamma_{xy}$) |yupdate|."
     },
     {
       "name": "strainGoal",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "strainRate",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current strain rate vector."
     },
     {
       "name": "stress",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current stress vector ($\\sigma_x$,$\\sigma_y$,$\\sigma_z$,$\\tau_{yz}$,$\\tau_{zx}$,$\\tau_{xy}$)|yupdate|."
     },
     {
       "name": "stressGoal",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Peri3dController internal variable"
     },
     {
       "name": "stressIdeal",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Ideal stress vector at current time step."
     },
     {
       "name": "stressMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "mask determining whether components of"
     },
     {
       "name": "stressRate",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current stress rate vector (that is prescribed, the actual one slightly differ)."
     },
     {
       "name": "xxPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "\"Time function\" (piecewise linear) for xx direction. Sequence of couples of numbers. First number is time, second number desired value of respective quantity (stress or strain). The last couple is considered as final state (equal to ("
     },
     {
       "name": "xyPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "Time function for xy direction, see"
     },
     {
       "name": "youngEstimation",
       "type": "float",
-      "default": "1e+20"
+      "default": "1e+20",
+      "description": "Estimation of macroscopic Young's modulus, used for the first simulation step"
     },
     {
       "name": "yyPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "Time function for yy direction, see"
     },
     {
       "name": "yzPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "Time function for yz direction, see"
     },
     {
       "name": "zxPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "Time function for zx direction, see"
     },
     {
       "name": "zzPath",
       "type": "list",
-      "default": "[Vector2(1,1)]"
+      "default": "[Vector2(1,1)]",
+      "description": "Time function for zz direction, see"
     }
   ]
 }

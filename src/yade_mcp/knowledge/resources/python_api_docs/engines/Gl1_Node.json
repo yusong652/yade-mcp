@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_Node",
+  "category": "engines",
+  "parent": "GlShapeFunctor",
+  "description": "Renders Node object\n\n.. ystaticattr:: Gl1_Node.quality(=1.0)\n\n\tChange discretization level of spheres. quality>1  for better image quality, at the price of more cpu/gpu usage, 0<quality<1 for faster rendering. If mono-color spheres are displayed (Gl1_Node::stripes = False), quality mutiplies Gl1_Node::glutSlices and Gl1_Node::glutStacks. If striped spheres are displayed (Gl1_Node::stripes = True), only integer increments are meaningfull : quality=1 and quality=1.9 will give the same result, quality=2 will give finer result.\n\n.. ystaticattr:: Gl1_Node.wire(=false)\n\n\tOnly show wireframe (controlled by ``glutSlices`` and ``glutStacks``.\n\n.. ystaticattr:: Gl1_Node.stripes(=false)\n\n\tIn non-wire rendering, show stripes clearly showing particle rotation.\n\n.. ystaticattr:: Gl1_Node.localSpecView(=true)\n\n\tCompute specular light in local eye coordinate system.\n\n.. ystaticattr:: Gl1_Node.glutSlices(=12)\n\n\tBase number of sphere slices, multiplied by Gl1_Node::quality before use); not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)\n\n.. ystaticattr:: Gl1_Node.glutStacks(=6)\n\n\tBase number of sphere stacks, multiplied by Gl1_Node::quality before use; not used with ``stripes`` (see `glut{Solid,Wire}Sphere reference <http://www.opengl.org/documentation/specs/glut/spec3/node81.html>`_)",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

@@ -7,12 +7,14 @@
     {
       "name": "Cd",
       "type": "float",
-      "default": "0.47"
+      "default": "0.47",
+      "description": "Drag coefficient <http://en.wikipedia.org/wiki/Drag_coefficient>`_."
     },
     {
       "name": "Rho",
       "type": "float",
-      "default": "1.225"
+      "default": "1.225",
+      "description": "Density of the medium (fluid or air), by default - the density of the air."
     },
     {
       "name": "ids",

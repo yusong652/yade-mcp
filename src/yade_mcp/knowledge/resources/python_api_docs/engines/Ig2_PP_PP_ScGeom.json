@@ -7,32 +7,38 @@
     {
       "name": "accuracyTol",
       "type": "float",
-      "default": "1e-07"
+      "default": "1e-07",
+      "description": "accuracy desired, tolerance criteria for SOCP"
     },
     {
       "name": "areaStep",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "Angular step (degrees) to calculate"
     },
     {
       "name": "calContactArea",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether to calculate jointLength for 2-D contacts and contactArea for 2-D and 3-D contacts"
     },
     {
       "name": "twoDdir",
       "type": "Vector3",
-      "default": "Vector3(0,1,0)"
+      "default": "Vector3(0,1,0)",
+      "description": "Direction of 2D"
     },
     {
       "name": "twoDimension",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether the contact is 2-D"
     },
     {
       "name": "unitWidth2D",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Unit width in 2D"
     }
   ]
 }

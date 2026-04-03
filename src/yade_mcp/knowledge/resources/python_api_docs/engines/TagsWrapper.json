@@ -1,0 +1,7 @@
+{
+  "name": "TagsWrapper",
+  "category": "engines",
+  "parent": "",
+  "description": "Container emulating dictionary semantics for accessing tags associated with simulation. Tags are accesed by strings.",
+  "attributes": []
+}

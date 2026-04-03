@@ -7,67 +7,80 @@
     {
       "name": "counter",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Number that will be appended to fileBase when the next snapshot is saved (incremented at every save). |yupdate|"
     },
     {
       "name": "deadTimeout",
       "type": "float",
-      "default": "3.0"
+      "default": "3.0",
+      "description": "Timeout for 3d operations (opening new view, saving snapshot); after timing out, throw exception (or only report error if *ignoreErrors*) and make myself"
     },
     {
       "name": "fileBase",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Basename for snapshots"
     },
     {
       "name": "format",
       "type": "str",
-      "default": "'PNG'"
+      "default": "'PNG'",
+      "description": "Format of snapshots (one of JPEG, PNG, EPS, PS, PPM, BMP) `QGLViewer documentation <http://www.libqglviewer.com/refManual/classQGLViewer.html#abbb1add55632dced395e2f1b78ef491c>`_. File extension will be lowercased *format*. Validity of format is not checked."
     },
     {
       "name": "ignoreErrors",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Only report errors instead of throwing exceptions, in case of timeouts."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "msecSleep",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "number of msec to sleep after snapshot (to prevent 3d hw problems) [ms]"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "plot",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Name of field in"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "snapshots",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Files that have been created so far"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     }
   ]
 }

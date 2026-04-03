@@ -7,17 +7,20 @@
     {
       "name": "nRefineOctree",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "The number of refinements performed by the Octree algorithm used to compute the overlap volume between two particles. Default is 5. Note: (nr of layers, effective nr of integration elements): (1,1), (2,8), (3,64), (4,512), (5,4096), (n,8^(n-1))."
     },
     {
       "name": "smearCoeffOctree",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Smearing coefficient for the smeared Heaviside step function in the overlap volume integration. The transition width, or smearing width, is equal to half the diagonal of the smallest integration cell divided by the smearing coefficient."
     },
     {
       "name": "useAABE",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, use the provided (locally) axis-aligned bounding ellipsoid (AABE) to reduce the potential overlap volume between the particles. Increases accuracy of the Octree algrithm because the smallest integration cells will be smaller."
     }
   ]
 }

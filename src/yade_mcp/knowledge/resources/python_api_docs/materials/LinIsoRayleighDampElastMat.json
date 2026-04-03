@@ -7,27 +7,32 @@
     {
       "name": "alpha",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Mass propotional damping constant of Rayleigh Damping."
     },
     {
       "name": "beta",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Stiffness propotional damping constant of Rayleigh Damping."
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Density of the material."
     },
     {
       "name": "poissonratio",
       "type": "float",
-      "default": "0.33"
+      "default": "0.33",
+      "description": "Poisson ratio. Initially aluminium."
     },
     {
       "name": "youngmodulus",
       "type": "float",
-      "default": "78000.0"
+      "default": "78000.0",
+      "description": "Young's modulus. Initially aluminium."
     }
   ]
 }

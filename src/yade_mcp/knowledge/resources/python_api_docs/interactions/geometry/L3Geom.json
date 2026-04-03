@@ -7,42 +7,50 @@
     {
       "name": "F",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Applied force in local coordinates [debugging only, will be removed]"
     },
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(1.011846442682872922e-320,0,6.944499766239071868e-310)"
+      "default": "Vector3(1.011846442682872922e-320,0,6.944499766239071868e-310)",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(2.547345948847582943e-316,0,6.944499766182155505e-310)"
+      "default": "Vector3(2.547345948847582943e-316,0,6.944499766182155505e-310)",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|"
     },
     {
       "name": "trsf",
       "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Transformation (rotation) from global to local coordinates. (the translation part is in"
     },
     {
       "name": "u",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Displacement components, in local coordinates. |yupdate|"
     },
     {
       "name": "u0",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Zero displacement value; u0 should be always subtracted from the *geometrical* displacement *u* computed by appropriate"
     }
   ]
 }

@@ -7,27 +7,32 @@
     {
       "name": "disPath",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Loading path, where each Vector3 contains desired normal displacement and two components of the shear displacement (in local coordinate system, which is being tracked automatically. If shorter than"
     },
     {
       "name": "displIsRel",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether displacement values in *disPath* are normalized by reference contact length (r1+r2 for 2 spheres)."
     },
     {
       "name": "doneHook",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Python command (as string) to run when end of the path is achieved. If empty, the engine will be set"
     },
     {
       "name": "hooks",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Python commands to be run when the corresponding point in path is reached, before doing other things in that particular step. See also"
     },
     {
       "name": "idWeight",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Float, usually \u2208\u23290,1\u232a, determining on how are displacements distributed between particles (0 for id1, 1 for id2); intermediate values will apply respective part to each of them. This parameter is ignored with 6-DoFs"
     },
     {
       "name": "ids",
@@ -37,7 +42,8 @@
     {
       "name": "pathSteps",
       "type": "list",
-      "default": "[1]"
+      "default": "[1]",
+      "description": "Step number for corresponding values in"
     },
     {
       "name": "ptGeom",
@@ -52,12 +58,14 @@
     {
       "name": "refLength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Reference contact length, for rendering only."
     },
     {
       "name": "renderLength",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Characteristic length for the purposes of rendering, set equal to the smaller radius."
     },
     {
       "name": "rotGeom",
@@ -72,37 +80,44 @@
     {
       "name": "rotPath",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Rotational components of the loading path, where each item contains torsion and two bending rotations in local coordinates. If shorter than"
     },
     {
       "name": "rotWeight",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Float \u2208\u23290,1\u232a determining whether shear displacement is applied as rotation or displacement on arc (0 is displacement-only, 1 is rotation-only). Not effective when mutual rotation is specified."
     },
     {
       "name": "step",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Step number in which this engine is active; determines position in path, using pathSteps."
     },
     {
       "name": "trsf",
       "type": "Matrix3",
-      "default": "Matrix3(1.39804328609528886e-76,1.39804328609528886e-76,1.39804328609528886e-76,"
+      "default": "Matrix3(1.39804328609528886e-76,1.39804328609528886e-76,1.39804328609528886e-76,",
+      "description": "Transformation matrix for the local coordinate system. |yupdate|"
     },
     {
       "name": "uGeom",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current generalized displacements (3 displacements, 3 rotations), as stored in the interation itself. They should corredpond to"
     },
     {
       "name": "uTest",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Current generalized displacements (3 displacements, 3 rotations), as they should be according to this"
     },
     {
       "name": "uuPrev",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)"
+      "default": "Vector6(0,0,0, 0,0,0)",
+      "description": "Generalized displacement values reached in the previous step, for knowing which increment to apply in the current step."
     }
   ]
 }

@@ -7,12 +7,14 @@
     {
       "name": "allowBiggerThanPeriod",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, tests on bodies sizes will be disabled, and the simulation will run normaly even if bodies larger than period are found. It can be useful when the periodic problem include e.g. a floor modelized with wall/box/facet.\nBe sure you know what you are doing if you touch this flag. The result is undefined if one large body moves out of the (0,0,0) period."
     },
     {
       "name": "avoidSelfInteractionMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "This mask is used to avoid the interactions inside a group of particles. To do so, the particles must have the exact same mask and that mask should have one bit in common with this"
     },
     {
       "name": "boundDispatcher",
@@ -22,42 +24,50 @@
     {
       "name": "doSort",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Do forced resorting of interactions."
     },
     {
       "name": "fastestBodyMaxDist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normalized maximum displacement of the fastest body since last run; if >= 1, we could get out of bboxes and will trigger full run. |yupdate|"
     },
     {
       "name": "keepListsShort",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "if true remove bounds of non-existent or unbounded bodies from the lists |yupdate|; turned true automatically in MPI mode and if bodies are erased with"
     },
     {
       "name": "minSweepDistFactor",
       "type": "float",
-      "default": "0.1"
+      "default": "0.1",
+      "description": "Minimal distance by which enlarge all bounding boxes; superseeds computed value of verletDist when lower that (minSweepDistFactor x verletDist)."
     },
     {
       "name": "newton",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "reference to active"
     },
     {
       "name": "numAction",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Cummulative number of collision detection."
     },
     {
       "name": "numReinit",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Cummulative number of bound array re-initialization."
     },
     {
       "name": "overlapTolerance",
       "type": "float",
-      "default": "1e-07"
+      "default": "1e-07",
+      "description": "Tolerance on determining overlap. In rare cases different parts of the code can inconsistently lead to different results in terms of overlap, with false negative by spatialOverlapPeri possibly leading to nasty bugs in contact detection (false positive are harmless). This tolerance is to avoid false negative, the value can be understood as relative to 1 (i.e. independent of particle size or any other reference length). The default should be ok."
     },
     {
       "name": "periodic",
@@ -67,17 +77,20 @@
     {
       "name": "smartInsertErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Use an algorithm optimized for heavy insert/delete (avoid initSort) - experimental."
     },
     {
       "name": "sortAxis",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Axis for the initial contact detection."
     },
     {
       "name": "sortThenCollide",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Separate sorting and colliding phase; it is MUCH slower, but all interactions are processed at every step; this effectively makes the collider non-persistent, not remembering last state. (The default behavior relies on the fact that inversions during insertion sort are overlaps of bounding boxes that just started/ceased to exist, and only processes those; this makes the collider much more efficient.)"
     },
     {
       "name": "strideActive",
@@ -87,17 +100,30 @@
     {
       "name": "targetInterv",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "(experimental) Target number of iterations between bound update, used to define a smaller sweep distance for slower grains if >0, else always use 1*verletDist. Useful in simulations with strong velocity contrasts between slow bodies and fast bodies."
     },
     {
       "name": "updatingDispFactor",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "(experimental) Displacement factor used to trigger bound update: the bound is updated only if updatingDispFactor*disp>sweepDist when >0, else all bounds are updated."
     },
     {
       "name": "verletDist",
       "type": "float",
-      "default": "-0.5"
+      "default": "-0.5",
+      "description": "Length by which to enlarge particle bounds, to avoid running collider at every step. Stride disabled if zero. Negative value will trigger automatic computation, so that the real value will be *verletDist* \u00d7 minimum spherical particle radius; if there are no spherical particles, it will be disabled. The actual length added to one bound can be only a fraction of verletDist when"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dumpBounds",
+      "description": "Return representation of the internal sort data. The format is ``([...],[...],[...])`` for 3 axes, where each ``...`` is a list of entries (bounds). The entry is a tuple with the fllowing items:"
+    },
+    {
+      "name": "isActivated",
+      "description": "Return true if collider needs execution at next iteration."
     }
   ]
 }

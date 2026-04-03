@@ -7,112 +7,134 @@
     {
       "name": "Capillar",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "True, if capillar forces need to be added."
     },
     {
       "name": "CapillarType",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Different types of capillar interaction: Willett_numeric, Willett_analytic [Willett2000]_ , Weigert [Weigert1999]_ , Rabinovich [Rabinov2005]_ , Lambert (simplified, corrected Rabinovich model) [Lambert2008]_"
     },
     {
       "name": "Vb",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Liquid bridge volume [m^3]"
     },
     {
       "name": "cn",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "cs",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "dcap",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Damping coefficient for the capillary phase [-]"
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "en",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Restitution coefficient in normal direction"
     },
     {
       "name": "et",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Restitution coefficient in tangential direction"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "gamma",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Surface tension [N/m]"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Normal elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Shear elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "lubrication",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient)."
     },
     {
       "name": "mR",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Rolling resistance, see [Zhou1999536]_."
     },
     {
       "name": "mRtype",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_."
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "roughnessScale",
       "type": "float",
-      "default": "0.001"
+      "default": "0.001",
+      "description": "if lubrication is activated, roughness scale considered for the particles to evaluate the effective restitution coefficient."
     },
     {
       "name": "tc",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Contact time"
     },
     {
       "name": "theta",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Contact angle [\u00b0]"
     },
     {
       "name": "viscoDyn",
       "type": "float",
-      "default": "0.001"
+      "default": "0.001",
+      "description": "if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

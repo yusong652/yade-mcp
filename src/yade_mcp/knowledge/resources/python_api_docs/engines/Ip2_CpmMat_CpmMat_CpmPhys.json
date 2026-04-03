@@ -7,12 +7,14 @@
     {
       "name": "E",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "cohesiveThresholdIter",
       "type": "int",
-      "default": "10"
+      "default": "10",
+      "description": "Should new contacts be cohesive? They will before this iter#, they will not be afterwards. If 0, they will never be. If negative, they will always be created as cohesive (10 by default)."
     }
   ]
 }

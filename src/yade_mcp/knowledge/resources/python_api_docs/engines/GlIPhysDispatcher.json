@@ -1,0 +1,36 @@
+{
+  "name": "GlIPhysDispatcher",
+  "category": "engines",
+  "parent": "Dispatcher",
+  "description": "Dispatcher calling functors<GlIPhysFunctor> based on received argument type(s).",
+  "attributes": [
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python."
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g."
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispFunctor",
+      "description": "Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws."
+    },
+    {
+      "name": "dispMatrix",
+      "description": "Return dictionary with contents of the dispatch matrix."
+    }
+  ]
+}

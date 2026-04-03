@@ -7,62 +7,74 @@
     {
       "name": "Fn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Linear-elastic part of the normal force of the contact"
     },
     {
       "name": "Fv",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Viscous part of the normal force of the contact"
     },
     {
       "name": "cn",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Normal viscous constant"
     },
     {
       "name": "cs",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Shear viscous constant"
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "mR",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Rolling resistance, see [Zhou1999536]_."
     },
     {
       "name": "mRtype",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     }
   ]
 }

@@ -12,7 +12,8 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Keep interactions even if particles go away from each other (only useful if another contact law is used as well)."
     },
     {
       "name": "shearCreep",
@@ -22,7 +23,8 @@
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing."
     },
     {
       "name": "viscosity",
@@ -32,7 +34,18 @@
     {
       "name": "volumePower",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "The exponent $a$ on the overlap volume within the contact law. Setting to 0.5 gives a near-linear relationship of force with respect to penetration distance for spheres."
+    }
+  ],
+  "methods": [
+    {
+      "name": "initPlasticDissipation",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+    },
+    {
+      "name": "plasticDissipation",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_VolumeGeom_FrictPhys_Elastic::traceEnergy is true."
     }
   ]
 }

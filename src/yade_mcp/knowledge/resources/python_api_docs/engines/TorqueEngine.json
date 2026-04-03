@@ -12,7 +12,8 @@
     {
       "name": "moment",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Torque value to be applied."
     }
   ]
 }

@@ -3,5 +3,11 @@
   "category": "engines",
   "parent": "IGeomFunctor",
   "description": "Creates or updates a ScGeom instance representing the contact of two convex LevelSet-shaped bodies after executing a master-slave algorithm that combines distance function $\\phi$ (LevelSet.distField) with surface nodes $\\vec{N}$ (LevelSet.surfNodes) [Duriez2021a]_ [Duriez2021b]_. Denoting $S$,...",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "normalMismatch",
+      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment."
+    }
+  ]
 }

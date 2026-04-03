@@ -7,22 +7,32 @@
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "extents",
       "type": "Vector3",
-      "default": "Vector3(1,8.48798316386108926e-313,8.221252346798342495e-321)"
+      "default": "Vector3(1,8.48798316386108926e-313,8.221252346798342495e-321)",
+      "description": "Half-size of the cuboid"
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume."
     }
   ]
 }

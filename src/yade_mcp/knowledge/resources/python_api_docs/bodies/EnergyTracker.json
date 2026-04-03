@@ -7,7 +7,26 @@
     {
       "name": "energies",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Energy values, in linear array"
+    }
+  ],
+  "methods": [
+    {
+      "name": "clear",
+      "description": "Clear all stored values."
+    },
+    {
+      "name": "items",
+      "description": "Return contents as list of (name,value) tuples."
+    },
+    {
+      "name": "keys",
+      "description": "Return defined energies."
+    },
+    {
+      "name": "total",
+      "description": "Return sum of all energies."
     }
   ]
 }

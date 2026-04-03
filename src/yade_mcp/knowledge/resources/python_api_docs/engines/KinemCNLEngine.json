@@ -7,97 +7,116 @@
     {
       "name": "Key",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "string to add at the names of the saved files"
     },
     {
       "name": "LOG",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "boolean controling the output of messages on the screen"
     },
     {
       "name": "alpha",
       "type": "float",
-      "default": "1.5707963267948966"
+      "default": "1.5707963267948966",
+      "description": "the angle from the lower box to the left box (trigo wise). Measured by this Engine. Has to be saved, but not to be changed by the user."
     },
     {
       "name": "f0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the (vertical) force acting on the upper plate on the very first time step (determined by the Engine). Controls of the loadings in case of"
     },
     {
       "name": "firstRun",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "boolean set to false as soon as the engine has done its job one time : useful to know if initial height of, and normal force sustained by, the upper box are known or not (and thus if they have to be initialized)."
     },
     {
       "name": "gamma",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "current value of tangential displacement [m]"
     },
     {
       "name": "gamma_save",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "vector with the values of gamma at which a save of the simulation is performed [m]"
     },
     {
       "name": "gammalim",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the value of tangential displacement (of upper plate) at wich the shearing is stopped [m]"
     },
     {
       "name": "id_boxback",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "the id of the wall at the back of the sample"
     },
     {
       "name": "id_boxbas",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "the id of the lower wall"
     },
     {
       "name": "id_boxfront",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "the id of the wall in front of the sample"
     },
     {
       "name": "id_boxleft",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "the id of the left wall"
     },
     {
       "name": "id_boxright",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "the id of the right wall"
     },
     {
       "name": "id_topbox",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "the id of the upper wall"
     },
     {
       "name": "max_vel",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "to limit the speed of the vertical displacements done to control $\\sigma$ (CNL or CNS cases) [$m/s$]"
     },
     {
       "name": "shearSpeed",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the speed at wich the shearing is performed : speed of the upper plate [m/s]"
     },
     {
       "name": "temoin_save",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "vector (same length as 'gamma_save' for ex), with 0 or 1 depending whether the save for the corresponding value of gamma has been done (1) or not (0)."
     },
     {
       "name": "wallDamping",
       "type": "float",
-      "default": "0.2"
+      "default": "0.2",
+      "description": "the vertical displacements done to to control $\\sigma$ (CNL or CNS cases) are in fact damped, through this wallDamping"
     },
     {
       "name": "y0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the height of the upper plate at the very first time step : the engine finds its value [$m$]. Has to be saved, but not to be changed by the user."
     }
   ]
 }

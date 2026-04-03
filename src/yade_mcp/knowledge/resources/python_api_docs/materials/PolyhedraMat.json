@@ -7,67 +7,80 @@
     {
       "name": "IsSplitable",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "To be splitted ... or not"
     },
     {
       "name": "Wei_P",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Weibull Formulation, failure  probability, P, [Gladky2017]_."
     },
     {
       "name": "Wei_S0",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Weibull Formulation, Sigma0, Pa, (if negative - disabled), [Gladky2017]_"
     },
     {
       "name": "Wei_V0",
       "type": "float",
-      "default": "1e-09"
+      "default": "1e-09",
+      "description": "Weibull Formulation, V0, m^3, representative volume, [Gladky2017]_."
     },
     {
       "name": "Wei_m",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Weibull Formulation, Weibull modulus, m, (if negative - disabled), [Gladky2017]_"
     },
     {
       "name": "density",
       "type": "float",
-      "default": "1000.0"
+      "default": "1000.0",
+      "description": "Density of the material [kg/m\u00b3]"
     },
     {
       "name": "frictionAngle",
       "type": "float",
-      "default": "0.5"
+      "default": "0.5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "0.25"
+      "default": "0.25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "sigmaCD",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Mohr-Coulomb failure criterium SigmaCD, Pa,  maximal compressive strength (if negative - disabled), [Gladky2017]_"
     },
     {
       "name": "sigmaCZ",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Mohr-Coulomb failure criterium SigmaCZ, Pa, maximal tensile strength (if negative - disabled), [Gladky2017]_"
     },
     {
       "name": "strength",
       "type": "float",
-      "default": "100.0"
+      "default": "100.0",
+      "description": "Stress at which polyhedra of volume 4/3*pi [mm] breaks."
     },
     {
       "name": "strengthTau",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Tangential stress at which polyhedra of volume 4/3*pi [mm] breaks."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0"
+      "default": "1000000000.0",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
     }
   ]
 }

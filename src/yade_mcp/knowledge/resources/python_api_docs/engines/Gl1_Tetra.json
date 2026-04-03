@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_Tetra",
+  "category": "engines",
+  "parent": "GlShapeFunctor",
+  "description": "Renders Tetra object\n\n.. ystaticattr:: Gl1_Tetra.wire(=true)\n\n\tTODO",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}

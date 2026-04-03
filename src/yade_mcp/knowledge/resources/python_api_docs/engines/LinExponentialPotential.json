@@ -1,0 +1,62 @@
+{
+  "name": "LinExponentialPotential",
+  "category": "engines",
+  "parent": "CundallStrackPotential",
+  "description": "LinExponential Potential with only Cundall-and-Strack-like contact. The LinExponential potential formula is $F(u) = \\frac{k*(x_e-x_0)}{x_e}(u/a-x_0)\\exp\\left(\\frac{-(u/a)}{x_e-x_0}\\right)$. Where $k$ is the slope at the origin, $x_0$ is the position where the potential cross $0$ and $x_e$ is the position of the extremum.",
+  "attributes": [
+    {
+      "name": "F0",
+      "type": "Real",
+      "default": "1",
+      "description": "Force at contact. Force when $F_0 = F(u=0)$ (LinExponential)"
+    },
+    {
+      "name": "Fe",
+      "type": "Real",
+      "default": "1",
+      "description": "Extremum force. Value of force at extremum. (LinExponential)"
+    },
+    {
+      "name": "alpha",
+      "type": "Real",
+      "default": "1",
+      "description": "Bulk-to-roughness stiffness ratio"
+    },
+    {
+      "name": "k",
+      "type": "Real",
+      "default": "1",
+      "description": "Slope at the origin (stiffness). (LinExponential)"
+    },
+    {
+      "name": "x0",
+      "type": "Real",
+      "default": "0",
+      "description": "Equilibrium distance. Potential force is 0 at $x_0$ (LinExponential)"
+    },
+    {
+      "name": "xe",
+      "type": "Real",
+      "default": "1",
+      "description": "Extremum position. Position of local max/min of force. (LinExponential)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "computeParametersFromF0",
+      "description": "Set parameters of the potential, with $k$ computed from $F_0$"
+    },
+    {
+      "name": "computeParametersFromF0Fe",
+      "description": "Set parameters of the potential, with $k$ and $x_0$ computed from $F_0$ and $F_e$"
+    },
+    {
+      "name": "potential",
+      "description": "Get potential value at any point."
+    },
+    {
+      "name": "setParameters",
+      "description": "Set parameters of the potential"
+    }
+  ]
+}

@@ -7,17 +7,20 @@
     {
       "name": "boundsMax",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "max corner of all bboxes of members; differs from effective domain bounds by the extra length (sweepLength)"
     },
     {
       "name": "boundsMin",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "min corner of all bboxes of members; differs from effective domain bounds by the extra length (sweepLength)"
     },
     {
       "name": "color",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "comm",
@@ -27,17 +30,20 @@
     {
       "name": "extraLength",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "verlet dist for the subdomain, added to bodies verletDist"
     },
     {
       "name": "highlight",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "ids",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Ids of owned particles."
     },
     {
       "name": "intersections",
@@ -57,7 +63,130 @@
     {
       "name": "wire",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "boundOnAxis",
+      "description": "computes projected position of a bound in a certain direction"
+    },
+    {
+      "name": "centerOfMass",
+      "description": "returns center of mass of assigned bodies"
+    },
+    {
+      "name": "cleanIntersections",
+      "description": "makes sure that the ids in the current subdomain belong to the current subdomain"
+    },
+    {
+      "name": "completeSendBodies",
+      "description": "calls MPI_wait to complete the non blocking sends/recieves."
+    },
+    {
+      "name": "countIntsWith",
+      "description": "returns for a body the count of interactions (real or virtual) with bodies from a certain subdomain, interactions with subdomains excluded. Third parameter (scene pointer) can be left to default (equivalent to O._sceneObj)."
+    },
+    {
+      "name": "filterIntersections",
+      "description": "clear intersections and mirror intersections of all non-interacting bodies."
+    },
+    {
+      "name": "filteredInts",
+      "description": "return a copy of intersections or mirrorIntersections from which non-interacting bodies have been removed."
+    },
+    {
+      "name": "getMirrorIntrs",
+      "description": "get mirrorIntersections from other subdomains"
+    },
+    {
+      "name": "getRankSize",
+      "description": "set subdomain ranks, used for communications -> merging, sending bodies etc."
+    },
+    {
+      "name": "getStateBoundsValuesFromIds",
+      "description": "returns pos,vel,angVel,ori,bounds of listed bodies."
+    },
+    {
+      "name": "getStateValues",
+      "description": "returns pos,vel,angVel,ori of bodies interacting with a given otherDomain, based on Subdomain.intersections."
+    },
+    {
+      "name": "getStateValuesFromIds",
+      "description": "returns pos,vel,angVel,ori of listed bodies."
+    },
+    {
+      "name": "init",
+      "description": "Initialize subdomain variables as rank and buffer sizes, call this from each thread after scene distribution by master."
+    },
+    {
+      "name": "medianFilterCPP",
+      "description": "cpp version of median filter, used for body reallocation operations."
+    },
+    {
+      "name": "mergeOp",
+      "description": "merge with setting interactions"
+    },
+    {
+      "name": "migrateBodiesSend",
+      "description": "ids of body to be sent have their subdomain parameter reassigned, followed by sendBodies"
+    },
+    {
+      "name": "mpiIrecvStates",
+      "description": "mpi-Irecv states from another domain  (non-blocking)"
+    },
+    {
+      "name": "mpiRecvStates",
+      "description": "mpi-recv states from another domain  (blocking)"
+    },
+    {
+      "name": "mpiSendStates",
+      "description": "mpi-send states from current domain to another domain (blocking)"
+    },
+    {
+      "name": "mpiWaitReceived",
+      "description": "mpi-Wait states from another domain (upon return the buffer is set)"
+    },
+    {
+      "name": "receiveBodies",
+      "description": "Receive the bodies from MPI sender rank to MPI receiver rank"
+    },
+    {
+      "name": "sendBodies",
+      "description": "Copy the bodies from MPI sender rank to MPI receiver rank"
+    },
+    {
+      "name": "setIDstoSubdomain",
+      "description": "set list of ids to the subdomain."
+    },
+    {
+      "name": "setMinMax",
+      "description": "returns bounding min-max based on members bounds. precondition: the members bounds have been dispatched already, else we re-use old values. Carefull if subdomain is not at the end of O.bodies."
+    },
+    {
+      "name": "setStateBoundsValuesFromIds",
+      "description": "set pos,vel,angVel,ori,bounds from listed body ids and data."
+    },
+    {
+      "name": "setStateValuesFromBuffer",
+      "description": "set pos,vel,angVel,ori from state buffer."
+    },
+    {
+      "name": "setStateValuesFromIds",
+      "description": "set pos,vel,angVel,ori from listed body ids and data."
+    },
+    {
+      "name": "splitBodiesToWorkers",
+      "description": "of true bodies in workers are erased and reassigned."
+    },
+    {
+      "name": "updateLocalIds",
+      "description": "updates the ids in the subdomain id vector, if not eraseRemoteMastrer, body->subdomain in master are updated."
+    },
+    {
+      "name": "updateNewMirrorIntrs",
+      "description": "update the mirrorIntersections of a specific subdomain"
     }
   ]
 }

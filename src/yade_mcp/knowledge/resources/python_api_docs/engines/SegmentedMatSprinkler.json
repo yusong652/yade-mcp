@@ -7,82 +7,104 @@
     {
       "name": "alpha",
       "type": "float",
-      "default": "45.0"
+      "default": "45.0",
+      "description": "Angle (degrees) defining width of the stream in the first direction."
     },
     {
       "name": "alphaResolution",
       "type": "int",
-      "default": "50"
+      "default": "50",
+      "description": "How many searching lines scan one cross-section in first direction"
     },
     {
       "name": "beta",
       "type": "float",
-      "default": "45.0"
+      "default": "45.0",
+      "description": "Angle (degrees) defining width of the stream in the second direction."
     },
     {
       "name": "betaResolution",
       "type": "int",
-      "default": "50"
+      "default": "50",
+      "description": "How many searching lines scan one cross-section in first direction"
     },
     {
       "name": "feedRate",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Volume of the material distributed per second (unit is $1000^3$ smaller than volume unit of the simulation, see"
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "lostVolume",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Released volume that did not reach any target."
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "pos",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Origin of the sprinkling source."
     },
     {
       "name": "prevTime",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Virtual time of the last run. Compared to the"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "refDir",
       "type": "Vector3",
-      "default": "Vector3(0,0,-1)"
+      "default": "Vector3(0,0,-1)",
+      "description": "Reference direction of SegmentedMatSprinkler (center of the stream). It should not be directly modified. When the direction of sprinkler is rotated in setVersors function, this direction is taken as reference."
     },
     {
       "name": "releasedVolume",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Volume released by the sprinkler since the begining of its work."
     },
     {
       "name": "versors",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Versors of the searching lines."
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setVersors",
+      "description": "Sets versors of lines searching for the surfaces of closest spheres. Should always be used after changing any parameters of SegmentedMatSprinkler other than feedRate."
     }
   ]
 }

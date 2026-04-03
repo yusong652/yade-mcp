@@ -7,72 +7,86 @@
     {
       "name": "advection",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates advection"
     },
     {
       "name": "bndCondIsTemperature",
       "type": "list",
-      "default": "[False, False, False, False, False, False]"
+      "default": "[False, False, False, False, False, False]",
+      "description": "defines the type of boundary condition for each side of particle packing. True if temperature is imposed, False for no heat-flux. Indices can be retrieved with"
     },
     {
       "name": "boundarySet",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "set false to change boundary conditions"
     },
     {
       "name": "conduction",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates conduction"
     },
     {
       "name": "debug",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "debugging flags"
     },
     {
       "name": "delT",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Allows user to apply a delT to solids and observe macro thermal expansion. Resets to 0 after one conduction step."
     },
     {
       "name": "flowTempBoundarySet",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "set false to change boundary conditions"
     },
     {
       "name": "fluidBeta",
       "type": "float",
-      "default": "0.0002"
+      "default": "0.0002",
+      "description": "volumetric temperature coefficient m^3/m^3C, default water, <= 0 deactivates"
     },
     {
       "name": "fluidBulkModulus",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If > 0, thermalEngine uses this value instead of flow.fluidBulkModulus."
     },
     {
       "name": "fluidConduction",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates conduction within fluid"
     },
     {
       "name": "fluidConductionAreaFactor",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Factor for the porethroat area (used for fluid-fluid conduction model)"
     },
     {
       "name": "fluidK",
       "type": "float",
-      "default": "0.58"
+      "default": "0.58",
+      "description": "Thermal conductivity of the fluid."
     },
     {
       "name": "fluidThermoMech",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates thermoMech"
     },
     {
       "name": "heatGenerationRatio",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If > 0, this value will be used to calculate heat generation as a fraction of frictional energy dissipation."
     },
     {
       "name": "ids",
@@ -82,112 +96,160 @@
     {
       "name": "ignoreFictiousConduction",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Allows user to ignore conduction between fictious cells and particles. Mainly for debugging purposes."
     },
     {
       "name": "lenBodies",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "cache the number of thermal bodies to perform checks and raise warnings if newly inserted bodies are not thermal"
     },
     {
       "name": "letThermalRunFlowForceUpdates",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, Thermal will run force updates according to new pressures instead of FlowEngine. only useful if useVolumeChange=false."
     },
     {
       "name": "minimumFluidCondDist",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Useful for maintaining stability despite poor external triangulations involving flat tetrahedrals. Consider setting to minimum particle diameter to keep scale."
     },
     {
       "name": "particleAlpha",
       "type": "float",
-      "default": "1.16e-05"
+      "default": "1.16e-05",
+      "description": "Particle volumetric thermal expansion coeffcient"
     },
     {
       "name": "particleCp",
       "type": "float",
-      "default": "750.0"
+      "default": "750.0",
+      "description": "Particle thermal heat capacity (J/(kgK)"
     },
     {
       "name": "particleDensity",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If > 0, this value will override material density for thermodynamic calculations (useful for quasi-static simulations involving unphysical particle densities)"
     },
     {
       "name": "particleK",
       "type": "float",
-      "default": "3.0"
+      "default": "3.0",
+      "description": "Particle thermal conductivity (W/(mK)"
     },
     {
       "name": "particleT0",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Initial temperature of particles"
     },
     {
       "name": "porosityFactor",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "If >0, factors the fluid thermal expansion. Useful for simulating low porosity matrices."
     },
     {
       "name": "solidThermoMech",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates thermoMech"
     },
     {
       "name": "tempDependentFluidBeta",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, fluid volumetric thermal expansion coefficient,"
     },
     {
       "name": "thermalBndCondValue",
       "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
+      "description": "Imposed temperature boundary condition for the particles."
     },
     {
       "name": "thermalBndFlux",
       "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
+      "description": "Flux through thermal boundary."
     },
     {
       "name": "thermalFreq",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "If > 1, this value will be used as the frequency of thermal solution (number of DEM steps to solve thermal behavior). Only effective when tsSafetyFactor <= 0, otherwise tsSafetyFactor controls thermal timestep."
     },
     {
       "name": "thermoMech",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Activates thermoMech"
     },
     {
       "name": "tsSafetyFactor",
       "type": "float",
-      "default": "0.8"
+      "default": "0.8",
+      "description": "Allow user to control the timstep estimate with a safety factor. Default 0.8. If <= 0, thermal timestep is equal to DEM"
     },
     {
       "name": "unboundCavityBodies",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "automatically unbound bodies touching only cavity cells."
     },
     {
       "name": "uniformReynolds",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Control reynolds number in all cells (mostly debugging purposes)."
     },
     {
       "name": "useBoBMethod",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "flag to use Batchelor and O'Brien method for thermal conductivity area calc"
     },
     {
       "name": "useHertzMethod",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "flag to use hertzmethod for thermal conductivity area calc"
     },
     {
       "name": "useKernMethod",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "flag to use Kern method for thermal conductivity area calc"
+    }
+  ],
+  "methods": [
+    {
+      "name": "checkThermal",
+      "description": "Check if all bodies have thermal states."
+    },
+    {
+      "name": "getConductionIterPeriod",
+      "description": "let user check estimated conductionIterPeriod ."
+    },
+    {
+      "name": "getMaxTimeStep",
+      "description": "let user check estimated maxTimeStep."
+    },
+    {
+      "name": "getThermalDT",
+      "description": "let user check estimated thermalDT ."
+    },
+    {
+      "name": "makeThermal",
+      "description": "Assign thermal states to all bodies."
+    },
+    {
+      "name": "setReynoldsNumbers",
+      "description": "update the cell reynolds numbers manually (computationally expensive)"
     }
   ]
 }

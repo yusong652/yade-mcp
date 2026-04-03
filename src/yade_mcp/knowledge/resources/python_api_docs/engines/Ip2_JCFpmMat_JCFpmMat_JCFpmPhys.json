@@ -7,27 +7,32 @@
     {
       "name": "cohesiveTresholdIteration",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "should new contacts be cohesive? If strictly negativ, they will in any case. If positiv, they will before this iter, they won't afterward."
     },
     {
       "name": "weibullCutOffMax",
       "type": "float",
-      "default": "10.0"
+      "default": "10.0",
+      "description": "Factor that cuts off the largest values of the weibull distributed interaction areas."
     },
     {
       "name": "weibullCutOffMin",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Factor that cuts off the smallest values of the weibull distributed interaction areas."
     },
     {
       "name": "xSectionWeibullScaleParameter",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Scale parameter used to generate interaction radii for the crosssectional areas (changing strength criteria only) according to Weibull distribution. Activated for any value other than 0. Needs to be combined with a"
     },
     {
       "name": "xSectionWeibullShapeParameter",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shape parameter used to generate interaction radii for the crossSectional areas (changing strength criteria only) according to Weibull distribution. Activated for any value other than 0. Needs to be combined with a"
     }
   ]
 }

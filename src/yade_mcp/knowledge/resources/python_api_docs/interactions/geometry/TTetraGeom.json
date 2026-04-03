@@ -7,37 +7,44 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(-4516999929266176,1.287677866613876784e-290,-65536.047607421875)"
+      "default": "Vector3(-4516999929266176,1.287677866613876784e-290,-65536.047607421875)",
+      "description": "Contact point (global coords)"
     },
     {
       "name": "equivalentCrossSection",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Cross-section of the overlap (perpendicular to the axis of least inertia"
     },
     {
       "name": "equivalentPenetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "??"
     },
     {
       "name": "maxPenetrationDepthA",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "??"
     },
     {
       "name": "maxPenetrationDepthB",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "??"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(8.557478558370078878e-311,0,6.924272242393752482e-310)"
+      "default": "Vector3(8.557478558370078878e-311,0,6.924272242393752482e-310)",
+      "description": "Normal of the interaction, directed in the sense of least inertia of the overlap volume"
     },
     {
       "name": "penetrationVolume",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Volume of overlap [m\u00b3]"
     }
   ]
 }

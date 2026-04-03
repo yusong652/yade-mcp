@@ -7,7 +7,8 @@
     {
       "name": "aabbEnlargeFactor",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Relative enlargement of the bounding box; deactivated if negative.\n\n.. note::\n\tThis attribute is used to create distant interaction, but is only meaningful with an"
     }
   ]
 }

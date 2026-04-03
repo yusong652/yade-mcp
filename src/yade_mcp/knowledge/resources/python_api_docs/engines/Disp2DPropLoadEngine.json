@@ -7,57 +7,68 @@
     {
       "name": "Key",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "string to add at the names of the saved files, and of the output file filled by *saveData*"
     },
     {
       "name": "LOG",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "boolean controling the output of messages on the screen"
     },
     {
       "name": "id_boxback",
       "type": "int",
-      "default": "4"
+      "default": "4",
+      "description": "the id of the wall at the back of the sample"
     },
     {
       "name": "id_boxbas",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "the id of the lower wall"
     },
     {
       "name": "id_boxfront",
       "type": "int",
-      "default": "5"
+      "default": "5",
+      "description": "the id of the wall in front of the sample"
     },
     {
       "name": "id_boxleft",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "the id of the left wall"
     },
     {
       "name": "id_boxright",
       "type": "int",
-      "default": "2"
+      "default": "2",
+      "description": "the id of the right wall"
     },
     {
       "name": "id_topbox",
       "type": "int",
-      "default": "3"
+      "default": "3",
+      "description": "the id of the upper wall"
     },
     {
       "name": "nbre_iter",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "the number of iterations of loading to perform"
     },
     {
       "name": "theta",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the angle, in a (gamma,h=-u) plane from the gamma - axis to the perturbation vector (trigo wise) [degrees]"
     },
     {
       "name": "v",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "the speed at which the perturbation is imposed. In case of samples which are more sensitive to normal loadings than tangential ones, one possibility is to take v = V_shear - | (V_shear-V_comp)*sin(theta) | => v=V_shear in shear; V_comp in compression [m/s]"
     }
   ]
 }

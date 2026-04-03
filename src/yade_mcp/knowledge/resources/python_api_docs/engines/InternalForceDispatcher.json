@@ -9,5 +9,15 @@
       "type": "list",
       "default": "[]"
     }
+  ],
+  "methods": [
+    {
+      "name": "dispFunctor",
+      "description": "Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws."
+    },
+    {
+      "name": "dispMatrix",
+      "description": "Return dictionary with contents of the dispatch matrix."
+    }
   ]
 }

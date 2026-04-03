@@ -7,77 +7,92 @@
     {
       "name": "dL",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Additional wire length for considering the distortion for"
     },
     {
       "name": "displForceValues",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Defines the values for force-displacement curve."
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "initD",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Equilibrium distance for particles. Computed as the initial inter-particular distance when particle are linked."
     },
     {
       "name": "isDoubleTwist",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true the properties of the interaction will be defined as a double-twisted wire."
     },
     {
       "name": "isLinked",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true particles are linked and will interact. Interactions are linked automatically by the definition of the corresponding interaction radius. The value is false if the wire breaks (no more interaction)."
     },
     {
       "name": "isShifted",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "limitFactor",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "This value indicates on how far from failing the wire is, e.g. actual normal displacement divided by admissible normal displacement."
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "plastD",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Plastic part of the inter-particular distance of the previous step. \n\n.. note::\n\t Only elastic displacements are reversible (the elastic stiffness is used for unloading) and compressive forces are inadmissible. The compressive stiffness is assumed to be equal to zero.\n\n.."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "stiffnessValues",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Defines the values for the various stiffnesses (the elastic stiffness is stored as kn)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     }
   ]
 }

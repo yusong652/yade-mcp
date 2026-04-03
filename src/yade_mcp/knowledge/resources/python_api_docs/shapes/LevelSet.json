@@ -7,77 +7,154 @@
     {
       "name": "axesAABE",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "The half lengths of the principal axes of the axis-aligned bounding ellipsoid (AABE) of the level-set shape. Format (rx,ry,rz). Only works for VLS-DEM."
     },
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)"
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
     },
     {
       "name": "corners",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "The 8 corners of an axis-aligned bounding box, in local axes. It is computed once for all by"
     },
     {
       "name": "distField",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "The signed (< 0 when inside) distance-to-surface function as a discrete scalar field on"
     },
     {
       "name": "hasAABE",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Flag to indicate whether an axis-aligned bounding ellipsoid (AABE) has been provided by the user. If true, you must specify"
     },
     {
       "name": "highlight",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
     },
     {
       "name": "lsGrid",
       "type": "RegularGrid",
-      "default": "<RegularGrid instance at 0x389ba00>"
+      "default": "<RegularGrid instance at 0x389ba00>",
+      "description": "The"
     },
     {
       "name": "n_neighborsNodes",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "How many closest nodes we want to store for every one in"
     },
     {
       "name": "neighborsNodes",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Denoting"
     },
     {
       "name": "smearCoeff",
       "type": "float",
-      "default": "1.5"
+      "default": "1.5",
+      "description": "Rules the smearing coefficient $\\varepsilon > 0$ of the Heaviside step function for a smooth integration of the particle's volume close to its surface (the higher $\\varepsilon$ the smoother, i.e. the more diffuse the surface in terms of volume integration). Given in reciprocal multiples of $R_{cell} = \\sqrt{3}/2 g_{grid}$ the half diagonal of the cells of the"
     },
     {
       "name": "sphericity",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Shape sphericity computed from boundary nodes and assuming both largest inscribed sphere and smallest circumscribed sphere have the origin (of local axes) as center."
     },
     {
       "name": "starLike",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Indicates whether"
     },
     {
       "name": "surfNodes",
       "type": "list",
-      "default": "[]"
+      "default": "[]",
+      "description": "Surface discretization in terms of (a list of) nodes, for the master-slave refined contact treatment in"
     },
     {
       "name": "twoD",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "True for z-invariant shapes. Serves to restrict the ray tracing of"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ],
+  "methods": [
+    {
+      "name": "assignSurfNodes",
+      "description": "Assigns given *nodes* (as a list of Vector3r points conforming local frame) to surfNodes<LevelSet.surfNodes>, erasing pre-existing ones if any."
+    },
+    {
+      "name": "binarize",
+      "description": "Returns (for any user-defined purpose) a voxellised description of the shape volume. Selection (as being part of the particle) of voxels associated with a strictly zero value of distance depends on *surface*."
+    },
+    {
+      "name": "center",
+      "description": "The center of mass of the volume<LevelSet.volume> (considering obviously an uniform density for this volume), in local axes (for verification purposes, by comparison with the origin)."
+    },
+    {
+      "name": "computeMarchingCubes",
+      "description": "Compute or recompute the triangulation of the particle surface after using the Marching Cubes algorithm on distField<LevelSet.distField>."
+    },
+    {
+      "name": "distance",
+      "description": "Distance to surface at *pt*, with pt being expressed in the local frame. The 'unbound' flag (if True) allows the computation of distance values outside of the grid<LevelSet.lsGrid> extents, which otherwise returns NaN together with an error."
+    },
+    {
+      "name": "getSurface",
+      "description": "Compute particle surface by differentiation of Level Set volume around $\\phi = 0$, where best results have usually been obtained using smearCoeff<LevelSet.smearCoeff> = 1. Given argument *epsilon* (as a length quantity) serves to initialize the recursive limit search in the derivative expression (see [Duriez2025]_)"
+    },
+    {
+      "name": "getVolume",
+      "description": "Returns the shape volume as the negative domain of the level set function<LevelSet.distField>, in a voxellised fashion, where a negative value of the level set, distField[i][j][k]<LevelSet.distField> $\\leq$ 0, is considered to correspond to a material cubic voxel of side lsGrid.spacing<RegularGrid.spacing> and centered at lsGrid.gridPoint(i,j,k)<RegularGrid.gridPoint>. Smearing considerations may apply as per smearCoeff<LevelSet.smearCoeff>."
+    },
+    {
+      "name": "inertia",
+      "description": "The diagonal coefficients (i.e., eigenvalues, in a consistent workflow) of the geometric inertia matrix (the one considering the infinitesimal volume as the integrand, instead of infinitesimal mass) of the particle volume<LevelSet.getVolume>, as a (xx,yy,zz) Vector3r."
+    },
+    {
+      "name": "marchingCubesNbTriangles",
+      "description": "Returns the number of triangles forming the surface triangulation as per the Marching Cubes algorithm (executed on distField<LevelSet.distField>)."
+    },
+    {
+      "name": "marchingCubesNormals",
+      "description": "Returns the normals for a surface triangulation obtained after executing the Marching Cubes algorithm on distField<LevelSet.distField>."
+    },
+    {
+      "name": "marchingCubesVertices",
+      "description": "Returns the vertices for a surface triangulation obtained after executing the Marching Cubes algorithm on distField<LevelSet.distField>."
+    },
+    {
+      "name": "normal",
+      "description": "Unit normal vector to the surface, at some pt. Local frame applies to both output normal and input pt. Has an 'unbound' flag signaling whether to allow (if True) the computation of the normal outside of the grid<LevelSet.lsGrid> extents."
+    },
+    {
+      "name": "rayTrace",
+      "description": "Performs one ray tracing along *ray* (to be given in cartesian coordinates, see spher2cart() if a conversion is useful from spherical ones; norm should not matter) and returns the obtained surface points (without modifying surfNodes<LevelSet.surfNodes>). Argument *nodesTol* has the same meaning as in rayTraceSurfNodes<LevelSet.rayTraceSurfNodes>, see therein. Provided for debugging or shape analysis purposes."
+    },
+    {
+      "name": "rayTraceSurfNodes",
+      "description": "Defines all surface nodes (i.e., surfNodes<LevelSet.surfNodes>) by ray tracing, erasing pre-existing ones if any, according to given arguments"
+    },
+    {
+      "name": "volume",
+      "description": "A 2025/09-deprecated version of getVolume<LevelSet.getVolume>. Please use the latter instead."
     }
   ]
 }

@@ -7,17 +7,20 @@
     {
       "name": "eps",
       "type": "float",
-      "default": "0.001"
+      "default": "0.001",
+      "description": "Roughness: fraction of radius enlargement for contact asperities"
     },
     {
       "name": "eta",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Fluid viscosity [Pa.s]"
     },
     {
       "name": "keps",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Dimensionless stiffness coefficient of the asperities, relative to the stiffness of the surface (the final stiffness will be keps*kn). Only used with resolution method=0, with resolution>0 it is always equal to 1. [-]"
     }
   ]
 }

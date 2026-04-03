@@ -7,17 +7,20 @@
     {
       "name": "A",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Amplitude [N]"
     },
     {
       "name": "f",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Frequency [hertz]"
     },
     {
       "name": "fi",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Initial phase [radians]. By default, the phase is zero such that the force starts at zero."
     },
     {
       "name": "ids",

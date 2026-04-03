@@ -7,47 +7,56 @@
     {
       "name": "addIterNum",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Adds an iteration number to the file name, when the file was created. Useful for creating new files at each call (false by default)"
     },
     {
       "name": "file",
       "type": "str",
-      "default": "''"
+      "default": "''",
+      "description": "Name of file to save to; must not be empty."
     },
     {
       "name": "initRun",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Run the first time we are called as well."
     },
     {
       "name": "iterPeriod",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)"
     },
     {
       "name": "nDo",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Limit number of executions by this number (deactivated if negative)"
     },
     {
       "name": "porosity",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "porosity of the packing [-]"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "truncate",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether to delete current file contents, if any, when opening (false by default)"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     }
   ]
 }

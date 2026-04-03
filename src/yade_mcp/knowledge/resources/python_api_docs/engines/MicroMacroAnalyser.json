@@ -7,12 +7,14 @@
     {
       "name": "compDeformation",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Is the engine just saving states or also computing and outputing deformations for each increment?"
     },
     {
       "name": "compIncrt",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Should increments of force and displacements be defined on [n,n+1]? If not, states will be saved with only positions and forces (no displacements)."
     },
     {
       "name": "incrtNumber",
@@ -22,27 +24,32 @@
     {
       "name": "interval",
       "type": "int",
-      "default": "100"
+      "default": "100",
+      "description": "Number of timesteps between analyzed states."
     },
     {
       "name": "nonSphereAsFictious",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "bodies that are not spheres will be used to defines bounds (else just skipped)."
     },
     {
       "name": "outputFile",
       "type": "str",
-      "default": "'MicroMacroAnalysis'"
+      "default": "'MicroMacroAnalysis'",
+      "description": "Base name for increment analysis output file."
     },
     {
       "name": "stateFileName",
       "type": "str",
-      "default": "'state'"
+      "default": "'state'",
+      "description": "Base name of state files."
     },
     {
       "name": "stateNumber",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "A number incremented and appended at the end of output files to reflect increment number."
     }
   ]
 }

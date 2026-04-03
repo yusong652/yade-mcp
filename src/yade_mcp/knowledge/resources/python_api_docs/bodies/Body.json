@@ -6,7 +6,8 @@
     {
       "name": "aspherical",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this body has different inertia along principal axes;"
     },
     {
       "name": "bound",
@@ -16,32 +17,38 @@
     {
       "name": "bounded",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether this body should have"
     },
     {
       "name": "clumpId",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Id of clump this body makes part of; invalid number if not part of clump; see"
     },
     {
       "name": "dynamic",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether this body will be moved by forces. (In c++, use ``Body::isDynamic``/``Body::setDynamic``)"
     },
     {
       "name": "flags",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Bits of various body-related flags. *Do not access directly*. In c++, use isDynamic/setDynamic, isBounded/setBounded, isAspherical/setAspherical. In python, use"
     },
     {
       "name": "groupMask",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": "Bitmask for interaction detection purposes: it is required that two bodies have at least one bit in common in their groupMask for their interaction to be possible from the"
     },
     {
       "name": "id",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Unique id of this body."
     },
     {
       "name": "isClump",
@@ -61,12 +68,14 @@
     {
       "name": "isSubdomain",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "Whether this body is a subdomain should have"
     },
     {
       "name": "iterBorn",
       "type": "int",
-      "default": "-1"
+      "default": "-1",
+      "description": "Step number at which the body was added to simulation."
     },
     {
       "name": "mask",
@@ -86,22 +95,32 @@
     {
       "name": "shape",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Geometrical"
     },
     {
       "name": "state",
       "type": "State",
-      "default": "<State instance at 0x388fd10>"
+      "default": "<State instance at 0x388fd10>",
+      "description": "Physical"
     },
     {
       "name": "subdomain",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "the subdomain this body belongs to."
     },
     {
       "name": "timeBorn",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.0",
+      "description": "Time at which the body was added to simulation."
+    }
+  ],
+  "methods": [
+    {
+      "name": "intrs",
+      "description": "Return list of all real interactions in which this body participates."
     }
   ]
 }

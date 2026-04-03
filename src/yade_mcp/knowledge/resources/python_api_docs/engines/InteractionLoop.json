@@ -12,12 +12,14 @@
     {
       "name": "loopOnSortedInteractions",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, the main interaction loop will occur on a sorted list of interactions. This is SLOW but useful to workaround floating point force addition non reproducibility when debugging parallel implementations of yade."
     },
     {
       "name": "warnRoleIg2",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "Whether warnings are output (if true) in case the"
     }
   ]
 }

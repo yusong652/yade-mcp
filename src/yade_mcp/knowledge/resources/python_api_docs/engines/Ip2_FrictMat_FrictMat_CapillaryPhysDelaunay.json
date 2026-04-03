@@ -7,22 +7,26 @@
     {
       "name": "computeDefault",
       "type": "bool",
-      "default": "True"
+      "default": "True",
+      "description": "bool to assign the default value of computeBridge."
     },
     {
       "name": "frictAngle",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "kn",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     },
     {
       "name": "ks",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Instance of"
     }
   ]
 }

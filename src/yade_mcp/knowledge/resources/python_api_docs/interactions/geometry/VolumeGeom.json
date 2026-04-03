@@ -7,22 +7,26 @@
     {
       "name": "averagePenetrationDepth",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "penetrationVolume / contactArea."
     },
     {
       "name": "contactArea",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Contact area perpendicular to the normal."
     },
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Contact point (global coordinates), centroid of the penetration volume."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal direction of the interaction."
     },
     {
       "name": "orthonormal_axis",
@@ -32,12 +36,14 @@
     {
       "name": "penetrationVolume",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Volume of the overlap or penetrating region."
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear displacement increment in the last step."
     },
     {
       "name": "twist_axis",

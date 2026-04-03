@@ -1,0 +1,14 @@
+{
+  "name": "GlExtraDrawer",
+  "category": "engines",
+  "parent": "",
+  "description": "Performing arbitrary OpenGL drawing commands; called from OpenGLRenderer (see OpenGLRenderer.extraDrawers) once regular rendering routines will have finished.\n\nThis class itself does not render anything, derived classes should override the *render* method.",
+  "attributes": [
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "Deactivate the object (on error/exception)."
+    }
+  ]
+}

@@ -7,52 +7,62 @@
     {
       "name": "cohesion",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "cohesion [Pa]"
     },
     {
       "name": "compressiveStrength",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "compressiveStrength [Pa]"
     },
     {
       "name": "crossSection",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "Crosssection of interaction"
     },
     {
       "name": "ellAspect",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "aspect ratio of elliptical 'cap'. Value >1 means the ellipse is longer along normal stress axis."
     },
     {
       "name": "frictDissip",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Normal stiffness"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Shear stiffness"
     },
     {
       "name": "neverDamage",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "If true, interactions remain elastic regardless stresses"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "Vector3(0,0,0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "sigmaN",
@@ -67,12 +77,20 @@
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tan of angle of friction"
     },
     {
       "name": "tensileStrength",
       "type": "float",
-      "default": "nan"
+      "default": "nan",
+      "description": "tensileStrength [Pa]"
+    }
+  ],
+  "methods": [
+    {
+      "name": "failureCondition",
+      "description": "Failure condition from normal stress and norm of shear stress (false=elastic, true=damaged)"
     }
   ]
 }

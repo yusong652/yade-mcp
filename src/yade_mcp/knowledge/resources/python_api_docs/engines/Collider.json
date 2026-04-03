@@ -7,7 +7,8 @@
     {
       "name": "avoidSelfInteractionMask",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "This mask is used to avoid the interactions inside a group of particles. To do so, the particles must have the exact same mask and that mask should have one bit in common with this"
     }
   ]
 }

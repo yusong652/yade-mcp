@@ -1,0 +1,14 @@
+{
+  "name": "Gl1_PolyhedraPhys",
+  "category": "engines",
+  "parent": "GlIPhysFunctor",
+  "description": "Renders PolyhedraPhys objects as cylinders of which diameter and color depends on PolyhedraPhys::normForce magnitude.\n\n.. ystaticattr:: Gl1_PolyhedraPhys.maxFn(=0)\n\n\tValue of NormPhys.normalForce corresponding to maxDiameter<Gl1_NormPhys.maxDiameter>. This value will be increased (but *not decreased* ) automatically.\n\n.. ystaticattr:: Gl1_PolyhedraPhys.refRadius(=std::numeric_limits<Real>::infinity())\n\n\tReference (minimum) particle radius\n\n.. ystaticattr:: Gl1_PolyhedraPhys.signFilter(=0)\n\n\tIf non-zero, only display contacts with negative (-1) or positive (+1) normal forces; if zero, all contacts will be displayed.\n\n.. ystaticattr:: Gl1_PolyhedraPhys.maxRadius(=-1)\n\n\tCylinder radius corresponding to the maximum normal force.\n\n.. ystaticattr:: Gl1_PolyhedraPhys.slices(=6)\n\n\tNumber of sphere slices; (see `glutCylinder reference <http://www.opengl.org/sdk/docs/man/xhtml/gluCylinder.xml>`__)\n\n.. ystaticattr:: Gl1_PolyhedraPhys.stacks(=1)\n\n\tNumber of sphere stacks; (see `glutCylinder reference <http://www.opengl.org/sdk/docs/man/xhtml/gluCylinder.xml>`__)",
+  "attributes": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+    }
+  ]
+}
