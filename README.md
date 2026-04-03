@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/header.gif" alt="yade-mcp header" width="720">
 </p>
 
-[English](https://github.com/yusong652/yade-mcp/blob/main/README.md) | [简体中文](https://github.com/yusong652/yade-mcp/blob/main/README.zh-CN.md)
+[English](https://github.com/yusong652/yade-mcp/blob/master/README.md) | [简体中文](https://github.com/yusong652/yade-mcp/blob/master/README.zh-CN.md)
 
 [![PyPI](https://img.shields.io/pypi/v/yade-mcp)](https://pypi.org/project/yade-mcp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -13,6 +13,8 @@
 `O.engines += [LLM()]  # yet another engine.`
 
 **yade-mcp** connects AI agents to [YADE](https://yade-dem.org/) — the open-source discrete element method engine — through the [Model Context Protocol](https://modelcontextprotocol.io/). Browse API docs, run simulations, and execute code, all through natural conversation.
+
+![yade-mcp demo](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
 
 ## Tools (7)
 
