@@ -1,7 +1,6 @@
 """Task-related message handlers for YADE bridge."""
 
-from .context import ServerContext
-from .helpers import truncate_message, require_field
+from .helpers import require_field, truncate_message
 
 
 async def handle_yade_task(ctx, data):
@@ -83,7 +82,7 @@ async def handle_interrupt_task(ctx, data):
             "type": "result",
             "request_id": request_id,
             "status": "error",
-            "message": "Task not found: {}".format(task_id),
+            "message": f"Task not found: {task_id}",
             "data": {"task_id": task_id, "interrupt_requested": False}
         }
 
@@ -93,7 +92,7 @@ async def handle_interrupt_task(ctx, data):
             "type": "result",
             "request_id": request_id,
             "status": "error",
-            "message": "Task already in terminal state: {} (status: {})".format(task_id, task_status),
+            "message": f"Task already in terminal state: {task_id} (status: {task_status})",
             "data": {"task_id": task_id, "status": task_status, "interrupt_requested": False}
         }
 
@@ -102,6 +101,6 @@ async def handle_interrupt_task(ctx, data):
         "type": "result",
         "request_id": request_id,
         "status": "success",
-        "message": "Interrupt requested for task: {}".format(task_id),
+        "message": f"Interrupt requested for task: {task_id}",
         "data": {"task_id": task_id, "interrupt_requested": True}
     }

@@ -4,8 +4,8 @@ Provides a file-like buffer that writes directly to disk, ensuring
 complete output preservation for long-running simulations.
 """
 
-import os
 import logging
+import os
 
 # Module logger
 logger = logging.getLogger("YADE-Bridge")
@@ -31,7 +31,7 @@ class FileBuffer:
             os.makedirs(log_dir)
 
         self._file = open(log_path, 'w', encoding='utf-8', buffering=buffer_size)
-        logger.debug("FileBuffer created: {}".format(log_path))
+        logger.debug(f"FileBuffer created: {log_path}")
 
     def write(self, s):
         if self._closed or not s:
@@ -47,12 +47,12 @@ class FileBuffer:
             return ""
 
         try:
-            with open(self._path, 'r', encoding='utf-8') as f:
+            with open(self._path, encoding='utf-8') as f:
                 if max_size is None or self._size <= max_size:
                     return f.read()
                 return self._read_tail(f, max_size)
-        except Exception as e:
-            logger.warning("Failed to read output file: {}".format(e))
+        except OSError as e:
+            logger.warning(f"Failed to read output file: {e}")
             return ""
 
     def get_tail(self, tail_bytes=DEFAULT_TAIL_SIZE):
@@ -66,9 +66,7 @@ class FileBuffer:
         content = f.read()
         truncated = self._size - len(content) - (seek_pos if seek_pos == 0 else 0)
         if truncated > 0:
-            header = "[... {} earlier bytes, showing recent output ...]\n\n".format(
-                self._format_bytes(truncated)
-            )
+            header = f"[... {self._format_bytes(truncated)} earlier bytes, showing recent output ...]\n\n"
             return header + content
         return content
 
@@ -97,11 +95,11 @@ class FileBuffer:
     @staticmethod
     def _format_bytes(num_bytes):
         if num_bytes < 1024:
-            return "{} bytes".format(num_bytes)
+            return f"{num_bytes} bytes"
         elif num_bytes < 1024 * 1024:
-            return "{:.1f} KB".format(num_bytes / 1024)
+            return f"{num_bytes / 1024:.1f} KB"
         else:
-            return "{:.1f} MB".format(num_bytes / (1024 * 1024))
+            return f"{num_bytes / (1024 * 1024):.1f} MB"
 
     def readable(self):
         return False

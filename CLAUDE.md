@@ -10,11 +10,13 @@ yade-mcp is an MCP server that connects AI agents to YADE (open-source DEM engin
 ## Build and test
 
 ```bash
-uv sync --group dev          # install dependencies
-uv run ruff check src/       # lint
-uv run ruff format src/      # format
-uv run mypy src/yade_mcp/    # type check
-uv run pytest tests/ -v      # run tests (integration tests need bridge running)
+uv sync --group dev                    # install dependencies
+uv run ruff check src/                 # lint MCP server
+uv run ruff check yade-mcp-bridge/src/ # lint bridge (uses bridge's own ruff config)
+uv run ruff format src/                # format
+uv run mypy src/yade_mcp/              # type check
+uv run pytest tests/ -v --ignore=tests/test_bridge_client.py --ignore=tests/test_tools_integration.py  # unit + protocol tests (no bridge needed)
+uv run pytest tests/ -v                # all tests (integration tests need bridge running)
 ```
 
 ## Branch strategy
@@ -35,8 +37,19 @@ Both use trusted publishing (PyPI OIDC). Version is defined in `__init__.py` of 
 ## Coding conventions
 
 - Ruff for linting and formatting (N818: exception names must end with `Error`)
+- Bridge has its own ruff config in `yade-mcp-bridge/pyproject.toml` (targets py38, ignores UP032/SIM115)
 - Async-first: bridge client uses websockets with asyncio
 - Response envelope: all tools return via `build_ok()` / `build_error()` from contracts.py
+
+## Test structure
+
+- `tests/` — MCP server unit tests (config, contracts, formatting, search, response truncation)
+- `tests/bridge/` — Bridge unit + protocol tests (no YADE runtime needed)
+  - `test_helpers.py`, `test_signals.py`, `test_utils.py`, `test_execution.py`, `test_tasks.py` — unit tests
+  - `test_handlers.py` — handler tests with mock context
+  - `test_protocol.py` — real WebSocket server, tests message format and routing
+- `tests/test_bridge_client.py` — MCP bridge client (needs running bridge)
+- `tests/test_tools_integration.py` — end-to-end MCP tools (needs YADE + bridge)
 
 ## Key architectural decisions
 

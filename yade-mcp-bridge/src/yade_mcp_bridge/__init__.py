@@ -40,7 +40,7 @@ def _start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
     if _qt_task_timer is not None:
         try:
             _qt_task_timer.stop()
-        except Exception:
+        except RuntimeError:
             pass
 
     per_tick = None
@@ -49,14 +49,14 @@ def _start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
             value = int(max_tasks_per_tick)
             if value > 0:
                 per_tick = value
-        except Exception:
+        except (TypeError, ValueError):
             per_tick = 1
 
     def _process_tick():
         try:
             main_executor.process_tasks(max_tasks=per_tick)
-        except Exception as e:
-            logger.error("Task pump tick failed: {}".format(e))
+        except Exception as e:  # task pump must not crash event loop
+            logger.error(f"Task pump tick failed: {e}")
 
     timer = QtCore.QTimer()
     timer.setInterval(interval_ms)
@@ -77,7 +77,7 @@ def _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
             value = int(max_tasks_per_tick)
             if value > 0:
                 per_tick = value
-        except Exception:
+        except (TypeError, ValueError):
             per_tick = 1
 
     sleep_s = interval_ms / 1000.0
@@ -85,8 +85,8 @@ def _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
         while True:
             try:
                 main_executor.process_tasks(max_tasks=per_tick)
-            except Exception as e:
-                logger.error("Task pump tick failed: {}".format(e))
+            except Exception as e:  # task pump must not crash event loop
+                logger.error(f"Task pump tick failed: {e}")
             time.sleep(sleep_s)
     except KeyboardInterrupt:
         logger.info("Bridge stopped by user")
@@ -119,6 +119,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
             return False
 
     import __main__
+
     from .signals import is_interrupt_requested
 
     # Flag checked after O.run() returns
@@ -159,10 +160,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 
     def _has_our_pyrunner():
         """Check if our PyRunner is in O.engines."""
-        for e in O.engines:
-            if hasattr(e, 'label') and e.label == '_mcp_bridge_runner':
-                return True
-        return False
+        return any(hasattr(e, 'label') and e.label == '_mcp_bridge_runner' for e in O.engines)
 
     # Hook O.run() to auto-inject PyRunner before each simulation run.
     # This handles O.reset() clearing engines — our PyRunner gets
@@ -177,7 +175,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
                     O.engines = list(O.engines) + [_make_pyrunner()]
                     logger.info("PyRunner auto-injected before O.run()")
                 except Exception as e:
-                    logger.warning("PyRunner auto-injection failed: {}".format(e))
+                    logger.warning(f"PyRunner auto-injection failed: {e}")
             _interrupt_triggered["value"] = False
             result = _original_run(*args, **kwargs)
             # After O.run() returns (possibly due to O.pause() from interrupt),
@@ -193,11 +191,10 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 
     try:
         O.engines = list(O.engines) + [_make_pyrunner()]
-        logger.info("PyRunner installed (iterPeriod={}) — interrupt check + task queue processing".format(
-            interrupt_check_period))
+        logger.info(f"PyRunner installed (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing")
         return True
     except Exception as e:
-        logger.warning("Failed to install PyRunner: {}".format(e))
+        logger.warning(f"Failed to install PyRunner: {e}")
         return False
 
 
@@ -228,16 +225,16 @@ def start(
         mode: Task pump mode - "auto" (try Qt, fall back to blocking),
             "gui" (Qt only), or "console" (blocking only).
     """
-    import sys
-    import os
     import asyncio
     import logging
+    import os
     import socket
+    import sys
     import threading
 
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(
-            "Invalid mode '{}'. Expected one of: {}".format(mode, ", ".join(VALID_RUNTIME_MODES))
+            f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}"
         )
 
     interval_ms = max(1, int(timer_interval_ms))
@@ -273,11 +270,11 @@ def start(
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
         sock.bind((host, port))
-    except OSError:
+    except OSError as exc:
         raise RuntimeError(
-            "Port {} is already in use. "
-            "Try: yade_mcp_bridge.start(port={})".format(port, port + 1)
-        )
+            f"Port {port} is already in use. "
+            f"Try: yade_mcp_bridge.start(port={port + 1})"
+        ) from exc
     finally:
         sock.close()
 
@@ -295,7 +292,7 @@ def start(
             loop.run_until_complete(yade_server.start())
             loop.run_forever()
         except Exception as e:
-            logger.error("Server error: {}".format(e))
+            logger.error(f"Server error: {e}")
             import traceback
             traceback.print_exc()
         finally:
@@ -311,9 +308,9 @@ def start(
     print("\n" + "=" * 60)
     print("YADE MCP Bridge Server")
     print("=" * 60)
-    print("  URL:         ws://{}:{}".format(host, port))
-    print("  Log:         {}".format(log_file))
-    print("  PyRunner:    {}".format("installed (period={})".format(interrupt_check_period) if pyrunner_ok else "not available"))
+    print(f"  URL:         ws://{host}:{port}")
+    print(f"  Log:         {log_file}")
+    print(f"  PyRunner:    {f'installed (period={interrupt_check_period})' if pyrunner_ok else 'not available'}")
     print("=" * 60 + "\n")
 
     # Main-thread task pump
@@ -322,8 +319,7 @@ def start(
 
     if use_qt and _start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
         yade_server.set_runtime_mode("gui")
-        print("Task loop running via Qt timer (interval={}ms, max_tasks_per_tick={})".format(
-            interval_ms, max_tasks_per_tick))
+        print(f"Task loop running via Qt timer (interval={interval_ms}ms, max_tasks_per_tick={max_tasks_per_tick})")
         print("Bridge started in non-blocking mode (GUI remains responsive).")
         return
 
@@ -332,6 +328,6 @@ def start(
 
     if use_blocking:
         yade_server.set_runtime_mode("console")
-        print("Task loop running via blocking poll (interval={}ms)".format(interval_ms))
+        print(f"Task loop running via blocking poll (interval={interval_ms}ms)")
         print("Press Ctrl+C to stop.\n")
         _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger)

@@ -6,17 +6,17 @@ import logging
 
 import websockets
 
-from .execution import ScriptRunner, MainThreadExecutor
-from .tasks import TaskManager
+from .execution import ScriptRunner
 from .handlers import (
     ServerContext,
-    handle_yade_task,
     handle_check_task_status,
-    handle_list_tasks,
     handle_execute_code,
-    handle_ping,
     handle_interrupt_task,
+    handle_list_tasks,
+    handle_ping,
+    handle_yade_task,
 )
+from .tasks import TaskManager
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -89,14 +89,13 @@ class YADEWebSocketServer:
             preview = code[:80].replace("\n", "\\n")
             if len(code) > 80:
                 preview += "..."
-            return 'code="{}"'.format(preview)
+            return f'code="{preview}"'
         if msg_type == "yade_task":
-            return 'script="{}" desc="{}"'.format(
-                data.get("script_path", "?"), data.get("description", "")[:60])
+            return f'script="{data.get("script_path", "?")}" desc="{data.get("description", "")[:60]}"'
         if msg_type in ("check_task_status", "interrupt_task"):
-            return "task_id={}".format(data.get("task_id", "?"))
+            return f"task_id={data.get('task_id', '?')}"
         if msg_type == "list_tasks":
-            return "offset={} limit={}".format(data.get("offset", 0), data.get("limit", "all"))
+            return f"offset={data.get('offset', 0)} limit={data.get('limit', 'all')}"
         return ""
 
     async def _process_message(self, websocket, message):

@@ -9,7 +9,7 @@ def require_field(data, field_name, request_id, response_type="result"):
             "type": response_type,
             "request_id": request_id,
             "status": "error",
-            "message": "{} required".format(field_name),
+            "message": f"{field_name} required",
             "data": None
         }
     return value, None
@@ -19,4 +19,4 @@ def truncate_message(message, max_length=5000):
     """Truncate message if too long."""
     if len(message) <= max_length:
         return message
-    return message[:max_length] + "\n... (truncated from {} chars)".format(len(message))
+    return message[:max_length] + f"\n... (truncated from {len(message)} chars)"

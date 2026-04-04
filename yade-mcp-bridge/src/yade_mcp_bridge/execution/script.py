@@ -10,9 +10,8 @@ import sys
 import time
 import traceback
 
-from .main_thread import MainThreadExecutor
-from ..utils import path_to_llm_format, FileBuffer, TaskDataBuilder, build_response
-from ..signals import set_current_task, clear_current_task, clear_interrupt
+from ..signals import clear_current_task, clear_interrupt, set_current_task
+from ..utils import FileBuffer, TaskDataBuilder, build_response, path_to_llm_format
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -62,9 +61,9 @@ class ScriptRunner:
 
             script_name = os.path.basename(script_path)
             if serialized_result is not None:
-                message = "Script executed: {}\nResult: {}".format(script_name, serialized_result)
+                message = f"Script executed: {script_name}\nResult: {serialized_result}"
             else:
-                message = "Script executed: {}".format(script_name)
+                message = f"Script executed: {script_name}"
 
             return {
                 "status": "success",
@@ -75,10 +74,10 @@ class ScriptRunner:
 
         except InterruptedError as e:
             output_text = output_buffer.getvalue()
-            logger.info("Script interrupted: {} - {}".format(script_path, str(e)))
+            logger.info(f"Script interrupted: {script_path} - {str(e)}")
             return {
                 "status": "interrupted",
-                "message": "Script interrupted by user: {}".format(str(e)),
+                "message": f"Script interrupted by user: {str(e)}",
                 "result": None,
                 "output": output_text,
             }
@@ -89,7 +88,7 @@ class ScriptRunner:
             # Detect InterruptedError wrapped by YADE's PyRunner as RuntimeError
             error_str = str(e)
             if "InterruptedError" in error_str and "Interrupted by MCP bridge" in error_str:
-                logger.info("Script interrupted (via PyRunner): {}".format(script_path))
+                logger.info(f"Script interrupted (via PyRunner): {script_path}")
                 return {
                     "status": "interrupted",
                     "message": "Script interrupted by user",
@@ -98,7 +97,7 @@ class ScriptRunner:
                 }
 
             full_traceback = traceback.format_exc()
-            logger.error("Script execution failed with traceback:\n{}".format(full_traceback))
+            logger.error(f"Script execution failed with traceback:\n{full_traceback}")
 
             # Extract user script frames only
             tb = sys.exc_info()[2]
@@ -117,12 +116,12 @@ class ScriptRunner:
 
             if user_frames:
                 error_parts = ["Script execution failed:\n"]
-                for filename, lineno, name in user_frames:
-                    error_parts.append('  File "{}", line {}, in {}\n'.format(display_path, lineno, name))
-                error_parts.append("{}: {}".format(type(e).__name__, str(e)))
+                for _filename, lineno, name in user_frames:
+                    error_parts.append(f'  File "{display_path}", line {lineno}, in {name}\n')
+                error_parts.append(f"{type(e).__name__}: {str(e)}")
                 error_message = "".join(error_parts)
             else:
-                error_message = "Script execution failed: {}: {}".format(type(e).__name__, str(e))
+                error_message = f"Script execution failed: {type(e).__name__}: {str(e)}"
 
             return {
                 "status": "error",
@@ -144,16 +143,16 @@ class ScriptRunner:
         script_name = os.path.basename(script_path)
 
         try:
-            with open(script_path, "r", encoding="utf-8") as f:
+            with open(script_path, encoding="utf-8") as f:
                 script_content = f.read()
         except FileNotFoundError:
-            return {"status": "error", "message": "Script file not found: {}".format(script_path), "data": None}
-        except Exception as e:
-            return {"status": "error", "message": "Failed to read script file: {}".format(str(e)), "data": None}
+            return {"status": "error", "message": f"Script file not found: {script_path}", "data": None}
+        except OSError as e:
+            return {"status": "error", "message": f"Failed to read script file: {str(e)}", "data": None}
 
         try:
             log_dir = os.path.join(".yade-mcp", "logs")
-            log_path = os.path.join(log_dir, "task_{}.log".format(task_id))
+            log_path = os.path.join(log_dir, f"task_{task_id}.log")
             output_buffer = FileBuffer(log_path)
 
             future = self.main_executor.submit(self._execute, script_path, script_content, output_buffer, task_id)
@@ -170,7 +169,7 @@ class ScriptRunner:
                         task.status = "running"
                         if task.on_status_change:
                             task.on_status_change(task)
-                except Exception:
+                except RuntimeError:
                     pass
 
             data = (
@@ -178,11 +177,11 @@ class ScriptRunner:
                 .with_timing(submit_time)
                 .build()
             )
-            return build_response("pending", "Script submitted: {}".format(script_name), data)
+            return build_response("pending", f"Script submitted: {script_name}", data)
 
         except Exception as e:
-            logger.error("Script execution failed: {}".format(e))
-            error_message = "Script execution failed: {}".format(str(e))
+            logger.error(f"Script execution failed: {e}")
+            error_message = f"Script execution failed: {str(e)}"
             data = (
                 TaskDataBuilder(task_id, "script", script_name, script_path, description)
                 .with_error(error_message)

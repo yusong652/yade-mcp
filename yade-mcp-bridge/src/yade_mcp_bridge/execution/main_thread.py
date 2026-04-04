@@ -4,11 +4,10 @@ Provides task queue mechanism to execute YADE operations in the main thread
 while WebSocket server runs in background thread.
 """
 
-import queue
 import logging
+import queue
 import threading
 from concurrent.futures import Future
-
 
 logger = logging.getLogger("YADE-Bridge")
 

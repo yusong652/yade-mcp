@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.yusong652/yade-mcp",
+  "title": "YADE MCP Server",
+  "description": "MCP server for YADE — open-source DEM engine. Browse API docs, run simulations, manage tasks.",
+  "repository": {
+    "url": "https://github.com/yusong652/yade-mcp",
+    "source": "github"
+  },
+  "version": "0.1.5",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "yade-mcp",
+      "version": "0.1.5",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

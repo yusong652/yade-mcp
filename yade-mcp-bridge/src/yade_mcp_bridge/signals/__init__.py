@@ -28,7 +28,7 @@ def clear_current_task():
 def request_interrupt(task_id):
     """Request interruption of a specific task."""
     _interrupt_requested[task_id] = True
-    logger.info("Interrupt requested for task: {}".format(task_id))
+    logger.info(f"Interrupt requested for task: {task_id}")
 
 
 def is_interrupt_requested(task_id=None):

@@ -1,8 +1,8 @@
 """Script Task - Lifecycle management for long-running YADE script execution."""
 
+import logging
 import os
 import time
-import logging
 
 from ..utils import TaskDataBuilder, build_response
 
@@ -92,7 +92,7 @@ class ScriptTask:
             try:
                 self.on_status_change(self)
             except Exception as e:
-                logger.warning("Status change callback failed: {}".format(e))
+                logger.warning(f"Status change callback failed: {e}")
 
     def get_elapsed_time(self):
         if self.end_time is not None:
@@ -105,16 +105,16 @@ class ScriptTask:
         if self.output_buffer:
             try:
                 self.output_buffer.flush()
-            except Exception:
+            except (ValueError, OSError):
                 pass
 
         if self.log_path:
             try:
                 if os.path.exists(self.log_path):
-                    with open(self.log_path, 'r', encoding='utf-8') as f:
+                    with open(self.log_path, encoding='utf-8') as f:
                         return f.read()
-            except Exception as e:
-                logger.warning("Failed to read log file: {}".format(e))
+            except OSError as e:
+                logger.warning(f"Failed to read log file: {e}")
 
         snapshot = getattr(self, '_output_snapshot', None)
         return snapshot if snapshot else None
@@ -135,10 +135,8 @@ class ScriptTask:
         if current_status in ("pending", "running"):
             builder.with_timing(self.start_time, elapsed_time=elapsed_time)
             builder.with_output(current_output)
-            message = "Script {}: {}\nElapsed time: {:.2f}s".format(
-                "queued" if current_status == "pending" else "executing",
-                self.description, elapsed_time
-            )
+            phase = "queued" if current_status == "pending" else "executing"
+            message = f"Script {phase}: {self.description}\nElapsed time: {elapsed_time:.2f}s"
             return build_response(current_status, message, builder.build())
 
         # completed / failed / interrupted
@@ -155,23 +153,17 @@ class ScriptTask:
                 except Exception:
                     pass
             builder.with_result(self._serialize_result(result_data))
-            message = "Script completed: {}\nElapsed time: {:.2f}s".format(
-                self.description, elapsed_time
-            )
+            message = f"Script completed: {self.description}\nElapsed time: {elapsed_time:.2f}s"
             return build_response("success", message, builder.build())
 
         if current_status == "interrupted":
-            message = "Script interrupted: {}\nElapsed time: {:.2f}s".format(
-                self.description, elapsed_time
-            )
+            message = f"Script interrupted: {self.description}\nElapsed time: {elapsed_time:.2f}s"
             return build_response("interrupted", message, builder.build())
 
         # failed
         error_msg = self.error or "Task execution failed"
         builder.with_error(error_msg)
-        message = "Script failed: {}\nElapsed time: {:.2f}s\nError: {}".format(
-            self.description, elapsed_time, error_msg
-        )
+        message = f"Script failed: {self.description}\nElapsed time: {elapsed_time:.2f}s\nError: {error_msg}"
         return build_response("error", message, builder.build())
 
     def get_task_info(self):

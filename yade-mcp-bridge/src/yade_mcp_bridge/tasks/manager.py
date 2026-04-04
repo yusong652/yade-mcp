@@ -1,9 +1,9 @@
 """Task Manager - Registry, lifecycle, and persistence for long-running tasks."""
 
 import json
+import logging
 import os
 import uuid
-import logging
 
 from .task import ScriptTask
 
@@ -50,7 +50,7 @@ class TaskManager:
         if not task:
             return {
                 "status": "not_found",
-                "message": "Task ID not found: {}".format(task_id),
+                "message": f"Task ID not found: {task_id}",
                 "data": None
             }
         self._refresh_runtime_status(task)
@@ -69,7 +69,7 @@ class TaskManager:
 
         return {
             "status": "success",
-            "message": "Found {} tracked task(s)".format(total_count),
+            "message": f"Found {total_count} tracked task(s)",
             "data": tasks_info,
             "pagination": {
                 "total_count": total_count,
@@ -91,11 +91,11 @@ class TaskManager:
                 task.status = "running"
                 if task.on_status_change:
                     task.on_status_change(task)
-        except Exception:
+        except RuntimeError:
             return
 
     def _on_task_status_change(self, task):
-        logger.debug("Task {} status changed to: {}".format(task.task_id, task.status))
+        logger.debug(f"Task {task.task_id} status changed to: {task.status}")
         self._save_tasks()
 
     def _save_tasks(self):
@@ -105,22 +105,22 @@ class TaskManager:
             with open(temp, 'w') as f:
                 json.dump(tasks_data, f, indent=2)
             os.replace(temp, TASKS_FILENAME)
-        except Exception as e:
-            logger.error("Failed to save tasks: {}".format(e))
+        except OSError as e:
+            logger.error(f"Failed to save tasks: {e}")
 
     def _load_historical_tasks(self):
         if not os.path.exists(TASKS_FILENAME):
             return
         try:
-            with open(TASKS_FILENAME, 'r') as f:
+            with open(TASKS_FILENAME) as f:
                 all_data = json.load(f)
             for task_data in all_data:
                 task = self._restore_task(task_data)
                 if task:
                     self.tasks[task.task_id] = task
             logger.info("Loaded %d historical task(s)", len(all_data))
-        except Exception as e:
-            logger.error("Failed to load historical tasks: {}".format(e))
+        except (OSError, json.JSONDecodeError, KeyError) as e:
+            logger.error(f"Failed to load historical tasks: {e}")
 
     @staticmethod
     def _serialize_task(task):
@@ -143,6 +143,6 @@ class TaskManager:
             if task_data.get("status") == "running":
                 task_data["status"] = "failed"
             return ScriptTask.from_persisted(task_data)
-        except Exception as e:
-            logger.error("Failed to restore task {}: {}".format(task_data.get("task_id"), e))
+        except (KeyError, TypeError) as e:
+            logger.error(f"Failed to restore task {task_data.get('task_id')}: {e}")
             return None
