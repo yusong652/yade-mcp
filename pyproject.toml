@@ -9,11 +9,19 @@ description = "MCP server for YADE open-source discrete element method simulatio
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name= "Yusong Han", email = "yusong.han.652@gmail.com" }, { name = "Nagisa Toyoura", email = "nagisa.toyoura@gmail.com" }]
-keywords = ["yade", "dem", "mcp", "simulation", "discrete-element", "granular"]
+keywords = [
+    "yade", "dem", "mcp", "mcp-server", "model-context-protocol",
+    "simulation", "discrete-element", "granular",
+    "ai", "llm", "claude", "anthropic",
+    "scientific-computing", "particle-simulation", "geomechanics",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -25,6 +33,13 @@ dependencies = [
     "websockets>=15.0.1",
 ]
 readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/yusong652/yade-mcp"
+Repository = "https://github.com/yusong652/yade-mcp"
+Issues = "https://github.com/yusong652/yade-mcp/issues"
+Discussions = "https://github.com/yusong652/yade-mcp/discussions"
+Changelog = "https://github.com/yusong652/yade-mcp/releases"
 
 [project.scripts]
 yade-mcp = "yade_mcp.server:main"
