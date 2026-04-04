@@ -1,5 +1,7 @@
 # yade-mcp
 
+<!-- mcp-name: io.github.yusong652/yade-mcp -->
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/header.gif" alt="yade-mcp header" width="720">
 </p>
