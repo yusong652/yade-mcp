@@ -15,8 +15,8 @@ uv run ruff check src/                 # lint MCP server
 uv run ruff check yade-mcp-bridge/src/ # lint bridge (uses bridge's own ruff config)
 uv run ruff format src/                # format
 uv run mypy src/yade_mcp/              # type check
-uv run pytest tests/ -v --ignore=tests/test_bridge_client.py --ignore=tests/test_tools_integration.py  # unit + protocol tests (no bridge needed)
-uv run pytest tests/ -v                # all tests (integration tests need bridge running)
+uv run pytest tests/ -v --ignore=tests/test_tools_integration.py  # unit + protocol tests (no YADE needed)
+uv run pytest tests/ -v                # all tests (integration tests need YADE + bridge)
 ```
 
 ## Branch strategy
