@@ -22,7 +22,7 @@
 
 ## Tools (7)
 
-**2 documentation tools** — browse and search the YADE Python API with 350+ class docs and BM25 keyword search. No bridge required.
+**2 documentation tools** — browse and search the YADE Python API with BM25 keyword search. No bridge required.
 
 **5 execution tools** — synchronous REPL, async task submission, progress monitoring, interruption, and task history. Requires bridge.
 
@@ -76,7 +76,7 @@ Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to c
 
 ## Features
 
-- **350+ class documentation** — covers ~90% of the YADE Python API, enriched with real types, defaults, and docstrings
+- **Rich class documentation** — covers the YADE Python API, enriched with real types, defaults, and docstrings
 - **Hierarchical API browsing** — agents navigate categories, subcategories, and classes with progressive disclosure, reducing hallucination
 - **BM25 keyword search** — fast, ranked search across all API docs by natural language queries
 - **Synchronous REPL** — rapid iteration for querying simulation state (`O.bodies`, `O.iter`, quick tests)
