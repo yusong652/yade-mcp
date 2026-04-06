@@ -82,6 +82,9 @@ class ScriptRunner:
                 "output": output_text,
             }
 
+        except (SystemExit, KeyboardInterrupt):
+            raise
+
         except BaseException as e:
             output_text = output_buffer.getvalue()
 

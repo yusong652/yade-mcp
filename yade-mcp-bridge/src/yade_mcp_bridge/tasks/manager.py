@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import time
 import uuid
 
 from .task import ScriptTask
@@ -14,17 +15,22 @@ LOGS_DIR = os.path.join(DATA_DIR, "logs")
 TASKS_FILENAME = os.path.join(DATA_DIR, "tasks.json")
 
 
+DEFAULT_MAX_TASKS = 1024
+
+
 class TaskManager:
     """Manage long-running task tracking, status queries, and disk persistence."""
 
-    def __init__(self):
+    def __init__(self, max_tasks=DEFAULT_MAX_TASKS):
         self.tasks = {}
+        self._max_tasks = max_tasks
 
         for d in (DATA_DIR, LOGS_DIR):
             if not os.path.exists(d):
                 os.makedirs(d)
 
         self._load_historical_tasks()
+        self._prune_old_tasks()
         logger.info("TaskManager initialized")
 
     def create_script_task(self, future, script_name, entry_script, output_buffer=None, description=None, task_id=None):
@@ -35,6 +41,7 @@ class TaskManager:
             output_buffer, description, on_status_change=self._on_task_status_change,
         )
         self.tasks[task_id] = task
+        self._prune_old_tasks()
         self._save_tasks()
         return task_id
 
@@ -93,6 +100,43 @@ class TaskManager:
                     task.on_status_change(task)
         except RuntimeError:
             return
+
+    def shutdown(self):
+        """Flush output buffers and mark active tasks before exit."""
+        n_flushed = 0
+        n_interrupted = 0
+        for task in self.tasks.values():
+            if task.output_buffer:
+                try:
+                    task.output_buffer.flush()
+                    n_flushed += 1
+                except (ValueError, OSError):
+                    pass
+            if task.status in ("pending", "running"):
+                task.status = "interrupted"
+                task.end_time = time.time()
+                task.error = "Bridge shutdown"
+                n_interrupted += 1
+        self._save_tasks()
+        if n_flushed or n_interrupted:
+            logger.info("Shutdown: flushed %d buffer(s), interrupted %d task(s)", n_flushed, n_interrupted)
+
+    def _prune_old_tasks(self):
+        """Remove oldest tasks when count exceeds max_tasks, and delete their log files."""
+        if len(self.tasks) <= self._max_tasks:
+            return
+        sorted_tasks = sorted(self.tasks.values(), key=lambda t: t.start_time)
+        n_remove = len(self.tasks) - self._max_tasks
+        removed = sorted_tasks[:n_remove]
+        for task in removed:
+            if task.log_path:
+                try:
+                    os.remove(task.log_path)
+                except OSError:
+                    pass
+            del self.tasks[task.task_id]
+        logger.info("Pruned %d old task(s), keeping %d", n_remove, len(self.tasks))
+        self._save_tasks()
 
     def _on_task_status_change(self, task):
         logger.debug(f"Task {task.task_id} status changed to: {task.status}")

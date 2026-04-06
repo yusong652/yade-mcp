@@ -25,16 +25,18 @@ class YADEWebSocketServer:
     """WebSocket server for YADE script execution via main thread queue."""
 
     def __init__(self, main_executor, host="localhost", port=9002,
-                 ping_interval=120, ping_timeout=300, runtime_mode="unknown"):
+                 ping_interval=120, ping_timeout=300, runtime_mode="unknown",
+                 max_tasks=None):
         self.main_executor = main_executor
         self.host = host
         self.port = port
         self.ping_interval = ping_interval
         self.ping_timeout = ping_timeout
-        task_manager = TaskManager()
+        task_manager = TaskManager(max_tasks=max_tasks) if max_tasks is not None else TaskManager()
         self.script_runner = ScriptRunner(main_executor, task_manager)
         self.active_connections = set()
         self.server = None
+        self._loop = None
 
         self._context = ServerContext(
             task_manager=task_manager,
@@ -160,6 +162,7 @@ class YADEWebSocketServer:
             logger.info("Client disconnected: %s:%s (total=%d)", remote[0], remote[1], len(self.active_connections))
 
     async def start(self):
+        self._loop = asyncio.get_event_loop()
         self.server = await websockets.serve(
             self.handle_client,
             self.host,
@@ -169,13 +172,24 @@ class YADEWebSocketServer:
             max_size=50 * 2**20,
         )
 
+    def shutdown(self):
+        """Graceful shutdown: close WebSocket server and flush task data."""
+        self._context.task_manager.shutdown()
+        if self.server and self._loop and self._loop.is_running():
+            try:
+                self._loop.call_soon_threadsafe(self.server.close)
+            except RuntimeError:
+                pass
+        logger.info("Server shutdown complete")
+
     def set_runtime_mode(self, runtime_mode):
         self._context.runtime_mode = runtime_mode
 
 
 def create_server(main_executor, host="localhost", port=9002,
-                  ping_interval=120, ping_timeout=300, runtime_mode="unknown"):
+                  ping_interval=120, ping_timeout=300, runtime_mode="unknown",
+                  max_tasks=None):
     return YADEWebSocketServer(
         main_executor, host, port, ping_interval, ping_timeout,
-        runtime_mode=runtime_mode,
+        runtime_mode=runtime_mode, max_tasks=max_tasks,
     )

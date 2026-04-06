@@ -1,10 +1,11 @@
 """Tests for ScriptTask lifecycle and TaskManager."""
 
+import json
 import os
 import tempfile
 import time
 from concurrent.futures import Future
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -262,3 +263,123 @@ class TestTaskManager:
 
         tm2 = TaskManager()
         assert tm2.tasks["was-running"].status == "failed"
+
+    def test_prune_on_startup(self):
+        """Old tasks beyond max_tasks are pruned at startup."""
+        tm = TaskManager()
+        for i in range(5):
+            f = Future()
+            f.set_result({"status": "success"})
+            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
+            # Space out start_time so ordering is deterministic
+            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+        tm._save_tasks()
+
+        # Reload with max_tasks=3 — oldest 2 should be pruned
+        tm2 = TaskManager(max_tasks=3)
+        assert len(tm2.tasks) == 3
+        assert "t0" not in tm2.tasks
+        assert "t1" not in tm2.tasks
+        assert "t2" in tm2.tasks
+        assert "t3" in tm2.tasks
+        assert "t4" in tm2.tasks
+
+    def test_prune_deletes_log_files(self, tmp_path):
+        """Pruning removes associated log files from disk."""
+        tm = TaskManager(max_tasks=2)
+        logs_dir = tmp_path / ".yade-mcp" / "logs"
+
+        for i in range(3):
+            f = Future()
+            f.set_result({"status": "success"})
+            log_path = str(logs_dir / "task_t{}.log".format(i))
+            # Create the log file
+            with open(log_path, "w") as fh:
+                fh.write("output {}".format(i))
+            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
+            tm.tasks["t{}".format(i)].log_path = log_path
+            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+
+        # After adding t2, max_tasks=2 should prune t0
+        tm._prune_old_tasks()
+        tm._save_tasks()
+        assert len(tm.tasks) == 2
+        assert not os.path.exists(str(logs_dir / "task_t0.log"))
+        assert os.path.exists(str(logs_dir / "task_t2.log"))
+
+    def test_prune_on_create(self):
+        """Creating a new task triggers pruning when limit exceeded."""
+        tm = TaskManager(max_tasks=3)
+        for i in range(3):
+            f = Future()
+            f.set_result({"status": "success"})
+            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
+            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+
+        assert len(tm.tasks) == 3
+
+        # Adding one more should prune the oldest
+        f = Future()
+        f.set_result({"status": "success"})
+        tm.create_script_task(f, "s3.py", "/s3.py", task_id="t3")
+        tm.tasks["t3"].start_time = 1003.0
+
+        assert len(tm.tasks) == 3
+        assert "t0" not in tm.tasks
+
+    def test_shutdown_flushes_buffers(self):
+        """Shutdown flushes all active output buffers."""
+        tm = TaskManager()
+        f = Future()
+        tm.create_script_task(f, "test.py", "/test.py", task_id="buf-1")
+        mock_buffer = MagicMock()
+        tm.tasks["buf-1"].output_buffer = mock_buffer
+        tm.tasks["buf-1"].status = "running"
+
+        tm.shutdown()
+        mock_buffer.flush.assert_called_once()
+
+    def test_shutdown_marks_running_as_interrupted(self):
+        """Shutdown marks running/pending tasks as interrupted with end_time."""
+        tm = TaskManager()
+        for status, tid in [("running", "r1"), ("pending", "p1"), ("completed", "c1")]:
+            f = Future()
+            if status == "completed":
+                f.set_result({"status": "success"})
+            tm.create_script_task(f, "test.py", "/test.py", task_id=tid)
+            if status != "completed":
+                tm.tasks[tid]._status = status
+
+        tm.shutdown()
+
+        assert tm.tasks["r1"].status == "interrupted"
+        assert tm.tasks["r1"].end_time is not None
+        assert tm.tasks["r1"].error == "Bridge shutdown"
+        assert tm.tasks["p1"].status == "interrupted"
+        assert tm.tasks["c1"].status == "completed"  # untouched
+
+    def test_shutdown_persists_to_disk(self, tmp_path):
+        """Shutdown saves updated statuses to tasks.json."""
+        tm = TaskManager()
+        f = Future()
+        tm.create_script_task(f, "test.py", "/test.py", task_id="persist-s")
+        tm.tasks["persist-s"]._status = "running"
+
+        tm.shutdown()
+
+        tasks_file = tmp_path / ".yade-mcp" / "tasks.json"
+        data = json.loads(tasks_file.read_text())
+        saved = {t["task_id"]: t for t in data}
+        assert saved["persist-s"]["status"] == "interrupted"
+
+    def test_shutdown_not_restored_as_failed(self, tmp_path):
+        """Tasks interrupted by shutdown should NOT become 'failed' on reload."""
+        tm = TaskManager()
+        f = Future()
+        tm.create_script_task(f, "test.py", "/test.py", task_id="graceful-1")
+        tm.tasks["graceful-1"]._status = "running"
+        tm.shutdown()
+
+        # Reload — should stay "interrupted", not become "failed"
+        tm2 = TaskManager()
+        assert tm2.tasks["graceful-1"].status == "interrupted"
