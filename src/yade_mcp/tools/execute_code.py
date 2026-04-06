@@ -24,10 +24,18 @@ def register(mcp: FastMCP) -> None:
         environment where yade modules are already imported;
         side effects persist.
 
+        This tool remains responsive EVEN WHILE a simulation task is
+        running (submitted via yade_execute_task). Use it as a live
+        REPL to inspect simulation state in real time — no need to
+        pre-script print statements.
+
         Typical uses:
         - Query simulation state: O.bodies count, current iteration
         - Create/modify bodies, engines, interactions
         - Read or set material properties
+        - Live inspection during a running simulation (e.g. check
+          stress tensor, coordination number, energy balance,
+          or capture viewport screenshots when GUI is available)
         - Development and REPL-style testing
 
         Unlike yade_execute_task, this tool is fire-and-return: the
