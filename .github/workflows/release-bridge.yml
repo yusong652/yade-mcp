@@ -18,3 +18,24 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: yade-mcp-bridge/dist/
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          NOTES="$(git tag -l --format='%(contents)' "$TAG")"
+          if [ -z "$NOTES" ]; then
+            gh release create "$TAG" --generate-notes
+          else
+            gh release create "$TAG" --notes "$NOTES"
+          fi
