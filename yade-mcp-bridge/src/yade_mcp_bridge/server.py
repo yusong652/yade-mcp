@@ -25,7 +25,7 @@ class YADEWebSocketServer:
     """WebSocket server for YADE script execution via main thread queue."""
 
     def __init__(self, main_executor, host="localhost", port=9002,
-                 ping_interval=120, ping_timeout=300, runtime_mode="unknown",
+                 ping_interval=20, ping_timeout=40, runtime_mode="unknown",
                  max_tasks=None):
         self.main_executor = main_executor
         self.host = host
@@ -187,7 +187,7 @@ class YADEWebSocketServer:
 
 
 def create_server(main_executor, host="localhost", port=9002,
-                  ping_interval=120, ping_timeout=300, runtime_mode="unknown",
+                  ping_interval=20, ping_timeout=40, runtime_mode="unknown",
                   max_tasks=None):
     return YADEWebSocketServer(
         main_executor, host, port, ping_interval, ping_timeout,

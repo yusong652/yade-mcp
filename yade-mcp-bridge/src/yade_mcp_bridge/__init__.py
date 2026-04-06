@@ -202,8 +202,8 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 def start(
     host="localhost",
     port=9002,
-    ping_interval=120,
-    ping_timeout=300,
+    ping_interval=20,
+    ping_timeout=40,
     timer_interval_ms=DEFAULT_TIMER_INTERVAL_MS,
     max_tasks_per_tick=DEFAULT_MAX_TASKS_PER_TICK,
     interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
