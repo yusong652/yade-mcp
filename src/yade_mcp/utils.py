@@ -21,7 +21,7 @@ MIN_TIMEOUT_S = 1
 MAX_TIMEOUT_S = 600
 
 # Wait constraints (seconds)
-MIN_WAIT_SECONDS = 1
+MIN_WAIT_SECONDS = 0
 MAX_WAIT_SECONDS = 3600
 
 # Description constraints
@@ -131,10 +131,10 @@ FilterText = Annotated[
 WaitSeconds = Annotated[
     float,
     Field(
-        default=MIN_WAIT_SECONDS,
+        default=1,
         ge=MIN_WAIT_SECONDS,
         le=MAX_WAIT_SECONDS,
-        description="Wait time before querying status",
+        description="Delay before querying (prevents polling too fast). Use 0 for immediate check.",
     ),
 ]
 
@@ -146,5 +146,5 @@ ConsoleCode = Annotated[
 
 ConsoleTimeoutSeconds = Annotated[
     int,
-    Field(default=120, ge=MIN_TIMEOUT_S, le=MAX_TIMEOUT_S, description="Console execution timeout in seconds"),
+    Field(default=10, ge=MIN_TIMEOUT_S, le=MAX_TIMEOUT_S, description="Console execution timeout in seconds"),
 ]
