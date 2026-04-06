@@ -34,7 +34,8 @@ class ScriptRunner:
             task.status = "running"
 
         old_stdout = sys.stdout
-        sys.stdout = TeeBuffer(old_stdout, output_buffer)
+        terminal = sys.__stdout__ if sys.__stdout__ is not None else old_stdout
+        sys.stdout = TeeBuffer(terminal, output_buffer)
 
         set_current_task(task_id)
 
