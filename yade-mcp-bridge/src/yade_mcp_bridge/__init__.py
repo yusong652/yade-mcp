@@ -12,7 +12,7 @@ Usage (batch/console mode):
     yade_mcp_bridge.start(mode="console")
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 # Keep global references to avoid Qt timer garbage collection.
 _qt_task_timer = None
