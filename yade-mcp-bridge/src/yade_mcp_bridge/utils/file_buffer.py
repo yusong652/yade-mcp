@@ -119,3 +119,60 @@ class FileBuffer:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
         return False
+
+
+class TeeBuffer:
+    """Write to both the original stdout and a FileBuffer simultaneously.
+
+    Acts as a transparent tee: task output appears in the YADE terminal
+    AND is captured to disk for polling via check_task_status.
+    """
+
+    def __init__(self, terminal, file_buffer):
+        self._terminal = terminal
+        self._file_buffer = file_buffer
+
+    def write(self, s):
+        if not s:
+            return 0
+        self._file_buffer.write(s)
+        try:
+            self._terminal.write(s)
+            self._terminal.flush()
+        except (ValueError, OSError):
+            pass
+        return len(s)
+
+    def flush(self):
+        self._file_buffer.flush()
+        try:
+            self._terminal.flush()
+        except (ValueError, OSError):
+            pass
+
+    def getvalue(self, max_size=None):
+        return self._file_buffer.getvalue(max_size)
+
+    def get_tail(self, tail_bytes=DEFAULT_TAIL_SIZE):
+        return self._file_buffer.get_tail(tail_bytes)
+
+    def get_size(self):
+        return self._file_buffer.get_size()
+
+    def get_path(self):
+        return self._file_buffer.get_path()
+
+    def close(self):
+        self._file_buffer.close()
+
+    def readable(self):
+        return False
+
+    def writable(self):
+        return self._file_buffer.writable()
+
+    def seekable(self):
+        return False
+
+    def isatty(self):
+        return False

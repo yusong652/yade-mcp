@@ -5,7 +5,7 @@ import tempfile
 
 from yade_mcp_bridge.utils.path_utils import path_to_llm_format
 from yade_mcp_bridge.utils.response import TaskDataBuilder, build_response
-from yade_mcp_bridge.utils.file_buffer import FileBuffer
+from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
 
 
 class TestPathToLlmFormat:
@@ -170,3 +170,59 @@ class TestFileBuffer:
             buf.write("test")
             buf.close()
             assert os.path.exists(path)
+
+
+class TestTeeBuffer:
+    def test_writes_to_both(self):
+        from io import StringIO
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "out.log")
+            terminal = StringIO()
+            fb = FileBuffer(path)
+            tee = TeeBuffer(terminal, fb)
+            tee.write("hello\n")
+            tee.flush()
+            assert terminal.getvalue() == "hello\n"
+            assert fb.getvalue() == "hello\n"
+            fb.close()
+
+    def test_getvalue_delegates_to_file_buffer(self):
+        from io import StringIO
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "out.log")
+            terminal = StringIO()
+            fb = FileBuffer(path)
+            tee = TeeBuffer(terminal, fb)
+            tee.write("line1\nline2\n")
+            assert tee.getvalue() == "line1\nline2\n"
+            assert tee.get_size() == 12
+            fb.close()
+
+    def test_terminal_error_does_not_break_capture(self):
+        """If terminal write fails, file capture still works."""
+        class BrokenWriter:
+            def write(self, s):
+                raise OSError("terminal broken")
+            def flush(self):
+                raise OSError("terminal broken")
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "out.log")
+            fb = FileBuffer(path)
+            tee = TeeBuffer(BrokenWriter(), fb)
+            tee.write("still captured\n")
+            tee.flush()
+            assert fb.getvalue() == "still captured\n"
+            fb.close()
+
+    def test_file_like_interface(self):
+        from io import StringIO
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "out.log")
+            fb = FileBuffer(path)
+            tee = TeeBuffer(StringIO(), fb)
+            assert not tee.readable()
+            assert tee.writable()
+            assert not tee.seekable()
+            assert not tee.isatty()
+            fb.close()

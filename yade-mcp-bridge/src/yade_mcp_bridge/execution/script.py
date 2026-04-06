@@ -11,7 +11,7 @@ import time
 import traceback
 
 from ..signals import clear_current_task, clear_interrupt, set_current_task
-from ..utils import FileBuffer, TaskDataBuilder, build_response, path_to_llm_format
+from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, build_response, path_to_llm_format
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -34,7 +34,7 @@ class ScriptRunner:
             task.status = "running"
 
         old_stdout = sys.stdout
-        sys.stdout = output_buffer
+        sys.stdout = TeeBuffer(old_stdout, output_buffer)
 
         set_current_task(task_id)
 
