@@ -8,6 +8,7 @@ import logging
 import sys
 from io import StringIO
 
+from ..utils import TeeBuffer
 from .helpers import require_field
 
 logger = logging.getLogger("YADE-Bridge")
@@ -30,7 +31,8 @@ async def handle_execute_code(ctx, data):
             """Execute code in main thread, capturing stdout."""
             old_stdout = sys.stdout
             output_buffer = StringIO()
-            sys.stdout = output_buffer
+            terminal = sys.__stdout__ if sys.__stdout__ is not None else old_stdout
+            sys.stdout = TeeBuffer(terminal, output_buffer)
 
             try:
                 import __main__
