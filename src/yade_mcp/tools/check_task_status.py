@@ -1,6 +1,5 @@
 """Task status query tool backed by yade-mcp-bridge."""
 
-import asyncio
 from typing import Any
 
 from fastmcp import FastMCP
