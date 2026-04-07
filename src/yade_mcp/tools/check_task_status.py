@@ -29,11 +29,23 @@ def register(mcp: FastMCP) -> None:
         wait_seconds: WaitSeconds = 1,
     ) -> dict[str, Any]:
         """Check status and output for a submitted YADE task."""
-        await asyncio.sleep(wait_seconds)
-
         try:
             client = await get_bridge_client()
+            terminal_states = {"completed", "failed", "interrupted", "not_found"}
+
+            # Register listener BEFORE checking status to avoid missing
+            # a push notification that arrives between check and wait.
+            if wait_seconds > 0:
+                client.listen_for_task(task_id)
+
             response = await client.check_task_status(task_id)
+            status = normalize_status(response.get("status", "unknown"))
+
+            if status not in terminal_states and wait_seconds > 0:
+                await client.wait_for_task(task_id, timeout=wait_seconds)
+                response = await client.check_task_status(task_id)
+            else:
+                client.unlisten_task(task_id)
         except Exception as exc:
             return build_bridge_error(exc, task_id=task_id)
 

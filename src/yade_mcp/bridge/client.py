@@ -37,6 +37,7 @@ class YADEBridgeClient:
         self._websocket: Any | None = None
         self._receiver_task: asyncio.Task[Any] | None = None
         self._pending_requests: dict[str, asyncio.Future[dict[str, Any]]] = {}
+        self._task_events: dict[str, asyncio.Event] = {}
         self._lock = asyncio.Lock()
 
     @property
@@ -92,6 +93,14 @@ class YADEBridgeClient:
             async for raw_message in self._websocket:
                 payload = json.loads(raw_message)
                 msg_type = payload.get("type")
+
+                if msg_type == "task_status_changed":
+                    task_id = payload.get("task_id", "")
+                    event = self._task_events.get(task_id)
+                    if event:
+                        event.set()
+                    continue
+
                 if msg_type not in {"result", "execute_code_result"}:
                     continue
                 request_id = payload.get("request_id")
@@ -158,6 +167,36 @@ class YADEBridgeClient:
 
         assert last_error is not None
         raise ConnectionError(f"{operation_name} failed: {last_error}") from last_error
+
+    def listen_for_task(self, task_id: str) -> None:
+        """Pre-register an event listener for task completion.
+
+        Must be called BEFORE querying task status to avoid missing
+        a push notification that arrives between the query and wait.
+        """
+        if task_id not in self._task_events:
+            self._task_events[task_id] = asyncio.Event()
+
+    def unlisten_task(self, task_id: str) -> None:
+        """Remove a previously registered task listener."""
+        self._task_events.pop(task_id, None)
+
+    async def wait_for_task(self, task_id: str, timeout: float) -> bool:
+        """Wait for a task to reach terminal state via push notification.
+
+        Requires listen_for_task() to have been called first.
+        Returns True if notified, False on timeout.
+        """
+        event = self._task_events.get(task_id)
+        if event is None:
+            return False
+        try:
+            await asyncio.wait_for(event.wait(), timeout=timeout)
+            return True
+        except asyncio.TimeoutError:
+            return False
+        finally:
+            self._task_events.pop(task_id, None)
 
     async def execute_task(
         self,

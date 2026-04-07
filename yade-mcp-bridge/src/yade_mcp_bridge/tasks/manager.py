@@ -21,9 +21,10 @@ DEFAULT_MAX_TASKS = 1024
 class TaskManager:
     """Manage long-running task tracking, status queries, and disk persistence."""
 
-    def __init__(self, max_tasks=DEFAULT_MAX_TASKS):
+    def __init__(self, max_tasks=DEFAULT_MAX_TASKS, on_task_terminal=None):
         self.tasks = {}
         self._max_tasks = max_tasks
+        self.on_task_terminal = on_task_terminal
 
         for d in (DATA_DIR, LOGS_DIR):
             if not os.path.exists(d):
@@ -141,6 +142,12 @@ class TaskManager:
     def _on_task_status_change(self, task):
         logger.debug(f"Task {task.task_id} status changed to: {task.status}")
         self._save_tasks()
+
+        if task.status in ("completed", "failed", "interrupted") and self.on_task_terminal:
+            try:
+                self.on_task_terminal(task.task_id, task.status)
+            except Exception as e:
+                logger.warning(f"Failed to broadcast task status: {e}")
 
     def _save_tasks(self):
         try:

@@ -32,11 +32,15 @@ class YADEWebSocketServer:
         self.port = port
         self.ping_interval = ping_interval
         self.ping_timeout = ping_timeout
-        task_manager = TaskManager(max_tasks=max_tasks) if max_tasks is not None else TaskManager()
-        self.script_runner = ScriptRunner(main_executor, task_manager)
         self.active_connections = set()
         self.server = None
         self._loop = None
+
+        tm_kwargs = {"on_task_terminal": self._broadcast_task_status}
+        if max_tasks is not None:
+            tm_kwargs["max_tasks"] = max_tasks
+        task_manager = TaskManager(**tm_kwargs)
+        self.script_runner = ScriptRunner(main_executor, task_manager)
 
         self._context = ServerContext(
             task_manager=task_manager,
@@ -139,6 +143,30 @@ class YADEWebSocketServer:
                 "message": "Internal server error",
                 "error": str(e)
             })
+
+    def _broadcast_task_status(self, task_id, status):
+        """Broadcast task status change to all connected clients.
+
+        Called from the YADE main thread (via Future callback), not the
+        asyncio event loop thread, so we use run_coroutine_threadsafe.
+        """
+        if not self._loop or not self.active_connections:
+            return
+
+        msg = json.dumps({
+            "type": "task_status_changed",
+            "task_id": task_id,
+            "status": status,
+        })
+
+        async def _send_all():
+            for ws in list(self.active_connections):
+                try:
+                    await ws.send(msg)
+                except Exception:
+                    pass
+
+        asyncio.run_coroutine_threadsafe(_send_all(), self._loop)
 
     async def handle_client(self, websocket, path=None):
         remote = websocket.remote_address
