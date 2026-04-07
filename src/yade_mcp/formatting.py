@@ -13,18 +13,15 @@ from yade_mcp.contracts import build_error
 # Task status / output formatting
 # =============================================================================
 
-STATUS_MAP = {
-    "pending": "pending",
-    "running": "running",
+_LEGACY_STATUS_MAP = {
     "success": "completed",
     "error": "failed",
-    "interrupted": "interrupted",
-    "not_found": "not_found",
 }
 
 
 def normalize_status(status: str) -> str:
-    return STATUS_MAP.get(status, status)
+    """Normalize task status. Maps legacy bridge names for compatibility."""
+    return _LEGACY_STATUS_MAP.get(status, status)
 
 
 def format_unix_timestamp(value: Any) -> str:

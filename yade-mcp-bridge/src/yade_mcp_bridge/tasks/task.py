@@ -154,7 +154,7 @@ class ScriptTask:
                     pass
             builder.with_result(self._serialize_result(result_data))
             message = f"Script completed: {self.description}\nElapsed time: {elapsed_time:.2f}s"
-            return build_response("success", message, builder.build())
+            return build_response("completed", message, builder.build())
 
         if current_status == "interrupted":
             message = f"Script interrupted: {self.description}\nElapsed time: {elapsed_time:.2f}s"
@@ -164,7 +164,7 @@ class ScriptTask:
         error_msg = self.error or "Task execution failed"
         builder.with_error(error_msg)
         message = f"Script failed: {self.description}\nElapsed time: {elapsed_time:.2f}s\nError: {error_msg}"
-        return build_response("error", message, builder.build())
+        return build_response("failed", message, builder.build())
 
     def get_task_info(self):
         info = {
