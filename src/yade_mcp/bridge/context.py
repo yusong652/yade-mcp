@@ -27,7 +27,10 @@ async def fetch_bridge_context() -> dict[str, Any] | None:
         data = response.get("data") or {}
         entries = data.get("entries", [])
         if entries:
-            context["console"] = [_format_entry(e) for e in entries]
+            context["user_console"] = {
+                "description": "Recent commands the USER typed in the YADE interactive console. Not from this LLM session.",
+                "entries": [_format_entry(e) for e in entries],
+            }
     except Exception as exc:
         logger.warning("Console context unavailable: %s", exc)
 
