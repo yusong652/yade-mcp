@@ -101,7 +101,7 @@ class YADEBridgeClient:
                         event.set()
                     continue
 
-                if msg_type not in {"result", "execute_code_result"}:
+                if msg_type not in {"result", "execute_code_result", "console_history_result"}:
                     continue
                 request_id = payload.get("request_id")
                 if not request_id:
@@ -238,6 +238,13 @@ class YADEBridgeClient:
             {"type": "interrupt_task", "task_id": task_id},
             operation_name="interrupt_task",
             timeout_s=5.0,
+        )
+
+    async def consume_console_history(self, limit: int = 20) -> dict[str, Any]:
+        return await self._request_with_retry(
+            {"type": "console_history", "limit": limit},
+            operation_name="console_history",
+            timeout_s=3.0,
         )
 
     async def execute_code(self, code: str, timeout_ms: int = 10000) -> dict[str, Any]:

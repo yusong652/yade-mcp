@@ -87,4 +87,4 @@ def register(mcp: FastMCP) -> None:
         if data.get("result") is not None:
             result_data["result"] = data["result"]
 
-        return build_ok(result_data)
+        return await build_ok(result_data)

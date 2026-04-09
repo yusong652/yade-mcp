@@ -91,10 +91,22 @@ def _enforce_size(envelope: dict[str, Any], max_chars: int = MAX_RESPONSE_CHARS)
     return envelope
 
 
-def build_ok(data: Any) -> dict[str, Any]:
-    """Build, validate, and size-enforce a success envelope."""
+async def build_ok(data: Any) -> dict[str, Any]:
+    """Build, validate, and size-enforce a success envelope with bridge context."""
     envelope = ToolEnvelope(ok=True, data=data).model_dump(exclude_none=True)
-    return _enforce_size(envelope)
+    envelope = _enforce_size(envelope)
+
+    # Inject bridge context (console history, etc.)
+    try:
+        from yade_mcp.bridge.context import fetch_bridge_context
+        context = await fetch_bridge_context()
+        if context:
+            envelope["_context"] = context
+    except Exception:
+        import logging
+        logging.getLogger("yade-mcp.contracts").debug("Context injection skipped", exc_info=True)
+
+    return envelope
 
 
 def build_error(

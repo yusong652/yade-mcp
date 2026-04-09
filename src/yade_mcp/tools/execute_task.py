@@ -60,7 +60,7 @@ def register(mcp: FastMCP) -> None:
                 action="Check script path and bridge logs, then retry",
             )
 
-        return build_ok(
+        return await build_ok(
             {
                 "task_id": task_id,
                 "entry_script": entry_script,

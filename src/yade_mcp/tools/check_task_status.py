@@ -84,4 +84,4 @@ def register(mcp: FastMCP) -> None:
         if data.get("error"):
             result["error"] = data["error"]
 
-        return build_ok(result)
+        return await build_ok(result)

@@ -57,7 +57,7 @@ def register(mcp: FastMCP) -> None:
             }
             normalized_tasks.append(normalized_task)
 
-        return build_ok(
+        return await build_ok(
             {
                 "total_count": total_count,
                 "displayed_count": displayed_count,

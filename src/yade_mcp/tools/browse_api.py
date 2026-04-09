@@ -13,7 +13,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_browse_api tool."""
 
     @mcp.tool()
-    def yade_browse_api(
+    async def yade_browse_api(
         path: str | None = Field(
             None,
             description=(
@@ -49,16 +49,16 @@ def register(mcp: FastMCP) -> None:
             )
 
         if level == "root":
-            return _browse_root()
+            return await _browse_root()
 
         if level == "category":
-            return _browse_category(resolved["category"])
+            return await _browse_category(resolved["category"])
 
         if level == "subcategory":
-            return _browse_category(resolved["category"], resolved["subcategory"])
+            return await _browse_category(resolved["category"], resolved["subcategory"])
 
         if level == "class":
-            return _browse_class(
+            return await _browse_class(
                 resolved["category"],
                 resolved["class_name"],
                 resolved.get("subcategory"),
@@ -67,9 +67,9 @@ def register(mcp: FastMCP) -> None:
         return build_error("unknown_level", f"Unknown path level: {level}")
 
 
-def _browse_root() -> dict[str, Any]:
+async def _browse_root() -> dict[str, Any]:
     categories = APILoader.list_categories()
-    return build_ok(
+    return await build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
@@ -79,7 +79,7 @@ def _browse_root() -> dict[str, Any]:
     )
 
 
-def _browse_category(category: str, subcategory: str | None = None) -> dict[str, Any]:
+async def _browse_category(category: str, subcategory: str | None = None) -> dict[str, Any]:
     classes = APILoader.list_classes(category, subcategory)
     if classes is None:
         path = f"{category}.{subcategory}" if subcategory else category
@@ -90,7 +90,6 @@ def _browse_category(category: str, subcategory: str | None = None) -> dict[str,
 
     display_path = f"{category}.{subcategory}" if subcategory else category
 
-    # Also show subcategories if this category has them and no subcategory specified
     entries: list[dict[str, Any]] = []
     if not subcategory:
         index = APILoader.load_index()
@@ -117,7 +116,7 @@ def _browse_category(category: str, subcategory: str | None = None) -> dict[str,
             }
         )
 
-    return build_ok(
+    return await build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
@@ -131,11 +130,10 @@ def _browse_category(category: str, subcategory: str | None = None) -> dict[str,
     )
 
 
-def _browse_class(category: str, class_name: str, subcategory: str | None = None) -> dict[str, Any]:
+async def _browse_class(category: str, class_name: str, subcategory: str | None = None) -> dict[str, Any]:
     doc = APILoader.load_class(category, class_name, subcategory=subcategory)
 
     if not doc:
-        # Show available classes as hint
         classes = APILoader.list_classes(category, subcategory) or []
         available = [c["name"] for c in classes]
         path = f"{category}.{subcategory}" if subcategory else category
@@ -147,7 +145,7 @@ def _browse_class(category: str, class_name: str, subcategory: str | None = None
 
     display_path = f"{category}.{subcategory}.{class_name}" if subcategory else f"{category}.{class_name}"
 
-    return build_ok(
+    return await build_ok(
         build_docs_data(
             source="python_api",
             action="browse",

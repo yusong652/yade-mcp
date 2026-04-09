@@ -13,7 +13,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_query_api tool."""
 
     @mcp.tool()
-    def yade_query_api(
+    async def yade_query_api(
         query: PythonAPISearchQuery,
         limit: SearchLimit = 10,
     ) -> dict[str, Any]:
@@ -39,4 +39,4 @@ def register(mcp: FastMCP) -> None:
             summary={"count": len(matches), "query": query},
         )
 
-        return build_ok(payload)
+        return await build_ok(payload)

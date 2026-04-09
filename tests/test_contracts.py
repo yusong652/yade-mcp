@@ -13,19 +13,22 @@ from yade_mcp.contracts import (
 
 
 class TestBuildOk:
-    def test_basic(self):
-        result = build_ok({"key": "value"})
+    @pytest.mark.asyncio
+    async def test_basic(self):
+        result = await build_ok({"key": "value"})
         assert result["ok"] is True
         assert result["data"]["key"] == "value"
         assert "error" not in result
 
-    def test_none_data(self):
-        result = build_ok(None)
+    @pytest.mark.asyncio
+    async def test_none_data(self):
+        result = await build_ok(None)
         assert result["ok"] is True
 
-    def test_enforces_size_limit(self):
+    @pytest.mark.asyncio
+    async def test_enforces_size_limit(self):
         big_data = {"output": "x" * (MAX_RESPONSE_CHARS * 2)}
-        result = build_ok(big_data)
+        result = await build_ok(big_data)
         serialized = json.dumps(result, ensure_ascii=False)
         assert len(result["data"]["output"]) < MAX_RESPONSE_CHARS * 2
 
@@ -68,16 +71,19 @@ class TestBuildDocsData:
 
 
 class TestSizeEnforcement:
-    def test_small_response_unchanged(self):
-        result = build_ok({"msg": "hello"})
+    @pytest.mark.asyncio
+    async def test_small_response_unchanged(self):
+        result = await build_ok({"msg": "hello"})
         assert result["data"]["msg"] == "hello"
 
-    def test_large_string_truncated(self):
-        result = build_ok({"output": "line\n" * 5000})
+    @pytest.mark.asyncio
+    async def test_large_string_truncated(self):
+        result = await build_ok({"output": "line\n" * 5000})
         assert "truncated" in result["data"]["output"].lower()
 
-    def test_extremely_large_response(self):
+    @pytest.mark.asyncio
+    async def test_extremely_large_response(self):
         huge = {"field_" + str(i): "x" * 5000 for i in range(100)}
-        result = build_ok(huge)
+        result = await build_ok(huge)
         serialized = json.dumps(result, ensure_ascii=False)
         assert "_truncated" in serialized or len(serialized) < MAX_RESPONSE_CHARS * 3

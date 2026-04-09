@@ -26,7 +26,7 @@ def register(mcp: FastMCP) -> None:
         message = response.get("message", "")
 
         if status == "success":
-            return build_ok(
+            return await build_ok(
                 {
                     "task_id": task_id,
                     "interrupt_requested": True,
