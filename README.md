@@ -77,11 +77,9 @@ Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to c
 
 ## Features
 
-- **Rich class documentation** — covers the YADE Python API, enriched with real types, defaults, and docstrings
-- **Hierarchical API browsing** — agents navigate categories, subcategories, and classes with progressive disclosure, reducing hallucination
-- **BM25 keyword search** — fast, ranked search across all API docs by natural language queries
-- **Synchronous REPL** — rapid iteration for querying simulation state (`O.bodies`, `O.iter`, quick tests)
-- **Async task lifecycle** — submit long-running simulations, monitor progress, gracefully interrupt via PyRunner, and browse history
+- **API documentation & search** — browse and search the full YADE Python API with ranked results, real types, and defaults
+- **Live code execution** — run code in the YADE process and get results back instantly, or submit long-running simulations with progress monitoring and interruption
+- **User intent awareness** — agents automatically see what the user is doing in the YADE console, enabling contextual assistance without explicit instructions
 - **Multi-client compatible** — works with Claude Code, Codex CLI, Gemini CLI, OpenCode, and other MCP clients
 
 ## Contributing
