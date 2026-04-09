@@ -136,19 +136,21 @@ class TeeBuffer:
         if not s:
             return 0
         self._file_buffer.write(s)
-        try:
-            self._terminal.write(s)
-            self._terminal.flush()
-        except (ValueError, OSError):
-            pass
+        if self._terminal is not None:
+            try:
+                self._terminal.write(s)
+                self._terminal.flush()
+            except (ValueError, OSError):
+                pass
         return len(s)
 
     def flush(self):
         self._file_buffer.flush()
-        try:
-            self._terminal.flush()
-        except (ValueError, OSError):
-            pass
+        if self._terminal is not None:
+            try:
+                self._terminal.flush()
+            except (ValueError, OSError):
+                pass
 
     def getvalue(self, max_size=None):
         return self._file_buffer.getvalue(max_size)
