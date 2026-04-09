@@ -6,10 +6,12 @@ import logging
 
 import websockets
 
+from .console import ConsoleHistory
 from .execution import ScriptRunner
 from .handlers import (
     ServerContext,
     handle_check_task_status,
+    handle_console_history,
     handle_execute_code,
     handle_interrupt_task,
     handle_list_tasks,
@@ -42,11 +44,15 @@ class YADEWebSocketServer:
         task_manager = TaskManager(**tm_kwargs)
         self.script_runner = ScriptRunner(main_executor, task_manager)
 
+        self.console_history = ConsoleHistory()
+        self.console_history.on_new_entry = self._broadcast_console_entry
+
         self._context = ServerContext(
             task_manager=task_manager,
             script_runner=self.script_runner,
             main_executor=self.main_executor,
             runtime_mode=runtime_mode,
+            console_history=self.console_history,
         )
 
         self._handlers = {
@@ -55,6 +61,7 @@ class YADEWebSocketServer:
             "list_tasks": handle_list_tasks,
             "interrupt_task": handle_interrupt_task,
             "execute_code": handle_execute_code,
+            "console_history": handle_console_history,
             "ping": handle_ping,
         }
 
@@ -157,6 +164,29 @@ class YADEWebSocketServer:
             "type": "task_status_changed",
             "task_id": task_id,
             "status": status,
+        })
+
+        async def _send_all():
+            for ws in list(self.active_connections):
+                try:
+                    await ws.send(msg)
+                except Exception:
+                    pass
+
+        asyncio.run_coroutine_threadsafe(_send_all(), self._loop)
+
+    def _broadcast_console_entry(self, entry):
+        """Broadcast new console entry notification to all connected clients.
+
+        Called from the main thread (IPython hook), so we use
+        run_coroutine_threadsafe like _broadcast_task_status.
+        """
+        if not self._loop or not self.active_connections:
+            return
+
+        msg = json.dumps({
+            "type": "console_entry",
+            "entry_id": entry.get("id"),
         })
 
         async def _send_all():

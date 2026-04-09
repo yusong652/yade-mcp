@@ -288,6 +288,11 @@ def start(
         runtime_mode=mode, max_tasks=max_tasks,
     )
 
+    # Install IPython hooks for console history capture
+    from .console import ConsoleCapture
+    console_capture = ConsoleCapture(yade_server.console_history)
+    capture_ok = console_capture.install()
+
     def run_server_background():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
@@ -342,6 +347,7 @@ def start(
     print(f"  URL:         ws://{host}:{port}")
     print(f"  Log:         {log_file}")
     print(f"  PyRunner:    {f'installed (period={interrupt_check_period})' if pyrunner_ok else 'not available'}")
+    print(f"  Console:     {'capture active' if capture_ok else 'capture not available'}")
     print("=" * 60 + "\n")
 
     # Main-thread task pump

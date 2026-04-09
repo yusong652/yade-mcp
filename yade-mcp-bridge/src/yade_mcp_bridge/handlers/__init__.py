@@ -1,5 +1,6 @@
 """YADE WebSocket Server Message Handlers."""
 
+from .console import handle_console_history
 from .context import ServerContext
 from .execute_code import handle_execute_code
 from .tasks import (
@@ -17,5 +18,6 @@ __all__ = [
     "handle_list_tasks",
     "handle_interrupt_task",
     "handle_execute_code",
+    "handle_console_history",
     "handle_ping",
 ]
