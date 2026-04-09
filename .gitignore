@@ -16,3 +16,4 @@ venv/
 .mcp.json
 .yade-mcp/
 .coverage
+docker/workspace/

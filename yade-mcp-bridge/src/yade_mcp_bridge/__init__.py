@@ -68,8 +68,8 @@ def _start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
     return True
 
 
-def _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
-    """Block the main thread and poll task queue. Used in console/batch mode."""
+def _run_background_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
+    """Poll task queue in a loop. Runs in a background daemon thread."""
     import time
 
     per_tick = None
@@ -82,15 +82,12 @@ def _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
             per_tick = 1
 
     sleep_s = interval_ms / 1000.0
-    try:
-        while True:
-            try:
-                main_executor.process_tasks(max_tasks=per_tick)
-            except Exception as e:  # task pump must not crash event loop
-                logger.error(f"Task pump tick failed: {e}")
-            time.sleep(sleep_s)
-    except KeyboardInterrupt:
-        logger.info("Bridge stopped by user")
+    while True:
+        try:
+            main_executor.process_tasks(max_tasks=per_tick)
+        except Exception as e:  # task pump must not crash
+            logger.error(f"Task pump tick failed: {e}")
+        time.sleep(sleep_s)
 
 
 def _install_pyrunner(main_executor, interrupt_check_period, logger):
@@ -362,6 +359,18 @@ def start(
 
     if use_blocking:
         yade_server.set_runtime_mode("console")
-        print(f"Task loop running via blocking poll (interval={interval_ms}ms)")
-        print("Press Ctrl+C to stop.\n")
-        _run_blocking_pump(main_executor, interval_ms, max_tasks_per_tick, logger)
+        pump_thread = threading.Thread(
+            target=_run_background_pump,
+            args=(main_executor, interval_ms, max_tasks_per_tick, logger),
+            daemon=True,
+            name="mcp-task-pump",
+        )
+        pump_thread.start()
+        # Remove stdout handler so background log messages don't
+        # interfere with the interactive console prompt.
+        # Logs are still written to bridge.log.
+        for h in root_logger.handlers[:]:
+            if isinstance(h, logging.StreamHandler) and not isinstance(h, logging.FileHandler):
+                root_logger.removeHandler(h)
+        print(f"Task loop running via background thread (interval={interval_ms}ms)")
+        print(f"Bridge started. Console is available. Logs: {log_file}\n")

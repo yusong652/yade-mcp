@@ -160,7 +160,7 @@ class TestScriptTask:
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="done task")
         f.set_result({"status": "success", "result": 99})
         resp = task.get_status_response()
-        assert resp["status"] == "success"
+        assert resp["status"] == "completed"
         assert "completed" in resp["message"]
 
     def test_get_status_response_failed(self):
@@ -168,7 +168,7 @@ class TestScriptTask:
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="bad task")
         f.set_result({"status": "error", "message": "kaboom"})
         resp = task.get_status_response()
-        assert resp["status"] == "error"
+        assert resp["status"] == "failed"
         assert "kaboom" in resp["message"]
 
 

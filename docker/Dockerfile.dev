@@ -1,0 +1,27 @@
+# YADE + yade-mcp-bridge development image
+#
+# Build:  docker build -f docker/Dockerfile.dev -t yade-dev .
+# Run:    docker run -it -p 9002:9002 yade-dev
+#
+# The bridge WebSocket will be available at ws://localhost:9002
+
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ── Install YADE from apt (pre-compiled, no build needed) ───────
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        yade \
+        python3-yade \
+        python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Install yade-mcp-bridge ─────────────────────────────────────
+COPY yade-mcp-bridge/ /yade-mcp-bridge/
+RUN pip3 install /yade-mcp-bridge/
+
+WORKDIR /workspace
+EXPOSE 9002
+
+CMD ["yade"]
