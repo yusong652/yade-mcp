@@ -99,11 +99,13 @@ async def build_ok(data: Any) -> dict[str, Any]:
     # Inject bridge context (console history, etc.)
     try:
         from yade_mcp.bridge.context import fetch_bridge_context
+
         context = await fetch_bridge_context()
         if context:
             envelope["_context"] = context
     except Exception:
         import logging
+
         logging.getLogger("yade-mcp.contracts").debug("Context injection skipped", exc_info=True)
 
     return envelope
