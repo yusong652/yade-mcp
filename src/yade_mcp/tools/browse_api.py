@@ -75,7 +75,8 @@ async def _browse_root() -> dict[str, Any]:
             action="browse",
             entries=[{"entry_type": "category", **cat} for cat in categories],
             summary={"count": len(categories), "hint": "Browse a category for its classes"},
-        )
+        ),
+        inject_context=False,
     )
 
 
@@ -126,7 +127,8 @@ async def _browse_category(category: str, subcategory: str | None = None) -> dic
                 "category": display_path,
                 "hint": "Browse a class for full documentation",
             },
-        )
+        ),
+        inject_context=False,
     )
 
 
@@ -157,5 +159,6 @@ async def _browse_class(category: str, class_name: str, subcategory: str | None 
                 }
             ],
             summary={"count": 1, "class": class_name},
-        )
+        ),
+        inject_context=False,
     )
