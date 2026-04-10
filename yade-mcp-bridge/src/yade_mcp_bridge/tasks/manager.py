@@ -6,7 +6,7 @@ import os
 import time
 import uuid
 
-from .task import ScriptTask
+from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -38,8 +38,13 @@ class TaskManager:
         if task_id is None:
             task_id = uuid.uuid4().hex[:8]
         task = ScriptTask(
-            task_id, future, script_name, entry_script,
-            output_buffer, description, on_status_change=self._on_task_status_change,
+            task_id,
+            future,
+            script_name,
+            entry_script,
+            output_buffer,
+            description,
+            on_status_change=self._on_task_status_change,
         )
         self.tasks[task_id] = task
         self._prune_old_tasks()
@@ -53,16 +58,12 @@ class TaskManager:
                 return True
         return False
 
-    def get_task_status(self, task_id):
+    def get_task_status(self, task_id, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
         task = self.tasks.get(task_id)
         if not task:
-            return {
-                "status": "not_found",
-                "message": f"Task ID not found: {task_id}",
-                "data": None
-            }
+            return {"status": "not_found", "message": f"Task ID not found: {task_id}", "data": None}
         self._refresh_runtime_status(task)
-        return task.get_status_response()
+        return task.get_status_response(skip_newest=skip_newest, limit=limit, filter_text=filter_text)
 
     def list_all_tasks(self, offset=0, limit=None):
         for task in self.tasks.values():
@@ -84,8 +85,8 @@ class TaskManager:
                 "displayed_count": len(tasks_info),
                 "offset": offset,
                 "limit": limit,
-                "has_more": end_idx < total_count
-            }
+                "has_more": end_idx < total_count,
+            },
         }
 
     def _refresh_runtime_status(self, task):
@@ -153,7 +154,7 @@ class TaskManager:
         try:
             tasks_data = [self._serialize_task(task) for task in self.tasks.values()]
             temp = TASKS_FILENAME + ".tmp"
-            with open(temp, 'w') as f:
+            with open(temp, "w") as f:
                 json.dump(tasks_data, f, indent=2)
             os.replace(temp, TASKS_FILENAME)
         except OSError as e:

@@ -2,12 +2,13 @@
 
 import asyncio
 import json
+from concurrent.futures import Future
 
 import pytest
 import websockets
-
 from yade_mcp_bridge.execution.main_thread import MainThreadExecutor
 from yade_mcp_bridge.server import create_server
+from yade_mcp_bridge.tasks.task import ScriptTask
 
 
 @pytest.fixture()
@@ -28,6 +29,28 @@ async def bridge_server():
     url = "ws://127.0.0.1:{}".format(port)
 
     yield url, executor
+
+    server.server.close()
+    await server.server.wait_closed()
+
+
+@pytest.fixture()
+async def bridge_server_with_tasks(tmp_path):
+    """Bridge server fixture that exposes the task_manager for direct task injection."""
+    executor = MainThreadExecutor()
+    server = create_server(
+        main_executor=executor,
+        host="127.0.0.1",
+        port=0,
+        ping_interval=None,
+        ping_timeout=None,
+        runtime_mode="test",
+    )
+    await server.start()
+    port = server.server.sockets[0].getsockname()[1]
+    url = f"ws://127.0.0.1:{port}"
+
+    yield url, server._context.task_manager, tmp_path
 
     server.server.close()
     await server.server.wait_closed()
@@ -149,6 +172,125 @@ class TestTaskProtocol:
         resp = await _send_recv(url, {"type": "check_task_status", "request_id": "t2"})
         assert resp["status"] == "error"
         assert "task_id required" in resp["message"]
+
+
+# =========================================================================
+# Check task status pagination (bridge-side)
+# =========================================================================
+
+
+class TestCheckTaskStatusPagination:
+    """End-to-end websocket tests for bridge-side pagination of task output.
+
+    Injects a ScriptTask backed by a real log file into the task_manager,
+    then issues check_task_status messages with various skip_newest/limit/
+    filter_text combinations and verifies that both the output window and
+    the pagination metadata reflect the full log (not a pre-truncated view).
+    """
+
+    def _inject_task(self, task_manager, tmp_path, task_id, lines):
+        log_path = str(tmp_path / f"{task_id}.log")
+        with open(log_path, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines))
+
+        future = Future()
+        future.set_result({"status": "success"})
+        task = ScriptTask(
+            task_id,
+            future,
+            f"{task_id}.py",
+            f"/tmp/{task_id}.py",
+            description=f"task {task_id}",
+        )
+        task.log_path = log_path
+        task_manager.tasks[task_id] = task
+        return log_path
+
+    async def test_default_pagination_returns_tail_window(self, bridge_server_with_tasks):
+        url, task_manager, tmp_path = bridge_server_with_tasks
+        self._inject_task(task_manager, tmp_path, "tail1", [f"line {i}" for i in range(200)])
+
+        resp = await _send_recv(url, {
+            "type": "check_task_status",
+            "request_id": "p1",
+            "task_id": "tail1",
+        })
+
+        assert resp["status"] == "completed"
+        data = resp["data"]
+        assert data["pagination"]["total_lines"] == 200
+        assert data["pagination"]["has_older"] is True
+        assert data["pagination"]["has_newer"] is False
+        # Default limit=64, so we should see the last 64 lines.
+        assert "line 199" in data["output"]
+        assert "line 136" in data["output"]
+        assert "line 135" not in data["output"]
+
+    async def test_skip_newest_and_limit(self, bridge_server_with_tasks):
+        url, task_manager, tmp_path = bridge_server_with_tasks
+        self._inject_task(task_manager, tmp_path, "skip1", [f"line {i}" for i in range(100)])
+
+        resp = await _send_recv(url, {
+            "type": "check_task_status",
+            "request_id": "p2",
+            "task_id": "skip1",
+            "skip_newest": 10,
+            "limit": 5,
+        })
+
+        data = resp["data"]
+        assert data["pagination"]["total_lines"] == 100
+        assert data["pagination"]["has_older"] is True
+        assert data["pagination"]["has_newer"] is True
+        # Skipping 10 from the end leaves lines 0..89; limit=5 picks lines 85..89.
+        assert "line 89" in data["output"]
+        assert "line 85" in data["output"]
+        assert "line 84" not in data["output"]
+        assert "line 90" not in data["output"]
+
+    async def test_filter_text_applies_to_full_log(self, bridge_server_with_tasks):
+        url, task_manager, tmp_path = bridge_server_with_tasks
+        # Interleave error lines throughout a 300-line log — some are past
+        # any naive head-truncation window, which is exactly the bug we
+        # are guarding against.
+        lines = []
+        for i in range(300):
+            if i in (5, 150, 295):
+                lines.append(f"error at step {i}")
+            else:
+                lines.append(f"ok {i}")
+        self._inject_task(task_manager, tmp_path, "filter1", lines)
+
+        resp = await _send_recv(url, {
+            "type": "check_task_status",
+            "request_id": "p3",
+            "task_id": "filter1",
+            "filter_text": "error",
+            "limit": 10,
+        })
+
+        data = resp["data"]
+        assert data["pagination"]["total_lines"] == 3
+        assert "error at step 5" in data["output"]
+        assert "error at step 150" in data["output"]
+        assert "error at step 295" in data["output"]
+        assert "ok " not in data["output"]
+
+    async def test_empty_log_returns_empty_pagination(self, bridge_server_with_tasks):
+        url, task_manager, tmp_path = bridge_server_with_tasks
+        self._inject_task(task_manager, tmp_path, "empty1", [])
+
+        resp = await _send_recv(url, {
+            "type": "check_task_status",
+            "request_id": "p4",
+            "task_id": "empty1",
+        })
+
+        data = resp["data"]
+        assert data["pagination"]["total_lines"] == 0
+        assert data["pagination"]["line_range"] == "0-0"
+        assert data["pagination"]["has_older"] is False
+        assert data["pagination"]["has_newer"] is False
 
 
 # =========================================================================

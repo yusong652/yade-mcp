@@ -17,38 +17,37 @@ async def handle_yade_task(ctx, data):
 
     description = data.get("description", "")
 
-    result = await ctx.script_runner.run(
-        script_path, description, task_id=task_id
-    )
+    result = await ctx.script_runner.run(script_path, description, task_id=task_id)
 
     if "message" in result:
         result["message"] = truncate_message(result["message"])
 
-    return {
-        "type": "result",
-        "request_id": request_id,
-        **result
-    }
+    return {"type": "result", "request_id": request_id, **result}
 
 
 async def handle_check_task_status(ctx, data):
-    """Handle check_task_status message."""
+    """Handle check_task_status message with bridge-side output pagination."""
     request_id = data.get("request_id", "unknown")
 
     task_id, err = require_field(data, "task_id", request_id)
     if err:
         return err
 
-    result = ctx.task_manager.get_task_status(task_id)
+    skip_newest = data.get("skip_newest", 0)
+    limit = data.get("limit", 64)
+    filter_text = data.get("filter_text")
+
+    result = ctx.task_manager.get_task_status(
+        task_id,
+        skip_newest=skip_newest,
+        limit=limit,
+        filter_text=filter_text,
+    )
 
     if "message" in result:
         result["message"] = truncate_message(result["message"])
 
-    return {
-        "type": "result",
-        "request_id": request_id,
-        **result
-    }
+    return {"type": "result", "request_id": request_id, **result}
 
 
 async def handle_list_tasks(ctx, data):
@@ -59,11 +58,7 @@ async def handle_list_tasks(ctx, data):
 
     result = ctx.task_manager.list_all_tasks(offset=offset, limit=limit)
 
-    return {
-        "type": "result",
-        "request_id": request_id,
-        **result
-    }
+    return {"type": "result", "request_id": request_id, **result}
 
 
 async def handle_interrupt_task(ctx, data):
@@ -83,7 +78,7 @@ async def handle_interrupt_task(ctx, data):
             "request_id": request_id,
             "status": "error",
             "message": f"Task not found: {task_id}",
-            "data": {"task_id": task_id, "interrupt_requested": False}
+            "data": {"task_id": task_id, "interrupt_requested": False},
         }
 
     task_status = task.status
@@ -93,7 +88,7 @@ async def handle_interrupt_task(ctx, data):
             "request_id": request_id,
             "status": "error",
             "message": f"Task already in terminal state: {task_id} (status: {task_status})",
-            "data": {"task_id": task_id, "status": task_status, "interrupt_requested": False}
+            "data": {"task_id": task_id, "status": task_status, "interrupt_requested": False},
         }
 
     request_interrupt(task_id)
@@ -102,5 +97,5 @@ async def handle_interrupt_task(ctx, data):
         "request_id": request_id,
         "status": "success",
         "message": f"Interrupt requested for task: {task_id}",
-        "data": {"task_id": task_id, "interrupt_requested": True}
+        "data": {"task_id": task_id, "interrupt_requested": True},
     }

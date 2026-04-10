@@ -26,9 +26,16 @@ logger = logging.getLogger("YADE-Bridge")
 class YADEWebSocketServer:
     """WebSocket server for YADE script execution via main thread queue."""
 
-    def __init__(self, main_executor, host="localhost", port=9002,
-                 ping_interval=20, ping_timeout=40, runtime_mode="unknown",
-                 max_tasks=None):
+    def __init__(
+        self,
+        main_executor,
+        host="localhost",
+        port=9002,
+        ping_interval=20,
+        ping_timeout=40,
+        runtime_mode="unknown",
+        max_tasks=None,
+    ):
         self.main_executor = main_executor
         self.host = host
         self.port = port
@@ -82,16 +89,27 @@ class YADEWebSocketServer:
 
     @staticmethod
     def _truncate_response(response, max_bytes):
-        """Truncate large response data to fit within WebSocket limits."""
+        """Truncate large response data to fit within WebSocket limits.
+
+        Keeps the TAIL of output (most recent content), since monitoring
+        scenarios care about current progress, not the start of a long log.
+        For task responses this is a defensive safety net — bridge-side
+        pagination already limits output before it reaches this path.
+        """
         data = response.get("data", {})
         if isinstance(data, dict) and "output" in data:
             output = data["output"]
             if isinstance(output, str) and len(output) > 10000:
-                data["output"] = output[:10000] + (
-                    f"\n\n... [TRUNCATED: output was {len(output)} chars, "
-                    f"exceeds WebSocket size limit. "
-                    f"Consider writing output to file instead of printing.]"
-                )
+                tail = output[-10000:]
+                nl = tail.find("\n")
+                if nl >= 0:
+                    tail = tail[nl + 1 :]
+                omitted = len(output) - len(tail)
+                data["output"] = (
+                    f"... [TRUNCATED: {omitted} earlier chars omitted, "
+                    f"showing most recent {len(tail)} chars. "
+                    f"Consider writing output to file instead of printing.]\n"
+                ) + tail
                 response["data"] = data
         return response
 
@@ -123,6 +141,7 @@ class YADEWebSocketServer:
             handler = self._handlers.get(msg_type)
             if handler:
                 import time
+
                 t0 = time.time()
                 response = await handler(self._context, data)
                 elapsed_ms = (time.time() - t0) * 1000
@@ -136,20 +155,12 @@ class YADEWebSocketServer:
 
         except json.JSONDecodeError as e:
             logger.error("Invalid JSON: %s", e)
-            await self._send_response(websocket, {
-                "type": "error",
-                "message": "Invalid JSON format",
-                "error": str(e)
-            })
+            await self._send_response(websocket, {"type": "error", "message": "Invalid JSON format", "error": str(e)})
         except asyncio.CancelledError:
             raise
         except Exception as e:
             logger.error("[%s] Message handling error: %s", data.get("request_id", "?")[:8], e)
-            await self._send_response(websocket, {
-                "type": "error",
-                "message": "Internal server error",
-                "error": str(e)
-            })
+            await self._send_response(websocket, {"type": "error", "message": "Internal server error", "error": str(e)})
 
     def _broadcast_task_status(self, task_id, status):
         """Broadcast task status change to all connected clients.
@@ -160,11 +171,13 @@ class YADEWebSocketServer:
         if not self._loop or not self.active_connections:
             return
 
-        msg = json.dumps({
-            "type": "task_status_changed",
-            "task_id": task_id,
-            "status": status,
-        })
+        msg = json.dumps(
+            {
+                "type": "task_status_changed",
+                "task_id": task_id,
+                "status": status,
+            }
+        )
 
         async def _send_all():
             for ws in list(self.active_connections):
@@ -184,10 +197,12 @@ class YADEWebSocketServer:
         if not self._loop or not self.active_connections:
             return
 
-        msg = json.dumps({
-            "type": "console_entry",
-            "entry_id": entry.get("id"),
-        })
+        msg = json.dumps(
+            {
+                "type": "console_entry",
+                "entry_id": entry.get("id"),
+            }
+        )
 
         async def _send_all():
             for ws in list(self.active_connections):
@@ -244,10 +259,21 @@ class YADEWebSocketServer:
         self._context.runtime_mode = runtime_mode
 
 
-def create_server(main_executor, host="localhost", port=9002,
-                  ping_interval=20, ping_timeout=40, runtime_mode="unknown",
-                  max_tasks=None):
+def create_server(
+    main_executor,
+    host="localhost",
+    port=9002,
+    ping_interval=20,
+    ping_timeout=40,
+    runtime_mode="unknown",
+    max_tasks=None,
+):
     return YADEWebSocketServer(
-        main_executor, host, port, ping_interval, ping_timeout,
-        runtime_mode=runtime_mode, max_tasks=max_tasks,
+        main_executor,
+        host,
+        port,
+        ping_interval,
+        ping_timeout,
+        runtime_mode=runtime_mode,
+        max_tasks=max_tasks,
     )

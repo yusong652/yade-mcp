@@ -8,6 +8,8 @@ from ..utils import TaskDataBuilder, build_response
 
 logger = logging.getLogger("YADE-Bridge")
 
+DEFAULT_PAGINATION_LIMIT = 64
+
 
 class ScriptTask:
     """Task for Python script execution with real-time output capture.
@@ -20,8 +22,9 @@ class ScriptTask:
     - "interrupted": Task was interrupted by user
     """
 
-    def __init__(self, task_id, future, script_name, entry_script,
-                 output_buffer=None, description=None, on_status_change=None):
+    def __init__(
+        self, task_id, future, script_name, entry_script, output_buffer=None, description=None, on_status_change=None
+    ):
         self.task_id = task_id
         self.future = future
         self.description = description or ""
@@ -35,7 +38,7 @@ class ScriptTask:
         self.error = None
 
         self.log_path = None
-        if output_buffer and hasattr(output_buffer, 'get_path'):
+        if output_buffer and hasattr(output_buffer, "get_path"):
             self.log_path = output_buffer.get_path()
 
         future.add_done_callback(self._on_complete)
@@ -101,47 +104,74 @@ class ScriptTask:
             return 0.0
         return time.time() - self.start_time
 
-    def get_current_output(self):
+    def get_paginated_output(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
+        """Return (output_text, pagination) paginating the task log on the bridge side.
+
+        Reads the complete log file, optionally filters by substring, then
+        extracts a tail-biased window: skip `skip_newest` lines from the end,
+        then take up to `limit` lines backwards from there. Pagination metadata
+        reflects the full log (or the filtered view), so MCP can trust it.
+        """
         if self.output_buffer:
             try:
                 self.output_buffer.flush()
             except (ValueError, OSError):
                 pass
 
-        if self.log_path:
+        full = ""
+        if self.log_path and os.path.exists(self.log_path):
             try:
-                if os.path.exists(self.log_path):
-                    with open(self.log_path, encoding='utf-8') as f:
-                        return f.read()
+                with open(self.log_path, encoding="utf-8", errors="replace") as f:
+                    full = f.read()
             except OSError as e:
                 logger.warning(f"Failed to read log file: {e}")
 
-        snapshot = getattr(self, '_output_snapshot', None)
-        return snapshot if snapshot else None
+        if not full:
+            full = getattr(self, "_output_snapshot", "") or ""
+
+        lines = full.splitlines()
+        if filter_text:
+            lines = [line for line in lines if filter_text in line]
+
+        total_lines = len(lines)
+        start_idx = max(0, total_lines - limit - skip_newest)
+        end_idx = max(0, total_lines - skip_newest)
+        selected = lines[start_idx:end_idx]
+
+        pagination = {
+            "total_lines": total_lines,
+            "line_range": f"{start_idx + 1}-{end_idx}" if selected else "0-0",
+            "has_older": start_idx > 0,
+            "has_newer": skip_newest > 0,
+        }
+
+        text = "\n".join(selected) if selected else ""
+        return text, pagination
 
     def _create_data_builder(self):
-        return TaskDataBuilder(
-            self.task_id, "script",
-            self.script_name, self.entry_script, self.description
-        )
+        return TaskDataBuilder(self.task_id, "script", self.script_name, self.entry_script, self.description)
 
-    def get_status_response(self):
+    def get_status_response(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
         current_status = self.status
         elapsed_time = self.get_elapsed_time()
-        current_output = self.get_current_output()
+        output_text, pagination = self.get_paginated_output(
+            skip_newest=skip_newest, limit=limit, filter_text=filter_text
+        )
 
         builder = self._create_data_builder()
 
         if current_status in ("pending", "running"):
             builder.with_timing(self.start_time, elapsed_time=elapsed_time)
-            builder.with_output(current_output)
+            builder.with_output(output_text)
+            builder.with_pagination(pagination)
             phase = "queued" if current_status == "pending" else "executing"
             message = f"Script {phase}: {self.description}\nElapsed time: {elapsed_time:.2f}s"
             return build_response(current_status, message, builder.build())
 
         # completed / failed / interrupted
         builder.with_timing(self.start_time, self.end_time, elapsed_time)
-        builder.with_output(current_output if current_output else "")
+        builder.with_output(output_text)
+        builder.with_pagination(pagination)
 
         if current_status == "completed":
             result_data = None

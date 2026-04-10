@@ -26,6 +26,11 @@ class TaskDataBuilder:
             self._data["output"] = output
         return self
 
+    def with_pagination(self, pagination):
+        if pagination is not None:
+            self._data["pagination"] = pagination
+        return self
+
     def with_result(self, result):
         self._data["result"] = result
         return self

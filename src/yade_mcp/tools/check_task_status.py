@@ -11,7 +11,6 @@ from yade_mcp.formatting import (
     build_operation_error,
     format_unix_timestamp,
     normalize_status,
-    paginate_output,
 )
 from yade_mcp.utils import FilterText, OutputLimit, SkipNewestLines, TaskId, WaitSeconds
 
@@ -37,12 +36,22 @@ def register(mcp: FastMCP) -> None:
             if wait_seconds > 0:
                 client.listen_for_task(task_id)
 
-            response = await client.check_task_status(task_id)
+            response = await client.check_task_status(
+                task_id,
+                skip_newest=skip_newest,
+                limit=limit,
+                filter_text=filter,
+            )
             status = normalize_status(response.get("status", "unknown"))
 
             if status not in terminal_states and wait_seconds > 0:
                 await client.wait_for_task(task_id, timeout=wait_seconds)
-                response = await client.check_task_status(task_id)
+                response = await client.check_task_status(
+                    task_id,
+                    skip_newest=skip_newest,
+                    limit=limit,
+                    filter_text=filter,
+                )
             else:
                 client.unlisten_task(task_id)
         except Exception as exc:
@@ -60,12 +69,14 @@ def register(mcp: FastMCP) -> None:
         data = response.get("data") or {}
         normalized_status = normalize_status(status)
 
-        output_text, pagination = paginate_output(
-            output=data.get("output") or "",
-            skip_newest=skip_newest,
-            limit=limit,
-            filter_text=filter,
-        )
+        bridge_output = data.get("output") or ""
+        output_text = bridge_output if bridge_output else "(no output)"
+        pagination = data.get("pagination") or {
+            "total_lines": 0,
+            "line_range": "0-0",
+            "has_older": False,
+            "has_newer": False,
+        }
 
         result: dict[str, Any] = {
             "task_id": task_id,

@@ -6,7 +6,6 @@ from yade_mcp.formatting import (
     format_unix_timestamp,
     is_bridge_connectivity_error,
     normalize_status,
-    paginate_output,
 )
 
 
@@ -40,41 +39,6 @@ class TestFormatUnixTimestamp:
     def test_float_timestamp(self):
         result = format_unix_timestamp(1700000000.0)
         assert "2023" in result
-
-
-class TestPaginateOutput:
-    def test_empty_output(self):
-        text, pag = paginate_output("", skip_newest=0, limit=10, filter_text=None)
-        assert text == "(no output)"
-        assert pag["total_lines"] == 0
-
-    def test_basic_pagination(self):
-        output = "\n".join(f"line {i}" for i in range(20))
-        text, pag = paginate_output(output, skip_newest=0, limit=5, filter_text=None)
-        assert pag["total_lines"] == 20
-        assert pag["has_older"] is True
-        assert pag["has_newer"] is False
-        assert "line 19" in text
-        assert "line 15" in text
-
-    def test_skip_newest(self):
-        output = "\n".join(f"line {i}" for i in range(20))
-        text, pag = paginate_output(output, skip_newest=5, limit=5, filter_text=None)
-        assert pag["has_newer"] is True
-        assert "line 19" not in text
-        assert "line 14" in text
-
-    def test_filter_text(self):
-        output = "error: something\ninfo: ok\nerror: another"
-        text, pag = paginate_output(output, skip_newest=0, limit=10, filter_text="error")
-        assert pag["total_lines"] == 2
-        assert "info" not in text
-
-    def test_limit_larger_than_output(self):
-        output = "line 1\nline 2"
-        text, pag = paginate_output(output, skip_newest=0, limit=100, filter_text=None)
-        assert pag["total_lines"] == 2
-        assert pag["has_older"] is False
 
 
 class TestIsBridgeConnectivityError:

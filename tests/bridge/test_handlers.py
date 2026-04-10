@@ -68,9 +68,25 @@ class TestHandleCheckTaskStatus:
             "message": "Task completed",
         }
         resp = await handle_check_task_status(ctx, {"request_id": "r1", "task_id": "t1"})
-        ctx.task_manager.get_task_status.assert_called_once_with("t1")
+        ctx.task_manager.get_task_status.assert_called_once_with(
+            "t1", skip_newest=0, limit=64, filter_text=None,
+        )
         assert resp["status"] == "success"
         assert resp["request_id"] == "r1"
+
+    async def test_forwards_pagination_params(self):
+        ctx = _make_ctx()
+        ctx.task_manager.get_task_status.return_value = {"status": "success", "message": "ok"}
+        await handle_check_task_status(ctx, {
+            "request_id": "r1",
+            "task_id": "t1",
+            "skip_newest": 10,
+            "limit": 32,
+            "filter_text": "error",
+        })
+        ctx.task_manager.get_task_status.assert_called_once_with(
+            "t1", skip_newest=10, limit=32, filter_text="error",
+        )
 
 
 # =========================================================================

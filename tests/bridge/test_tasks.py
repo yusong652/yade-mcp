@@ -171,6 +171,80 @@ class TestScriptTask:
         assert resp["status"] == "failed"
         assert "kaboom" in resp["message"]
 
+    def _make_task_with_log(self, tmp_path, lines):
+        """Helper: create a task backed by a real log file containing given lines."""
+        log_path = str(tmp_path / "task.log")
+        with open(log_path, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines))
+        f = Future()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
+        task.log_path = log_path
+        return task
+
+    def test_paginated_output_empty_log(self, tmp_path):
+        task = self._make_task_with_log(tmp_path, [])
+        text, pag = task.get_paginated_output()
+        assert text == ""
+        assert pag["total_lines"] == 0
+        assert pag["line_range"] == "0-0"
+        assert pag["has_older"] is False
+        assert pag["has_newer"] is False
+
+    def test_paginated_output_tail_window(self, tmp_path):
+        task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
+        text, pag = task.get_paginated_output(skip_newest=0, limit=5)
+        assert pag["total_lines"] == 20
+        assert pag["has_older"] is True
+        assert pag["has_newer"] is False
+        assert "line 19" in text
+        assert "line 15" in text
+        assert "line 14" not in text
+
+    def test_paginated_output_skip_newest(self, tmp_path):
+        task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
+        text, pag = task.get_paginated_output(skip_newest=5, limit=5)
+        assert pag["has_newer"] is True
+        assert "line 19" not in text
+        assert "line 14" in text
+
+    def test_paginated_output_filter(self, tmp_path):
+        task = self._make_task_with_log(
+            tmp_path, ["error: one", "info: ok", "error: two", "debug: noise"]
+        )
+        text, pag = task.get_paginated_output(filter_text="error")
+        assert pag["total_lines"] == 2
+        assert "info" not in text
+        assert "debug" not in text
+        assert "error: one" in text
+        assert "error: two" in text
+
+    def test_paginated_output_limit_exceeds_total(self, tmp_path):
+        task = self._make_task_with_log(tmp_path, ["a", "b"])
+        text, pag = task.get_paginated_output(limit=100)
+        assert pag["total_lines"] == 2
+        assert pag["has_older"] is False
+        assert "a" in text and "b" in text
+
+    def test_paginated_output_handles_bad_bytes(self, tmp_path):
+        """Log with invalid UTF-8 should not crash thanks to errors='replace'."""
+        log_path = str(tmp_path / "task.log")
+        with open(log_path, "wb") as fh:
+            fh.write(b"ok line\n\xff\xfe bad bytes\nlast line")
+        f = Future()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
+        task.log_path = log_path
+        text, pag = task.get_paginated_output()
+        assert pag["total_lines"] == 3
+        assert "last line" in text
+
+    def test_get_status_response_includes_pagination(self, tmp_path):
+        task = self._make_task_with_log(tmp_path, ["alpha", "beta"])
+        resp = task.get_status_response()
+        data = resp["data"]
+        assert "pagination" in data
+        assert data["pagination"]["total_lines"] == 2
+        assert "alpha" in data["output"]
+
 
 # =========================================================================
 # TaskManager
