@@ -14,6 +14,8 @@ venv/
 .env
 *.so
 .mcp.json
+.gemini/
 .yade-mcp/
+yade-mcp-bridge/uv.lock
 .coverage
 docker/workspace/
