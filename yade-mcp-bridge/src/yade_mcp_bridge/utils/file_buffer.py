@@ -30,7 +30,7 @@ class FileBuffer:
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        self._file = open(log_path, 'w', encoding='utf-8', buffering=buffer_size)
+        self._file = open(log_path, "w", encoding="utf-8", buffering=buffer_size)
         logger.debug(f"FileBuffer created: {log_path}")
 
     def write(self, s):
@@ -47,7 +47,7 @@ class FileBuffer:
             return ""
 
         try:
-            with open(self._path, encoding='utf-8') as f:
+            with open(self._path, encoding="utf-8") as f:
                 if max_size is None or self._size <= max_size:
                     return f.read()
                 return self._read_tail(f, max_size)

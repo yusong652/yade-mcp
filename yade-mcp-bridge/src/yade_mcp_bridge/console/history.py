@@ -46,7 +46,8 @@ class ConsoleHistory:
         self._load_cursor()
         logger.info(
             "ConsoleHistory initialized (%d entries, cursor=%d)",
-            len(self._entries), self._last_delivered_id,
+            len(self._entries),
+            self._last_delivered_id,
         )
 
     def add(self, input_text, output="", result=None, success=True):
@@ -168,7 +169,7 @@ class ConsoleHistory:
             return
 
         if len(entries) > self._max_entries:
-            entries = entries[-self._max_entries:]
+            entries = entries[-self._max_entries :]
 
         self._entries = entries
         self._next_id = max_id + 1
@@ -197,7 +198,7 @@ class ConsoleHistory:
         if len(self._entries) <= self._max_entries:
             return
 
-        self._entries = self._entries[-self._max_entries:]
+        self._entries = self._entries[-self._max_entries :]
         self._rewrite_file()
 
     def _rewrite_file(self):

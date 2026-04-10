@@ -10,7 +10,7 @@ def require_field(data, field_name, request_id, response_type="result"):
             "request_id": request_id,
             "status": "error",
             "message": f"{field_name} required",
-            "data": None
+            "data": None,
         }
     return value, None
 

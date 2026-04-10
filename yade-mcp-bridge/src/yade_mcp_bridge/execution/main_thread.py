@@ -24,8 +24,7 @@ class MainThreadExecutor:
         self.main_thread_id = threading.current_thread().ident
         self.main_thread_name = threading.current_thread().name
         logger.info(
-            "MainThreadExecutor initialized (main_thread=%s, id=%s)",
-            self.main_thread_name, self.main_thread_id
+            "MainThreadExecutor initialized (main_thread=%s, id=%s)", self.main_thread_name, self.main_thread_id
         )
 
     def submit(self, func, *args, **kwargs):
@@ -36,10 +35,7 @@ class MainThreadExecutor:
         """
         future = Future()
         self.task_queue.put((func, args, kwargs, future))
-        logger.debug(
-            "Task submitted: %s (queue_size=%d)",
-            func.__name__, self.task_queue.qsize()
-        )
+        logger.debug("Task submitted: %s (queue_size=%d)", func.__name__, self.task_queue.qsize())
         return future
 
     def process_tasks(self, max_tasks=None):
@@ -62,16 +58,16 @@ class MainThreadExecutor:
                 task_limit = parsed
 
         current_thread_id = threading.current_thread().ident
-        is_main_thread = (current_thread_id == self.main_thread_id)
+        is_main_thread = current_thread_id == self.main_thread_id
 
         if not is_main_thread:
             # Expected when called from YADE's PyRunner during O.run() —
             # C++ simulation thread invokes Python callback on a Dummy thread.
             # Still safe due to Python GIL and thread-safe queue.
             logger.debug(
-                "process_tasks() called from non-main thread: "
-                "current=%s, expected=%s",
-                threading.current_thread().name, self.main_thread_name
+                "process_tasks() called from non-main thread: current=%s, expected=%s",
+                threading.current_thread().name,
+                self.main_thread_name,
             )
 
         processed_count = 0

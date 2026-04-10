@@ -27,6 +27,7 @@ async def handle_execute_code(ctx, data):
     timeout_s = timeout_ms / 1000.0
 
     try:
+
         def _execute_code(code_str):
             """Execute code in main thread, capturing stdout."""
             old_stdout = sys.stdout
@@ -36,6 +37,7 @@ async def handle_execute_code(ctx, data):
 
             try:
                 import __main__
+
                 exec_globals = __main__.__dict__
                 exec_globals.pop("result", None)
 
@@ -51,7 +53,11 @@ async def handle_execute_code(ctx, data):
                 return {
                     "status": "success",
                     "output": output_text,
-                    "result": result if isinstance(result, (str, int, float, bool, list, dict, type(None))) else str(result) if result is not None else None,
+                    "result": result
+                    if isinstance(result, (str, int, float, bool, list, dict, type(None)))
+                    else str(result)
+                    if result is not None
+                    else None,
                 }
             except Exception as e:
                 output_text = output_buffer.getvalue()

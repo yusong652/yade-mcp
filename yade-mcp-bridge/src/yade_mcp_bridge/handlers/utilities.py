@@ -9,5 +9,5 @@ async def handle_ping(ctx, data):
         "request_id": request_id,
         "status": "success",
         "message": "pong",
-        "data": {"runtime_mode": ctx.runtime_mode}
+        "data": {"runtime_mode": ctx.runtime_mode},
     }

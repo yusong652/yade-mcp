@@ -150,21 +150,21 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
     def _make_pyrunner():
         """Create a fresh PyRunner instance."""
         return _pyrunner_config["PyRunner"](
-            command='_mcp_pyrunner_tick()',
+            command="_mcp_pyrunner_tick()",
             iterPeriod=_pyrunner_config["period"],
-            label='_mcp_bridge_runner',
+            label="_mcp_bridge_runner",
             dead=False,
         )
 
     def _has_our_pyrunner():
         """Check if our PyRunner is in O.engines."""
-        return any(hasattr(e, 'label') and e.label == '_mcp_bridge_runner' for e in O.engines)
+        return any(hasattr(e, "label") and e.label == "_mcp_bridge_runner" for e in O.engines)
 
     # Hook O.run() to auto-inject PyRunner before each simulation run.
     # This handles O.reset() clearing engines — our PyRunner gets
     # re-added transparently before simulation starts.
     # Guard against double-hooking if start() is called multiple times.
-    if not getattr(O.run, '_mcp_hooked', False):
+    if not getattr(O.run, "_mcp_hooked", False):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
@@ -189,7 +189,9 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 
     try:
         O.engines = list(O.engines) + [_make_pyrunner()]
-        logger.info(f"PyRunner installed (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing")
+        logger.info(
+            f"PyRunner installed (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing"
+        )
         return True
     except Exception as e:
         logger.warning(f"Failed to install PyRunner: {e}")
@@ -236,9 +238,7 @@ def start(
     import threading
 
     if mode not in VALID_RUNTIME_MODES:
-        raise ValueError(
-            f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}"
-        )
+        raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
 
     interval_ms = max(1, int(timer_interval_ms))
 
@@ -252,9 +252,8 @@ def start(
     root_logger.setLevel(logging.INFO)
     root_logger.handlers.clear()
 
-    formatter = logging.Formatter('[%(asctime)s] %(levelname)s - %(message)s')
-    for handler in [logging.StreamHandler(sys.stdout),
-                    logging.FileHandler(log_file, mode='w', encoding='utf-8')]:
+    formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
+    for handler in [logging.StreamHandler(sys.stdout), logging.FileHandler(log_file, mode="w", encoding="utf-8")]:
         handler.setFormatter(formatter)
         root_logger.addHandler(handler)
     logger = logging.getLogger("YADE-Bridge")
@@ -274,22 +273,24 @@ def start(
     try:
         sock.bind((host, port))
     except OSError as exc:
-        raise RuntimeError(
-            f"Port {port} is already in use. "
-            f"Try: yade_mcp_bridge.start(port={port + 1})"
-        ) from exc
+        raise RuntimeError(f"Port {port} is already in use. Try: yade_mcp_bridge.start(port={port + 1})") from exc
     finally:
         sock.close()
 
     # Start WebSocket server in background thread
     yade_server = create_server(
-        main_executor=main_executor, host=host, port=port,
-        ping_interval=ping_interval, ping_timeout=ping_timeout,
-        runtime_mode=mode, max_tasks=max_tasks,
+        main_executor=main_executor,
+        host=host,
+        port=port,
+        ping_interval=ping_interval,
+        ping_timeout=ping_timeout,
+        runtime_mode=mode,
+        max_tasks=max_tasks,
     )
 
     # Install IPython hooks for console history capture
     from .console import ConsoleCapture
+
     console_capture = ConsoleCapture(yade_server.console_history)
     capture_ok = console_capture.install()
 
@@ -302,6 +303,7 @@ def start(
         except Exception as e:
             logger.error(f"Server error: {e}")
             import traceback
+
             traceback.print_exc()
         finally:
             loop.close()

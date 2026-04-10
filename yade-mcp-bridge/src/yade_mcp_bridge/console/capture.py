@@ -73,6 +73,7 @@ class ConsoleCapture:
 
         def _wait():
             import time
+
             for _ in range(120):
                 time.sleep(0.5)
                 ip = _find_ipython_shell()
@@ -125,6 +126,7 @@ def _find_ipython_shell():
     """
     try:
         from IPython import get_ipython
+
         ip = get_ipython()
         if ip is not None:
             return ip
@@ -133,6 +135,7 @@ def _find_ipython_shell():
 
     try:
         from IPython.core.interactiveshell import InteractiveShell
+
         for obj in gc.get_objects():
             try:
                 if isinstance(obj, InteractiveShell):

@@ -43,6 +43,7 @@ class ScriptRunner:
             # Use __main__ namespace so YADE modules are available
             # and variables persist between executions
             import __main__
+
             exec_globals = __main__.__dict__
 
             exec_globals["__file__"] = script_path
@@ -162,9 +163,7 @@ class ScriptRunner:
             future = self.main_executor.submit(self._execute, script_path, script_content, output_buffer, task_id)
 
             submit_time = time.time()
-            self.task_manager.create_script_task(
-                future, script_name, script_path, output_buffer, description, task_id
-            )
+            self.task_manager.create_script_task(future, script_name, script_path, output_buffer, description, task_id)
 
             task = self.task_manager.tasks.get(task_id)
             if task and task.status == "pending":
