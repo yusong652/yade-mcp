@@ -1,0 +1,7 @@
+{
+  "name": "IGeom",
+  "category": "interactions",
+  "parent": "Serializable",
+  "description": "Geometrical configuration of interaction",
+  "attributes": []
+}

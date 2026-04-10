@@ -1,0 +1,7 @@
+{
+  "name": "Engine",
+  "category": "engines",
+  "parent": "Serializable",
+  "description": "Basic execution unit of simulation, called from the simulation loop (O.engines)",
+  "attributes": []
+}

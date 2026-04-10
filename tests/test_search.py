@@ -1,5 +1,6 @@
 """Tests for BM25 search: tokenizer, indexer, scorer."""
 
+from yade_mcp.knowledge.search import APISearch
 from yade_mcp.knowledge.search.document import SearchDocument
 from yade_mcp.knowledge.search.indexing.bm25_indexer import BM25Indexer
 from yade_mcp.knowledge.search.preprocessing.tokenizer import TextTokenizer
@@ -194,3 +195,20 @@ class TestBM25Scorer:
         assert "name" in info["field_scores"]
         assert "description" in info["field_scores"]
         assert "keywords" in info["field_scores"]
+
+
+# =========================================================================
+# APISearch result shaping
+# =========================================================================
+
+
+class TestAPISearch:
+    def test_results_include_valid_browse_path_for_leaf_class(self):
+        results = APISearch.search("newton integrator", top_k=5)
+        match = next(r for r in results if r["name"] == "NewtonIntegrator")
+        assert match["browse_path"] == "engine.GlobalEngine.NewtonIntegrator"
+
+    def test_results_include_valid_browse_path_for_tree_node_class(self):
+        results = APISearch.search("gravity engine", top_k=5)
+        match = next(r for r in results if r["name"] == "GravityEngine")
+        assert match["browse_path"] == "engine.GlobalEngine.FieldApplier.GravityEngine"

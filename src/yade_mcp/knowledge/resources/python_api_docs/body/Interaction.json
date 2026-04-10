@@ -1,0 +1,58 @@
+{
+  "name": "Interaction",
+  "category": "bodies",
+  "parent": "Serializable",
+  "description": "Interaction between pair of bodies.",
+  "attributes": [
+    {
+      "name": "cellDist",
+      "type": "Vector3i",
+      "default": "Vector3i(0,0,0)",
+      "description": "Distance of bodies in cell size units, if using periodic boundary conditions; id2 is shifted by this number of cells from its"
+    },
+    {
+      "name": "geom",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Geometry part of the interaction."
+    },
+    {
+      "name": "id1",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "id2",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "isActive",
+      "type": "bool",
+      "default": "True"
+    },
+    {
+      "name": "isReal",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "iterBorn",
+      "type": "int",
+      "default": "-1",
+      "description": "Step number at which the interaction was added to simulation."
+    },
+    {
+      "name": "iterMadeReal",
+      "type": "int",
+      "default": "-1",
+      "description": "Step number at which the interaction was fully (in the sense of geom and phys) created. (Should be touched only by"
+    },
+    {
+      "name": "phys",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Physical (material) part of the interaction."
+    }
+  ]
+}

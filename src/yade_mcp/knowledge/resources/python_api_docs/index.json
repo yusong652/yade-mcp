@@ -1,34 +1,396 @@
 {
   "categories": {
-    "bodies": {
-      "description": "Body types, states, containers, and boundary objects",
+    "body": {
+      "description": "Core body-related classes — Body, Cell, Interaction, EnergyTracker, MatchMaker",
+      "classes": [
+        "Body",
+        "Cell",
+        "EnergyTracker",
+        "Interaction",
+        "MatchMaker"
+      ],
+      "tree": {
+        "direct_classes": [
+          "Body",
+          "Cell",
+          "EnergyTracker",
+          "Interaction",
+          "MatchMaker"
+        ],
+        "children": {}
+      }
+    },
+    "bound": {
+      "description": "Body bounding volumes (Bound subtree) — Aabb",
       "classes": [
         "Aabb",
-        "Body",
-        "BodyContainer",
-        "Bound",
-        "Cell",
-        "ChainedState",
-        "CpmState",
-        "EnergyTracker",
-        "ForceContainer",
-        "Interaction",
-        "InteractionContainer",
-        "JCFpmState",
-        "MatchMaker",
-        "PartialSatState",
-        "SegmentedState",
-        "State",
-        "ThermalState",
-        "WireState"
-      ]
+        "Bound"
+      ],
+      "tree": {
+        "direct_classes": [
+          "Aabb",
+          "Bound"
+        ],
+        "children": {}
+      }
     },
-    "engines": {
-      "description": "Simulation engines, functors, dispatchers, and controllers",
+    "engine": {
+      "description": "Simulation engines (Engine subtree) — global/partial/periodic/dispatchers",
       "classes": [
-        "AttrFlags",
         "AxialGravityEngine",
         "BicyclePedalEngine",
+        "BoundDispatcher",
+        "BoundaryController",
+        "BoxFactory",
+        "CapillarityEngine",
+        "CapillaryStressRecorder",
+        "CentralConstantAccelerationEngine",
+        "CircularFactory",
+        "CohesiveFrictionalContactLaw",
+        "Collider",
+        "CombinedKinematicEngine",
+        "CpmStateUpdater",
+        "Disp2DPropLoadEngine",
+        "Dispatcher",
+        "DomainLimiter",
+        "DragEngine",
+        "ElasticContactLaw",
+        "Engine",
+        "FEInternalForceEngine",
+        "FacetTopologyAnalyzer",
+        "FieldApplier",
+        "FlatGridCollider",
+        "FlowEngine",
+        "FlowEngineT",
+        "FlowEngine_PeriodicInfo",
+        "FoamCoupling",
+        "ForceEngine",
+        "ForceRecorder",
+        "ForceResetter",
+        "GeneralIntegratorInsertionSortCollider",
+        "GlBoundDispatcher",
+        "GlIGeomDispatcher",
+        "GlIPhysDispatcher",
+        "GlShapeDispatcher",
+        "GlStateDispatcher",
+        "GlobalEngine",
+        "GlobalStiffnessTimeStepper",
+        "GravityEngine",
+        "HarmonicForceEngine",
+        "HarmonicMotionEngine",
+        "HarmonicRotationEngine",
+        "HdapsGravityEngine",
+        "HelixEngine",
+        "HydroForceEngine",
+        "HydrodynamicsLawLBM",
+        "IGeomDispatcher",
+        "IPhysDispatcher",
+        "InsertionSortCollider",
+        "Integrator",
+        "InteractionLoop",
+        "InternalForceDispatcher",
+        "InterpolatingDirectedForceEngine",
+        "InterpolatingHelixEngine",
+        "KinemCNDEngine",
+        "KinemCNLEngine",
+        "KinemCNSEngine",
+        "KinemCTDEngine",
+        "KinemSimpleShearBox",
+        "KinematicEngine",
+        "Law2_ScGeom_CapillaryPhys_Capillarity",
+        "LawDispatcher",
+        "LawTester",
+        "LinearDragEngine",
+        "LubricationPDFEngine",
+        "MeasureCapStress",
+        "MicroMacroAnalyser",
+        "NewtonIntegrator",
+        "PDFEngine",
+        "ParallelEngine",
+        "PartialEngine",
+        "PartialSatClayEngine",
+        "PartialSatClayEngineT",
+        "Peri3dController",
+        "PeriIsoCompressor",
+        "PeriTriaxController",
+        "PeriodicEngine",
+        "PeriodicFlowEngine",
+        "PolyhedraSplitter",
+        "PotentialParticleVTKRecorder",
+        "PyRunner",
+        "RadialForceEngine",
+        "Recorder",
+        "ResetRandomPosition",
+        "RotationEngine",
+        "RungeKuttaCashKarp54Integrator",
+        "SegmentedMatSprinkler",
+        "SegmentedStateUpdater",
+        "ServoPIDController",
+        "SnapshotEngine",
+        "SpatialQuickSortCollider",
+        "SpheresFactory",
+        "SplitPolyMohrCoulomb",
+        "SplitPolyTauMax",
+        "StepDisplacer",
+        "TesselationWrapper",
+        "TetraVolumetricLaw",
+        "ThermalEngine",
+        "ThreeDTriaxialEngine",
+        "TimeAverager",
+        "TimeStepper",
+        "TorqueEngine",
+        "TorqueRecorder",
+        "TranslationEngine",
+        "TriaxialCompressionEngine",
+        "TriaxialStateRecorder",
+        "TriaxialStressController",
+        "TwoPhaseFlowEngine",
+        "TwoPhaseFlowEngineT",
+        "UniaxialStrainer",
+        "UnsaturatedEngine",
+        "VESupportEngine",
+        "VTKRecorder"
+      ],
+      "tree": {
+        "direct_classes": [
+          "Engine",
+          "ParallelEngine"
+        ],
+        "children": {
+          "Dispatcher": {
+            "direct_classes": [
+              "BoundDispatcher",
+              "GlBoundDispatcher",
+              "GlIGeomDispatcher",
+              "GlIPhysDispatcher",
+              "GlShapeDispatcher",
+              "GlStateDispatcher",
+              "IGeomDispatcher",
+              "IPhysDispatcher",
+              "InternalForceDispatcher",
+              "LawDispatcher"
+            ],
+            "children": {}
+          },
+          "GlobalEngine": {
+            "direct_classes": [
+              "CapillarityEngine",
+              "CohesiveFrictionalContactLaw",
+              "ElasticContactLaw",
+              "FEInternalForceEngine",
+              "FacetTopologyAnalyzer",
+              "FoamCoupling",
+              "ForceResetter",
+              "HydrodynamicsLawLBM",
+              "InteractionLoop",
+              "Law2_ScGeom_CapillaryPhys_Capillarity",
+              "MicroMacroAnalyser",
+              "NewtonIntegrator",
+              "TesselationWrapper",
+              "TetraVolumetricLaw"
+            ],
+            "children": {
+              "BoundaryController": {
+                "direct_classes": [
+                  "Disp2DPropLoadEngine",
+                  "Peri3dController",
+                  "PeriIsoCompressor",
+                  "PeriTriaxController",
+                  "UniaxialStrainer",
+                  "VESupportEngine"
+                ],
+                "children": {
+                  "KinemSimpleShearBox": {
+                    "direct_classes": [
+                      "KinemCNDEngine",
+                      "KinemCNLEngine",
+                      "KinemCNSEngine",
+                      "KinemCTDEngine"
+                    ],
+                    "children": {}
+                  },
+                  "TriaxialStressController": {
+                    "direct_classes": [
+                      "ThreeDTriaxialEngine",
+                      "TriaxialCompressionEngine"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "Collider": {
+                "direct_classes": [
+                  "FlatGridCollider",
+                  "SpatialQuickSortCollider"
+                ],
+                "children": {
+                  "InsertionSortCollider": {
+                    "direct_classes": [
+                      "GeneralIntegratorInsertionSortCollider"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "FieldApplier": {
+                "direct_classes": [
+                  "AxialGravityEngine",
+                  "CentralConstantAccelerationEngine"
+                ],
+                "children": {
+                  "GravityEngine": {
+                    "direct_classes": [
+                      "HdapsGravityEngine"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "PeriodicEngine": {
+                "direct_classes": [
+                  "CpmStateUpdater",
+                  "DomainLimiter",
+                  "MeasureCapStress",
+                  "PotentialParticleVTKRecorder",
+                  "PyRunner",
+                  "ResetRandomPosition",
+                  "SegmentedMatSprinkler",
+                  "SegmentedStateUpdater",
+                  "SnapshotEngine",
+                  "VTKRecorder"
+                ],
+                "children": {
+                  "PDFEngine": {
+                    "direct_classes": [
+                      "LubricationPDFEngine"
+                    ],
+                    "children": {}
+                  },
+                  "PolyhedraSplitter": {
+                    "direct_classes": [
+                      "SplitPolyMohrCoulomb",
+                      "SplitPolyTauMax"
+                    ],
+                    "children": {}
+                  },
+                  "Recorder": {
+                    "direct_classes": [
+                      "CapillaryStressRecorder",
+                      "ForceRecorder",
+                      "TorqueRecorder",
+                      "TriaxialStateRecorder"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "SpheresFactory": {
+                "direct_classes": [
+                  "BoxFactory",
+                  "CircularFactory"
+                ],
+                "children": {}
+              },
+              "TimeStepper": {
+                "direct_classes": [
+                  "GlobalStiffnessTimeStepper"
+                ],
+                "children": {
+                  "Integrator": {
+                    "direct_classes": [
+                      "RungeKuttaCashKarp54Integrator"
+                    ],
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "PartialEngine": {
+            "direct_classes": [
+              "CombinedKinematicEngine",
+              "DragEngine",
+              "HarmonicForceEngine",
+              "HydroForceEngine",
+              "LawTester",
+              "LinearDragEngine",
+              "RadialForceEngine",
+              "StepDisplacer",
+              "ThermalEngine",
+              "TimeAverager",
+              "TorqueEngine"
+            ],
+            "children": {
+              "FlowEngineT": {
+                "direct_classes": [
+                  "FlowEngine"
+                ],
+                "children": {}
+              },
+              "FlowEngine_PeriodicInfo": {
+                "direct_classes": [
+                  "PeriodicFlowEngine"
+                ],
+                "children": {}
+              },
+              "ForceEngine": {
+                "direct_classes": [
+                  "InterpolatingDirectedForceEngine"
+                ],
+                "children": {}
+              },
+              "KinematicEngine": {
+                "direct_classes": [
+                  "BicyclePedalEngine",
+                  "HarmonicMotionEngine"
+                ],
+                "children": {
+                  "RotationEngine": {
+                    "direct_classes": [
+                      "HarmonicRotationEngine"
+                    ],
+                    "children": {
+                      "HelixEngine": {
+                        "direct_classes": [
+                          "InterpolatingHelixEngine"
+                        ],
+                        "children": {}
+                      }
+                    }
+                  },
+                  "TranslationEngine": {
+                    "direct_classes": [
+                      "ServoPIDController"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "PartialSatClayEngineT": {
+                "direct_classes": [
+                  "PartialSatClayEngine"
+                ],
+                "children": {}
+              },
+              "TwoPhaseFlowEngineT": {
+                "direct_classes": [],
+                "children": {
+                  "TwoPhaseFlowEngine": {
+                    "direct_classes": [
+                      "UnsaturatedEngine"
+                    ],
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "functor": {
+      "description": "Pluggable functors invoked by dispatchers — bound, contact geometry, contact physics, contact laws, rendering",
+      "classes": [
         "Bo1_Box_Aabb",
         "Bo1_ChainedCylinder_Aabb",
         "Bo1_Cylinder_Aabb",
@@ -44,43 +406,8 @@
         "Bo1_Subdomain_Aabb",
         "Bo1_Tetra_Aabb",
         "Bo1_Wall_Aabb",
-        "BodyIterator",
-        "BoundDispatcher",
         "BoundFunctor",
-        "BoundaryController",
-        "BoxFactory",
-        "CapillarityEngine",
-        "CapillaryStressRecorder",
-        "CentralConstantAccelerationEngine",
-        "CircularFactory",
-        "CohesiveFrictionalContactLaw",
-        "Collider",
-        "CombinedKinematicEngine",
-        "CpmStateUpdater",
-        "CundallStrackAdhesivePotential",
-        "CundallStrackPotential",
-        "Disp2DPropLoadEngine",
-        "Dispatcher",
-        "DomainLimiter",
-        "DragEngine",
-        "ElasticContactLaw",
-        "Engine",
-        "FEInternalForceEngine",
-        "FacetTopologyAnalyzer",
-        "FastMarchingMethod",
-        "FieldApplier",
-        "FileGenerator",
-        "FlatGridCollider",
-        "FlowEngine",
-        "FlowEngineT",
-        "FlowEngine_PeriodicInfo",
-        "FoamCoupling",
-        "ForceEngine",
-        "ForceRecorder",
-        "ForceResetter",
         "Functor",
-        "GeneralIntegratorInsertionSortCollider",
-        "GenericPotential",
         "Gl1_Aabb",
         "Gl1_Box",
         "Gl1_ChainedCylinder",
@@ -102,33 +429,12 @@
         "Gl1_Sphere",
         "Gl1_Tetra",
         "Gl1_Wall",
-        "GlBoundDispatcher",
         "GlBoundFunctor",
-        "GlExtraDrawer",
-        "GlExtra_AlphaGraph",
-        "GlExtra_LawTester",
-        "GlExtra_OctreeCubes",
-        "GlIGeomDispatcher",
         "GlIGeomFunctor",
-        "GlIPhysDispatcher",
         "GlIPhysFunctor",
-        "GlShapeDispatcher",
         "GlShapeFunctor",
-        "GlStateDispatcher",
         "GlStateFunctor",
-        "GlobalEngine",
-        "GlobalStiffnessTimeStepper",
-        "GravityEngine",
-        "HarmonicForceEngine",
-        "HarmonicMotionEngine",
-        "HarmonicRotationEngine",
-        "HdapsGravityEngine",
-        "HelixEngine",
-        "HydroForceEngine",
-        "HydrodynamicsLawLBM",
-        "IGeomDispatcher",
         "IGeomFunctor",
-        "IPhysDispatcher",
         "IPhysFunctor",
         "If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat",
         "If2_Lin4NodeTetra_LinIsoRayleighDampElast",
@@ -171,15 +477,7 @@
         "Ig2_Wall_Polyhedra_PolyhedraGeom",
         "Ig2_Wall_Sphere_L3Geom",
         "Ig2_Wall_Sphere_ScGeom",
-        "InsertionSortCollider",
-        "Integrator",
-        "InteractionIterator",
-        "InteractionLoop",
-        "InternalForceDispatcher",
         "InternalForceFunctor",
-        "InterpolatingDirectedForceEngine",
-        "InterpolatingHelixEngine",
-        "IntrCallback",
         "Ip2_2xInelastCohFrictMat_InelastCohFrictPhys",
         "Ip2_BubbleMat_BubbleMat_BubblePhys",
         "Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys",
@@ -212,190 +510,495 @@
         "Ip2_ViscElMat_ViscElMat_MultiViscElPhys",
         "Ip2_ViscElMat_ViscElMat_ViscElPhys",
         "Ip2_WireMat_WireMat_WirePhys",
-        "KinemCNDEngine",
-        "KinemCNLEngine",
-        "KinemCNSEngine",
-        "KinemCTDEngine",
-        "KinemSimpleShearBox",
-        "KinematicEngine",
-        "LBMbody",
-        "LBMlink",
-        "LBMnode",
-        "LawDispatcher",
+        "Law2_ChCylGeom6D_CohFrictPhys_CohesionMoment",
+        "Law2_CylScGeom6D_CohFrictPhys_CohesionMoment",
+        "Law2_CylScGeom_FrictPhys_CundallStrack",
+        "Law2_GridCoGridCoGeom_FrictPhys_CundallStrack",
+        "Law2_L3Geom_FrictPhys_ElPerfPl",
+        "Law2_L6Geom_FrictPhys_Linear",
+        "Law2_MultiScGeom_MultiFrictPhys_CundallStrack",
+        "Law2_MultiScGeom_MultiViscElPhys_Basic",
+        "Law2_PolyhedraGeom_PolyhedraPhys_Volumetric",
+        "Law2_SCG_KnKsPhys_KnKsLaw",
+        "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
+        "Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment",
+        "Law2_ScGeom_BubblePhys_Bubble",
+        "Law2_ScGeom_CpmPhys_Cpm",
+        "Law2_ScGeom_FrictPhys_CundallStrack",
+        "Law2_ScGeom_FrictViscoPhys_CundallStrackVisco",
+        "Law2_ScGeom_ImplicitLubricationPhys",
+        "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
+        "Law2_ScGeom_LudingPhys_Basic",
+        "Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM",
+        "Law2_ScGeom_MindlinPhys_HertzWithLinearShear",
+        "Law2_ScGeom_MindlinPhys_Mindlin",
+        "Law2_ScGeom_MindlinPhys_MindlinDeresiewitz",
+        "Law2_ScGeom_MortarPhys_Lourenco",
+        "Law2_ScGeom_PotentialLubricationPhys",
+        "Law2_ScGeom_VirtualLubricationPhys",
+        "Law2_ScGeom_ViscElCapPhys_Basic",
+        "Law2_ScGeom_ViscElPhys_Basic",
+        "Law2_ScGeom_ViscoFrictPhys_CundallStrack",
+        "Law2_ScGeom_WirePhys_WirePM",
+        "Law2_ScGridCoGeom_CohFrictPhys_CundallStrack",
+        "Law2_ScGridCoGeom_FrictPhys_CundallStrack",
+        "Law2_TTetraSimpleGeom_NormPhys_Simple",
+        "Law2_VolumeGeom_FrictPhys_Elastic",
+        "Law2_VolumeGeom_ViscoFrictPhys_Elastic",
         "LawFunctor",
-        "LawTester",
-        "LinExponentialPotential",
-        "LinearDragEngine",
-        "LubricationPDFEngine",
-        "MPIBodyContainer",
-        "MaterialContainer",
-        "MeasureCapStress",
-        "MicroMacroAnalyser",
-        "NewtonIntegrator",
-        "OpenGLRenderer",
-        "PDFEngine",
-        "ParallelEngine",
-        "PartialEngine",
-        "PartialSatClayEngine",
-        "PartialSatClayEngineT",
-        "Peri3dController",
-        "PeriIsoCompressor",
-        "PeriTriaxController",
-        "PeriodicEngine",
-        "PeriodicFlowEngine",
-        "PhaseCluster",
-        "PolyhedraSplitter",
-        "PotentialParticle2AABB",
-        "PotentialParticleVTKRecorder",
-        "PyRunner",
-        "RadialForceEngine",
-        "Recorder",
-        "RegularGrid",
-        "ResetRandomPosition",
-        "RotationEngine",
-        "RungeKuttaCashKarp54Integrator",
-        "STLImporter",
-        "Scene",
-        "SegmentedMatSprinkler",
-        "SegmentedStateUpdater",
-        "Serializable",
-        "ServoPIDController",
-        "SimpleShear",
-        "SnapshotEngine",
-        "SpatialQuickSortCollider",
-        "SpheresFactory",
-        "SplitPolyMohrCoulomb",
-        "SplitPolyTauMax",
-        "StepDisplacer",
-        "SumIntrForcesCb",
-        "TagsWrapper",
-        "TesselationWrapper",
-        "TetraVolumetricLaw",
-        "ThermalEngine",
-        "ThreeDTriaxialEngine",
-        "TimeAverager",
-        "TimeStepper",
-        "TimingDeltas",
-        "TorqueEngine",
-        "TorqueRecorder",
-        "TranslationEngine",
-        "TriaxialCompressionEngine",
-        "TriaxialStateRecorder",
-        "TriaxialStressController",
-        "TriaxialTest",
-        "TwoPhaseFlowEngine",
-        "TwoPhaseFlowEngineT",
-        "UniaxialStrainer",
-        "UnsaturatedEngine",
-        "VESupportEngine",
-        "VTKRecorder"
-      ]
-    },
-    "interactions": {
-      "description": "Contact geometry, physics, and constitutive laws",
-      "subcategories": {
-        "geometry": {
-          "description": "Contact geometry classes (IGeom)",
-          "classes": [
-            "ChCylGeom6D",
-            "CylScGeom",
-            "CylScGeom6D",
-            "GenericSpheresContact",
-            "GridCoGridCoGeom",
-            "GridNodeGeom6D",
-            "IGeom",
-            "L3Geom",
-            "L6Geom",
-            "LSnodeGeom",
-            "MultiScGeom",
-            "PolyhedraGeom",
-            "ScGeom",
-            "ScGeom6D",
-            "ScGridCoGeom",
-            "TTetraGeom",
-            "TTetraSimpleGeom",
-            "VolumeGeom"
-          ]
-        },
-        "laws": {
-          "description": "Constitutive law functors (Law2)",
-          "classes": [
-            "Law2_ChCylGeom6D_CohFrictPhys_CohesionMoment",
-            "Law2_CylScGeom6D_CohFrictPhys_CohesionMoment",
-            "Law2_CylScGeom_FrictPhys_CundallStrack",
-            "Law2_GridCoGridCoGeom_FrictPhys_CundallStrack",
-            "Law2_L3Geom_FrictPhys_ElPerfPl",
-            "Law2_L6Geom_FrictPhys_Linear",
-            "Law2_MultiScGeom_MultiFrictPhys_CundallStrack",
-            "Law2_MultiScGeom_MultiViscElPhys_Basic",
-            "Law2_PolyhedraGeom_PolyhedraPhys_Volumetric",
-            "Law2_SCG_KnKsPhys_KnKsLaw",
-            "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
-            "Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment",
-            "Law2_ScGeom_BubblePhys_Bubble",
-            "Law2_ScGeom_CapillaryPhys_Capillarity",
-            "Law2_ScGeom_CpmPhys_Cpm",
-            "Law2_ScGeom_FrictPhys_CundallStrack",
-            "Law2_ScGeom_FrictViscoPhys_CundallStrackVisco",
-            "Law2_ScGeom_ImplicitLubricationPhys",
-            "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
-            "Law2_ScGeom_LudingPhys_Basic",
-            "Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM",
-            "Law2_ScGeom_MindlinPhys_HertzWithLinearShear",
-            "Law2_ScGeom_MindlinPhys_Mindlin",
-            "Law2_ScGeom_MindlinPhys_MindlinDeresiewitz",
-            "Law2_ScGeom_MortarPhys_Lourenco",
-            "Law2_ScGeom_PotentialLubricationPhys",
-            "Law2_ScGeom_VirtualLubricationPhys",
-            "Law2_ScGeom_ViscElCapPhys_Basic",
-            "Law2_ScGeom_ViscElPhys_Basic",
-            "Law2_ScGeom_ViscoFrictPhys_CundallStrack",
-            "Law2_ScGeom_WirePhys_WirePM",
-            "Law2_ScGridCoGeom_CohFrictPhys_CundallStrack",
-            "Law2_ScGridCoGeom_FrictPhys_CundallStrack",
-            "Law2_TTetraSimpleGeom_NormPhys_Simple",
-            "Law2_VolumeGeom_FrictPhys_Elastic",
-            "Law2_VolumeGeom_ViscoFrictPhys_Elastic"
-          ]
-        },
-        "physics": {
-          "description": "Contact physics / constitutive models (IPhys)",
-          "classes": [
-            "BubblePhys",
-            "CapillaryMindlinPhysDelaunay",
-            "CapillaryPhys",
-            "CapillaryPhysDelaunay",
-            "CohFrictPhys",
-            "CpmPhys",
-            "FrictPhys",
-            "FrictViscoPhys",
-            "IPhys",
-            "InelastCohFrictPhys",
-            "JCFpmPhys",
-            "KnKsPhys",
-            "LubricationPhys",
-            "LudingPhys",
-            "MindlinCapillaryPhys",
-            "MindlinPhys",
-            "MindlinPhysCDM",
-            "MortarPhys",
-            "MultiFrictPhys",
-            "MultiPhys",
-            "MultiViscElPhys",
-            "NormPhys",
-            "NormShearPhys",
-            "PolyhedraPhys",
-            "RotStiffFrictPhys",
-            "ViscElCapPhys",
-            "ViscElPhys",
-            "ViscoFrictPhys",
-            "WirePhys"
-          ]
+        "PotentialParticle2AABB"
+      ],
+      "tree": {
+        "direct_classes": [
+          "Functor",
+          "GlStateFunctor"
+        ],
+        "children": {
+          "BoundFunctor": {
+            "direct_classes": [
+              "Bo1_Box_Aabb",
+              "Bo1_ChainedCylinder_Aabb",
+              "Bo1_Cylinder_Aabb",
+              "Bo1_DeformableElement_Aabb",
+              "Bo1_Facet_Aabb",
+              "Bo1_FluidDomainBbox_Aabb",
+              "Bo1_GridConnection_Aabb",
+              "Bo1_LevelSet_Aabb",
+              "Bo1_Node_Aabb",
+              "Bo1_PFacet_Aabb",
+              "Bo1_Polyhedra_Aabb",
+              "Bo1_Sphere_Aabb",
+              "Bo1_Subdomain_Aabb",
+              "Bo1_Tetra_Aabb",
+              "Bo1_Wall_Aabb",
+              "PotentialParticle2AABB"
+            ],
+            "children": {}
+          },
+          "GlBoundFunctor": {
+            "direct_classes": [
+              "Gl1_Aabb"
+            ],
+            "children": {}
+          },
+          "GlIGeomFunctor": {
+            "direct_classes": [
+              "Gl1_PolyhedraGeom"
+            ],
+            "children": {
+              "Gl1_L3Geom": {
+                "direct_classes": [
+                  "Gl1_L6Geom"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "GlIPhysFunctor": {
+            "direct_classes": [
+              "Gl1_CpmPhys",
+              "Gl1_NormPhys",
+              "Gl1_PolyhedraPhys"
+            ],
+            "children": {}
+          },
+          "GlShapeFunctor": {
+            "direct_classes": [
+              "Gl1_Box",
+              "Gl1_DeformableElement",
+              "Gl1_Facet",
+              "Gl1_GridConnection",
+              "Gl1_LevelSet",
+              "Gl1_Node",
+              "Gl1_PFacet",
+              "Gl1_Polyhedra",
+              "Gl1_PotentialParticle",
+              "Gl1_Sphere",
+              "Gl1_Tetra",
+              "Gl1_Wall"
+            ],
+            "children": {
+              "Gl1_Cylinder": {
+                "direct_classes": [
+                  "Gl1_ChainedCylinder"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "IGeomFunctor": {
+            "direct_classes": [
+              "Ig2_Box_LevelSet_ScGeom",
+              "Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D",
+              "Ig2_Facet_Polyhedra_PolyhedraGeom",
+              "Ig2_GridConnection_GridConnection_GridCoGridCoGeom",
+              "Ig2_LevelSet_LevelSet_VolumeGeom",
+              "Ig2_PP_PP_ScGeom",
+              "Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
+              "Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom",
+              "Ig2_Polyhedra_Polyhedra_ScGeom",
+              "Ig2_Sphere_LevelSet_ScGeom",
+              "Ig2_Sphere_Polyhedra_ScGeom",
+              "Ig2_Tetra_Tetra_TTetraGeom",
+              "Ig2_Tetra_Tetra_TTetraSimpleGeom",
+              "Ig2_Wall_LevelSet_MultiScGeom",
+              "Ig2_Wall_LevelSet_ScGeom",
+              "Ig2_Wall_LevelSet_VolumeGeom",
+              "Ig2_Wall_Polyhedra_PolyhedraGeom"
+            ],
+            "children": {
+              "Ig2_Box_Sphere_ScGeom": {
+                "direct_classes": [
+                  "Ig2_Box_Sphere_ScGeom6D"
+                ],
+                "children": {}
+              },
+              "Ig2_Facet_Sphere_ScGeom": {
+                "direct_classes": [
+                  "Ig2_Facet_Sphere_ScGeom6D"
+                ],
+                "children": {}
+              },
+              "Ig2_LevelSet_LevelSet_ScGeom": {
+                "direct_classes": [
+                  "Ig2_LevelSet_LevelSet_LSnodeGeom",
+                  "Ig2_LevelSet_LevelSet_MultiScGeom"
+                ],
+                "children": {}
+              },
+              "Ig2_Sphere_ChainedCylinder_CylScGeom": {
+                "direct_classes": [
+                  "Ig2_Sphere_ChainedCylinder_CylScGeom6D"
+                ],
+                "children": {}
+              },
+              "Ig2_Sphere_GridConnection_ScGridCoGeom": {
+                "direct_classes": [
+                  "Ig2_GridConnection_PFacet_ScGeom"
+                ],
+                "children": {
+                  "Ig2_Sphere_PFacet_ScGridCoGeom": {
+                    "direct_classes": [
+                      "Ig2_PFacet_PFacet_ScGeom"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "Ig2_Sphere_Sphere_L3Geom": {
+                "direct_classes": [
+                  "Ig2_Facet_Sphere_L3Geom",
+                  "Ig2_Sphere_Sphere_L6Geom",
+                  "Ig2_Wall_Sphere_L3Geom"
+                ],
+                "children": {}
+              },
+              "Ig2_Sphere_Sphere_ScGeom": {
+                "direct_classes": [
+                  "Ig2_GridNode_GridNode_GridNodeGeom6D",
+                  "Ig2_Sphere_Sphere_ScGeom6D"
+                ],
+                "children": {}
+              },
+              "Ig2_Wall_Sphere_ScGeom": {
+                "direct_classes": [
+                  "Ig2_Wall_PFacet_ScGeom"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "IPhysFunctor": {
+            "direct_classes": [
+              "Ip2_2xInelastCohFrictMat_InelastCohFrictPhys",
+              "Ip2_BubbleMat_BubbleMat_BubblePhys",
+              "Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys",
+              "Ip2_CohFrictMat_CohFrictMat_CohFrictPhys",
+              "Ip2_CpmMat_CpmMat_CpmPhys",
+              "Ip2_ElastMat_ElastMat_NormPhys",
+              "Ip2_ElastMat_ElastMat_NormShearPhys",
+              "Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM",
+              "Ip2_FrictMat_CpmMat_FrictPhys",
+              "Ip2_FrictMat_FrictMatCDM_MindlinPhysCDM",
+              "Ip2_FrictMat_FrictMat_CapillaryPhys",
+              "Ip2_FrictMat_FrictMat_KnKsPhys",
+              "Ip2_FrictMat_FrictMat_LubricationPhys",
+              "Ip2_FrictMat_FrictMat_MindlinCapillaryPhys",
+              "Ip2_FrictMat_FrictMat_MultiFrictPhys",
+              "Ip2_FrictMat_FrictViscoMat_FrictViscoPhys",
+              "Ip2_FrictMat_PolyhedraMat_FrictPhys",
+              "Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys",
+              "Ip2_JCFpmMat_JCFpmMat_JCFpmPhys",
+              "Ip2_LudingMat_LudingMat_LudingPhys",
+              "Ip2_MortarMat_MortarMat_MortarPhys",
+              "Ip2_PartialSatMat_PartialSatMat_MindlinPhys",
+              "Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys",
+              "Ip2_ViscElMat_ViscElMat_MultiViscElPhys",
+              "Ip2_WireMat_WireMat_WirePhys"
+            ],
+            "children": {
+              "Ip2_FrictMat_FrictMat_FrictPhys": {
+                "direct_classes": [
+                  "Ip2_FrictMat_FrictMat_CapillaryPhysDelaunay",
+                  "Ip2_FrictMat_FrictMat_ViscoFrictPhys"
+                ],
+                "children": {}
+              },
+              "Ip2_FrictMat_FrictMat_MindlinPhys": {
+                "direct_classes": [
+                  "Ip2_FrictMat_FrictMat_CapillaryMindlinPhysDelaunay"
+                ],
+                "children": {}
+              },
+              "Ip2_ViscElMat_ViscElMat_ViscElPhys": {
+                "direct_classes": [
+                  "Ip2_ViscElCapMat_ViscElCapMat_ViscElCapPhys"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "InternalForceFunctor": {
+            "direct_classes": [
+              "If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat",
+              "If2_Lin4NodeTetra_LinIsoRayleighDampElast"
+            ],
+            "children": {}
+          },
+          "LawFunctor": {
+            "direct_classes": [
+              "Law2_ChCylGeom6D_CohFrictPhys_CohesionMoment",
+              "Law2_CylScGeom6D_CohFrictPhys_CohesionMoment",
+              "Law2_CylScGeom_FrictPhys_CundallStrack",
+              "Law2_PolyhedraGeom_PolyhedraPhys_Volumetric",
+              "Law2_SCG_KnKsPhys_KnKsLaw",
+              "Law2_ScGeom6D_CohFrictPhys_CohesionMoment",
+              "Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment",
+              "Law2_ScGeom_BubblePhys_Bubble",
+              "Law2_ScGeom_CpmPhys_Cpm",
+              "Law2_ScGeom_FrictViscoPhys_CundallStrackVisco",
+              "Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM",
+              "Law2_ScGeom_LudingPhys_Basic",
+              "Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM",
+              "Law2_ScGeom_MindlinPhys_HertzWithLinearShear",
+              "Law2_ScGeom_MindlinPhys_Mindlin",
+              "Law2_ScGeom_MindlinPhys_MindlinDeresiewitz",
+              "Law2_ScGeom_MortarPhys_Lourenco",
+              "Law2_ScGeom_ViscElCapPhys_Basic",
+              "Law2_ScGeom_WirePhys_WirePM",
+              "Law2_ScGridCoGeom_CohFrictPhys_CundallStrack",
+              "Law2_ScGridCoGeom_FrictPhys_CundallStrack",
+              "Law2_TTetraSimpleGeom_NormPhys_Simple"
+            ],
+            "children": {
+              "Law2_L3Geom_FrictPhys_ElPerfPl": {
+                "direct_classes": [
+                  "Law2_L6Geom_FrictPhys_Linear"
+                ],
+                "children": {}
+              },
+              "Law2_ScGeom_FrictPhys_CundallStrack": {
+                "direct_classes": [
+                  "Law2_GridCoGridCoGeom_FrictPhys_CundallStrack",
+                  "Law2_MultiScGeom_MultiFrictPhys_CundallStrack",
+                  "Law2_ScGeom_ViscoFrictPhys_CundallStrack"
+                ],
+                "children": {}
+              },
+              "Law2_ScGeom_VirtualLubricationPhys": {
+                "direct_classes": [],
+                "children": {
+                  "Law2_ScGeom_ImplicitLubricationPhys": {
+                    "direct_classes": [
+                      "Law2_ScGeom_PotentialLubricationPhys"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "Law2_ScGeom_ViscElPhys_Basic": {
+                "direct_classes": [
+                  "Law2_MultiScGeom_MultiViscElPhys_Basic"
+                ],
+                "children": {}
+              },
+              "Law2_VolumeGeom_FrictPhys_Elastic": {
+                "direct_classes": [
+                  "Law2_VolumeGeom_ViscoFrictPhys_Elastic"
+                ],
+                "children": {}
+              }
+            }
+          }
         }
       }
     },
-    "materials": {
-      "description": "Material models (elastic, frictional, cohesive, etc.)",
+    "igeom": {
+      "description": "Contact geometry data types (IGeom subtree) — ScGeom, L3Geom, PolyhedraGeom, etc.",
+      "classes": [
+        "ChCylGeom6D",
+        "CylScGeom",
+        "CylScGeom6D",
+        "GenericSpheresContact",
+        "GridCoGridCoGeom",
+        "GridNodeGeom6D",
+        "IGeom",
+        "L3Geom",
+        "L6Geom",
+        "LSnodeGeom",
+        "MultiScGeom",
+        "PolyhedraGeom",
+        "ScGeom",
+        "ScGeom6D",
+        "ScGridCoGeom",
+        "TTetraGeom",
+        "TTetraSimpleGeom",
+        "VolumeGeom"
+      ],
+      "tree": {
+        "direct_classes": [
+          "IGeom",
+          "MultiScGeom",
+          "PolyhedraGeom",
+          "TTetraGeom",
+          "TTetraSimpleGeom",
+          "VolumeGeom"
+        ],
+        "children": {
+          "GenericSpheresContact": {
+            "direct_classes": [],
+            "children": {
+              "L3Geom": {
+                "direct_classes": [
+                  "L6Geom"
+                ],
+                "children": {}
+              },
+              "ScGeom": {
+                "direct_classes": [
+                  "CylScGeom",
+                  "GridCoGridCoGeom",
+                  "LSnodeGeom"
+                ],
+                "children": {
+                  "ScGeom6D": {
+                    "direct_classes": [
+                      "ChCylGeom6D",
+                      "CylScGeom6D",
+                      "GridNodeGeom6D",
+                      "ScGridCoGeom"
+                    ],
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "iphys": {
+      "description": "Contact physics data types (IPhys subtree) — FrictPhys, NormShearPhys, etc.",
+      "classes": [
+        "BubblePhys",
+        "CapillaryMindlinPhysDelaunay",
+        "CapillaryPhys",
+        "CapillaryPhysDelaunay",
+        "CohFrictPhys",
+        "CpmPhys",
+        "FrictPhys",
+        "FrictViscoPhys",
+        "IPhys",
+        "InelastCohFrictPhys",
+        "JCFpmPhys",
+        "KnKsPhys",
+        "LubricationPhys",
+        "LudingPhys",
+        "MindlinCapillaryPhys",
+        "MindlinPhys",
+        "MindlinPhysCDM",
+        "MortarPhys",
+        "MultiFrictPhys",
+        "MultiPhys",
+        "MultiViscElPhys",
+        "NormPhys",
+        "NormShearPhys",
+        "PolyhedraPhys",
+        "RotStiffFrictPhys",
+        "ViscElCapPhys",
+        "ViscElPhys",
+        "ViscoFrictPhys",
+        "WirePhys"
+      ],
+      "tree": {
+        "direct_classes": [
+          "BubblePhys",
+          "IPhys"
+        ],
+        "children": {
+          "MultiPhys": {
+            "direct_classes": [
+              "MultiFrictPhys",
+              "MultiViscElPhys"
+            ],
+            "children": {}
+          },
+          "NormPhys": {
+            "direct_classes": [],
+            "children": {
+              "NormShearPhys": {
+                "direct_classes": [
+                  "CpmPhys",
+                  "JCFpmPhys"
+                ],
+                "children": {
+                  "FrictPhys": {
+                    "direct_classes": [
+                      "CapillaryPhys",
+                      "CapillaryPhysDelaunay",
+                      "FrictViscoPhys",
+                      "KnKsPhys",
+                      "LudingPhys",
+                      "MortarPhys",
+                      "PolyhedraPhys",
+                      "ViscoFrictPhys",
+                      "WirePhys"
+                    ],
+                    "children": {
+                      "RotStiffFrictPhys": {
+                        "direct_classes": [
+                          "CohFrictPhys",
+                          "InelastCohFrictPhys"
+                        ],
+                        "children": {
+                          "MindlinPhys": {
+                            "direct_classes": [
+                              "CapillaryMindlinPhysDelaunay",
+                              "MindlinCapillaryPhys",
+                              "MindlinPhysCDM"
+                            ],
+                            "children": {}
+                          }
+                        }
+                      },
+                      "ViscElPhys": {
+                        "direct_classes": [
+                          "LubricationPhys",
+                          "ViscElCapPhys"
+                        ],
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "material": {
+      "description": "Material types (Material subtree) — friction, cohesive, visco-elastic, etc.",
       "classes": [
         "BubbleMat",
         "CohFrictMat",
@@ -421,16 +1024,195 @@
         "ViscElCapMat",
         "ViscElMat",
         "WireMat"
-      ]
+      ],
+      "tree": {
+        "direct_classes": [
+          "BubbleMat",
+          "LudingMat",
+          "Material"
+        ],
+        "children": {
+          "CohesiveDeformableElementMaterial": {
+            "direct_classes": [],
+            "children": {
+              "LinCohesiveElasticMaterial": {
+                "direct_classes": [
+                  "LinCohesiveStiffPropDampElastMat"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "DeformableElementMaterial": {
+            "direct_classes": [],
+            "children": {
+              "LinIsoElastMat": {
+                "direct_classes": [
+                  "LinIsoRayleighDampElastMat"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "ElastMat": {
+            "direct_classes": [],
+            "children": {
+              "FrictMat": {
+                "direct_classes": [
+                  "CpmMat",
+                  "FrictMatCDM",
+                  "FrictViscoMat",
+                  "InelastCohFrictMat",
+                  "JCFpmMat",
+                  "MortarMat",
+                  "PartialSatMat",
+                  "PolyhedraMat",
+                  "WireMat"
+                ],
+                "children": {
+                  "CohFrictMat": {
+                    "direct_classes": [
+                      "CohFrictMatSeg"
+                    ],
+                    "children": {}
+                  },
+                  "ViscElMat": {
+                    "direct_classes": [
+                      "ViscElCapMat"
+                    ],
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "omega": {
-      "description": "Omega (O) \u2014 top-level simulation control object",
+    "misc": {
+      "description": "Miscellaneous types that don't fit a specific subtree",
       "classes": [
-        "Omega"
-      ]
+        "AttrFlags",
+        "MPIBodyContainer",
+        "utils"
+      ],
+      "tree": {
+        "direct_classes": [
+          "MPIBodyContainer",
+          "utils"
+        ],
+        "children": {
+          "enum": {
+            "direct_classes": [
+              "AttrFlags"
+            ],
+            "children": {}
+          }
+        }
+      }
     },
-    "shapes": {
-      "description": "Geometric shapes for DEM bodies",
+    "runtime": {
+      "description": "YADE runtime wrappers and global singletons — Omega, Serializable, containers, iterators",
+      "classes": [
+        "BodyContainer",
+        "BodyIterator",
+        "CundallStrackAdhesivePotential",
+        "CundallStrackPotential",
+        "FastMarchingMethod",
+        "FileGenerator",
+        "ForceContainer",
+        "GenericPotential",
+        "GlExtraDrawer",
+        "GlExtra_AlphaGraph",
+        "GlExtra_LawTester",
+        "GlExtra_OctreeCubes",
+        "InteractionContainer",
+        "InteractionIterator",
+        "IntrCallback",
+        "LBMbody",
+        "LBMlink",
+        "LBMnode",
+        "LinExponentialPotential",
+        "MaterialContainer",
+        "Omega",
+        "OpenGLRenderer",
+        "PhaseCluster",
+        "RegularGrid",
+        "STLImporter",
+        "Scene",
+        "Serializable",
+        "SimpleShear",
+        "SumIntrForcesCb",
+        "TagsWrapper",
+        "TimingDeltas",
+        "TriaxialTest"
+      ],
+      "tree": {
+        "direct_classes": [
+          "BodyContainer",
+          "BodyIterator",
+          "ForceContainer",
+          "InteractionContainer",
+          "InteractionIterator",
+          "MaterialContainer",
+          "Omega",
+          "STLImporter",
+          "TagsWrapper",
+          "TimingDeltas"
+        ],
+        "children": {
+          "Serializable": {
+            "direct_classes": [
+              "FastMarchingMethod",
+              "LBMbody",
+              "LBMlink",
+              "LBMnode",
+              "OpenGLRenderer",
+              "PhaseCluster",
+              "RegularGrid",
+              "Scene"
+            ],
+            "children": {
+              "FileGenerator": {
+                "direct_classes": [
+                  "SimpleShear",
+                  "TriaxialTest"
+                ],
+                "children": {}
+              },
+              "GenericPotential": {
+                "direct_classes": [],
+                "children": {
+                  "CundallStrackPotential": {
+                    "direct_classes": [
+                      "CundallStrackAdhesivePotential",
+                      "LinExponentialPotential"
+                    ],
+                    "children": {}
+                  }
+                }
+              },
+              "GlExtraDrawer": {
+                "direct_classes": [
+                  "GlExtra_AlphaGraph",
+                  "GlExtra_LawTester",
+                  "GlExtra_OctreeCubes"
+                ],
+                "children": {}
+              },
+              "IntrCallback": {
+                "direct_classes": [
+                  "SumIntrForcesCb"
+                ],
+                "children": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "shape": {
+      "description": "Body geometry types (Shape subtree) — sphere, box, wall, facet, polyhedron, etc.",
       "classes": [
         "Box",
         "ChainedCylinder",
@@ -454,13 +1236,84 @@
         "Subdomain",
         "Tetra",
         "Wall"
-      ]
+      ],
+      "tree": {
+        "direct_classes": [
+          "Box",
+          "Clump",
+          "Facet",
+          "FluidDomainBbox",
+          "LevelSet",
+          "Node",
+          "PFacet",
+          "Polyhedra",
+          "PotentialParticle",
+          "Shape",
+          "Subdomain",
+          "Tetra",
+          "Wall"
+        ],
+        "children": {
+          "DeformableElement": {
+            "direct_classes": [
+              "Lin4NodeTetra"
+            ],
+            "children": {
+              "DeformableCohesiveElement": {
+                "direct_classes": [
+                  "Lin4NodeTetra_Lin4NodeTetra_InteractionElement"
+                ],
+                "children": {}
+              }
+            }
+          },
+          "Sphere": {
+            "direct_classes": [
+              "GridConnection",
+              "GridNode"
+            ],
+            "children": {
+              "Cylinder": {
+                "direct_classes": [
+                  "ChainedCylinder"
+                ],
+                "children": {}
+              }
+            }
+          }
+        }
+      }
     },
-    "utils": {
-      "description": "Utility functions and helpers",
+    "state": {
+      "description": "Body state variants (State subtree) — CpmState, ThermalState, etc.",
       "classes": [
-        "utils"
-      ]
+        "ChainedState",
+        "CpmState",
+        "JCFpmState",
+        "PartialSatState",
+        "SegmentedState",
+        "State",
+        "ThermalState",
+        "WireState"
+      ],
+      "tree": {
+        "direct_classes": [
+          "ChainedState",
+          "CpmState",
+          "PartialSatState",
+          "SegmentedState",
+          "State",
+          "WireState"
+        ],
+        "children": {
+          "ThermalState": {
+            "direct_classes": [
+              "JCFpmState"
+            ],
+            "children": {}
+          }
+        }
+      }
     }
   }
 }

@@ -1,0 +1,110 @@
+{
+  "name": "Omega",
+  "category": "omega",
+  "parent": "instance",
+  "description": "Central simulation controller, accessed as O. Manages scene, bodies, engines, and simulation lifecycle.",
+  "attributes": [
+    {
+      "name": "bodies",
+      "type": "BodyContainer",
+      "default": "<yade.wrapper.BodyContainer object at 0x7f9108a56740>"
+    },
+    {
+      "name": "interactions",
+      "type": "InteractionContainer",
+      "default": "<yade.wrapper.InteractionContainer object at 0x7f910960bbc0>"
+    },
+    {
+      "name": "materials",
+      "type": "MaterialContainer",
+      "default": "<yade.wrapper.MaterialContainer object at 0x7f9107ec1200>"
+    },
+    {
+      "name": "engines",
+      "type": "list",
+      "default": "[<ForceResetter instance at 0x18c94d0>, <InsertionSortCollider instance at 0x161"
+    },
+    {
+      "name": "dt",
+      "type": "float",
+      "default": "1e-08"
+    },
+    {
+      "name": "iter",
+      "type": "int",
+      "default": "0"
+    },
+    {
+      "name": "time",
+      "type": "float",
+      "default": "0.0"
+    },
+    {
+      "name": "realtime",
+      "type": "float",
+      "default": "0.226"
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "cell",
+      "type": "NoneType",
+      "default": "None"
+    },
+    {
+      "name": "trackEnergy",
+      "type": "bool",
+      "default": "False"
+    },
+    {
+      "name": "tags",
+      "type": "TagsWrapper",
+      "default": "<yade.wrapper.TagsWrapper object at 0x7f9107ec1200>"
+    }
+  ],
+  "methods": [
+    {
+      "name": "run",
+      "signature": "O.run(*args, **kwargs)",
+      "description": ""
+    },
+    {
+      "name": "pause",
+      "signature": "O.pause()",
+      "description": "\npause( (Omega)arg1) -> None :\n    Stop simulation execution. (May be called from within the loop, and it will stop after the current step)."
+    },
+    {
+      "name": "wait",
+      "signature": "O.wait()",
+      "description": "\nwait( (Omega)arg1) -> None :\n    Don't return until the simulation will have been paused. (Returns immediately if not running)."
+    },
+    {
+      "name": "reset",
+      "signature": "O.reset()",
+      "description": "\nreset( (Omega)arg1) -> None :\n    Reset simulations completely (including another scenes!)."
+    },
+    {
+      "name": "save",
+      "signature": "O.save()",
+      "description": "\nsave( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Save current simulation to file (should be .xml or .xml.bz2 or .yade or .yade.gz). .xml files are bigger than .yade, but can be more "
+    },
+    {
+      "name": "load",
+      "signature": "O.load()",
+      "description": "\nload( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Load simulation from file. The file should have been :yref:`saved<Omega.save>` in the same version of Yade built or compiled with the"
+    },
+    {
+      "name": "saveTmp",
+      "signature": "O.saveTmp()",
+      "description": "\nsaveTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Save simulation to memory (disappears at shutdown), can be loaded later with loadTmp. *mark* optionally distinguishes differ"
+    },
+    {
+      "name": "loadTmp",
+      "signature": "O.loadTmp()",
+      "description": "\nloadTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Load simulation previously stored in memory by saveTmp. *mark* optionally distinguishes multiple saved simulations"
+    }
+  ]
+}

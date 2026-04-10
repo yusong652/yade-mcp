@@ -1,0 +1,28 @@
+{
+  "name": "BodyContainer",
+  "category": "bodies",
+  "parent": "instance",
+  "description": "Container for all bodies, accessed as O.bodies.",
+  "methods": [
+    {
+      "name": "append",
+      "description": "\nappend( (BodyContainer)arg1, (Body)arg2) -> int :\n    Append one Body instance, return its id.\n\nappend( (BodyContainer)arg1, (object)arg2) -> object :\n    Append list of Body instance, return list of"
+    },
+    {
+      "name": "erase",
+      "description": "\nerase( (BodyContainer)arg1, (int)arg2 [, (bool)eraseClumpMembers=0]) -> bool :\n    Erase body with the given id; all interaction will be deleted by InteractionLoop in the next step. If a clump is era"
+    },
+    {
+      "name": "clear",
+      "description": "\nclear( (BodyContainer)arg1) -> None :\n    Remove all bodies (interactions not checked)"
+    },
+    {
+      "name": "clump",
+      "description": "\nclump( (BodyContainer)arg1, (object)arg2 [, (int)discretization=0]) -> int :\n    Clump given bodies together (creating a rigid aggregate); returns ``clumpId``. A precise definition of clump masses an"
+    },
+    {
+      "name": "replaceByClumps",
+      "description": "\nreplaceByClumps( (BodyContainer)arg1, (list)arg2, (object)arg3 [, (int)discretization=0]) -> list :\n    Replace spheres by clumps using a list of clump templates and a list of amounts; returns a list"
+    }
+  ]
+}

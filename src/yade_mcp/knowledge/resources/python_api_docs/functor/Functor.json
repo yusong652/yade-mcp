@@ -1,0 +1,7 @@
+{
+  "name": "Functor",
+  "category": "engines",
+  "parent": "Serializable",
+  "description": "Function-like object that is called by Dispatcher, if types of arguments match those the Functor declares to accept.",
+  "attributes": []
+}

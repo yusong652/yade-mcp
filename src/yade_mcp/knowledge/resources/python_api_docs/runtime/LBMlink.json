@@ -1,0 +1,74 @@
+{
+  "name": "LBMlink",
+  "category": "engines",
+  "parent": "Serializable",
+  "description": "Link class for Lattice Boltzmann Method",
+  "attributes": [
+    {
+      "name": "DistMid",
+      "type": "Vector3r",
+      "default": "Vector3r::Zero()",
+      "description": "Distance between middle of the link and mass center of body"
+    },
+    {
+      "name": "PointingOutside",
+      "type": "bool",
+      "default": "false",
+      "description": "True if it is a link pointing outside to the system (from a fluid or solid node)"
+    },
+    {
+      "name": "VbMid",
+      "type": "Vector3r",
+      "default": "Vector3r::Zero()",
+      "description": "Velocity of boundary at midpoint"
+    },
+    {
+      "name": "ct",
+      "type": "Real",
+      "default": "0.",
+      "description": "Coupling term in modified bounce back rule"
+    },
+    {
+      "name": "fid",
+      "type": "int",
+      "default": "-1",
+      "description": "Fluid node identifier"
+    },
+    {
+      "name": "i",
+      "type": "short int",
+      "default": "-1",
+      "description": "direction index of the link"
+    },
+    {
+      "name": "idx_sigma_i",
+      "type": "short int",
+      "default": "-1",
+      "description": "sigma_i direction index  (Fluid->Solid)"
+    },
+    {
+      "name": "isBd",
+      "type": "bool",
+      "default": "false",
+      "description": "True if it is a boundary link"
+    },
+    {
+      "name": "nid1",
+      "type": "int",
+      "default": "-1",
+      "description": "fixed node identifier"
+    },
+    {
+      "name": "nid2",
+      "type": "int",
+      "default": "-1",
+      "description": "fixed node identifier or -1 if node points outside"
+    },
+    {
+      "name": "sid",
+      "type": "int",
+      "default": "-1",
+      "description": "Solid node identifier"
+    }
+  ]
+}

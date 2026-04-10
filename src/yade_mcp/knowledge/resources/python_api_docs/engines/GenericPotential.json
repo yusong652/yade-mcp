@@ -1,7 +1,0 @@
-{
-  "name": "GenericPotential",
-  "category": "engines",
-  "parent": "",
-  "description": "Generic class for potential representation in PotentialLubrication law. Don't do anything. If set as potential, the result will be a lubrication-only simulation.",
-  "attributes": []
-}

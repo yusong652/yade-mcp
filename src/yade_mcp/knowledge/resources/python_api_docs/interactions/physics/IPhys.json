@@ -1,7 +1,0 @@
-{
-  "name": "IPhys",
-  "category": "interactions",
-  "parent": "instance",
-  "description": "Physical (material) properties of interaction<Interaction>.",
-  "attributes": []
-}

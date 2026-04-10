@@ -1,0 +1,7 @@
+{
+  "name": "STLImporter",
+  "category": "engines",
+  "parent": "instance",
+  "description": "",
+  "attributes": []
+}

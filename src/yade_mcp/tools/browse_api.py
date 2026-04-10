@@ -1,4 +1,4 @@
-"""YADE Python API Browse Tool - Navigate documentation by path."""
+"""YADE Python API browse tool — walks the YADE-native class tree."""
 
 from typing import Any
 
@@ -17,105 +17,136 @@ def register(mcp: FastMCP) -> None:
         path: str | None = Field(
             None,
             description=(
-                "Dot-separated API path to browse. Progressive disclosure:\n"
-                "- None or '': Root — list all categories\n"
-                "- 'engines': List all engine classes\n"
-                "- 'engines.NewtonIntegrator': Full docs for NewtonIntegrator\n"
-                "- 'materials': List all material classes\n"
-                "- 'materials.FrictMat': Full docs for FrictMat\n"
-                "- 'interactions.geometry': List contact geometry classes\n"
-                "- 'interactions.laws.Law2_ScGeom_FrictPhys_CundallStrack': Full docs\n"
-                "- 'utils': Utility functions\n"
-                "- 'omega': Omega (O) simulation control"
+                "Dot-separated path into YADE's class hierarchy. "
+                "Navigation is tree-driven (no class-name shortcuts).\n"
+                "- None or '': list top-level categories (engine / functor / "
+                "material / shape / ...)\n"
+                "- 'engine': list direct sub-trees of Engine (Dispatcher, "
+                "GlobalEngine, PartialEngine, ...)\n"
+                "- 'engine.GlobalEngine': list GlobalEngine's sub-trees "
+                "(BoundaryController, Collider, PeriodicEngine, ...) plus its "
+                "direct leaf classes (NewtonIntegrator, InteractionLoop, ...)\n"
+                "- 'engine.GlobalEngine.NewtonIntegrator': full docs for "
+                "NewtonIntegrator\n"
+                "- 'functor.LawFunctor.Law2_ScGeom_FrictPhys_CundallStrack': "
+                "full docs for a contact law functor\n"
+                "Every leaf is reached via its parent-class chain."
             ),
         ),
     ) -> dict[str, Any]:
-        """Browse YADE Python API documentation hierarchically.
+        """Browse YADE's Python API as a YADE-native class tree.
 
-        Navigate category → class → details, like a filesystem:
-        - Empty path: list categories (ls /)
-        - Category: list classes (ls /engines)
-        - Category.Class: full documentation (cat /engines/NewtonIntegrator)
+        The tree is rooted in YADE's real inheritance hierarchy: paths
+        mirror the class's __mro__ up to its category root. No
+        shortcuts — always drill through parents.
         """
         normalized = (path or "").strip()
         resolved = APILoader.resolve_path(normalized)
         level = resolved["level"]
 
         if level == "error":
+            details = {
+                k: v
+                for k, v in resolved.items()
+                if k in ("category", "tree_path", "available_children", "available_classes", "available")
+            }
             return build_error(
                 code="invalid_path",
                 message=resolved["error"],
-                details={"available": resolved.get("available", [])},
+                details=details or None,
             )
 
         if level == "root":
             return await _browse_root()
 
-        if level == "category":
-            return await _browse_category(resolved["category"])
-
-        if level == "subcategory":
-            return await _browse_category(resolved["category"], resolved["subcategory"])
+        if level == "tree_node":
+            return await _browse_tree_node(resolved["category"], resolved["tree_path"])
 
         if level == "class":
             return await _browse_class(
                 resolved["category"],
+                resolved["tree_path"],
                 resolved["class_name"],
-                resolved.get("subcategory"),
             )
 
         return build_error("unknown_level", f"Unknown path level: {level}")
 
 
 async def _browse_root() -> dict[str, Any]:
+    """List every top-level category."""
     categories = APILoader.list_categories()
+    entries = [{"entry_type": "category", **cat} for cat in categories]
     return await build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
-            entries=[{"entry_type": "category", **cat} for cat in categories],
-            summary={"count": len(categories), "hint": "Browse a category for its classes"},
+            entries=entries,
+            summary={
+                "count": len(entries),
+                "hint": "Browse a category (e.g. 'engine') to drill into its tree",
+            },
         ),
         inject_context=False,
     )
 
 
-async def _browse_category(category: str, subcategory: str | None = None) -> dict[str, Any]:
-    classes = APILoader.list_classes(category, subcategory)
-    if classes is None:
-        path = f"{category}.{subcategory}" if subcategory else category
+async def _browse_tree_node(category: str, tree_path: list[str]) -> dict[str, Any]:
+    """List a tree node's contents.
+
+    The response merges:
+      * ``self_class`` — the node's own class docs (when applicable),
+        surfaced as the first entry with ``entry_type: "self"``.
+      * child entries — each either a pure leaf class or a sub-tree
+        node (marked with ``has_children: true`` + ``descendant_count``).
+    """
+    contents = APILoader.list_node_contents(category, tree_path)
+    if contents is None:
         return build_error(
-            "category_not_found",
-            f"Category not found: {path}",
+            "tree_node_not_found",
+            f"Tree node not found: {category}{'.' + '.'.join(tree_path) if tree_path else ''}",
+            details={"category": category, "tree_path": tree_path},
         )
 
-    display_path = f"{category}.{subcategory}" if subcategory else category
-
+    display_path = category + ("." + ".".join(tree_path) if tree_path else "")
     entries: list[dict[str, Any]] = []
-    if not subcategory:
-        index = APILoader.load_index()
-        cat_info = index.get("categories", {}).get(category, {})
-        subcats = cat_info.get("subcategories", {})
-        for subcat_name, subcat_info in subcats.items():
-            entries.append(
-                {
-                    "entry_type": "subcategory",
-                    "name": subcat_name,
-                    "path": f"{category}.{subcat_name}",
-                    "description": subcat_info.get("description", ""),
-                }
-            )
 
-    for cls in classes:
-        entries.append(
-            {
-                "entry_type": "class",
-                "name": cls["name"],
-                "path": f"{display_path}.{cls['name']}",
-                "description": cls["description"],
-                "has_docs": cls["has_docs"],
-            }
-        )
+    # Self class as the first entry, so the browse response is "here is the
+    # node itself, and here is what hangs under it".
+    self_class = contents.get("self_class")
+    if self_class is not None:
+        self_entry: dict[str, Any] = {
+            "entry_type": "self",
+            "name": self_class["name"],
+            "path": display_path,
+            "description": self_class.get("description", ""),
+            "has_docs": self_class.get("has_docs", False),
+        }
+        for field in ("parent", "attribute_count", "method_count"):
+            if field in self_class:
+                self_entry[field] = self_class[field]
+        entries.append(self_entry)
+
+    children_count = 0
+    leaf_count = 0
+    for cls in contents["entries"]:
+        is_subtree = cls.get("has_children", False)
+        if is_subtree:
+            children_count += 1
+        else:
+            leaf_count += 1
+        entry: dict[str, Any] = {
+            "entry_type": "tree_node" if is_subtree else "class",
+            "name": cls["name"],
+            "path": f"{display_path}.{cls['name']}",
+            "description": cls.get("description", ""),
+            "has_docs": cls.get("has_docs", False),
+        }
+        for field in ("parent", "attribute_count", "method_count"):
+            if field in cls:
+                entry[field] = cls[field]
+        if is_subtree:
+            entry["descendant_count"] = cls["descendant_count"]
+        entries.append(entry)
 
     return await build_ok(
         build_docs_data(
@@ -124,29 +155,34 @@ async def _browse_category(category: str, subcategory: str | None = None) -> dic
             entries=entries,
             summary={
                 "count": len(entries),
-                "category": display_path,
-                "hint": "Browse a class for full documentation",
+                "category": category,
+                "tree_path": tree_path,
+                "display_path": display_path,
+                "sub_node_count": children_count,
+                "leaf_count": leaf_count,
+                "hint": "Drill into a tree_node to see its subtree, or into a class for full docs",
             },
         ),
         inject_context=False,
     )
 
 
-async def _browse_class(category: str, class_name: str, subcategory: str | None = None) -> dict[str, Any]:
-    doc = APILoader.load_class(category, class_name, subcategory=subcategory)
-
+async def _browse_class(category: str, tree_path: list[str], class_name: str) -> dict[str, Any]:
+    """Return the full class documentation JSON."""
+    doc = APILoader.load_class(category, class_name)
     if not doc:
-        classes = APILoader.list_classes(category, subcategory) or []
-        available = [c["name"] for c in classes]
-        path = f"{category}.{subcategory}" if subcategory else category
         return build_error(
             "class_not_found",
-            f"No documentation for '{class_name}' in {path}",
-            details={"available_classes": available},
+            f"No documentation for '{class_name}' in {category}",
+            details={
+                "category": category,
+                "tree_path": tree_path,
+                "class_name": class_name,
+            },
         )
 
-    display_path = f"{category}.{subcategory}.{class_name}" if subcategory else f"{category}.{class_name}"
-
+    display_path = category + ("." + ".".join(tree_path) if tree_path else "")
+    display_path = f"{display_path}.{class_name}"
     return await build_ok(
         build_docs_data(
             source="python_api",
@@ -158,7 +194,7 @@ async def _browse_class(category: str, class_name: str, subcategory: str | None 
                     "doc": doc,
                 }
             ],
-            summary={"count": 1, "class": class_name},
+            summary={"count": 1, "class": class_name, "display_path": display_path},
         ),
         inject_context=False,
     )

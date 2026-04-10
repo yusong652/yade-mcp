@@ -1,0 +1,7 @@
+{
+  "name": "Serializable",
+  "category": "engines",
+  "parent": "instance",
+  "description": "",
+  "attributes": []
+}

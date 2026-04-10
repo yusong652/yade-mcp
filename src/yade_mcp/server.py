@@ -106,7 +106,11 @@ def main() -> None:
     logging.getLogger("uvicorn").setLevel(uvicorn_level)
     logging.getLogger("uvicorn.error").setLevel(uvicorn_level)
 
-    run_kwargs: dict[str, Any] = {"transport": args.transport, "show_banner": False}
+    run_kwargs: dict[str, Any] = {
+        "transport": args.transport,
+        "show_banner": False,
+        "log_level": args.log_level.upper(),
+    }
     if args.transport in ("http", "sse"):
         run_kwargs["host"] = args.host
         run_kwargs["port"] = args.port

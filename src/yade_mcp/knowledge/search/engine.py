@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from yade_mcp.knowledge.loader import APILoader
 from yade_mcp.knowledge.search.document import SearchDocument
 from yade_mcp.knowledge.search.indexing.bm25_indexer import BM25Indexer
 from yade_mcp.knowledge.search.scoring.bm25_scorer import BM25Scorer
@@ -97,6 +98,7 @@ class APISearch:
 
         results: list[dict[str, Any]] = []
         for doc, score, _info in scored[:top_k]:
+            category_dir = str(doc.metadata.get("path", "")).split("/", 1)[0]
             results.append(
                 {
                     "name": doc.name,
@@ -105,6 +107,7 @@ class APISearch:
                     "score": round(score, 3),
                     "parent": doc.metadata.get("parent", ""),
                     "path": doc.metadata.get("path", ""),
+                    "browse_path": APILoader.build_browse_path(category_dir, doc.name),
                 }
             )
 

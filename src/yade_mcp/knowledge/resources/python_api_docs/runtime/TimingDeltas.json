@@ -1,0 +1,13 @@
+{
+  "name": "TimingDeltas",
+  "category": "engines",
+  "parent": "instance",
+  "description": "",
+  "attributes": [],
+  "methods": [
+    {
+      "name": "reset",
+      "description": "Reset timing information"
+    }
+  ]
+}

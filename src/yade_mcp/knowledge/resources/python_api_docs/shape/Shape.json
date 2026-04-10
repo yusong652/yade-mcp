@@ -1,0 +1,26 @@
+{
+  "name": "Shape",
+  "category": "shapes",
+  "parent": "Serializable",
+  "description": "Geometry of a body",
+  "attributes": [
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)",
+      "description": "Color for rendering (normalized RGB)."
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "False",
+      "description": "Whether this Shape will be highlighted when rendered."
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+    }
+  ]
+}
