@@ -89,6 +89,62 @@ _DEFAULT_ALIASES = {
     "Quaternionr::Identity()": "Quaternion.Identity",
 }
 
+# Type hints keyed by attribute name, used when the boost.python docstring
+# lacks a :yattrtype: marker (computed read-only properties, boost.python
+# meta-attrs, and attrs on uninstantiable classes in the TriaxialStressController
+# and DeformableElement families). These are docstring-verified name → type
+# mappings — do not add without checking the attribute is really what you think.
+_ATTR_TYPE_HINTS = {
+    # boost.python / YADE meta
+    "bases": "list[str]",
+    "dispIndex": "int",
+    "timingDeltas": "TimingDeltas",
+    "execTime": "int",
+    "execCount": "int",
+    "comm": "int",
+    # TriaxialStressController family — read-only computed scalars
+    "boxVolume": "float",
+    "particlesVolume": "float",
+    "spheresVolume": "float",
+    "porosity": "float",
+    "max_vel1": "float",
+    "max_vel2": "float",
+    "max_vel3": "float",
+    "strain": "Vector3",
+    "strainRate": "Vector3",
+    # FEM element geometry
+    "elementframe": "Matrix3",
+}
+
+# Sensible empty defaults by type when :ydefault: is explicitly empty.
+# Eigen types are the tricky ones — Vector3r() / Matrix3r() do NOT
+# zero-initialise (Eigen leaves them as uninitialised memory for
+# performance), so reading them off a freshly-constructed instance
+# returns garbage. The YADE convention is that empty :ydefault: on an
+# Eigen type means "construct the zero element", so we substitute the
+# convention here.
+_EMPTY_DEFAULT_BY_TYPE = {
+    "str": '""',
+    "Vector3": "(0, 0, 0)",
+    "Vector2": "(0, 0)",
+    "Vector6": "(0, 0, 0, 0, 0, 0)",
+    "Vector3i": "(0, 0, 0)",
+    "Vector2i": "(0, 0)",
+    "Matrix3": "Matrix3.Zero",
+    "Matrix6": "Matrix6.Zero",
+    "Quaternion": "Quaternion.Identity",
+    # Transient / diagnostic objects that are nullable by design.
+    "TimingDeltas": "None",
+    "NodeMap": "None",
+    "NodePairsMap": "None",
+}
+# Type names that are shared_ptr-like references (nullable, default None).
+_POINTER_TYPE_RE = re.compile(
+    r"^(MatchMaker|Body|Cell|Shape|State|Material|Interaction|Scene|Bound"
+    r"|IGeom|IPhys|Functor|BoundFunctor|ShapeFunctor|Dispatcher"
+    r"|FluidDomainBbox|Subdomain|LevelSet)(?:<.*>)?$"
+)
+
 
 def _py_type(cpp):
     if not cpp:
@@ -96,11 +152,17 @@ def _py_type(cpp):
     cpp = cpp.strip()
     if cpp in _TYPE_MAP:
         return _TYPE_MAP[cpp]
-    if cpp.startswith("std::vector<") and cpp.endswith(">"):
-        inner = cpp[len("std::vector<") : -1].strip()
-        return f"list[{_py_type(inner) or inner}]"
+    # Normalise container types whether or not they carry the std:: prefix.
+    for prefix in ("std::vector<", "vector<"):
+        if cpp.startswith(prefix) and cpp.endswith(">"):
+            inner = cpp[len(prefix) : -1].strip()
+            return f"list[{_py_type(inner) or inner}]"
+    for prefix in ("std::list<", "list<"):
+        if cpp.startswith(prefix) and cpp.endswith(">"):
+            inner = cpp[len(prefix) : -1].strip()
+            return f"list[{_py_type(inner) or inner}]"
     if cpp.startswith("shared_ptr<") and cpp.endswith(">"):
-        return cpp[len("shared_ptr<") : -1].strip()
+        return _py_type(cpp[len("shared_ptr<") : -1].strip()) or cpp[len("shared_ptr<") : -1].strip()
     return cpp
 
 
@@ -132,6 +194,23 @@ def _clean_default(raw):
     return v
 
 
+_GARBAGE_EXP = re.compile(r"e[+-]\d{3,}")
+
+
+def _looks_like_uninitialised(r):
+    """Guess whether a repr'd value is Eigen/C++ uninitialised memory.
+
+    YADE C++ uses `Real field;` and `Vector3r field;` patterns that do
+    NOT zero-init on some fields — reading them off a fresh instance
+    returns values like 1.39e-309 (denormal) or 4.27e+180 (random high
+    bits). We suppress those and let the caller fall back to a type-
+    appropriate empty default via _normalise_default().
+    """
+    if not r:
+        return False
+    return bool(_GARBAGE_EXP.search(r))
+
+
 def _repr_default(v):
     try:
         r = repr(v)
@@ -139,6 +218,8 @@ def _repr_default(v):
         return ""
     # Suppress unhelpful object reprs; caller decides what to do.
     if r.startswith("<") and r.endswith(">"):
+        return ""
+    if _looks_like_uninitialised(r):
         return ""
     if len(r) > 80:
         r = r[:77] + "..."
@@ -229,6 +310,24 @@ def _parse_method_doc(raw):
     }
 
 
+def _normalise_default(default, py_type):
+    """If :ydefault: was explicitly empty, substitute a type-appropriate
+    empty literal so downstream readers see e.g. `[]` / `None` instead
+    of a naked empty string.
+    """
+    if default:
+        return default
+    if not py_type:
+        return default
+    if py_type in _EMPTY_DEFAULT_BY_TYPE:
+        return _EMPTY_DEFAULT_BY_TYPE[py_type]
+    if py_type.startswith("list["):
+        return "[]"
+    if _POINTER_TYPE_RE.match(py_type):
+        return "None"
+    return default
+
+
 def _extract_attr_from_descriptor(name, klass, descr, cls, dict_defaults, inst):
     """Build one attribute entry from a property descriptor.
 
@@ -249,11 +348,23 @@ def _extract_attr_from_descriptor(name, klass, descr, cls, dict_defaults, inst):
 
     py_type = _py_type(type_m.group(1)) if type_m else None
 
-    if default_m:
-        default = _clean_default(default_m.group(1))
-    elif in_dict:
+    # YADE_CLASS_BASE_ATTRS_DEF emits `:ydefault:`` (empty) when the field
+    # is just default-constructed by the C++ compiler. For scalar / string
+    # types we can fall through to live instance inspection — they zero-init.
+    # For Eigen types (Vector3r / Matrix3r / Quaternionr) the default
+    # constructor leaves memory uninitialised, so reading from a fresh
+    # instance returns random-looking garbage. We handle those in
+    # _normalise_default() via _EMPTY_DEFAULT_BY_TYPE instead.
+    explicit_default = default_m.group(1).strip() if default_m else ""
+    _eigen_types = {"Vector3", "Vector2", "Vector6", "Vector3i", "Vector2i",
+                    "Matrix3", "Matrix6", "Quaternion"}
+    trust_instance = py_type not in _eigen_types
+
+    if explicit_default:
+        default = _clean_default(explicit_default)
+    elif trust_instance and in_dict:
         default = _repr_default(dict_defaults[name])
-    elif inst is not None:
+    elif trust_instance and inst is not None:
         try:
             default = _repr_default(getattr(inst, name))
         except Exception:
@@ -266,14 +377,18 @@ def _extract_attr_from_descriptor(name, klass, descr, cls, dict_defaults, inst):
             try:
                 py_type = type(dict_defaults[name]).__name__
             except Exception:
-                py_type = "auto"
+                pass
         elif inst is not None:
             try:
                 py_type = type(getattr(inst, name)).__name__
             except Exception:
-                py_type = "auto"
-        else:
-            py_type = "auto"
+                pass
+    # Final fallback: attr-name hint dict for meta/computed props that
+    # don't carry :yattrtype: markers.
+    if not py_type or py_type == "auto":
+        py_type = _ATTR_TYPE_HINTS.get(name, "auto")
+
+    default = _normalise_default(default, py_type)
 
     attr = {
         "name": name,
@@ -534,11 +649,12 @@ def extract_in_fork(cls, timeout_sec=10):
 
 
 def _clean_doc_inplace(doc):
-    """Run _clean_desc over every description field of a loaded JSON doc.
+    """Normalise an existing JSON doc in place.
 
     Used for orphan classes (documented but not present in this YADE build)
-    so their descriptions still get the rST polish even though we can't
-    regenerate their attribute list from runtime.
+    so their descriptions still get the rST polish and any garbage-memory
+    defaults get replaced with type-appropriate empty values even though
+    we can't regenerate their attribute list from runtime.
     """
     changed = False
     if doc.get("description"):
@@ -553,6 +669,12 @@ def _clean_doc_inplace(doc):
                 new = _clean_desc(desc)
                 if new != desc:
                     item["description"] = new
+                    changed = True
+            if key == "attributes":
+                dflt = item.get("default", "")
+                if dflt and _looks_like_uninitialised(dflt):
+                    normalised = _normalise_default("", item.get("type", ""))
+                    item["default"] = normalised
                     changed = True
     return changed
 
