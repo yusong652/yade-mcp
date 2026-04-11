@@ -154,6 +154,79 @@ was defensive about mismatches. Possible explanations:
 **Action**: on the new scraper run, whichever value runtime reports becomes
 the authoritative answer.
 
+## 2026-04-11 full-set addendum
+
+The original sample above covered 14 classes. Same day, later session,
+I ran the full drift scan: 412 JSON class files vs `cls().dict().keys()`
+for every `yade.wrapper.*` class that default-instantiates.
+
+### Coverage
+
+| | count |
+|---|---:|
+| JSON class files | 412 |
+| Default-instantiable in runtime | 350 |
+| Runtime-only (scraper missed entirely) | 0 |
+| JSON-only (doc'd but `cls()` raises) | 62 |
+| Runtime instantiation errors | 21 (AttrFlags, BodyContainer, DeformableElement, ...) |
+
+### Drift on the 350 common classes (absolute set comparison)
+
+| | count |
+|---|---:|
+| Perfect match | **65** (~19%) |
+| Any drift | **285** (~81%) |
+| ... only-missing (base-attr stripped) | 227 |
+| ... any stale attr (real version drift) | **58** |
+
+### The Category C pattern is much broader than 2/14
+
+Top attrs missing from JSON across the 285 drifting classes:
+
+| attr | classes missing it | source |
+|---|---:|---|
+| `label` | 232 | Serializable root — stripped from ~2/3 of all classes |
+| `dead` | 96 | Engine base |
+| `ompThreads` | 96 | Engine base |
+| `id` | 24 | Body base |
+| `firstIterRun` / `iterLast` / `nDone` / `realLast` / `virtLast` | 19 each | PeriodicEngine base (the Cat-C pattern VTKRecorder/PyRunner hit — 19 classes, not 2) |
+| `wire` | 9 | Shape base |
+| `glutSlices` / `glutStacks` / `functors` | 5 each | Gl1 functor base |
+
+Implication: the scraper's base-class policy is not "always strip" nor
+"always keep" — it's inconsistent across subtrees. Any uniform rule we
+pick in the rewrite is a net improvement.
+
+Note: three of the original sample's "Category A perfect matches"
+(Law2_ScGeom_FrictPhys_CundallStrack, Ip2_FrictMat_FrictMat_FrictPhys,
+Bo1_Sphere_Aabb) actually drop `label` in JSON. The original sample saw
+them as perfect only because its probe subtracted the immediate base
+class before counting, which masked Serializable-root drops.
+
+### Real version drift (58 classes, stale-in-JSON)
+
+Top recurring stale attrs (attrs the JSON has, runtime doesn't):
+
+| attr | classes | likely story |
+|---|---:|---|
+| `frictDissip` | 17 | contact-law energy tracking refactored out |
+| `forceMetis` / `meanK_opt` | 9 each | JCFpm / BCM law refactor |
+| `ori` / `pos` | 6 each | State accessor moved to transform-based API |
+| `beta` | 3 | |
+| `boxVolume`, `legacyStressDamping`, `max_vel1/2/3`, `particlesVolume`, `porosity`, `spheresVolume`, `strain` | 3 each | TriaxialStressController family cleanup |
+
+### Bottom line for Phase B
+
+- Target is not "fix 10 flagged classes" — it's "regenerate all 350".
+- Success metric: rerun the drift scan on the new output →
+  drift count goes from 285 → 0 on the 350 common classes.
+- The 62 JSON-only classes need a separate introspection path (they
+  can't be default-constructed), see Next Steps §8.
+
+Full drift-report JSON is in `/tmp/drift_report.json` inside the
+session that generated this section — regeneratable anytime from
+`/tmp/drift_scan.py`.
+
 ## Not yet verified
 
 Things we didn't probe in this round but may need similar drift checks:
@@ -180,8 +253,14 @@ Things we didn't probe in this round but may need similar drift checks:
    `src/yade_mcp/knowledge/resources/python_api_docs/` (files stay flat,
    tree comes from the new parent-driven classify)
 6. **Split long descriptions** into short (first paragraph) + long
-7. **Verify against this drift report** — when all 10 classes in
-   categories C and D come back 🟢, the scraper is correct
+7. **Verify against this drift report** — the full-set addendum above
+   is the real test vector. Drift must go to 0 for the 350 common
+   classes, not just the 10 sampled ones.
+8. **Handle non-default-constructable classes** (62 of them) via
+   introspection without instantiation: `cls.__dict__`,
+   `inspect.getmembers`, boost.python `__instance_size__` tricks, or
+   best-effort docstring parsing. These classes currently have JSON
+   docs of unknown quality since the drift scan couldn't probe them.
 
 ## Quick re-check script (stub)
 
