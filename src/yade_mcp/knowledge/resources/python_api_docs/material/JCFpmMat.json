@@ -5,88 +5,115 @@
   "description": "Possibly jointed, cohesive frictional material, for use with other JCFpm classes",
   "attributes": [
     {
-      "name": "cohesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the maximum admissible tangential force in shear, for Fn=0, in the matrix ("
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
-    },
-    {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
-    },
-    {
-      "name": "jointCohesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the"
-    },
-    {
-      "name": "jointDilationAngle",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the dilatancy of the joint surface (only valid for"
-    },
-    {
-      "name": "jointFrictionAngle",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Defines Coulomb friction on the joint surface. [rad]"
-    },
-    {
-      "name": "jointNormalStiffness",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the normal stiffness on the joint surface. [Pa/m]"
-    },
-    {
-      "name": "jointShearStiffness",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the shear stiffness on the joint surface. [Pa/m]"
-    },
-    {
-      "name": "jointTensileStrength",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the"
-    },
-    {
-      "name": "poisson",
-      "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "residualFrictionAngle",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Defines the residual friction angle (when contacts are not cohesive). residualFrictionAngle=frictionAngle if not specified. [rad]"
-    },
-    {
-      "name": "tensileStrength",
-      "type": "float",
-      "default": "0.0",
-      "description": "Defines the maximum admissible normal force in traction in the matrix ("
-    },
-    {
       "name": "type",
       "type": "int",
       "default": "0",
       "description": "If particles of two different types interact, it will be with friction only (no cohesion).[-]"
     },
     {
+      "name": "tensileStrength",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the maximum admissible normal force in traction in the matrix ("
+    },
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the maximum admissible tangential force in shear, for Fn=0, in the matrix ("
+    },
+    {
+      "name": "residualFrictionAngle",
+      "type": "float",
+      "default": "-1.",
+      "description": "Defines the residual friction angle (when contacts are not cohesive). residualFrictionAngle=frictionAngle if not specified. [rad]"
+    },
+    {
+      "name": "jointNormalStiffness",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the normal stiffness on the joint surface. [Pa/m]"
+    },
+    {
+      "name": "jointShearStiffness",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the shear stiffness on the joint surface. [Pa/m]"
+    },
+    {
+      "name": "jointTensileStrength",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the maximum admissible normal force in traction on the joint surface. [Pa]"
+    },
+    {
+      "name": "jointCohesion",
+      "type": "float",
+      "default": "0.",
+      "description": "Defines the maximum admissible tangential force in shear, for Fn=0, on the joint surface. [Pa]"
+    },
+    {
+      "name": "jointDilationAngle",
+      "type": "float",
+      "default": "0",
+      "description": "Defines the dilatancy of the joint surface (only valid for"
+    },
+    {
+      "name": "jointFrictionAngle",
+      "type": "float",
+      "default": "-1",
+      "description": "Defines Coulomb friction on the joint surface. [rad]"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
+    },
+    {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "10",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

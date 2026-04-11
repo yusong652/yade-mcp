@@ -7,14 +7,22 @@
     {
       "name": "kn",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Normal stiffness"
     },
     {
       "name": "normalForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "1",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

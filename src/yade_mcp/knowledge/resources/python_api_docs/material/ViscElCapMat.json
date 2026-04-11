@@ -7,14 +7,8 @@
     {
       "name": "Capillar",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "True, if capillar forces need to be added."
-    },
-    {
-      "name": "CapillarType",
-      "type": "str",
-      "default": "''",
-      "description": "Different types of capillar interaction: Willett_numeric, Willett_analytic [Willett2000]_ , Weigert [Weigert1999]_ , Rabinovich [Rabinov2005]_ , Lambert (simplified, corrected Rabinovich model) [Lambert2008]_"
     },
     {
       "name": "Vb",
@@ -23,100 +17,10 @@
       "description": "Liquid bridge volume [m^3]"
     },
     {
-      "name": "cn",
-      "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "cs",
-      "type": "float",
-      "default": "nan",
-      "description": "Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "dcap",
-      "type": "float",
-      "default": "0.0",
-      "description": "Damping coefficient for the capillary phase [-]"
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
-    },
-    {
-      "name": "en",
-      "type": "float",
-      "default": "nan",
-      "description": "Restitution coefficient in normal direction"
-    },
-    {
-      "name": "et",
-      "type": "float",
-      "default": "nan",
-      "description": "Restitution coefficient in tangential direction"
-    },
-    {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
-    },
-    {
       "name": "gamma",
       "type": "float",
       "default": "0.0",
       "description": "Surface tension [N/m]"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "nan",
-      "description": "Normal elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "nan",
-      "description": "Shear elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "lubrication",
-      "type": "bool",
-      "default": "False",
-      "description": "option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient)."
-    },
-    {
-      "name": "mR",
-      "type": "float",
-      "default": "0.0",
-      "description": "Rolling resistance, see [Zhou1999536]_."
-    },
-    {
-      "name": "mRtype",
-      "type": "int",
-      "default": "1",
-      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_."
-    },
-    {
-      "name": "poisson",
-      "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "roughnessScale",
-      "type": "float",
-      "default": "0.001",
-      "description": "if lubrication is activated, roughness scale considered for the particles to evaluate the effective restitution coefficient."
-    },
-    {
-      "name": "tc",
-      "type": "float",
-      "default": "nan",
-      "description": "Contact time"
     },
     {
       "name": "theta",
@@ -125,16 +29,151 @@
       "description": "Contact angle [\u00b0]"
     },
     {
+      "name": "dcap",
+      "type": "float",
+      "default": "0.0",
+      "description": "Damping coefficient for the capillary phase [-]"
+    },
+    {
+      "name": "CapillarType",
+      "type": "str",
+      "default": "\"\"",
+      "description": "Different types of capillar interaction: Willett_numeric, Willett_analytic [Willett2000]_ , Weigert [Weigert1999]_ , Rabinovich [Rabinov2005]_ , Lambert (simplified, corrected Rabinovich model) [Lambert2008]_"
+    },
+    {
+      "name": "tc",
+      "type": "float",
+      "default": "NaN",
+      "description": "Contact time",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "en",
+      "type": "float",
+      "default": "NaN",
+      "description": "Restitution coefficient in normal direction",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "et",
+      "type": "float",
+      "default": "NaN",
+      "description": "Restitution coefficient in tangential direction",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "cn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "mR",
+      "type": "float",
+      "default": "0.0",
+      "description": "Rolling resistance, see [Zhou1999536]_.",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "lubrication",
+      "type": "bool",
+      "default": "false",
+      "description": "option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient).",
+      "inherited_from": "ViscElMat"
+    },
+    {
       "name": "viscoDyn",
       "type": "float",
-      "default": "0.001",
-      "description": "if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision."
+      "default": "1e-3",
+      "description": "if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision.",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "roughnessScale",
+      "type": "float",
+      "default": "1e-3",
+      "description": "if lubrication is activated, roughness scale considered for the particles to evaluate the effective restitution coefficient.",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "mRtype",
+      "type": "int",
+      "default": "1",
+      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_.",
+      "inherited_from": "ViscElMat"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "20",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

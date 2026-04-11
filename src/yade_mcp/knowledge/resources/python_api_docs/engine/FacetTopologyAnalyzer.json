@@ -5,28 +5,75 @@
   "description": "Initializer for filling adjacency geometry data for facets.\n\nCommon vertices and common edges are identified and mutual angle between facet faces is written to Facet instances. If facets don't move with respect to each other, this must be done only at the beginng.",
   "attributes": [
     {
-      "name": "commonEdgesFound",
-      "type": "int",
-      "default": "0",
-      "description": "how many common edges were identified during last run. |yupdate|"
-    },
-    {
-      "name": "commonVerticesFound",
-      "type": "int",
-      "default": "0",
-      "description": "how many common vertices were identified during last run. |yupdate|"
-    },
-    {
       "name": "projectionAxis",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)",
+      "default": "Vector3r::UnitX()",
       "description": "Axis along which to do the initial vertex sort"
     },
     {
       "name": "relTolerance",
       "type": "float",
-      "default": "0.0001",
+      "default": "1e-4",
       "description": "maximum distance of 'identical' vertices, relative to minimum facet size"
+    },
+    {
+      "name": "commonEdgesFound",
+      "type": "int",
+      "default": "0",
+      "description": "how many common edges were identified during last run. |yupdate|",
+      "read_only": true
+    },
+    {
+      "name": "commonVerticesFound",
+      "type": "int",
+      "default": "0",
+      "description": "how many common vertices were identified during last run. |yupdate|",
+      "read_only": true
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

@@ -5,46 +5,16 @@
   "description": "Calculate physical parameters needed to obtain the normal and shear stiffness values according to the Hertz-Mindlin formulation (no slip solution).\\\\\n\nThere are two available viscous damping models for (1) constant and (2) velocity-dependent coefficient of restitution. In both cases, the viscous...",
   "attributes": [
     {
-      "name": "betan",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Normal viscous damping ratio $\\beta_n$."
-    },
-    {
-      "name": "betas",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Shear viscous damping ratio $\\beta_s$."
-    },
-    {
-      "name": "en",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Normal coefficient of restitution $e_n$."
-    },
-    {
-      "name": "es",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Shear coefficient of restitution $e_s$."
+      "name": "gamma",
+      "type": "float",
+      "default": "0.0",
+      "description": "Surface energy parameter [J/m^2] per each unit contact surface, to derive DMT formulation from HM"
     },
     {
       "name": "eta",
       "type": "float",
       "default": "0.0",
       "description": "Coefficient to determine the plastic bending moment"
-    },
-    {
-      "name": "frictAngle",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
-    },
-    {
-      "name": "gamma",
-      "type": "float",
-      "default": "0.0",
-      "description": "Surface energy parameter [J/m^2] per each unit contact surface, to derive DMT formulation from HM"
     },
     {
       "name": "krot",
@@ -59,10 +29,57 @@
       "description": "Torsional stiffness for moment contact law"
     },
     {
-      "name": "vn",
+      "name": "en",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Normal coefficient of restitution $e_n$."
+    },
+    {
+      "name": "es",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Shear coefficient of restitution $e_s$."
+    },
+    {
+      "name": "betan",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Normal viscous damping ratio $\\beta_n$."
+    },
+    {
+      "name": "betas",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Shear viscous damping ratio $\\beta_s$."
+    },
+    {
+      "name": "frictAngle",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute the friction angle of an interaction. If ``None``, minimum value is used."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Impact velocity corresponding to the en value to calculate the dissipative constant $An$ used in the viscous damping model of [Mueller2011]_."
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['FrictMat', 'FrictMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

@@ -5,16 +5,39 @@
   "description": "Create/update a ScGeom instance representing connexion between chained cylinders<ChainedCylinder>.",
   "attributes": [
     {
+      "name": "interactionDetectionFactor",
+      "type": "float",
+      "default": "1",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
+    },
+    {
       "name": "halfLengthContacts",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "If True, Cylinders nodes interact like spheres of radius 0.5*length, else one node has size length while the other has size 0. The difference is mainly the locus of rotation definition."
     },
     {
-      "name": "interactionDetectionFactor",
-      "type": "float",
-      "default": "1.0",
-      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['ChainedCylinder', 'ChainedCylinder']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

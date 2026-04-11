@@ -7,8 +7,31 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['ScGridCoGeom', 'FrictPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

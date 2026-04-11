@@ -5,52 +5,64 @@
   "description": "GridConnection shape (see [Effeindzourou2016]_, [Bourrier2013]_). Component of a grid designed to link two GridNodes<GridNode>. It is highly recommended to use yade.gridpfacet.gridConnection to generate correct GridConnections<GridConnection>.",
   "attributes": [
     {
+      "name": "node1",
+      "type": "Body",
+      "default": "",
+      "description": "First Body the GridConnection is connected to."
+    },
+    {
+      "name": "node2",
+      "type": "Body",
+      "default": "",
+      "description": "Second Body the GridConnection is connected to."
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": "false",
+      "description": "true if two nodes from different periods are connected."
+    },
+    {
       "name": "cellDist",
       "type": "Vector3i",
       "default": "Vector3i(0,0,0)",
       "description": "Distance of bodies in cell size units, if using periodic boundary conditions. Note that periodic boundary conditions for GridConnections have not yet been fully implemented."
     },
     {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "node1",
-      "type": "NoneType",
-      "default": "None",
-      "description": "First"
-    },
-    {
-      "name": "node2",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Second"
-    },
-    {
-      "name": "periodic",
-      "type": "bool",
-      "default": "False",
-      "description": "true if two nodes from different periods are connected."
-    },
-    {
       "name": "radius",
       "type": "float",
-      "default": "nan",
-      "description": "Radius [m]"
+      "default": "NaN",
+      "description": "Radius [m]",
+      "inherited_from": "Sphere"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "8",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ],
   "methods": [

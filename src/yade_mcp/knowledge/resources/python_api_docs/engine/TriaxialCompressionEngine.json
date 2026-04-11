@@ -5,300 +5,58 @@
   "description": "The engine is a state machine with the following states; transitions my be automatic, see below.\n\n#. STATE_ISO_COMPACTION: isotropic compaction (compression) until the prescribed mean pressue sigmaIsoCompaction is reached and the packing is stable. The compaction happens either by straining the...",
   "attributes": [
     {
-      "name": "Key",
-      "type": "str",
-      "default": "''",
-      "description": "A string appended at the end of all files, use it to name simulations."
+      "name": "warn",
+      "type": "int",
+      "default": "0",
+      "description": "counter used for sending a deprecation warning once"
+    },
+    {
+      "name": "strainRate",
+      "type": "float",
+      "default": "0",
+      "description": "target strain rate (./s, >0 for compression)"
+    },
+    {
+      "name": "currentStrainRate",
+      "type": "float",
+      "default": "0",
+      "description": "current strain rate - converging to"
+    },
+    {
+      "name": "UnbalancedForce",
+      "type": "float",
+      "default": "1",
+      "description": "mean resultant forces divided by mean contact force"
     },
     {
       "name": "StabilityCriterion",
       "type": "float",
       "default": "0.001",
-      "description": "tolerance in terms of"
+      "description": "tolerance in terms of UnbalancedForce to consider the packing is stable"
     },
     {
-      "name": "UnbalancedForce",
-      "type": "float",
-      "default": "1.0",
-      "description": "mean resultant forces divided by mean contact force"
+      "name": "translationAxis",
+      "type": "Vector3",
+      "default": "TriaxialStressController::normal[wall_bottom]",
+      "description": "compression axis"
     },
     {
       "name": "autoCompressionActivation",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "Auto-switch from isotropic compaction (or unloading state if sigmaLateralConfinement<sigmaIsoCompaction) to deviatoric loading"
-    },
-    {
-      "name": "autoStopSimulation",
-      "type": "bool",
-      "default": "False",
-      "description": "Stop the simulation when the sample reach STATE_LIMBO, or keep running"
     },
     {
       "name": "autoUnload",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "Auto-switch from isotropic compaction to unloading"
     },
     {
-      "name": "boxVolume",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "computeStressStrainInterval",
-      "type": "int",
-      "default": "10"
-    },
-    {
-      "name": "currentState",
-      "type": "int",
-      "default": "0",
-      "description": "There are 5 possible states in which TriaxialCompressionEngine can be. See above"
-    },
-    {
-      "name": "currentStrainRate",
-      "type": "float",
-      "default": "0.0",
-      "description": "current strain rate - converging to"
-    },
-    {
-      "name": "depth",
-      "type": "float",
-      "default": "0.0",
-      "description": "size of the box (2-axis) |yupdate|"
-    },
-    {
-      "name": "depth0",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference size for strain definition. See"
-    },
-    {
-      "name": "epsilonMax",
-      "type": "float",
-      "default": "0.5",
-      "description": "Value of axial deformation for which the loading must stop"
-    },
-    {
-      "name": "externalWork",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mechanical work associated to the boundary conditions, i.e. $\\int_{\\partial \\Omega} \\mat{T} \\cdot  \\mat{u} ds$ with $\\mat{T}$ the surface traction and $\\mat{u}$ the displacement at the boundary. |yupdate|"
-    },
-    {
-      "name": "finalMaxMultiplier",
-      "type": "float",
-      "default": "1.00001",
-      "description": "max multiplier of diameters during internal compaction (secondary precise adjustment -"
-    },
-    {
-      "name": "fixedPoroCompaction",
-      "type": "float",
-      "default": "0.0",
-      "description": "A special type of compaction with imposed final porosity"
-    },
-    {
-      "name": "fixedPorosity",
-      "type": "float",
-      "default": "0.0",
-      "description": "Value of porosity chosen by the user"
-    },
-    {
-      "name": "frictionAngleDegree",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Value of friction assigned just before the deviatoric loading"
-    },
-    {
-      "name": "goal1",
-      "type": "float",
-      "default": "0.0",
-      "description": "prescribed stress/strain rate on axis 0, as defined by"
-    },
-    {
-      "name": "goal2",
-      "type": "float",
-      "default": "0.0",
-      "description": "prescribed stress/strain rate on axis 1, as defined by"
-    },
-    {
-      "name": "goal3",
-      "type": "float",
-      "default": "0.0",
-      "description": "prescribed stress/strain rate on axis 2, as defined by"
-    },
-    {
-      "name": "height",
-      "type": "float",
-      "default": "0.0",
-      "description": "size of the box (1-axis) |yupdate|"
-    },
-    {
-      "name": "height0",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference size for strain definition. See"
-    },
-    {
-      "name": "internalCompaction",
+      "name": "autoStopSimulation",
       "type": "bool",
-      "default": "True",
-      "description": "Switch between 'external' (walls) and 'internal' (growth of particles) compaction."
-    },
-    {
-      "name": "isAxisymetric",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, sigma_iso is assigned to sigma1, 2 and 3 (applies at each iteration and overrides user-set values of s1,2,3)"
-    },
-    {
-      "name": "legacyStressDamping",
-      "type": "bool",
-      "default": "False",
-      "description": "if true, the legacy formula behind"
-    },
-    {
-      "name": "maxMultiplier",
-      "type": "float",
-      "default": "1.001",
-      "description": "max multiplier of diameters during internal compaction (initial fast increase -"
-    },
-    {
-      "name": "maxStress",
-      "type": "float",
-      "default": "0.0",
-      "description": "Max absolute value of axial stress during the simulation (for post-processing)"
-    },
-    {
-      "name": "max_vel",
-      "type": "float",
-      "default": "1.0",
-      "description": "Order of magnitude of maximum allowed walls velocity during stress control [m/s]. The corresponding value superseeds the one assigned by the stress controller if the later is higher. max_vel can be set to infinity in many cases, but sometimes helps stabilizing packings. Based on this value, different maxima are computed for each axis based on the dimensions of the sample (while keeping the average value equal to max_vel) so that if each boundary moves at its maximum velocity, the strain rate will be isotropic (see e.g."
-    },
-    {
-      "name": "max_vel1",
-      "type": "float",
-      "default": "6.9408649922977e-310"
-    },
-    {
-      "name": "max_vel2",
-      "type": "float",
-      "default": "2.3519985075986855e-42"
-    },
-    {
-      "name": "max_vel3",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "meanStress",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mean stress in the packing. |yupdate|"
-    },
-    {
-      "name": "noFiles",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, no files will be generated (\\*.xml, \\*.spheres,...)"
-    },
-    {
-      "name": "particlesVolume",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "porosity",
-      "type": "float",
-      "default": "1.0"
-    },
-    {
-      "name": "previousMultiplier",
-      "type": "float",
-      "default": "1.0",
-      "description": "|yupdate|"
-    },
-    {
-      "name": "previousSigmaIso",
-      "type": "float",
-      "default": "0.0",
-      "description": "Previous value of inherited sigma_iso (used to detect manual changes of the confining pressure)"
-    },
-    {
-      "name": "previousState",
-      "type": "int",
-      "default": "0",
-      "description": "Previous state (used to detect manual changes of the state in .xml)"
-    },
-    {
-      "name": "previousStress",
-      "type": "float",
-      "default": "0.0",
-      "description": "|yupdate|"
-    },
-    {
-      "name": "radiusControlInterval",
-      "type": "int",
-      "default": "10"
-    },
-    {
-      "name": "sigmaIsoCompaction",
-      "type": "float",
-      "default": "1.0",
-      "description": "Prescribed isotropic pressure during the compaction phase (< 0 for real - compressive - compaction)"
-    },
-    {
-      "name": "sigmaLateralConfinement",
-      "type": "float",
-      "default": "1.0",
-      "description": "Prescribed confining pressure in the deviatoric loading  (< 0 for classical compressive cases); might be different from"
-    },
-    {
-      "name": "sigma_iso",
-      "type": "float",
-      "default": "0.0",
-      "description": "prescribed confining stress (see"
-    },
-    {
-      "name": "spheresVolume",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "stiffnessUpdateInterval",
-      "type": "int",
-      "default": "10",
-      "description": "iteration period for measuring the resultant packing-boundaries stiffnesses, for stress servo-control"
-    },
-    {
-      "name": "strain",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "strainDamping",
-      "type": "float",
-      "default": "0.99",
-      "description": "coefficient used for smoother transitions in the strain rate. The rate reaches the target value like $d^n$ reaches 0, where $d$ is the damping coefficient and $n$ is the number of steps"
-    },
-    {
-      "name": "strainRate",
-      "type": "float",
-      "default": "0.0",
-      "description": "target strain rate (./s, >0 for compression)"
-    },
-    {
-      "name": "stressDamping",
-      "type": "float",
-      "default": "0.25",
-      "description": "wall damping coefficient for the stress control - wallDamping=0 implies a (theoretical) perfect control, wallDamping=1 means no movement"
-    },
-    {
-      "name": "stressMask",
-      "type": "int",
-      "default": "7",
-      "description": "Bitmask determining wether the imposed"
+      "default": "false",
+      "description": "Stop the simulation when the sample reach STATE_LIMBO, or keep running"
     },
     {
       "name": "testEquilibriumInterval",
@@ -307,124 +65,478 @@
       "description": "interval of checks for transition between phases, higher than 1 saves computation time."
     },
     {
-      "name": "thickness",
-      "type": "float",
-      "default": "-1.0",
-      "description": "thickness of boxes (needed by some functions)"
+      "name": "currentState",
+      "type": "int",
+      "default": "1",
+      "description": "There are 5 possible states in which TriaxialCompressionEngine can be. See above"
     },
     {
-      "name": "translationAxis",
-      "type": "Vector3",
-      "default": "Vector3(0,1,0)",
-      "description": "compression axis"
+      "name": "previousState",
+      "type": "int",
+      "default": "1",
+      "description": "Previous state (used to detect manual changes of the state in .xml)"
+    },
+    {
+      "name": "sigmaIsoCompaction",
+      "type": "float",
+      "default": "1",
+      "description": "Prescribed isotropic pressure during the compaction phase (< 0 for real - compressive - compaction)"
+    },
+    {
+      "name": "previousSigmaIso",
+      "type": "float",
+      "default": "1",
+      "description": "Previous value of inherited sigma_iso (used to detect manual changes of the confining pressure)"
+    },
+    {
+      "name": "sigmaLateralConfinement",
+      "type": "float",
+      "default": "1",
+      "description": "Prescribed confining pressure in the deviatoric loading  (< 0 for classical compressive cases); might be different from"
+    },
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "\"\"",
+      "description": "A string appended at the end of all files, use it to name simulations."
+    },
+    {
+      "name": "noFiles",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, no files will be generated (\\*.xml, \\*.spheres,...)"
+    },
+    {
+      "name": "frictionAngleDegree",
+      "type": "float",
+      "default": "-1",
+      "description": "Value of friction assigned just before the deviatoric loading"
+    },
+    {
+      "name": "epsilonMax",
+      "type": "float",
+      "default": "0.5",
+      "description": "Value of axial deformation for which the loading must stop"
     },
     {
       "name": "uniaxialEpsilonCurr",
       "type": "float",
-      "default": "1.0",
+      "default": "1",
       "description": "Current value of axial deformation during confined loading (is reference to strain[1])"
     },
     {
-      "name": "updatePorosity",
-      "type": "bool",
-      "default": "False",
-      "description": "If true,"
-    },
-    {
-      "name": "volumetricStrain",
+      "name": "fixedPoroCompaction",
       "type": "float",
-      "default": "0.0",
-      "description": "Volumetric strain (see"
+      "default": "false",
+      "description": "A special type of compaction with imposed final porosity"
     },
     {
-      "name": "wall_back_activated",
+      "name": "fixedPorosity",
+      "type": "float",
+      "default": "0",
+      "description": "Value of porosity chosen by the user"
+    },
+    {
+      "name": "maxStress",
+      "type": "float",
+      "default": "0",
+      "description": "Max absolute value of axial stress during the simulation (for post-processing)"
+    },
+    {
+      "name": "sigma_iso",
+      "type": "float",
+      "default": "0",
+      "description": "prescribed confining stress (see :yref:TriaxialCompressionEngine::isAxisymetric`)"
+    },
+    {
+      "name": "isAxisymetric",
       "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
+      "default": "false",
+      "description": "if true, sigma_iso is assigned to sigma1, 2 and 3 (applies at each iteration and overrides user-set values of s1,2,3)"
     },
     {
-      "name": "wall_back_id",
+      "name": "stiffnessUpdateInterval",
       "type": "int",
-      "default": "4",
-      "description": "id of boundary ; coordinate 2- (default value is ok if aabbWalls are appended BEFORE spheres.)"
+      "default": "10",
+      "description": "iteration period for measuring the resultant packing-boundaries stiffnesses, for stress servo-control",
+      "inherited_from": "TriaxialStressController"
     },
     {
-      "name": "wall_bottom_activated",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
+      "name": "radiusControlInterval",
+      "type": "int",
+      "default": "10",
+      "description": "",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "computeStressStrainInterval",
+      "type": "int",
+      "default": "10",
+      "description": "",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "stressDamping",
+      "type": "float",
+      "default": "0.25",
+      "description": "wall damping coefficient for the stress control - wallDamping=0 implies a (theoretical) perfect control, wallDamping=1 means no movement",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "strainDamping",
+      "type": "float",
+      "default": "0.99",
+      "description": "coefficient used for smoother transitions in the strain rate. The rate reaches the target value like $d^n$ reaches 0, where $d$ is the damping coefficient and $n$ is the number of steps",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "thickness",
+      "type": "float",
+      "default": "-1",
+      "description": "thickness of boxes (needed by some functions)",
+      "inherited_from": "TriaxialStressController"
     },
     {
       "name": "wall_bottom_id",
       "type": "int",
       "default": "2",
-      "description": "id of boundary ; coordinate 1- (default value is ok if aabbWalls are appended BEFORE spheres.)"
-    },
-    {
-      "name": "wall_front_activated",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
-    },
-    {
-      "name": "wall_front_id",
-      "type": "int",
-      "default": "5",
-      "description": "id of boundary ; coordinate 2+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
-    },
-    {
-      "name": "wall_left_activated",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
-    },
-    {
-      "name": "wall_left_id",
-      "type": "int",
-      "default": "0",
-      "description": "id of boundary ; coordinate 0- (default value is ok if aabbWalls are appended BEFORE spheres.)"
-    },
-    {
-      "name": "wall_right_activated",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
-    },
-    {
-      "name": "wall_right_id",
-      "type": "int",
-      "default": "1",
-      "description": "id of boundary ; coordinate 0+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
-    },
-    {
-      "name": "wall_top_activated",
-      "type": "bool",
-      "default": "True",
-      "description": "if true, this wall moves according to the target value (stress or strain rate)."
+      "description": "id of boundary ; coordinate 1- (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
     },
     {
       "name": "wall_top_id",
       "type": "int",
       "default": "3",
-      "description": "id of boundary ; coordinate 1+ (default value is ok if aabbWalls are appended BEFORE spheres.)"
+      "description": "id of boundary ; coordinate 1+ (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
     },
     {
-      "name": "warn",
+      "name": "wall_left_id",
       "type": "int",
       "default": "0",
-      "description": "counter used for sending a deprecation warning once"
+      "description": "id of boundary ; coordinate 0- (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_right_id",
+      "type": "int",
+      "default": "1",
+      "description": "id of boundary ; coordinate 0+ (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_front_id",
+      "type": "int",
+      "default": "5",
+      "description": "id of boundary ; coordinate 2+ (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_back_id",
+      "type": "int",
+      "default": "4",
+      "description": "id of boundary ; coordinate 2- (default value is ok if aabbWalls are appended BEFORE spheres.)",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_bottom_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_top_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_left_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_right_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_front_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "wall_back_activated",
+      "type": "bool",
+      "default": "true",
+      "description": "if true, this wall moves according to the target value (stress or strain rate).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "height",
+      "type": "float",
+      "default": "0",
+      "description": "size of the box (1-axis) |yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
     },
     {
       "name": "width",
       "type": "float",
-      "default": "0.0",
-      "description": "size of the box (0-axis) |yupdate|"
+      "default": "0",
+      "description": "size of the box (0-axis) |yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "depth",
+      "type": "float",
+      "default": "0",
+      "description": "size of the box (2-axis) |yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "height0",
+      "type": "float",
+      "default": "0",
+      "description": "Reference size for strain definition. See",
+      "inherited_from": "TriaxialStressController"
     },
     {
       "name": "width0",
       "type": "float",
+      "default": "0",
+      "description": "Reference size for strain definition. See",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "depth0",
+      "type": "float",
+      "default": "0",
+      "description": "Reference size for strain definition. See",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "goal1",
+      "type": "float",
+      "default": "0",
+      "description": "prescribed stress/strain rate on axis 0, as defined by",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "goal2",
+      "type": "float",
+      "default": "0",
+      "description": "prescribed stress/strain rate on axis 1, as defined by",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "goal3",
+      "type": "float",
+      "default": "0",
+      "description": "prescribed stress/strain rate on axis 2, as defined by",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "stressMask",
+      "type": "int",
+      "default": "7",
+      "description": "Bitmask determining wether the imposed goal values are stresses (0 for none, 7 for all, 1 for direction 1, 5 for directions 1 and 3, etc.) or strain rates",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "maxMultiplier",
+      "type": "float",
+      "default": "1.001",
+      "description": "max multiplier of diameters during internal compaction (initial fast increase -",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "finalMaxMultiplier",
+      "type": "float",
+      "default": "1.00001",
+      "description": "max multiplier of diameters during internal compaction (secondary precise adjustment -",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "max_vel",
+      "type": "float",
+      "default": "1",
+      "description": "Order of magnitude of maximum allowed walls velocity during stress control [m/s]. The corresponding value superseeds the one assigned by the stress controller if the later is higher. max_vel can be set to infinity in many cases, but sometimes helps stabilizing packings. Based on this value, different maxima are computed for each axis based on the dimensions of the sample (while keeping the average value equal to max_vel) so that if each boundary moves at its maximum velocity, the strain rate will be isotropic (see e.g.",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "previousStress",
+      "type": "float",
+      "default": "0",
+      "description": "|yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "previousMultiplier",
+      "type": "float",
+      "default": "1",
+      "description": "|yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "internalCompaction",
+      "type": "bool",
+      "default": "true",
+      "description": "Switch between 'external' (walls) and 'internal' (growth of particles) compaction.",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "meanStress",
+      "type": "float",
+      "default": "0",
+      "description": "Mean stress in the packing. |yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "volumetricStrain",
+      "type": "float",
+      "default": "0",
+      "description": "Volumetric strain (see strain). (auto-updated)",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "externalWork",
+      "type": "float",
+      "default": "0",
+      "description": "Mechanical work associated to the boundary conditions, i.e. $\\int_{\\partial \\Omega} \\mat{T} \\cdot  \\mat{u} ds$ with $\\mat{T}$ the surface traction and $\\mat{u}$ the displacement at the boundary. |yupdate|",
+      "read_only": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "updatePorosity",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, solid volume will be updated once (will automatically reset to false after one calculation step) e.g. for porosity calculation purpose. Can be used when volume of particles changes during the simulation (e.g. when particles are erased or when clumps are created).",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "strain",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "Current strain in a vector (exx,eyy,ezz). The values reflect true (logarithmic) strain.",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "porosity",
+      "type": "float",
+      "default": "1.0",
+      "description": "Porosity of the packing, computed from particlesVolume and boxVolume. (auto-updated)",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "boxVolume",
+      "type": "float",
       "default": "0.0",
-      "description": "Reference size for strain definition. See"
+      "description": "Total packing volume.",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "particlesVolume",
+      "type": "float",
+      "default": "1.390660840129893e-309",
+      "description": "Total volume of particles (clumps and dynamic spheres). |ycomp|",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "spheresVolume",
+      "type": "float",
+      "default": "1.390660840129893e-309",
+      "description": "Shorthand for particlesVolume",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "max_vel1",
+      "type": "float",
+      "default": "1.39066084013337e-309",
+      "description": "see max_vel |ycomp|",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "max_vel2",
+      "type": "float",
+      "default": "1.390660840126415e-309",
+      "description": "see max_vel |ycomp|",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "max_vel3",
+      "type": "float",
+      "default": "1.39066243098807e-309",
+      "description": "see max_vel |ycomp|",
+      "no_save": true,
+      "inherited_from": "TriaxialStressController"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [

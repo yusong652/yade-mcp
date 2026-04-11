@@ -5,34 +5,79 @@
   "description": "[DEPRECATED] Loop over interactions applying Law2_ScGeom6D_CohFrictPhys_CohesionMoment on all interactions.\n\n.. note::\n  Use InteractionLoop and Law2_ScGeom6D_CohFrictPhys_CohesionMoment instead of this class for performance reasons.",
   "attributes": [
     {
-      "name": "always_use_moment_law",
-      "type": "bool",
-      "default": "False",
-      "description": "If false, compute moments only for cohesive contacts, broken contacts will have only normal and shear forces. If true, compute bending/twisting moments at all contacts and use the frictional coefficients"
-    },
-    {
-      "name": "creep_viscosity",
-      "type": "float",
-      "default": "0.0",
-      "description": "creep viscosity [Pa.s/m]. probably should be moved to Ip2_CohFrictMat_CohFrictMat_CohFrictPhys..."
-    },
-    {
       "name": "neverErase",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
+    },
+    {
+      "name": "always_use_moment_law",
+      "type": "bool",
+      "default": "false",
+      "description": "If false, compute moments only for cohesive contacts, broken contacts will have only normal and shear forces. If true, compute bending/twisting moments at all contacts and use the frictional coefficients"
     },
     {
       "name": "shear_creep",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "activate creep on the shear force, using"
     },
     {
       "name": "twist_creep",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "activate creep on the twisting moment, using"
+    },
+    {
+      "name": "creep_viscosity",
+      "type": "float",
+      "default": "false",
+      "description": "creep viscosity [Pa.s/m]. probably should be moved to Ip2_CohFrictMat_CohFrictMat_CohFrictPhys..."
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

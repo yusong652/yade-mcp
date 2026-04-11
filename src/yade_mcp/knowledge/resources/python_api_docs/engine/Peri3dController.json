@@ -5,46 +5,48 @@
   "description": "Class for controlling independently all 6 components of \"engineering\" stress<Peri3dController.stress> and strain<Peri3dController.strain> of periodic Cell. goal<Peri3dController.goal> are the goal values, while stressMask<Peri3dController.stressMask> determines which components prescribe stress and...",
   "attributes": [
     {
-      "name": "doneHook",
-      "type": "str",
-      "default": "''",
-      "description": "Python command (as string) to run when"
+      "name": "stress",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current stress vector ($\\sigma_x$,$\\sigma_y$,$\\sigma_z$,$\\tau_{yz}$,$\\tau_{zx}$,$\\tau_{xy}$)|yupdate|.",
+      "read_only": true
+    },
+    {
+      "name": "strain",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current strain (deformation) vector ($\\varepsilon_x$,$\\varepsilon_y$,$\\varepsilon_z$,$\\gamma_{yz}$,$\\gamma_{zx}$,$\\gamma_{xy}$) |yupdate|.",
+      "read_only": true
+    },
+    {
+      "name": "strainRate",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current strain rate vector."
+    },
+    {
+      "name": "stressRate",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current stress rate vector (that is prescribed, the actual one slightly differ)."
+    },
+    {
+      "name": "stressIdeal",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Ideal stress vector at current time step."
     },
     {
       "name": "goal",
       "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
+      "default": "(0, 0, 0, 0, 0, 0)",
       "description": "Goal state; only the upper triangular matrix is considered; each component is either prescribed stress or strain, depending on"
     },
     {
-      "name": "lenPe",
+      "name": "stressMask",
       "type": "int",
-      "default": "0",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "lenPs",
-      "type": "int",
-      "default": "0",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "maxStrain",
-      "type": "float",
-      "default": "1000000.0",
-      "description": "Maximal asolute value of"
-    },
-    {
-      "name": "maxStrainRate",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Maximal absolute value of strain rate (both normal and shear components of"
-    },
-    {
-      "name": "mod",
-      "type": "float",
-      "default": "0.1",
-      "description": "Predictor modificator, by trail-and-error analysis the value 0.1 was found as the best."
+      "default": "((void)\"all strains\",0)",
+      "description": "mask determining whether components of goal are strain (0) or stress (1). The order is 00,11,22,12,02,01 from the least significant bit. (e.g. 0b000011 is stress 00 and stress 11)."
     },
     {
       "name": "nSteps",
@@ -53,130 +55,183 @@
       "description": "Number of steps of the simulation."
     },
     {
-      "name": "pathSizes",
-      "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "pathsCounter",
-      "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "pe",
-      "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "poissonEstimation",
-      "type": "float",
-      "default": "0.25",
-      "description": "Estimation of macroscopic Poisson's ratio, used used for the first simulation step"
-    },
-    {
       "name": "progress",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Actual progress of the simulation with Controller."
     },
     {
-      "name": "ps",
-      "type": "Vector6i",
-      "default": "Vector6i(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
+      "name": "mod",
+      "type": "float",
+      "default": ".1",
+      "description": "Predictor modificator, by trail-and-error analysis the value 0.1 was found as the best."
     },
     {
-      "name": "strain",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current strain (deformation) vector ($\\varepsilon_x$,$\\varepsilon_y$,$\\varepsilon_z$,$\\gamma_{yz}$,$\\gamma_{zx}$,$\\gamma_{xy}$) |yupdate|."
-    },
-    {
-      "name": "strainGoal",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "strainRate",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current strain rate vector."
-    },
-    {
-      "name": "stress",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current stress vector ($\\sigma_x$,$\\sigma_y$,$\\sigma_z$,$\\tau_{yz}$,$\\tau_{zx}$,$\\tau_{xy}$)|yupdate|."
-    },
-    {
-      "name": "stressGoal",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Peri3dController internal variable"
-    },
-    {
-      "name": "stressIdeal",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Ideal stress vector at current time step."
-    },
-    {
-      "name": "stressMask",
-      "type": "int",
-      "default": "0",
-      "description": "mask determining whether components of"
-    },
-    {
-      "name": "stressRate",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current stress rate vector (that is prescribed, the actual one slightly differ)."
+      "name": "doneHook",
+      "type": "str",
+      "default": "",
+      "description": "Python command (as string) to run when nSteps is achieved. If empty, the engine will be set dead."
     },
     {
       "name": "xxPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
-      "description": "\"Time function\" (piecewise linear) for xx direction. Sequence of couples of numbers. First number is time, second number desired value of respective quantity (stress or strain). The last couple is considered as final state (equal to ("
-    },
-    {
-      "name": "xyPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
-      "description": "Time function for xy direction, see"
-    },
-    {
-      "name": "youngEstimation",
-      "type": "float",
-      "default": "1e+20",
-      "description": "Estimation of macroscopic Young's modulus, used for the first simulation step"
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
+      "description": "\"Time function\" (piecewise linear) for xx direction. Sequence of couples of numbers. First number is time, second number desired value of respective quantity (stress or strain). The last couple is considered as final state (equal to (nSteps, goal)), other values are relative to this state. Example: nSteps=1000, goal[0]=300, xxPath=((2,3),(4,1),(5,2)) at step 400 (=5*1000/2) the value is 450 (=3*300/2), at step 800 (=4*1000/5) the value is 150 (=1*300/2), at step 1000 (=5*1000/5=nSteps) the value is 300 (=2*300/2=goal[0]). See example :ysrc:`scripts/test/peri3dController_example1` for illusration."
     },
     {
       "name": "yyPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
       "description": "Time function for yy direction, see"
     },
     {
+      "name": "zzPath",
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
+      "description": "Time function for zz direction, see"
+    },
+    {
       "name": "yzPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
       "description": "Time function for yz direction, see"
     },
     {
       "name": "zxPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
       "description": "Time function for zx direction, see"
     },
     {
-      "name": "zzPath",
-      "type": "list",
-      "default": "[Vector2(1,1)]",
-      "description": "Time function for zz direction, see"
+      "name": "xyPath",
+      "type": "vector<Vector2r>",
+      "default": "vector<Vector2r>(1,Vector2r::Ones())",
+      "description": "Time function for xy direction, see"
+    },
+    {
+      "name": "maxStrainRate",
+      "type": "float",
+      "default": "1e3",
+      "description": "Maximal absolute value of strain rate (both normal and shear components of"
+    },
+    {
+      "name": "maxStrain",
+      "type": "float",
+      "default": "1e6",
+      "description": "Maximal asolute value of strain allowed in the simulation. If reached, the simulation is considered as finished"
+    },
+    {
+      "name": "youngEstimation",
+      "type": "float",
+      "default": "1e20",
+      "description": "Estimation of macroscopic Young's modulus, used for the first simulation step"
+    },
+    {
+      "name": "poissonEstimation",
+      "type": "float",
+      "default": ".25",
+      "description": "Estimation of macroscopic Poisson's ratio, used used for the first simulation step"
+    },
+    {
+      "name": "stressGoal",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "strainGoal",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "pe",
+      "type": "Vector6i",
+      "default": "Vector6i::Zero()",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "ps",
+      "type": "Vector6i",
+      "default": "Vector6i::Zero()",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "pathSizes",
+      "type": "Vector6i",
+      "default": "Vector6i::Zero()",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "pathsCounter",
+      "type": "Vector6i",
+      "default": "Vector6i::Zero()",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "lenPe",
+      "type": "int",
+      "default": "0",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "lenPs",
+      "type": "int",
+      "default": "0",
+      "description": "Peri3dController internal variable",
+      "read_only": true
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

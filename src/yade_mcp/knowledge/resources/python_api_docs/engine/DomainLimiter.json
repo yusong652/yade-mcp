@@ -5,34 +5,35 @@
   "description": "Delete particles that are out of axis-aligned box given by *lo* and *hi*.",
   "attributes": [
     {
+      "name": "lo",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,0)",
+      "description": "Lower corner of the domain."
+    },
+    {
       "name": "hi",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "Vector3r(0,0,0)",
       "description": "Upper corner of the domain."
     },
     {
-      "name": "initRun",
-      "type": "bool",
-      "default": "False",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "iterPeriod",
+      "name": "nDeleted",
       "type": "int",
       "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "lo",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Lower corner of the domain."
+      "description": "Cummulative number of particles deleted.",
+      "read_only": true
     },
     {
       "name": "mDeleted",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Mass of deleted particles."
+    },
+    {
+      "name": "vDeleted",
+      "type": "float",
+      "default": "0",
+      "description": "Volume of deleted spheres (clumps not counted, in that case check"
     },
     {
       "name": "mask",
@@ -41,34 +42,123 @@
       "description": "If mask is defined, only particles with corresponding groupMask will be deleted."
     },
     {
-      "name": "nDeleted",
-      "type": "int",
-      "default": "0",
-      "description": "Cummulative number of particles deleted."
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "vDeleted",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volume of deleted spheres (clumps not counted, in that case check"
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "virtPeriod",
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

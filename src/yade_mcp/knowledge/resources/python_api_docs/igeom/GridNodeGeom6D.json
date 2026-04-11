@@ -5,76 +5,105 @@
   "description": "Geometry of a GridNode-GridNode contact. Inherits almost everything from ScGeom6D.",
   "attributes": [
     {
-      "name": "bending",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Bending at contact as a vector defining axis of rotation and angle (angle=norm)."
-    },
-    {
       "name": "connectionBody",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Reference to the"
-    },
-    {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
+      "type": "Body",
+      "default": "",
+      "description": "Reference to the GridNode Body who is linking the two GridNodes."
     },
     {
       "name": "initialOrientation1",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Orientation of body 1 one at initialisation time |yupdate|"
+      "default": "Quaternionr(1.0,0.0,0.0,0.0)",
+      "description": "Orientation of body 1 one at initialisation time |yupdate|",
+      "read_only": true,
+      "inherited_from": "ScGeom6D"
     },
     {
       "name": "initialOrientation2",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Orientation of body 2 one at initialisation time |yupdate|"
-    },
-    {
-      "name": "normal",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
-    },
-    {
-      "name": "penetrationDepth",
-      "type": "float",
-      "default": "nan",
-      "description": "Penetration distance of spheres (positive if overlapping)"
-    },
-    {
-      "name": "refR1",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #1. |ycomp|"
-    },
-    {
-      "name": "refR2",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #2. |ycomp|"
-    },
-    {
-      "name": "shearInc",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear displacement increment in the last step"
-    },
-    {
-      "name": "twist",
-      "type": "float",
-      "default": "0.0",
-      "description": "Elastic twist angle (around"
+      "default": "Quaternionr(1.0,0.0,0.0,0.0)",
+      "description": "Orientation of body 2 one at initialisation time |yupdate|",
+      "read_only": true,
+      "inherited_from": "ScGeom6D"
     },
     {
       "name": "twistCreep",
       "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Stored creep, substracted from total relative rotation for computation of elastic moment |yupdate|"
+      "default": "Quaternionr(1.0,0.0,0.0,0.0)",
+      "description": "Stored creep, substracted from total relative rotation for computation of elastic moment |yupdate|",
+      "read_only": true,
+      "inherited_from": "ScGeom6D"
+    },
+    {
+      "name": "twist",
+      "type": "float",
+      "default": "0",
+      "description": "Elastic twist angle (around normal axis) of the contact.",
+      "read_only": true,
+      "inherited_from": "ScGeom6D"
+    },
+    {
+      "name": "bending",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Bending at contact as a vector defining axis of rotation and angle (angle=norm).",
+      "read_only": true,
+      "inherited_from": "ScGeom6D"
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "float",
+      "default": "NaN",
+      "description": "Penetration distance of spheres (positive if overlapping)",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear displacement increment in the last step",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "read_only": true,
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #1. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #2. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "7",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ],
   "methods": [

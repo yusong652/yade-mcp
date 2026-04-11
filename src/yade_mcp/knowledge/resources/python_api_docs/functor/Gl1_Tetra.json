@@ -5,10 +5,33 @@
   "description": "Renders Tetra object\n\n.. ystaticattr:: Gl1_Tetra.wire(=true)\n\n\tTODO",
   "attributes": [
     {
+      "name": "wire",
+      "type": "bool",
+      "default": "True",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Tetra']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

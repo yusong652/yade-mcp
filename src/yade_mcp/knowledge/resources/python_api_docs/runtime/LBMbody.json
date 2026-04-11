@@ -5,76 +5,82 @@
   "description": "Body class for Lattice Boltzmann Method",
   "attributes": [
     {
+      "name": "force",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic force, need to be reinitialized (LB unit)"
+    },
+    {
+      "name": "fm",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic force (LB unit) at t-0.5dt"
+    },
+    {
+      "name": "fp",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic force (LB unit) at t+0.5dt"
+    },
+    {
+      "name": "momentum",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic momentum,need to be reinitialized (LB unit)"
+    },
+    {
+      "name": "mm",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic momentum (LB unit) at t-0.5dt"
+    },
+    {
+      "name": "mp",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Hydrodynamic momentum (LB unit) at t+0.5dt"
+    },
+    {
+      "name": "pos",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Position of body"
+    },
+    {
+      "name": "vel",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Velocity of body"
+    },
+    {
       "name": "AVel",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
       "description": "Angular velocity of body"
     },
     {
       "name": "Fh",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
       "description": "Hydrodynamical force on body"
     },
     {
       "name": "Mh",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
       "description": "Hydrodynamical momentum on body"
     },
     {
-      "name": "fm",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic force (LB unit) at t-0.5dt"
-    },
-    {
-      "name": "force",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic force, need to be reinitialized (LB unit)"
-    },
-    {
-      "name": "fp",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic force (LB unit) at t+0.5dt"
+      "name": "radius",
+      "type": "float",
+      "default": "-1000.",
+      "description": "Radius of body (for sphere)"
     },
     {
       "name": "isEroded",
       "type": "bool",
       "default": "false",
       "description": "Hydrodynamical force on body"
-    },
-    {
-      "name": "mm",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic momentum (LB unit) at t-0.5dt"
-    },
-    {
-      "name": "momentum",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic momentum,need to be reinitialized (LB unit)"
-    },
-    {
-      "name": "mp",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Hydrodynamic momentum (LB unit) at t+0.5dt"
-    },
-    {
-      "name": "pos",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Position of body"
-    },
-    {
-      "name": "radius",
-      "type": "Real",
-      "default": "-1000.",
-      "description": "Radius of body (for sphere)"
     },
     {
       "name": "saveProperties",
@@ -85,13 +91,8 @@
     {
       "name": "type",
       "type": "short int",
-      "default": "-1"
-    },
-    {
-      "name": "vel",
-      "type": "Vector3r",
-      "default": "Vector3r::Zero()",
-      "description": "Velocity of body"
+      "default": "-1",
+      "description": ""
     }
   ]
 }

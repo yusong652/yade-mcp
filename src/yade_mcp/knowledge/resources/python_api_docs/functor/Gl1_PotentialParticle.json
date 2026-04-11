@@ -5,10 +5,69 @@
   "description": "Renders PotentialParticle object\n\n.. ystaticattr:: Gl1_PotentialParticle.sizeX(=20)\n\n\tNumber of divisions in the X direction for triangulation\n\n.. ystaticattr:: Gl1_PotentialParticle.sizeY(=20)\n\n\tNumber of divisions in the Y direction for triangulation\n\n.. ystaticattr:: Gl1_PotentialParticle.sizeZ(=20)\n\n\tNumber of divisions in the Z direction for triangulation\n\n.. ystaticattr:: Gl1_PotentialParticle.store(=true)\n\n\tWhether to store computed triangulation or not\n\n.. ystaticattr:: Gl1_PotentialParticle.initialized(=false)\n\n\tWhether the triangulation is initialized\n\n.. ystaticattr:: Gl1_PotentialParticle.aabbEnlargeFactor(=1.3)\n\n\tEnlargement factor of the Marching Cubes drawing grid, used for displaying purposes. Try different value if the particles are not displayed properly\n\n.. ystaticattr:: Gl1_PotentialParticle.wire(=false)\n\n\tOnly show wireframe",
   "attributes": [
     {
+      "name": "sizeX",
+      "type": "int",
+      "default": "20",
+      "description": ""
+    },
+    {
+      "name": "sizeY",
+      "type": "int",
+      "default": "20",
+      "description": ""
+    },
+    {
+      "name": "sizeZ",
+      "type": "int",
+      "default": "20",
+      "description": ""
+    },
+    {
+      "name": "store",
+      "type": "bool",
+      "default": "True",
+      "description": ""
+    },
+    {
+      "name": "initialized",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "aabbEnlargeFactor",
+      "type": "float",
+      "default": "1.3",
+      "description": ""
+    },
+    {
+      "name": "wire",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['PotentialParticle']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

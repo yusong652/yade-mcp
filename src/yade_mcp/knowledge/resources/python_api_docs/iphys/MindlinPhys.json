@@ -5,10 +5,70 @@
   "description": "Representation of an interaction of the Hertz-Mindlin type.",
   "attributes": [
     {
-      "name": "Fs",
-      "type": "Vector2",
-      "default": "Vector2(0,0)",
-      "description": "Shear force in local axes (computed incrementally)"
+      "name": "kno",
+      "type": "float",
+      "default": "0.0",
+      "description": "Constant value in the formulation of the normal stiffness"
+    },
+    {
+      "name": "kso",
+      "type": "float",
+      "default": "0.0",
+      "description": "Constant value in the formulation of the tangential stiffness"
+    },
+    {
+      "name": "maxBendPl",
+      "type": "float",
+      "default": "0.0",
+      "description": "Coefficient to determine the maximum plastic moment to apply at the contact"
+    },
+    {
+      "name": "normalViscous",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal viscous component"
+    },
+    {
+      "name": "shearViscous",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear viscous component"
+    },
+    {
+      "name": "shearElastic",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear force"
+    },
+    {
+      "name": "usElastic",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear displacement (only elastic part)"
+    },
+    {
+      "name": "usTotal",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear displacement (elastic+plastic part)"
+    },
+    {
+      "name": "momentBend",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Artificial bending moment to provide rolling resistance in order to account for some degree of interlocking between particles"
+    },
+    {
+      "name": "momentTwist",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Artificial twisting moment (no plastic condition can be applied at the moment)"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "NaN",
+      "description": "Contact radius (only computed with"
     },
     {
       "name": "adhesionForce",
@@ -17,10 +77,16 @@
       "description": "Force of adhesion as predicted by DMT"
     },
     {
-      "name": "beta",
-      "type": "float",
-      "default": "0.0",
-      "description": "Auxiliary parameter used in the viscous damping model of [Mueller2011]_"
+      "name": "isAdhesive",
+      "type": "bool",
+      "default": "false",
+      "description": "bool to identify if the contact is adhesive, that is to say if the contact force is attractive"
+    },
+    {
+      "name": "isSliding",
+      "type": "bool",
+      "default": "false",
+      "description": "check if the contact is sliding (useful to calculate the ratio of sliding contacts)"
     },
     {
       "name": "betan",
@@ -35,148 +101,91 @@
       "description": "Shear Damping Ratio. Fraction of the viscous damping coefficient (shear direction) equal to $\\frac{c_{s}}{C_{s,crit}}$."
     },
     {
-      "name": "frictDissip",
+      "name": "alpha",
       "type": "float",
       "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "initD",
-      "type": "float",
-      "default": "0.0",
-      "description": "initial penetration distance, used for crackaperture estimate"
-    },
-    {
-      "name": "isAdhesive",
-      "type": "bool",
-      "default": "False",
-      "description": "bool to identify if the contact is adhesive, that is to say if the contact force is attractive"
-    },
-    {
-      "name": "isBroken",
-      "type": "bool",
-      "default": "False",
-      "description": "bool to keep a bond flagged as broken (only useful when displacement criteria is used in partial sat for cracked cell estimates)"
-    },
-    {
-      "name": "isSliding",
-      "type": "bool",
-      "default": "False",
-      "description": "check if the contact is sliding (useful to calculate the ratio of sliding contacts)"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "kno",
-      "type": "float",
-      "default": "0.0",
-      "description": "Constant value in the formulation of the normal stiffness"
-    },
-    {
-      "name": "kr",
-      "type": "float",
-      "default": "0.0",
-      "description": "rotational stiffness [N.m/rad]"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "kso",
-      "type": "float",
-      "default": "0.0",
-      "description": "Constant value in the formulation of the tangential stiffness"
-    },
-    {
-      "name": "ktw",
-      "type": "float",
-      "default": "0.0",
-      "description": "twist stiffness [N.m/rad]"
-    },
-    {
-      "name": "maxBendPl",
-      "type": "float",
-      "default": "0.0",
-      "description": "Coefficient to determine the maximum plastic moment to apply at the contact"
-    },
-    {
-      "name": "momentBend",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Artificial bending moment to provide rolling resistance in order to account for some degree of interlocking between particles"
-    },
-    {
-      "name": "momentTwist",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Artificial twisting moment (no plastic condition can be applied at the moment)"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "normalViscous",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal viscous component"
+      "description": "Constant coefficient to define contact viscous damping for non-linear elastic force-displacement relationship."
     },
     {
       "name": "prevU",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Previous local displacement; only used with"
     },
     {
-      "name": "radius",
+      "name": "Fs",
+      "type": "Vector2",
+      "default": "(0, 0)",
+      "description": "Shear force in local axes (computed incrementally)"
+    },
+    {
+      "name": "initD",
       "type": "float",
-      "default": "nan",
-      "description": "Contact radius (only computed with"
+      "default": "0",
+      "description": "initial penetration distance, used for crackaperture estimate"
     },
     {
-      "name": "shearElastic",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear force"
+      "name": "isBroken",
+      "type": "bool",
+      "default": "0",
+      "description": "bool to keep a bond flagged as broken (only useful when displacement criteria is used in partial sat for cracked cell estimates)"
     },
     {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "name": "kr",
+      "type": "float",
+      "default": "0",
+      "description": "rotational stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
     },
     {
-      "name": "shearViscous",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear viscous component"
+      "name": "ktw",
+      "type": "float",
+      "default": "0",
+      "description": "twist stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
     },
     {
-      "name": "usElastic",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear displacement (only elastic part)"
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
     },
     {
-      "name": "usTotal",
+      "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear displacement (elastic+plastic part)"
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "14",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

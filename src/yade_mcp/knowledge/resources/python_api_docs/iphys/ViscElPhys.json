@@ -5,6 +5,18 @@
   "description": "IPhys created from ViscElMat, for use with Law2_ScGeom_ViscElPhys_Basic.",
   "attributes": [
     {
+      "name": "cn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal viscous constant"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear viscous constant"
+    },
+    {
       "name": "Fn",
       "type": "float",
       "default": "0.0",
@@ -15,36 +27,6 @@
       "type": "float",
       "default": "0.0",
       "description": "Viscous part of the normal force of the contact"
-    },
-    {
-      "name": "cn",
-      "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant"
-    },
-    {
-      "name": "cs",
-      "type": "float",
-      "default": "nan",
-      "description": "Shear viscous constant"
-    },
-    {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
     },
     {
       "name": "mR",
@@ -59,22 +41,47 @@
       "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_"
     },
     {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
     },
     {
-      "name": "tangensOfFrictionAngle",
+      "name": "kn",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "12",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

@@ -5,94 +5,93 @@
   "description": "A level set description of particle shape based on a discrete distance field<LevelSet.distField> (denoting $\\phi$ the underlying signed distance function) and surface nodes<LevelSet.surfNodes> [Duriez2021a]_ [Duriez2021b]_. See :ysrc:`examples/levelSet` for example scripts.",
   "attributes": [
     {
-      "name": "axesAABE",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "The half lengths of the principal axes of the axis-aligned bounding ellipsoid (AABE) of the level-set shape. Format (rx,ry,rz). Only works for VLS-DEM."
-    },
-    {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
+      "name": "distField",
+      "type": "vector< vector< vector<Real> > >",
+      "default": "",
+      "description": "The signed (< 0 when inside) distance-to-surface function as a discrete scalar field on lsGrid, with distField[i][j][k] corresponding to lsGrid.gridPoint(i,j,k). From Python, slice this multi-dimensional list with care: while distField[i][:][:] corresponds to values on a x-cst plane, distField[:][:][k] is not at z-constant (use [[distField[i][j][k] for j in ..] for i in ..] instead)",
+      "read_only": true
     },
     {
       "name": "corners",
-      "type": "list",
-      "default": "[]",
-      "description": "The 8 corners of an axis-aligned bounding box, in local axes. It is computed once for all by"
+      "type": "vector<Vector3r>",
+      "default": "",
+      "description": "The 8 corners of an axis-aligned bounding box, in local axes. It is computed once for all by",
+      "read_only": true
     },
     {
-      "name": "distField",
-      "type": "list",
-      "default": "[]",
-      "description": "The signed (< 0 when inside) distance-to-surface function as a discrete scalar field on"
+      "name": "surfNodes",
+      "type": "vector<Vector3r>",
+      "default": "",
+      "description": "Surface discretization nodes (the list of) used for exact contact treatment in Ig2_LevelSet_LevelSet_ScGeom, previously coined boundNodes in [Duriez2021b]_. Expressed in local frame. Getting them back after a save/load cycle requires to launch one iteration or to first ask for shape.center.",
+      "read_only": true
     },
     {
-      "name": "hasAABE",
-      "type": "bool",
-      "default": "False",
-      "description": "Flag to indicate whether an axis-aligned bounding ellipsoid (AABE) has been provided by the user. If true, you must specify"
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "lsGrid",
-      "type": "RegularGrid",
-      "default": "<RegularGrid instance at 0x389ba00>",
-      "description": "The"
-    },
-    {
-      "name": "n_neighborsNodes",
+      "name": "nSurfNodes",
       "type": "int",
-      "default": "-1",
-      "description": "How many closest nodes we want to store for every one in"
+      "default": "100",
+      "description": "The number of boundary nodes in surfNodes, previously coined nNodes in [Duriez2021b]_. Usually set through utils levelSetBody() function (has to be set at instantiation in all cases). Please use a perfect square + 2 if not twoD and if nodesPath = 1."
     },
     {
-      "name": "neighborsNodes",
-      "type": "list",
-      "default": "[]",
-      "description": "Denoting"
+      "name": "nodesPath",
+      "type": "int",
+      "default": "2",
+      "description": "Defines how the space of spherical coordinates $( theta in [0; pi] , varphi in [0;2 pi])$ is discretized when ray tracing the boundary nodes: 1 gives a rectangular partition of that space, plus two nodes at $ theta = 0 [ pi]$; 2 locates the nodes along a spiral path [Duriez2021a]_"
     },
     {
-      "name": "smearCoeff",
+      "name": "nodesTol",
       "type": "float",
-      "default": "1.5",
-      "description": "Rules the smearing coefficient $\\varepsilon > 0$ of the Heaviside step function for a smooth integration of the particle's volume close to its surface (the higher $\\varepsilon$ the smoother, i.e. the more diffuse the surface in terms of volume integration). Given in reciprocal multiples of $R_{cell} = \\sqrt{3}/2 g_{grid}$ the half diagonal of the cells of the"
+      "default": "50",
+      "description": "Tolerance coefficient for accepting (if $| phi| / L <$ nodesTol $ times$ numeric precision with $ phi$ the return value of distance and $L$ a body-characteristic length taken as $ sqrt[3]{V}$ with $V$ the volume, or $ sqrt{V/g}$ with $g$ the grid spacing if twoD) boundary nodes proposed by the ray tracing algorithm."
     },
     {
       "name": "sphericity",
       "type": "float",
-      "default": "-1.0",
-      "description": "Shape sphericity computed from boundary nodes and assuming both largest inscribed sphere and smallest circumscribed sphere have the origin (of local axes) as center."
+      "default": "-1",
+      "description": "Shape sphericity computed from boundary nodes and assuming both largest inscribed sphere and smallest circumscribed sphere have the origin (of local axes) as center.",
+      "read_only": true
     },
     {
-      "name": "starLike",
-      "type": "bool",
-      "default": "False",
-      "description": "Indicates whether"
-    },
-    {
-      "name": "surfNodes",
-      "type": "list",
-      "default": "[]",
-      "description": "Surface discretization in terms of (a list of) nodes, for the master-slave refined contact treatment in"
+      "name": "lsGrid",
+      "type": "RegularGrid",
+      "default": "new RegularGrid",
+      "description": "The regular grid carrying distField, in local axes.",
+      "read_only": true
     },
     {
       "name": "twoD",
       "type": "bool",
-      "default": "False",
-      "description": "True for z-invariant shapes. Serves to restrict the ray tracing of"
+      "default": "false",
+      "description": "True for z-invariant shapes. Serves to restrict the ray tracing of",
+      "read_only": true
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "10",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ],
   "methods": [

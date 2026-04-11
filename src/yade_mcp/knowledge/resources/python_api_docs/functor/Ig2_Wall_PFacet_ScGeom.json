@@ -5,16 +5,41 @@
   "description": "Create/update a ScGeom instance representing intersection of Wall and PFacet.",
   "attributes": [
     {
-      "name": "hertzian",
-      "type": "bool",
-      "default": "False",
-      "description": "If True, the equivalent radius for the Wall ("
-    },
-    {
       "name": "noRatch",
       "type": "bool",
-      "default": "True",
-      "description": "Avoid granular ratcheting"
+      "default": "true",
+      "description": "Avoid granular ratcheting",
+      "inherited_from": "Ig2_Wall_Sphere_ScGeom"
+    },
+    {
+      "name": "hertzian",
+      "type": "bool",
+      "default": "false",
+      "description": "The equivalent radius for the Wall (ScGeom.refR1) is chosen as 1e8 times the Sphere's radius (closer to Hertzian therory, where it is infinite).",
+      "inherited_from": "Ig2_Wall_Sphere_ScGeom"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Wall', 'PFacet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

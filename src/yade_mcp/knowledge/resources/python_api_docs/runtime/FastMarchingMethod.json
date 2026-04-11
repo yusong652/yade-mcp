@@ -5,32 +5,27 @@
   "description": "Executes a Fast Marching Method (FMM) to solve $||\\vec \\nabla \\phi|| = c$ for a discrete field $\\phi$ defined on grid<FastMarchingMethod.grid>, with phiIni<FastMarchingMethod.phiIni> serving as boundary condition. Typically, $c=1$ (see speed<FastMarchingMethod.speed>) and $\\phi$ is a distance field. See [Duriez2021b]_ for more details (where the class was coined DistFMM) and pay attention to heapSort<FastMarchingMethod.heapSort> for possibly faster executions.",
   "attributes": [
     {
-      "name": "grid",
-      "type": "shared_ptr<RegularGrid>",
-      "default": "",
-      "description": "The underlying"
-    },
-    {
-      "name": "heapSort",
-      "type": "bool",
-      "default": "false",
-      "description": "Whether to use a heap-sort (if True) when advancing the narrow band and picking the closest-to-surface gridpoint, for a much faster execution (one or more order of magnitude for significant grid with 1e5 gridpoints or more). Note that the present implementation is not fully bullet-proof in principle for non-convex cases, from the point of view of conserving a heap-structure over the course of all operations, but that no significant consequences of using True have been observed to date."
-    },
-    {
       "name": "known",
       "type": "vector<Vector3i>",
       "default": "",
-      "description": "Gridpoints (indices) with distance known for good: they have been at some point the shortest gp to the surface while executing the FMM."
+      "description": "Gridpoints (indices) with distance known for good: they have been at some point the shortest gp to the surface while executing the FMM.",
+      "read_only": true
     },
     {
       "name": "phiIni",
       "type": "vector<vector<vector<Real>>>",
       "default": "",
-      "description": "Initial discrete field defined on the"
+      "description": "Initial discrete field defined on the grid that will serve as a boundary condition for the FMM. Field values have to be - inf (resp. inf) for points being far inside (resp. outside) and correct (finite) on each side of the interface. Built-in functions *distIniSE* (for superellipsoids), *phiIniCppPy* (for a Python user function, through a mixed C++-Py internal implementation) or *phiIniPy* (for a Python user function through a pure Py internal implementation) may be used for such a purpose."
+    },
+    {
+      "name": "grid",
+      "type": "RegularGrid",
+      "default": "",
+      "description": "The underlying"
     },
     {
       "name": "speed",
-      "type": "Real",
+      "type": "float",
       "default": "1",
       "description": "Keep to 1 for a true distance, 2 for the flake-like rose verification of [Duriez2021b]_."
     }

@@ -5,40 +5,63 @@
   "description": "Law for linear compression, and Mohr-Coulomb plasticity surface without cohesion.\nThis law implements the classical linear elastic-plastic law from [CundallStrack1979]_ (see also [Pfc3dManual30]_). The normal force is (with the convention of positive tensile forces) $F_n=\\min(k_n u_n, 0)$. The...",
   "attributes": [
     {
-      "name": "always_use_moment_law",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, use bending/twisting moments at all contacts. If false, compute moments only for cohesive contacts."
-    },
-    {
-      "name": "creep_viscosity",
-      "type": "float",
-      "default": "1.0",
-      "description": "creep viscosity [Pa.s/m]. probably should be moved to Ip2_CohFrictMat_CohFrictMat_CohFrictPhys..."
-    },
-    {
       "name": "neverErase",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
+    },
+    {
+      "name": "always_use_moment_law",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, use bending/twisting moments at all contacts. If false, compute moments only for cohesive contacts."
     },
     {
       "name": "shear_creep",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "activate creep on the shear force, using"
     },
     {
       "name": "twist_creep",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "activate creep on the twisting moment, using"
     },
     {
       "name": "useIncrementalForm",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "use the incremental formulation to compute bending and twisting moments. Creep on the twisting moment is not included in such a case."
+    },
+    {
+      "name": "creep_viscosity",
+      "type": "float",
+      "default": "1",
+      "description": "creep viscosity [Pa.s/m]. probably should be moved to Ip2_CohFrictMat_CohFrictMat_CohFrictPhys..."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['ChCylGeom6D', 'CohFrictPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

@@ -5,10 +5,81 @@
   "description": "Renders NormPhys objects as cylinders of which diameter and color depends on NormPhys.normalForce magnitude.\n\n.. ystaticattr:: Gl1_NormPhys.maxFn(=0)\n\n\tValue of NormPhys.normalForce corresponding to maxRadius<Gl1_NormPhys.maxRadius>. This value will be increased (but *not decreased* ) automatically.\n\n.. ystaticattr:: Gl1_NormPhys.signFilter(=0)\n\n\tIf non-zero, only display contacts with negative (-1) or positive (+1) normal forces; if zero, all contacts will be displayed.\n\n.. ystaticattr:: Gl1_NormPhys.refRadius(=std::numeric_limits<Real>::infinity())\n\n\tReference (minimum) particle radius; used only if maxRadius<Gl1_NormPhys.maxRadius> is negative. This value will be decreased (but *not increased* ) automatically. |yupdate|\n\n.. ystaticattr:: Gl1_NormPhys.maxRadius(=-1)\n\n\tCylinder radius corresponding to the maximum normal force. If negative, auto-updated refRadius<Gl1_NormPhys.refRadius> will be used instead.\n\n.. ystaticattr:: Gl1_NormPhys.slices(=6)\n\n\tNumber of sphere slices; (see `glutCylinder reference <http://www.opengl.org/sdk/docs/man/xhtml/gluCylinder.xml>`_)\n\n.. ystaticattr:: Gl1_NormPhys.stacks(=1)\n\n\tNumber of sphere stacks; (see `glutCylinder reference <http://www.opengl.org/sdk/docs/man/xhtml/gluCylinder.xml>`_)\n\n.. ystaticattr:: Gl1_NormPhys.maxWeakFn(=NaN)\n\n\tValue that divides contacts by their normal force into the 'weak fabric' and 'strong fabric'. This value is set as side-effect by utils.fabricTensor.\n\n.. ystaticattr:: Gl1_NormPhys.weakFilter(=0)\n\n\tIf non-zero, only display contacts belonging to the 'weak' (-1) or 'strong' (+1) fabric.\n\n.. ystaticattr:: Gl1_NormPhys.weakScale(=1.)\n\n\tIf maxWeakFn<Gl1_NormPhys.maxWeakFn> is set, scale radius of the weak fabric by this amount (usually smaller than 1). If zero, 1 pixel line is displayed. Colors are not affected by this value.",
   "attributes": [
     {
+      "name": "maxFn",
+      "type": "float",
+      "default": "0.0",
+      "description": ""
+    },
+    {
+      "name": "signFilter",
+      "type": "int",
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "refRadius",
+      "type": "float",
+      "default": "inf",
+      "description": ""
+    },
+    {
+      "name": "maxRadius",
+      "type": "float",
+      "default": "-1.0",
+      "description": ""
+    },
+    {
+      "name": "slices",
+      "type": "int",
+      "default": "6",
+      "description": ""
+    },
+    {
+      "name": "stacks",
+      "type": "int",
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "maxWeakFn",
+      "type": "float",
+      "default": "nan",
+      "description": ""
+    },
+    {
+      "name": "weakFilter",
+      "type": "int",
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "weakScale",
+      "type": "float",
+      "default": "1.0",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['NormPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

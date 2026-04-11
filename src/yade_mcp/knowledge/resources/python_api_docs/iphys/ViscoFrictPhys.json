@@ -7,44 +7,52 @@
     {
       "name": "creepedShear",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Creeped force (parallel)"
-    },
-    {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "Vector3r(0,0,0)",
+      "description": "Creeped force (parallel)",
+      "read_only": true
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "20",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

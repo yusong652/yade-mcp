@@ -5,16 +5,17 @@
   "description": "Find an instance of LawTester and show visually its data.",
   "attributes": [
     {
+      "name": "tester",
+      "type": "LawTester",
+      "default": "",
+      "description": "Associated LawTester object."
+    },
+    {
       "name": "dead",
       "type": "bool",
       "default": "false",
-      "description": "Deactivate the object (on error/exception)."
-    },
-    {
-      "name": "tester",
-      "type": "shared_ptr<LawTester>",
-      "default": "",
-      "description": "Associated"
+      "description": "Deactivate the object (on error/exception).",
+      "inherited_from": "GlExtraDrawer"
     }
   ]
 }

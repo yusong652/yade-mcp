@@ -5,28 +5,39 @@
   "description": "Geometry of node particle.",
   "attributes": [
     {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
       "name": "radius",
       "type": "float",
       "default": "0.1",
       "description": "Radius [m]"
     },
     {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
+    },
+    {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "13",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ]
 }

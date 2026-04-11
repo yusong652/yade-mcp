@@ -5,22 +5,45 @@
   "description": "Converts a FrictMat and FrictViscoMat instance to FrictViscoPhys with corresponding parameters. Basically this functor corresponds to Ip2_FrictMat_FrictMat_FrictPhys with the only difference that damping in normal direction can be considered.",
   "attributes": [
     {
-      "name": "frictAngle",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "name": "kn",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's normal contact stiffnesses. If this value is not given the elastic properties (i.e. young) of the two colliding materials are used to calculate the stiffness."
     },
     {
       "name": "kRatio",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's shear contact stiffnesses. If this value is not given the elastic properties (i.e. poisson) of the two colliding materials are used to calculate the stiffness."
     },
     {
-      "name": "kn",
+      "name": "frictAngle",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Instance of"
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['FrictMat', 'FrictViscoMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

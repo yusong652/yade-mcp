@@ -5,58 +5,65 @@
   "description": "Representation of a single interaction of the FrictViscoPM type, storage for relevant parameters",
   "attributes": [
     {
-      "name": "cn",
-      "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant defined as $\\c_{n}=c_{n,crit}\\beta_n$."
-    },
-    {
       "name": "cn_crit",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Normal viscous constant for ctitical damping defined as $\\c_{n}=C_{n,crit}\\beta_n$."
     },
     {
-      "name": "frictDissip",
+      "name": "cn",
       "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "NaN",
+      "description": "Normal viscous constant defined as $\\c_{n}=c_{n,crit}\\beta_n$."
     },
     {
       "name": "normalViscous",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Normal viscous component"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "8",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

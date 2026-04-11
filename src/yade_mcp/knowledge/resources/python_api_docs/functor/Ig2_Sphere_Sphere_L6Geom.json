@@ -5,28 +5,55 @@
   "description": "Incrementally compute L6Geom for contact of 2 spheres.",
   "attributes": [
     {
-      "name": "approxMask",
-      "type": "int",
-      "default": "0",
-      "description": "Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled.\n\n== ===============================================================\n1  use previous transformation to transform velocities (which are known at mid-steps), instead of mid-step transformation computed as quaternion slerp at t=0.5.\n2  do not take average (mid-step) normal when computing relative shear displacement, use previous value instead\n4  do not re-normalize average (mid-step) normal, if used.\u2026\n== ===============================================================\n\nBy default, the mask is zero, wherefore none of these approximations is used."
+      "name": "noRatch",
+      "type": "bool",
+      "default": "true",
+      "description": "See Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting.",
+      "inherited_from": "Ig2_Sphere_Sphere_L3Geom"
     },
     {
       "name": "distFactor",
       "type": "float",
-      "default": "1.0",
-      "description": "Create interaction if spheres are not futher than *distFactor* \\*(r1+r2). If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the ''zero'' one)."
-    },
-    {
-      "name": "noRatch",
-      "type": "bool",
-      "default": "True",
-      "description": "See"
+      "default": "1",
+      "description": "Create interaction if spheres are not futher than *distFactor* \\*(r1+r2). If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the ''zero'' one).",
+      "inherited_from": "Ig2_Sphere_Sphere_L3Geom"
     },
     {
       "name": "trsfRenorm",
       "type": "int",
       "default": "100",
-      "description": "How often to renormalize"
+      "description": "How often to renormalize trsf; if non-positive, never renormalized (simulation might be unstable)",
+      "inherited_from": "Ig2_Sphere_Sphere_L3Geom"
+    },
+    {
+      "name": "approxMask",
+      "type": "int",
+      "default": "0",
+      "description": "Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled.\n\n== ===============================================================\n1  use previous transformation to transform velocities (which are known at mid-steps), instead of mid-step transformation computed as quaternion slerp at t=0.5.\n2  do not take average (mid-step) normal when computing relative shear displacement, use previous value instead\n4  do not re-normalize average (mid-step) normal, if used.\u2026\n== ===============================================================\n\nBy default, the mask is zero, wherefore none of these approximations is used.",
+      "inherited_from": "Ig2_Sphere_Sphere_L3Geom"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Sphere', 'Sphere']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

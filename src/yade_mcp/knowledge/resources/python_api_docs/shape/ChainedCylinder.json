@@ -5,52 +5,66 @@
   "description": "Geometry of a deformable chained cylinder, using geometry Cylinder.",
   "attributes": [
     {
-      "name": "chainedOrientation",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Deviation of node1 orientation from node-to-node vector"
-    },
-    {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
       "name": "initLength",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "tensile-free length, used as reference for tensile strain"
+    },
+    {
+      "name": "chainedOrientation",
+      "type": "Quaternion",
+      "default": "Quaternion.Identity",
+      "description": "Deviation of node1 orientation from node-to-node vector"
     },
     {
       "name": "length",
       "type": "float",
-      "default": "nan",
-      "description": "Length [m]"
-    },
-    {
-      "name": "radius",
-      "type": "float",
-      "default": "nan",
-      "description": "Radius [m]"
+      "default": "NaN",
+      "description": "Length [m]",
+      "inherited_from": "Cylinder"
     },
     {
       "name": "segment",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "Length vector"
+      "default": "(0, 0, 0)",
+      "description": "Length vector",
+      "inherited_from": "Cylinder"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "NaN",
+      "description": "Radius [m]",
+      "inherited_from": "Sphere"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "3",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ],
   "methods": [

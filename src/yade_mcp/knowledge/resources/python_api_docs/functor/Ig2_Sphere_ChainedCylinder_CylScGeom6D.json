@@ -5,22 +5,46 @@
   "description": "Create/update a ScGeom6D instance representing the geometry of a contact point between two Spheres<Sphere>, including relative rotations.",
   "attributes": [
     {
+      "name": "updateRotations",
+      "type": "bool",
+      "default": "false",
+      "description": "Precompute relative rotations. Turning this false can speed up simulations when rotations are not needed in constitutive laws (e.g. when spheres are compressed without cohesion and moment in early stage of a triaxial test), but is not foolproof. Change this value only if you know what you are doing."
+    },
+    {
       "name": "creep",
       "type": "bool",
-      "default": "False",
-      "description": "Substract rotational creep from relative rotation. The rotational creep"
+      "default": "false",
+      "description": "Substract rotational creep from relative rotation. The rotational creep twistCreep is a quaternion and has to be updated inside a constitutive law, see for instance Law2_ScGeom6D_CohFrictPhys_CohesionMoment."
     },
     {
       "name": "interactionDetectionFactor",
       "type": "float",
-      "default": "1.0",
-      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
+      "default": "1",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions.",
+      "inherited_from": "Ig2_Sphere_ChainedCylinder_CylScGeom"
     },
     {
-      "name": "updateRotations",
-      "type": "bool",
-      "default": "False",
-      "description": "Precompute relative rotations. Turning this false can speed up simulations when rotations are not needed in constitutive laws (e.g. when spheres are compressed without cohesion and moment in early stage of a triaxial test), but is not foolproof. Change this value only if you know what you are doing."
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Sphere', 'ChainedCylinder']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

@@ -6,21 +6,24 @@
   "attributes": [
     {
       "name": "min",
-      "type": "Vector3r",
+      "type": "Vector3",
       "default": "Vector3r(NaN,NaN,NaN)",
-      "description": "The minimum corner of the grid."
+      "description": "The minimum corner of the grid.",
+      "read_only": true
     },
     {
       "name": "nGP",
       "type": "Vector3i",
       "default": "Vector3i::Zero()",
-      "description": "The number of grid points along the three axes as a Vector3i."
+      "description": "The number of grid points along the three axes as a Vector3i.",
+      "read_only": true
     },
     {
       "name": "spacing",
-      "type": "Real",
+      "type": "float",
       "default": "-1",
-      "description": "The (uniform and isotropic) grid spacing between two axis-consecutive grid points."
+      "description": "The (uniform and isotropic) grid spacing between two axis-consecutive grid points.",
+      "read_only": true
     }
   ],
   "methods": [

@@ -5,46 +5,11 @@
   "description": "IPhys class for Lubrication w/o FlowEngine. Used by Law2_ScGeom_ImplicitLubricationPhys.",
   "attributes": [
     {
-      "name": "Fn",
+      "name": "eta",
       "type": "float",
-      "default": "0.0",
-      "description": "Linear-elastic part of the normal force of the contact"
-    },
-    {
-      "name": "Fv",
-      "type": "float",
-      "default": "0.0",
-      "description": "Viscous part of the normal force of the contact"
-    },
-    {
-      "name": "a",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mean radius [m]"
-    },
-    {
-      "name": "cn",
-      "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant"
-    },
-    {
-      "name": "contact",
-      "type": "bool",
-      "default": "False",
-      "description": "The spheres are in contact"
-    },
-    {
-      "name": "cs",
-      "type": "float",
-      "default": "nan",
-      "description": "Shear viscous constant"
-    },
-    {
-      "name": "delta",
-      "type": "float",
-      "default": "0.0",
-      "description": "$\\log(u)$ - used for scheme with $\\delta=\\log(u)$ variable change"
+      "default": "1",
+      "description": "Fluid viscosity [Pa.s]",
+      "read_only": true
     },
     {
       "name": "eps",
@@ -53,28 +18,10 @@
       "description": "Roughness: fraction of radius used as roughness [-]"
     },
     {
-      "name": "eta",
-      "type": "float",
-      "default": "1.0",
-      "description": "Fluid viscosity [Pa.s]"
-    },
-    {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
       "name": "keps",
       "type": "float",
-      "default": "1.0",
+      "default": "1",
       "description": "stiffness coefficient of the asperities [N/m]. Only used with resolution method=0, with resolution>0 it is always equal to kn."
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
     },
     {
       "name": "kno",
@@ -83,22 +30,10 @@
       "description": "Coefficient for normal stiffness (Hertzian-like contact) [N/m^(3/2)]"
     },
     {
-      "name": "ks",
+      "name": "nun",
       "type": "float",
       "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "mR",
-      "type": "float",
-      "default": "0.0",
-      "description": "Rolling resistance, see [Zhou1999536]_."
-    },
-    {
-      "name": "mRtype",
-      "type": "int",
-      "default": "1",
-      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_"
+      "description": "Coefficient for normal lubrication [N.s]"
     },
     {
       "name": "mum",
@@ -107,88 +42,180 @@
       "description": "Friction coefficient [-]"
     },
     {
-      "name": "normalContactForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal contact force [N]"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "normalLubricationForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal lubrication force [N]"
-    },
-    {
-      "name": "normalPotentialForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force from potential other than contact [N]"
-    },
-    {
-      "name": "nun",
+      "name": "a",
       "type": "float",
-      "default": "0.0",
-      "description": "Coefficient for normal lubrication [N.s]"
-    },
-    {
-      "name": "prevDotU",
-      "type": "float",
-      "default": "0.0",
-      "description": "du/dt from previous integration - used for trapezoidal scheme (see"
-    },
-    {
-      "name": "prev_un",
-      "type": "float",
-      "default": "0.0",
-      "description": "Nondeformed distance (un) at t-dt [m]"
-    },
-    {
-      "name": "shearContactForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Frictional contact force [N]"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "shearLubricationForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear lubrication force [N]"
-    },
-    {
-      "name": "slip",
-      "type": "bool",
-      "default": "False",
-      "description": "The contact is slipping"
-    },
-    {
-      "name": "tangensOfFrictionAngle",
-      "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
-    },
-    {
-      "name": "u",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Interfacial distance (u) at t-dt [m]"
+      "default": "0.",
+      "description": "Mean radius [m]",
+      "read_only": true
     },
     {
       "name": "ue",
       "type": "float",
+      "default": "0.",
+      "description": "Surface deflection (ue) at t-dt [m]",
+      "read_only": true
+    },
+    {
+      "name": "u",
+      "type": "float",
+      "default": "-1",
+      "description": "Interfacial distance (u) at t-dt [m]",
+      "read_only": true
+    },
+    {
+      "name": "prev_un",
+      "type": "float",
+      "default": "0",
+      "description": "Nondeformed distance (un) at t-dt [m]",
+      "read_only": true
+    },
+    {
+      "name": "prevDotU",
+      "type": "float",
+      "default": "0",
+      "description": "du/dt from previous integration - used for trapezoidal scheme (see",
+      "read_only": true
+    },
+    {
+      "name": "delta",
+      "type": "float",
+      "default": "0",
+      "description": "$\\log(u)$ - used for scheme with $\\delta=\\log(u)$ variable change",
+      "read_only": true
+    },
+    {
+      "name": "contact",
+      "type": "bool",
+      "default": "false",
+      "description": "The spheres are in contact",
+      "read_only": true
+    },
+    {
+      "name": "slip",
+      "type": "bool",
+      "default": "false",
+      "description": "The contact is slipping",
+      "read_only": true
+    },
+    {
+      "name": "normalContactForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal contact force [N]",
+      "read_only": true
+    },
+    {
+      "name": "normalPotentialForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force from potential other than contact [N]",
+      "read_only": true
+    },
+    {
+      "name": "shearContactForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Frictional contact force [N]",
+      "read_only": true
+    },
+    {
+      "name": "normalLubricationForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal lubrication force [N]",
+      "read_only": true
+    },
+    {
+      "name": "shearLubricationForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear lubrication force [N]",
+      "read_only": true
+    },
+    {
+      "name": "cn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal viscous constant",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear viscous constant",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "Fn",
+      "type": "float",
       "default": "0.0",
-      "description": "Surface deflection (ue) at t-dt [m]"
+      "description": "Linear-elastic part of the normal force of the contact",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "Fv",
+      "type": "float",
+      "default": "0.0",
+      "description": "Viscous part of the normal force of the contact",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "mR",
+      "type": "float",
+      "default": "0.0",
+      "description": "Rolling resistance, see [Zhou1999536]_.",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "mRtype",
+      "type": "int",
+      "default": "1",
+      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "13",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

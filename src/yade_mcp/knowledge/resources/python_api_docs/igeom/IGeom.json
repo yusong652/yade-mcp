@@ -3,5 +3,13 @@
   "category": "interactions",
   "parent": "Serializable",
   "description": "Geometrical configuration of interaction",
-  "attributes": []
+  "attributes": [
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "-1",
+      "description": "Return class index of this instance.",
+      "no_save": true
+    }
+  ]
 }

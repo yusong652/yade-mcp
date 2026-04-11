@@ -5,64 +5,96 @@
   "description": "Material law for lubrication + potential between two spheres. The potential model include contact. This material law will solve the system with lubrication and the provided potential.",
   "attributes": [
     {
-      "name": "MaxDist",
-      "type": "float",
-      "default": "2.0",
-      "description": "Maximum distance (d/a) for the interaction"
-    },
-    {
-      "name": "MaxIter",
-      "type": "int",
-      "default": "30",
-      "description": "Maximum iterations for numerical resolution (Dichotomy and Newton-Rafson)"
-    },
-    {
-      "name": "SolutionTol",
-      "type": "float",
-      "default": "1e-08",
-      "description": "Tolerance for numerical resolution (Dichotomy and Newton-Rafson)"
-    },
-    {
-      "name": "activateRollLubrication",
-      "type": "bool",
-      "default": "True",
-      "description": "Activate roll lubrication (default: true)"
-    },
-    {
-      "name": "activateTangencialLubrication",
-      "type": "bool",
-      "default": "True",
-      "description": "Activate tangencial lubrication (default: true)"
-    },
-    {
-      "name": "activateTwistLubrication",
-      "type": "bool",
-      "default": "True",
-      "description": "Activate twist lubrication (default: true)"
+      "name": "potential",
+      "type": "GenericPotential",
+      "default": "new GenericPotential()",
+      "description": "Physical potential force between spheres."
     },
     {
       "name": "maxSubSteps",
       "type": "int",
       "default": "4",
-      "description": "max recursion depth of adaptative timestepping in the theta-method, the minimal time interval is thus"
-    },
-    {
-      "name": "potential",
-      "type": "GenericPotential",
-      "default": "<GenericPotential instance at 0x2173040>",
-      "description": "Physical potential force between spheres."
-    },
-    {
-      "name": "resolution",
-      "type": "int",
-      "default": "0",
-      "description": "Change normal component resolution method, 0: Iterative exact resolution with substepping (theta method, linear contact), 1: Newton-Rafson dimensionless resolution (theta method, linear contact), 2: (default) Dichotomy dimensionless resolution (theta method, linear contact), 3: Exact dimensionless solution with contact prediction (theta method, linear contact). Method 3 is better if the volumic fraction is not too high. Use 2 otherwise."
+      "description": "max recursion depth of adaptative timestepping in the theta-method, the minimal time interval is thus",
+      "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
     },
     {
       "name": "theta",
       "type": "float",
       "default": "0.55",
-      "description": "parameter of the 'theta'-method, 1: backward Euler, 0.5: trapezoidal rule, 0: not used,  0.55: suggested optimum)"
+      "description": "parameter of the 'theta'-method, 1: backward Euler, 0.5: trapezoidal rule, 0: not used,  0.55: suggested optimum)",
+      "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
+    },
+    {
+      "name": "resolution",
+      "type": "int",
+      "default": "0",
+      "description": "Change normal component resolution method, 0: Iterative exact resolution with substepping (theta method, linear contact), 1: Newton-Rafson dimensionless resolution (theta method, linear contact), 2: (default) Dichotomy dimensionless resolution (theta method, linear contact), 3: Exact dimensionless solution with contact prediction (theta method, linear contact). Method 3 is better if the volumic fraction is not too high. Use 2 otherwise.",
+      "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
+    },
+    {
+      "name": "SolutionTol",
+      "type": "float",
+      "default": "1.e-8",
+      "description": "Tolerance for numerical resolution (Dichotomy and Newton-Rafson)",
+      "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
+    },
+    {
+      "name": "MaxIter",
+      "type": "int",
+      "default": "30",
+      "description": "Maximum iterations for numerical resolution (Dichotomy and Newton-Rafson)",
+      "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
+    },
+    {
+      "name": "activateTangencialLubrication",
+      "type": "bool",
+      "default": "true",
+      "description": "Activate tangencial lubrication (default: true)",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
+    },
+    {
+      "name": "activateTwistLubrication",
+      "type": "bool",
+      "default": "true",
+      "description": "Activate twist lubrication (default: true)",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
+    },
+    {
+      "name": "activateRollLubrication",
+      "type": "bool",
+      "default": "true",
+      "description": "Activate roll lubrication (default: true)",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
+    },
+    {
+      "name": "MaxDist",
+      "type": "float",
+      "default": "2.",
+      "description": "Maximum distance (d/a) for the interaction",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['GenericSpheresContact', 'LubricationPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [

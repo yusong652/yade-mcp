@@ -5,16 +5,34 @@
   "description": "Physics of bubble-bubble interactions, for use with BubbleMat",
   "attributes": [
     {
-      "name": "Dmax",
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force"
+    },
+    {
+      "name": "surfaceTension",
       "type": "float",
-      "default": "nan",
-      "description": "Maximum penetrationDepth of the bubbles before the force displacement curve changes to an artificial exponential curve. Setting this value will have no effect. See Law2_ScGeom_BubblePhys_Bubble::pctMaxForce for more information"
+      "default": "NaN",
+      "description": "Surface tension of the surrounding liquid"
     },
     {
       "name": "fN",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Contact normal force"
+    },
+    {
+      "name": "rAvg",
+      "type": "float",
+      "default": "NaN",
+      "description": "Average radius of the two interacting bubbles"
+    },
+    {
+      "name": "Dmax",
+      "type": "float",
+      "default": "NaN",
+      "description": "Maximum penetrationDepth of the bubbles before the force displacement curve changes to an artificial exponential curve. Setting this value will have no effect. See Law2_ScGeom_BubblePhys_Bubble::pctMaxForce for more information"
     },
     {
       "name": "newtonIter",
@@ -25,26 +43,16 @@
     {
       "name": "newtonTol",
       "type": "float",
-      "default": "1e-06",
+      "default": "1e-6",
       "description": "Convergence criteria for force iterations"
     },
     {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force"
-    },
-    {
-      "name": "rAvg",
-      "type": "float",
-      "default": "nan",
-      "description": "Average radius of the two interacting bubbles"
-    },
-    {
-      "name": "surfaceTension",
-      "type": "float",
-      "default": "nan",
-      "description": "Surface tension of the surrounding liquid"
+      "name": "dispIndex",
+      "type": "int",
+      "default": "0",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ],
   "methods": [

@@ -5,90 +5,106 @@
   "description": "Parameters of periodic boundary conditions<sect-PBC>. Only applies if O.isPeriodic==True.",
   "attributes": [
     {
-      "name": "flipFlippable",
-      "type": "bool",
-      "default": "False",
-      "description": "flip automatically as soon as a more compact geometry is possible (see"
+      "name": "trsf",
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Current transformation matrix of the cell $ mat{F}$ giving current Cell vector $d vec{x}$ from its reference state $d vec{X}$ as per $d vec{x} = mat{F} d vec{X}$. Obtained from time integration of velGrad$ times mat{F}$ as detailed in the :ref:`documentation<sect-PBC>` during the prologue of a YADE iteration (before the O.engines loop). (auto-updated)",
+      "read_only": true
+    },
+    {
+      "name": "refHSize",
+      "type": "Matrix3",
+      "default": "Matrix3.Identity",
+      "description": "Reference cell configuration, only used with OpenGLRenderer.dispScale. Updated automatically when hSize or trsf is assigned directly; also modified by yade.utils.setRefSe3 (called e.g. by the ``Reference`` button in the UI)."
     },
     {
       "name": "hSize",
       "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Base cell vectors (columns of the matrix), updated at every step from velGrad (trsf accumulates applied velGrad transformations). Setting *hSize* during a simulation is not supported by most contact laws, it is only meant to be used at iteration 0 before any interactions have been created."
     },
     {
-      "name": "hSize0",
+      "name": "prevHSize",
       "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
+      "default": "Matrix3.Identity",
+      "description": "hSize from the previous step, used in the definition of relative velocity across periods.",
+      "read_only": true
+    },
+    {
+      "name": "velGrad",
+      "type": "Matrix3",
+      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "description": "Velocity gradient of the transformation of the Cell; used in NewtonIntegrator. Values of velGrad accumulate in trsf at every step. note: changing velGrad at the beginning of a timestep would lead to inaccurate integration for that step, as it should normally be changed after the contact laws (but before Newton). To avoid this problem, assignment is deferred automatically. The assigned value is internaly stored in Cell.nextVelGrad and will be applied right in time by Newton integrator. .. warning:: Assigning individual components as in `O.cell.velGrad[0,0]=1` is not possible (it will not return any error but it will have no effect). Instead, the whole matrix should be assigned, as in `O.cell.velGrad=Matrix3(...)`. Alternatively nextVelGrad can be assigned directly (both per-component or as a whole) and the effect should be the same."
+    },
+    {
+      "name": "nextVelGrad",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "see Cell.velGrad.",
+      "read_only": true
+    },
+    {
+      "name": "prevVelGrad",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "Velocity gradient in the previous step.",
+      "read_only": true
     },
     {
       "name": "homoDeform",
       "type": "int",
       "default": "2",
-      "description": "If >0, deform ("
-    },
-    {
-      "name": "nextVelGrad",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "see"
-    },
-    {
-      "name": "prevHSize",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
-    },
-    {
-      "name": "prevVelGrad",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Velocity gradient in the previous step."
-    },
-    {
-      "name": "refHSize",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
-      "description": "Reference cell configuration, only used with"
-    },
-    {
-      "name": "refSize",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)"
-    },
-    {
-      "name": "shearTrsf",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
-    },
-    {
-      "name": "size",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)"
-    },
-    {
-      "name": "trsf",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
-    },
-    {
-      "name": "unshearTrsf",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)"
-    },
-    {
-      "name": "velGrad",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)"
+      "description": "If >0, deform (velGrad) the cell homothetically by adjusting positions and velocities of bodies. The velocity change is obtained by deriving the expression v=\u2207v.x with respect to time, where \u2207v is the macroscopic velocity gradient, giving in an incremental form: \u0394v=\u0394 \u2207v x + \u2207v \u0394x across one DEM iteration. As a result, velocities are modified as soon as ``velGrad`` changes, according to the first term: \u0394v(t)=\u0394 \u2207v x(t), while the 2nd term reflects a convective term: \u0394v'= \u2207v v(t-dt/2). The second term is neglected if homoDeform=1. All terms are included if homoDeform=2 (default)"
     },
     {
       "name": "velGradChanged",
       "type": "bool",
-      "default": "False",
-      "description": "true when velGrad has been changed manually (see also"
+      "default": "false",
+      "description": "true when velGrad has been changed manually (see also",
+      "read_only": true
+    },
+    {
+      "name": "size",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)",
+      "description": "Current size of the cell, i.e. lengths of the 3 cell lateral vectors contained in Cell.hSize columns. (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "refSize",
+      "type": "Vector3",
+      "default": "Vector3(1,1,1)",
+      "description": "Reference size of the cell (lengths of initial cell vectors, i.e. column norms of hSize). .. note:: Modifying this value is deprecated, use setBox instead.",
+      "no_save": true
     },
     {
       "name": "volume",
       "type": "float",
-      "default": "1.0"
+      "default": "1.0",
+      "description": "Current volume of the cell.",
+      "no_save": true
+    },
+    {
+      "name": "shearTrsf",
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Current skew+rot transformation (no resize)",
+      "no_save": true
+    },
+    {
+      "name": "unshearTrsf",
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Inverse of the current skew+rot transformation (no resize)",
+      "no_save": true
+    },
+    {
+      "name": "hSize0",
+      "type": "Matrix3",
+      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
+      "description": "Value of untransformed hSize with respect to current trsf (computed as trsf \u207b\u00b9 \u00d7 hSize).",
+      "no_save": true
     }
   ],
   "methods": [

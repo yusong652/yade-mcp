@@ -5,40 +5,63 @@
   "description": "Constitutive law for the cpm-model<CpmMat>.",
   "attributes": [
     {
-      "name": "epsSoft",
-      "type": "float",
-      "default": "1.0",
-      "description": "Strain at which softening in compression starts (non-negative to deactivate). The default value is such that plasticity does not occur"
-    },
-    {
-      "name": "omegaThreshold",
-      "type": "float",
-      "default": "1.0",
-      "description": "damage after which the contact disappears (<1), since omega reaches 1 only for strain \u2192+\u221e"
-    },
-    {
-      "name": "relKnSoft",
-      "type": "float",
-      "default": "0.3",
-      "description": "Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)"
-    },
-    {
-      "name": "yieldEllipseShift",
-      "type": "float",
-      "default": "nan",
-      "description": "horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)"
-    },
-    {
-      "name": "yieldLogSpeed",
-      "type": "float",
-      "default": "0.1",
-      "description": "scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)"
-    },
-    {
       "name": "yieldSurfType",
       "type": "int",
       "default": "2",
       "description": "yield function: 0: mohr-coulomb (original); 1: parabolic; 2: logarithmic, 3: log+lin_tension, 4: elliptic, 5: elliptic+log"
+    },
+    {
+      "name": "yieldLogSpeed",
+      "type": "float",
+      "default": ".1",
+      "description": "scaling in the logarithmic yield surface (should be <1 for realistic results; >=0 for meaningful results)"
+    },
+    {
+      "name": "yieldEllipseShift",
+      "type": "float",
+      "default": "NaN",
+      "description": "horizontal scaling of the ellipse (shifts on the +x axis as interactions with +y are given)"
+    },
+    {
+      "name": "omegaThreshold",
+      "type": "float",
+      "default": "((void)\">=1. to deactivate, i.e. never delete any contacts\",1.)",
+      "description": "damage after which the contact disappears (<1), since omega reaches 1 only for strain \u2192+\u221e"
+    },
+    {
+      "name": "epsSoft",
+      "type": "float",
+      "default": "((void)\"approximates confinement (for -3e-3) -20MPa precisely, -100MPa a little over, -200 and -400 are OK (secant)\",1.)",
+      "description": "Strain at which softening in compression starts (non-negative to deactivate). The default value is such that plasticity does not occur"
+    },
+    {
+      "name": "relKnSoft",
+      "type": "float",
+      "default": ".3",
+      "description": "Relative rigidity of the softening branch in compression (0=perfect elastic-plastic, <0 softening, >0 hardening)"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['GenericSpheresContact', 'CpmPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [

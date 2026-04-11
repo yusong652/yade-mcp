@@ -5,58 +5,82 @@
   "description": "Material for mortar interface, used in Ip2_MortarMat_MortarMat_MortarPhys and Law2_ScGeom_MortarPhys_Lourenco. Default values according to",
   "attributes": [
     {
-      "name": "cohesion",
+      "name": "young",
       "type": "float",
-      "default": "1000000.0",
-      "description": "cohesion [Pa]"
-    },
-    {
-      "name": "compressiveStrength",
-      "type": "float",
-      "default": "10000000.0",
-      "description": "compressiveStrength [Pa]"
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
-    },
-    {
-      "name": "ellAspect",
-      "type": "float",
-      "default": "3.0",
-      "description": "aspect ratio of elliptical 'cap'. Value >1 means the ellipse is longer along normal stress axis."
-    },
-    {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.25",
-      "description": "Friction angle"
-    },
-    {
-      "name": "neverDamage",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, interactions remain elastic regardless stresses"
+      "default": "1e9",
+      "description": "Normal elastic modulus [Pa]"
     },
     {
       "name": "poisson",
       "type": "float",
-      "default": "1.0",
+      "default": "1",
       "description": "Shear to normal modulus ratio"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".25",
+      "description": "Friction angle"
     },
     {
       "name": "tensileStrength",
       "type": "float",
-      "default": "1000000.0",
+      "default": "1e6",
       "description": "tensileStrength [Pa]"
     },
     {
-      "name": "young",
+      "name": "compressiveStrength",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "Normal elastic modulus [Pa]"
+      "default": "10e6",
+      "description": "compressiveStrength [Pa]"
+    },
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "1e6",
+      "description": "cohesion [Pa]"
+    },
+    {
+      "name": "ellAspect",
+      "type": "float",
+      "default": "3",
+      "description": "aspect ratio of elliptical 'cap'. Value >1 means the ellipse is longer along normal stress axis."
+    },
+    {
+      "name": "neverDamage",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, interactions remain elastic regardless stresses"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "16",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

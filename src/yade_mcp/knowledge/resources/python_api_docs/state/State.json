@@ -5,79 +5,92 @@
   "description": "Dynamic state of a body: position, velocity, mass, inertia.",
   "attributes": [
     {
-      "name": "angMom",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular momentum"
-    },
-    {
-      "name": "angVel",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular velocity"
-    },
-    {
-      "name": "blockedDOFs",
-      "type": "str",
-      "default": "''"
-    },
-    {
-      "name": "densityScaling",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per"
-    },
-    {
-      "name": "inertia",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Inertia of associated body, in local coordinate system."
-    },
-    {
-      "name": "isDamped",
-      "type": "bool",
-      "default": "True",
-      "description": "Damping in"
-    },
-    {
-      "name": "mass",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mass of this body"
-    },
-    {
-      "name": "ori",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
-    },
-    {
-      "name": "pos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "refOri",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Reference orientation"
-    },
-    {
-      "name": "refPos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Reference position"
-    },
-    {
       "name": "se3",
-      "type": "tuple",
-      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))",
-      "description": "Position and"
+      "type": "Se3r",
+      "default": "Se3r((0, 0, 0),Quaternion.Identity)",
+      "description": "Position and orientation as one object."
     },
     {
       "name": "vel",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Current linear velocity."
+    },
+    {
+      "name": "mass",
+      "type": "float",
+      "default": "0",
+      "description": "Mass of this body"
+    },
+    {
+      "name": "angVel",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular velocity"
+    },
+    {
+      "name": "angMom",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular momentum"
+    },
+    {
+      "name": "inertia",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Inertia of associated body, in local coordinate system."
+    },
+    {
+      "name": "refPos",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Reference position"
+    },
+    {
+      "name": "refOri",
+      "type": "Quaternion",
+      "default": "Quaternion.Identity",
+      "description": "Reference orientation"
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "int",
+      "default": "0",
+      "description": "Degress of freedom where linear/angular velocity will be always constant (equal to zero, or to an user-defined value), regardless of applied force/torque. String that may contain 'xyzXYZ' (translations and rotations)."
+    },
+    {
+      "name": "isDamped",
+      "type": "bool",
+      "default": "true",
+      "description": "Damping in NewtonIntegrator can be deactivated for individual particles by setting this variable to FALSE. E.g. damping is inappropriate for particles in free flight under gravity but it might still be applicable to other particles in the same simulation."
+    },
+    {
+      "name": "densityScaling",
+      "type": "float",
+      "default": "-1",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per",
+      "read_only": true
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "-1",
+      "description": "Return class index of this instance.",
+      "no_save": true
+    },
+    {
+      "name": "pos",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "Current position.",
+      "no_save": true
+    },
+    {
+      "name": "ori",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Current orientation.",
+      "no_save": true
     }
   ],
   "methods": [

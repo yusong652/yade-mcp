@@ -5,39 +5,88 @@
   "description": "Non-optimized grid collider, storing grid as dense flat array. Each body is assigned to (possibly multiple) cells, which are arranged in regular grid between *aabbMin* and *aabbMax*, with cell size *step* (same in all directions). Bodies outsize (*aabbMin*, *aabbMax*) are handled gracefully,...",
   "attributes": [
     {
-      "name": "aabbMax",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Upper corner of grid (approximate, might be rouded up to *minStep*."
+      "name": "verletDist",
+      "type": "float",
+      "default": "0",
+      "description": "Length by which enlarge space occupied by each particle; avoids running collision detection at every step."
     },
     {
       "name": "aabbMin",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Lower corner of grid."
     },
     {
-      "name": "avoidSelfInteractionMask",
-      "type": "int",
-      "default": "0",
-      "description": "This mask is used to avoid the interactions inside a group of particles. To do so, the particles must have the exact same mask and that mask should have one bit in common with this"
-    },
-    {
-      "name": "boundDispatcher",
-      "type": "auto",
-      "default": ""
+      "name": "aabbMax",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Upper corner of grid (approximate, might be rouded up to *minStep*."
     },
     {
       "name": "step",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Step in the grid (cell size)"
     },
     {
-      "name": "verletDist",
-      "type": "float",
-      "default": "0.0",
-      "description": "Length by which enlarge space occupied by each particle; avoids running collision detection at every step."
+      "name": "boundDispatcher",
+      "type": "BoundDispatcher",
+      "default": "new BoundDispatcher",
+      "description": "BoundDispatcher object that is used for creating bounds on collider's request as necessary.",
+      "read_only": true,
+      "inherited_from": "Collider"
+    },
+    {
+      "name": "avoidSelfInteractionMask",
+      "type": "mask_t",
+      "default": "0",
+      "description": "This mask is used to avoid the interactions inside a group of particles. To do so, the particles must have the exact same mask and that mask should have one bit in common with this",
+      "inherited_from": "Collider"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

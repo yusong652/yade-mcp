@@ -6,9 +6,32 @@
   "attributes": [
     {
       "name": "frictAngle",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Instance of"
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['FrictMatCDM', 'FrictMatCDM']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

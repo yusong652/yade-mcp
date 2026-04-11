@@ -5,21 +5,28 @@
   "description": "Compress/decompress cloud of spheres by controlling periodic cell size until it reaches prescribed average stress, then moving to next stress value in given stress series.",
   "attributes": [
     {
+      "name": "stresses",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Stresses that should be reached, one after another"
+    },
+    {
       "name": "charLen",
       "type": "float",
-      "default": "-1.0",
+      "default": "-1.",
       "description": "Characteristic length, should be something like mean particle diameter (default -1=invalid value))"
     },
     {
-      "name": "currUnbalanced",
+      "name": "maxSpan",
       "type": "float",
-      "default": "-1.0"
+      "default": "-1.",
+      "description": "Maximum body span in terms of bbox, to prevent periodic cell getting too small. |ycomp|"
     },
     {
-      "name": "doneHook",
-      "type": "str",
-      "default": "''",
-      "description": "Python command to be run when reaching the last specified stress"
+      "name": "maxUnbalanced",
+      "type": "float",
+      "default": "1e-4",
+      "description": "if actual unbalanced force is smaller than this number, the packing is considered stable,"
     },
     {
       "name": "globalUpdateInt",
@@ -28,39 +35,81 @@
       "description": "how often to recompute average stress, stiffness and unbalanced force"
     },
     {
-      "name": "keepProportions",
-      "type": "bool",
-      "default": "True",
-      "description": "Exactly keep proportions of the cell (stress is controlled based on average, not its components"
-    },
-    {
-      "name": "maxSpan",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Maximum body span in terms of bbox, to prevent periodic cell getting too small. |ycomp|"
-    },
-    {
-      "name": "maxUnbalanced",
-      "type": "float",
-      "default": "0.0001",
-      "description": "if actual unbalanced force is smaller than this number, the packing is considered stable,"
-    },
-    {
-      "name": "sigma",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
       "name": "state",
       "type": "int",
       "default": "0",
       "description": "Where are we at in the stress series"
     },
     {
-      "name": "stresses",
-      "type": "list",
-      "default": "[]",
-      "description": "Stresses that should be reached, one after another"
+      "name": "doneHook",
+      "type": "str",
+      "default": "\"\"",
+      "description": "Python command to be run when reaching the last specified stress"
+    },
+    {
+      "name": "keepProportions",
+      "type": "bool",
+      "default": "true",
+      "description": "Exactly keep proportions of the cell (stress is controlled based on average, not its components"
+    },
+    {
+      "name": "currUnbalanced",
+      "type": "float",
+      "default": "-1.0",
+      "description": "Current value of unbalanced force",
+      "no_save": true
+    },
+    {
+      "name": "sigma",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "Current stress value",
+      "no_save": true
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

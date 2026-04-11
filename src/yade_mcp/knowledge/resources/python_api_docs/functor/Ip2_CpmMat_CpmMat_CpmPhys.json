@@ -5,16 +5,39 @@
   "description": "Convert 2 CpmMat instances to CpmPhys with corresponding parameters. Uses simple (arithmetic) averages if material are different. Simple copy of parameters is performed if the material<CpmMat> is shared between both particles. See cpm-model<CpmMat> for detals.",
   "attributes": [
     {
-      "name": "E",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
-    },
-    {
       "name": "cohesiveThresholdIter",
       "type": "int",
       "default": "10",
       "description": "Should new contacts be cohesive? They will before this iter#, they will not be afterwards. If 0, they will never be. If negative, they will always be created as cohesive (10 by default)."
+    },
+    {
+      "name": "E",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's normal modulus. If ``None``, average value is used."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['CpmMat', 'CpmMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

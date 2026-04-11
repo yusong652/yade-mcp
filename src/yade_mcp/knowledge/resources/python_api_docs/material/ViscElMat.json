@@ -5,58 +5,46 @@
   "description": "Material for simple viscoelastic model of contact from analytical solution of a pair spheres interaction problem  [Pournin2001]_ .",
   "attributes": [
     {
-      "name": "cn",
+      "name": "tc",
       "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "cs",
-      "type": "float",
-      "default": "nan",
-      "description": "Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
+      "default": "NaN",
+      "description": "Contact time"
     },
     {
       "name": "en",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Restitution coefficient in normal direction"
     },
     {
       "name": "et",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Restitution coefficient in tangential direction"
-    },
-    {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
     },
     {
       "name": "kn",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Normal elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
+    },
+    {
+      "name": "cn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Shear elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
-      "name": "lubrication",
-      "type": "bool",
-      "default": "False",
-      "description": "option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient)."
+      "name": "cs",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"
     },
     {
       "name": "mR",
@@ -65,40 +53,79 @@
       "description": "Rolling resistance, see [Zhou1999536]_."
     },
     {
+      "name": "lubrication",
+      "type": "bool",
+      "default": "false",
+      "description": "option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient)."
+    },
+    {
+      "name": "viscoDyn",
+      "type": "float",
+      "default": "1e-3",
+      "description": "if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision."
+    },
+    {
+      "name": "roughnessScale",
+      "type": "float",
+      "default": "1e-3",
+      "description": "if lubrication is activated, roughness scale considered for the particles to evaluate the effective restitution coefficient."
+    },
+    {
       "name": "mRtype",
       "type": "int",
       "default": "1",
       "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_."
     },
     {
-      "name": "poisson",
+      "name": "frictionAngle",
       "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "roughnessScale",
-      "type": "float",
-      "default": "0.001",
-      "description": "if lubrication is activated, roughness scale considered for the particles to evaluate the effective restitution coefficient."
-    },
-    {
-      "name": "tc",
-      "type": "float",
-      "default": "nan",
-      "description": "Contact time"
-    },
-    {
-      "name": "viscoDyn",
-      "type": "float",
-      "default": "0.001",
-      "description": "if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision."
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "19",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

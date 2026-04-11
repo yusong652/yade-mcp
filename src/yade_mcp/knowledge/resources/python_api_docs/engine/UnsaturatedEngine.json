@@ -5,841 +5,1038 @@
   "description": "Preliminary version engine of a drainage model for unsaturated soils. Note:Air reservoir is on the top; water reservoir is on the bottom.(deprecated engine, use TwoPhaseFlowEngine instead)",
   "attributes": [
     {
-      "name": "accumulativeDeformationFlux",
-      "type": "float",
-      "default": "0.0",
-      "description": "accumulative internal flux caused by deformation"
-    },
-    {
-      "name": "accumulativeFlux",
-      "type": "float",
-      "default": "0.0",
-      "description": "accumulative influx of water"
-    },
-    {
-      "name": "airWaterInterfacialArea",
-      "type": "float",
-      "default": "0.0",
-      "description": "Air-water interfacial area, based on the pore-unit assembly and regular-shaped pore units"
-    },
-    {
-      "name": "alphaBound",
-      "type": "float",
-      "default": "-1.0",
-      "description": "if 0, use an alphaBoundary condition where CGAL finds minimum alpha necessary for a single solid object. Any positive value will be used for the alpha. All negative values deactivate the functionality."
-    },
-    {
-      "name": "alphaBoundValue",
-      "type": "float",
-      "default": "0.0",
-      "description": "value of alpha constant pressure condition"
-    },
-    {
-      "name": "areaAveragedPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Air-water interfacial area averaged water pressure"
-    },
-    {
-      "name": "averageCavityPressure",
-      "type": "bool",
-      "default": "False",
-      "description": "true means the pressure in the cavity will be averaged each iteration."
-    },
-    {
-      "name": "blockHook",
-      "type": "str",
-      "default": "''",
-      "description": "Python command to be run when remeshing. Anticipated usage: define blocked cells (see also"
-    },
-    {
-      "name": "bndCondIsPressure",
-      "type": "list",
-      "default": "[False, False, False, False, False, False]",
-      "description": "defines the type of boundary condition for each side. True if pressure is imposed, False for no-flux. Indexes can be retrieved with"
-    },
-    {
-      "name": "bndCondIsTemperature",
-      "type": "list",
-      "default": "[False, False, False, False, False, False]",
-      "description": "defines the type of boundary condition for each side of triangulation (used with"
-    },
-    {
-      "name": "bndCondIsWaterReservoir",
-      "type": "list",
-      "default": "[False, False, False, False, False, False]",
-      "description": "Boundary conditions, if bndCondIsPressure[] = True, is it air or water boundary condition? True is water reservoir"
-    },
-    {
-      "name": "bndCondValue",
-      "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
-      "description": "Imposed value of a boundary condition. Only applies if the boundary condition is imposed pressure, else the imposed flux is always zero presently (may be generalized to non-zero imposed fluxes in the future)."
-    },
-    {
-      "name": "boundaryPressure",
-      "type": "list",
-      "default": "[]",
-      "description": "values defining pressure along x-axis for the top surface. See also"
-    },
-    {
-      "name": "boundaryUseMaxMin",
-      "type": "list",
-      "default": "[True, True, True, True, True, True]",
-      "description": "If true (default value) bounding sphere is added as function of max/min sphere coord, if false as function of yade wall position"
-    },
-    {
-      "name": "boundaryVelocity",
-      "type": "list",
-      "default": "[Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0),",
-      "description": "velocity on top boundary, only change it using"
-    },
-    {
-      "name": "boundaryXPos",
-      "type": "list",
-      "default": "[]",
-      "description": "values of the x-coordinate for which pressure is defined. See also"
-    },
-    {
-      "name": "breakControlledRemesh",
-      "type": "int",
-      "default": "0",
-      "description": "If true, remesh will occur everytime a break occurs in JCFpmPhys. Designed to increase accuracy and efficiency in hydraulic fracture simulations."
-    },
-    {
-      "name": "cavityFactor",
-      "type": "float",
-      "default": "1.0",
-      "description": "Permeability/viscosity for cavity cell neighbors (arbitrarily high to model triangulated fluid filled cavity)."
-    },
-    {
-      "name": "cavityFluidDensity",
-      "type": "float",
-      "default": "0.0",
-      "description": ">0 means cavity compressibility model considers density changes instead of volume changes."
-    },
-    {
-      "name": "cavityFlux",
-      "type": "float",
-      "default": "0.0",
-      "description": "For adding flux to pressuremanaged cavity model ("
-    },
-    {
-      "name": "centroidAverageWaterPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Water pressure based on centroid-corrected averaging, see Korteland et al. (2010) - what is the correct definition of average pressure?"
-    },
-    {
-      "name": "clampKValues",
-      "type": "bool",
-      "default": "True",
-      "description": "If true, clamp local permeabilities in [minKdivKmean,maxKdivKmean]*globalK. This clamping can avoid singular values in the permeability matrix and may reduce numerical errors in the solve phase. It will also hide junk values if they exist, or bias all values in very heterogeneous problems. So, use this with care."
-    },
-    {
-      "name": "computeForceActivated",
-      "type": "bool",
-      "default": "True",
-      "description": "Activate capillary force computation. WARNING: turning off means capillary force is not computed at all, but the drainage can still work."
-    },
-    {
-      "name": "controlCavityPressure",
-      "type": "bool",
-      "default": "False",
-      "description": "use full cavity flux and fluidbulkmodulus to control cavity as dynamic pressure (dirichlet) boundary condition."
-    },
-    {
-      "name": "controlCavityVolumeChange",
-      "type": "bool",
-      "default": "False",
-      "description": "cavity imposes a volume change on neighbor cells (shouldnt be used with controlCavityPressure)"
-    },
-    {
-      "name": "convertClumps",
-      "type": "bool",
-      "default": "True",
-      "description": "If true the clumps will be temptatively converted into equivalent spheres in the triangulation, and clump members are skipped. Else clumps are ignored and spherical clump members are triangulated as independent bodies."
-    },
-    {
-      "name": "debug",
-      "type": "bool",
-      "default": "False",
-      "description": "Activate debug messages"
-    },
-    {
-      "name": "debugTPF",
-      "type": "bool",
-      "default": "False",
-      "description": "Print debuging messages two phase flow engine"
-    },
-    {
-      "name": "decoupleForces",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, viscous and pressure forces are not imposed on particles. Useful for speeding up simulations in ultra-stiff cohesive materials."
-    },
-    {
-      "name": "defTolerance",
-      "type": "float",
-      "default": "0.0",
-      "description": "Cumulated deformation threshold for which retriangulation of pore space is performed. If negative, the triangulation update will occure with a fixed frequency on the basis of"
-    },
-    {
-      "name": "deformation",
-      "type": "bool",
-      "default": "False",
-      "description": "Boolean to indicate whether simulations of dynamic flow are withing a deformating packing or not. If true, change of void volume due to deformation is considered in flow computations."
-    },
-    {
-      "name": "deltaTimeTruncation",
-      "type": "float",
-      "default": "0.0",
-      "description": "truncation of time step, to avoid very small time steps during local imbibition, NOTE it does affect the mass conservation not set to 0"
-    },
-    {
-      "name": "desiredPorosity",
-      "type": "float",
-      "default": "0.0",
-      "description": "Correct the cell volumes to reflect this desired porosity (not active by default (0))."
-    },
-    {
-      "name": "doInterpolate",
-      "type": "bool",
-      "default": "False",
-      "description": "Force the interpolation of cell's info while remeshing. By default, interpolation would be done only for compressible fluids. It can be forced with this flag."
-    },
-    {
-      "name": "drainageFirst",
-      "type": "bool",
-      "default": "True",
-      "description": "If true, activate drainage first (initial saturated), then imbibition; if false, activate imbibition first (initial unsaturated), then drainage."
-    },
-    {
-      "name": "dt",
-      "type": "float",
-      "default": "0.0",
-      "description": "timestep [s]"
-    },
-    {
-      "name": "dtDynTPF",
-      "type": "float",
-      "default": "0.0",
-      "description": "Parameter which stores the smallest time step, based on the residence time"
-    },
-    {
-      "name": "entryMethodCorrection",
-      "type": "float",
-      "default": "1.0",
-      "description": "Parameter that is used in computing entry pressure of a pore throat: P_ij =  entryMethodCorrection * surfaceTension / radius_porethroat"
-    },
-    {
-      "name": "entryPressureMethod",
-      "type": "int",
-      "default": "1",
-      "description": "integer to define the method used to determine the pore throat radii and the according entry pressures. 1)radius of entry pore throat based on MS-P method; 2) radius of the inscribed circle; 3) radius of the circle with equivalent surface area of the pore throat."
-    },
-    {
-      "name": "eps",
-      "type": "float",
-      "default": "1e-05",
-      "description": "roughness defined as a fraction of particles size, giving the minimum distance between particles in the lubrication model."
-    },
-    {
-      "name": "epsVolMax",
-      "type": "float",
-      "default": "0.0",
-      "description": "Maximal absolute volumetric strain computed at each iteration. |yupdate|"
-    },
-    {
-      "name": "first",
-      "type": "bool",
-      "default": "True",
-      "description": "Controls the initialization/update phases"
-    },
-    {
-      "name": "firstDynTPF",
-      "type": "bool",
-      "default": "True",
-      "description": "this bool activated the initialization of the dynamic flow engine, such as merging and defining initial values"
-    },
-    {
-      "name": "fixTriUpdatePermInt",
-      "type": "int",
-      "default": "-1",
-      "description": "If positive, triangulation is fixed and DFNFlow trickPermeability is run according to the interval. Activating this automatically sets"
-    },
-    {
-      "name": "fixedAlpha",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, a constant-sized alpha vertex will be placed exactly above each facet. If false, logic is used to improve cell sizes in concave regions."
-    },
-    {
-      "name": "flatThreshold",
-      "type": "float",
-      "default": "-1.0",
-      "description": "If >=0, pore volumes below flatThreshold value are blocked from flow calc. Useful for compressible flow involving odd triangulations with some very flat pores."
-    },
-    {
-      "name": "fluidBulkModulus",
-      "type": "float",
-      "default": "0.0",
-      "description": "Bulk modulus of fluid (inverse of compressibility) K=-dP*V/dV [Pa]. Flow is compressible if fluidBulkModulus > 0, else incompressible."
-    },
-    {
-      "name": "fluidCp",
-      "type": "float",
-      "default": "4181.3",
-      "description": "Heat capacity of fluid (for thermalEngine)."
-    },
-    {
-      "name": "fluidRho",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of fluid (for thermalEngine)."
-    },
-    {
-      "name": "fluxInViaWBC",
-      "type": "float",
-      "default": "0.0",
-      "description": "Total water flux over water boundary conditions"
-    },
-    {
-      "name": "forceMetis",
-      "type": "bool",
-      "default": "False"
-    },
-    {
-      "name": "fractionMinSaturationInvasion",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Set the threshold saturation at which drainage can occur (Sthr = fractionMinSaturationInvasion), note that -1 implied the conventional definition of Sthr"
-    },
-    {
-      "name": "getCHOLMODPerfTimings",
-      "type": "bool",
-      "default": "False",
-      "description": "Print CHOLMOD build, analyze, and factorize timings"
-    },
-    {
-      "name": "getQuantitiesUpdateCont",
-      "type": "bool",
-      "default": "False",
-      "description": "Continuous update of various macro-scale quantities or not. Note that the updating quantities is computationally expensive"
-    },
-    {
-      "name": "idOffset",
-      "type": "int",
-      "default": "0",
-      "description": "If the bounding walls of the fluid mesh are not walls of the scene (i.e. are not elements of O.bodies), the offset should be set equal to the size of O.bodies. If the bounding walls are bodies of the scene but are not numbered as 0-5 then offset should be the number of bodies comming before the walls. Set offset<0 to get it set equal to O.bodies.size(), it will also update"
-    },
-    {
-      "name": "ids",
-      "type": "list",
-      "default": "[]"
-    },
-    {
-      "name": "ignoredBody",
-      "type": "int",
-      "default": "-1",
-      "description": "DEPRECATED, USE MASK - Id of a sphere to exclude from the triangulation.)"
-    },
-    {
-      "name": "iniVoidVolumes",
-      "type": "bool",
-      "default": "False",
-      "description": "activate the computation of the inverse of the initial void volumes in each cell when pore volumes are initialized."
-    },
-    {
-      "name": "initialPC",
-      "type": "float",
-      "default": "2000.0",
-      "description": "Initial capillary pressure of the water-air inside the packing"
-    },
-    {
-      "name": "initialWetting",
-      "type": "bool",
-      "default": "True",
-      "description": "Initial wetting saturated (=true) or non-wetting saturated (=false)"
-    },
-    {
-      "name": "isActivated",
-      "type": "bool",
-      "default": "True",
-      "description": "Activates Flow Engine"
-    },
-    {
-      "name": "isCellLabelActivated",
-      "type": "bool",
-      "default": "False",
-      "description": "Activate cell labels for marking disconnected wetting clusters. NW-reservoir label 0; W-reservoir label 1; disconnected W-clusters label from 2."
-    },
-    {
-      "name": "isDrainageActivated",
-      "type": "bool",
-      "default": "True",
-      "description": "Activates drainage."
-    },
-    {
-      "name": "isImbibitionActivated",
-      "type": "bool",
-      "default": "False",
-      "description": "Activates imbibition."
-    },
-    {
-      "name": "isInvadeBoundary",
-      "type": "bool",
-      "default": "True",
-      "description": "Invasion side boundary condition. If True, pores of side boundary can be invaded; if False, the pore throats connecting side boundary are closed, those pores are excluded in saturation calculation."
-    },
-    {
-      "name": "isPhaseTrapped",
-      "type": "bool",
-      "default": "True",
-      "description": "If True, both phases can be entrapped by the other, which would correspond to snap-off. If false, both phases are always connected to their reservoirs, thus no snap-off."
-    },
-    {
-      "name": "iterationTPF",
-      "type": "int",
-      "default": "-1",
-      "description": "Iteration number"
-    },
-    {
-      "name": "keepTriangulation",
-      "type": "bool",
-      "default": "False",
-      "description": "this bool activated triangulation or not during initialization"
-    },
-    {
-      "name": "mask",
-      "type": "int",
-      "default": "0",
-      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
-    },
-    {
-      "name": "maxIDMergedCells",
-      "type": "int",
-      "default": "0",
-      "description": "maximum number of merged ID, this is computed in mergeCells()"
-    },
-    {
-      "name": "maxKdivKmean",
-      "type": "float",
-      "default": "100.0",
-      "description": "define the max K value (see"
-    },
-    {
-      "name": "maximumRatioPoreThroatoverPoreBody",
-      "type": "float",
-      "default": "0.9",
-      "description": "maximum ratio of pore throat radius over pore body radius, this is used during merging of tetrahedra."
-    },
-    {
-      "name": "meanKStat",
-      "type": "bool",
-      "default": "False",
-      "description": "report the local permeabilities' correction"
-    },
-    {
-      "name": "meanK_opt",
-      "type": "bool",
-      "default": "True"
-    },
-    {
-      "name": "meshUpdateInterval",
-      "type": "int",
-      "default": "1000",
-      "description": "Maximum number of timesteps between re-triangulation events (a negative value will never re-triangulate). See also"
-    },
-    {
-      "name": "minKdivKmean",
-      "type": "float",
-      "default": "0.0001",
-      "description": "define the min K value (see"
-    },
-    {
-      "name": "minimumPorosity",
-      "type": "float",
-      "default": "0.0",
-      "description": "value used to limit the allowable minimum porosity for pore volume calculations. Particularly useful if very small volumes are impacting stability"
-    },
-    {
-      "name": "modelRunName",
-      "type": "str",
-      "default": "'dynamicDrainage'",
-      "description": "Name of simulation, to be implemented into output files"
-    },
-    {
-      "name": "multithread",
-      "type": "bool",
-      "default": "False",
-      "description": "Build triangulation and factorize in the background (multi-thread mode)"
-    },
-    {
-      "name": "normalLubrication",
-      "type": "bool",
-      "default": "False",
-      "description": "compute normal lubrication force as developped by Brule"
-    },
-    {
-      "name": "numFactorizeThreads",
-      "type": "int",
-      "default": "1",
-      "description": "number of openblas threads in the factorization phase"
-    },
-    {
-      "name": "numSolveThreads",
-      "type": "int",
-      "default": "1",
-      "description": "number of openblas threads in the solve phase."
-    },
-    {
-      "name": "numberOfPores",
-      "type": "int",
-      "default": "0",
-      "description": "Number of pores (i.e. number of tetrahedra, but compensated for merged tetrahedra"
-    },
-    {
-      "name": "pZero",
-      "type": "float",
-      "default": "0.0",
-      "description": "The value used for initializing pore pressure. It is useless for incompressible fluid, but important for compressible model."
-    },
-    {
-      "name": "permeabilityFactor",
-      "type": "float",
-      "default": "1.0",
-      "description": "Permability multiplier ($m$): $m=1$ (default) attempts to predicty the actual hydraulic conductivity using a Poiseuille equation; $m>0$ multiplies the default values by $m$; $m<0$ defines the conductivity independently of particle size and viscosity as if the material was a homogeneous continuum of conductivity $-m$"
-    },
-    {
-      "name": "permeabilityMap",
-      "type": "bool",
-      "default": "False",
-      "description": "Enable/disable stocking of average permeability scalar in cell infos."
-    },
-    {
-      "name": "phiZero",
-      "type": "float",
-      "default": "0.0",
-      "description": "if >0, considers water aircontent impact on fluid compressibility."
-    },
-    {
-      "name": "porosity",
-      "type": "float",
-      "default": "0.0",
-      "description": "Porosity computed at each retriangulation |yupdate|"
-    },
-    {
-      "name": "pressureForce",
-      "type": "bool",
-      "default": "True",
-      "description": "compute the pressure field and associated fluid forces. WARNING: turning off means fluid flow is not computed at all."
-    },
-    {
-      "name": "primaryTPF",
-      "type": "bool",
-      "default": "True",
-      "description": "Boolean to indicate whether the initial conditions are for primary drainage of imbibition (dictated by drainageFirst) or secondary drainage or imbibition. Note that during simulations, a switch from drainage to imbibition or vise versa can easily be made by changing waterBoundaryPressure"
-    },
-    {
-      "name": "pumpTorque",
-      "type": "bool",
-      "default": "False",
-      "description": "Compute pump torque applied on particles"
-    },
-    {
-      "name": "recursiveInvasion",
-      "type": "bool",
-      "default": "True",
-      "description": "If true the invasion stops only when no entry pc is less than current capillary pressure, implying simultaneous invasion of many pores. Else only one pore invasion per invasion step."
-    },
-    {
-      "name": "relax",
-      "type": "float",
-      "default": "1.9",
-      "description": "Gauss-Seidel relaxation"
-    },
-    {
-      "name": "remesh",
-      "type": "bool",
-      "default": "False",
-      "description": "update triangulation? -- YET TO BE IMPLEMENTED"
-    },
-    {
-      "name": "safetyFactorTimeStep",
-      "type": "float",
-      "default": "1.0",
-      "description": "Safey coefficient for time step"
-    },
-    {
-      "name": "setFractionParticles",
-      "type": "list",
-      "default": "[]",
-      "description": "Correction fraction for swelling of particles by mismatch of surface area of particles with those from actual surface area in pore units"
-    },
-    {
-      "name": "shearLubrication",
-      "type": "bool",
-      "default": "False",
-      "description": "compute shear lubrication force as developped by Brule (FIXME: ref.)"
-    },
-    {
-      "name": "simpleWaterPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Water pressure based on averaging over pore volume"
-    },
-    {
-      "name": "sineAverage",
-      "type": "float",
-      "default": "0.0",
-      "description": "Pressure value (average) when sinusoidal pressure is applied"
-    },
-    {
-      "name": "sineMagnitude",
-      "type": "float",
-      "default": "0.0",
-      "description": "Pressure value (amplitude) when sinusoidal pressure is applied (p )"
-    },
-    {
-      "name": "slipBoundary",
-      "type": "bool",
-      "default": "True",
-      "description": "Controls friction condition on lateral walls"
-    },
-    {
-      "name": "solvePressureSwitch",
-      "type": "bool",
-      "default": "True",
-      "description": "solve for pressure during actionTPF()"
-    },
-    {
-      "name": "stiffness",
-      "type": "float",
-      "default": "10000.0",
-      "description": "equivalent contact stiffness used in the lubrication model"
-    },
-    {
-      "name": "stopSimulation",
-      "type": "bool",
-      "default": "False",
-      "description": "Boolean to indicate that dynamic flow simulations cannot find a solution (or next time step). If True, stop simulations"
-    },
-    {
-      "name": "surfaceTension",
-      "type": "float",
-      "default": "0.0728",
-      "description": "Water Surface Tension in contact with air at 20 Degrees Celsius is: 0.0728(N/m)"
-    },
-    {
-      "name": "swelling",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, include swelling of particles during TPF computations"
-    },
-    {
-      "name": "tZero",
-      "type": "float",
-      "default": "0.0",
-      "description": "The value used for initializing pore temperatures in thermalEngine."
-    },
-    {
-      "name": "tempDependentViscosity",
-      "type": "bool",
-      "default": "False",
-      "description": "boolean to vary viscosity (ultimately cell permeability) with cell temperature. Linear model for viscosity b/w 20-70 degC. If true, kFactor must also be set negative, and becomes the darcy permeability."
-    },
-    {
-      "name": "thermalBndCondValue",
-      "type": "list",
-      "default": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]",
-      "description": "Imposed temperature boundary condition value for the cells in the triangulation (used with"
-    },
-    {
-      "name": "thermalEngine",
-      "type": "bool",
-      "default": "False",
-      "description": "activate thermalEngine within FlowEngine."
-    },
-    {
-      "name": "thermalPorosity",
-      "type": "float",
-      "default": "0.0",
-      "description": ">0 means the void volume space will be factored by thermalPorosity for pore internal energy considerations."
-    },
-    {
-      "name": "tolerance",
-      "type": "float",
-      "default": "1e-06",
-      "description": "Gauss-Seidel tolerance"
-    },
-    {
-      "name": "totalWaterVolume",
-      "type": "float",
-      "default": "0.0",
-      "description": "total watervolume"
-    },
-    {
-      "name": "truncationPrecision",
-      "type": "float",
-      "default": "1e-06",
-      "description": "threshold at which a saturation is truncated"
-    },
-    {
-      "name": "twistTorque",
-      "type": "bool",
-      "default": "False",
-      "description": "Compute twist torque applied on particles"
-    },
-    {
-      "name": "updateTriangulation",
-      "type": "bool",
-      "default": "False",
-      "description": "If true the medium is retriangulated. Can be switched on to force retriangulation after some events (else it will be true periodicaly based on"
-    },
-    {
-      "name": "useFastInvasion",
-      "type": "bool",
-      "default": "False",
-      "description": "use fast version of invasion"
-    },
-    {
-      "name": "useSolver",
-      "type": "int",
-      "default": "3",
-      "description": "Solver to use. 0:Gauss-Seidel, 3: Cholesky factorization (via Eigen3 interface), 4:multicore CPU or GPU accelerated CHOLMOD (without Eigen3), 1-2: undefined."
-    },
-    {
-      "name": "viscosity",
-      "type": "float",
-      "default": "1.0",
-      "description": "viscosity of the fluid"
-    },
-    {
-      "name": "viscousNormalBodyStress",
-      "type": "bool",
-      "default": "False",
-      "description": "compute normal viscous stress applied on each body"
-    },
-    {
-      "name": "viscousShear",
-      "type": "bool",
-      "default": "False",
-      "description": "compute viscous shear terms as developped by Donia Marzougui (FIXME: ref.)"
-    },
-    {
-      "name": "viscousShearBodyStress",
-      "type": "bool",
-      "default": "False",
-      "description": "compute shear viscous stress applied on each body"
-    },
-    {
-      "name": "voidVolume",
-      "type": "float",
-      "default": "0.0",
-      "description": "total void volume, excluding boundary cells"
-    },
-    {
-      "name": "volumeCorrection",
-      "type": "float",
-      "default": "1.0",
-      "description": "Volume correction factor (not user controlled. auto computed if"
-    },
-    {
-      "name": "volumeFactor",
-      "type": "float",
-      "default": "1.0",
-      "description": "Factor used for simulating low porosity (for thermal considerations only) in high porosity DEM packings."
-    },
-    {
-      "name": "wallIds",
-      "type": "list",
-      "default": "[0, 1, 2, 3, 4, 5]",
-      "description": "body ids of the boundaries (default values are ok only if aabbWalls are appended before spheres, i.e. numbered 0,...,5)"
-    },
-    {
-      "name": "wallThickness",
-      "type": "float",
-      "default": "0.0",
-      "description": "Walls thickness"
-    },
-    {
-      "name": "waterBoundaryPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Water pressure at boundary used in computations, is set automaticaly, but this value can be used to change water pressure during simulations"
-    },
-    {
-      "name": "waterPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volume-averaged water pressure"
-    },
-    {
-      "name": "waterPressurePartiallySatPores",
-      "type": "float",
-      "default": "0.0",
-      "description": "water pressure based on the volume-averaged water pressure in partially-saturated pore units (i.e. pore units having an interface)"
-    },
-    {
-      "name": "waterSaturation",
-      "type": "float",
-      "default": "0.0",
-      "description": "Water saturation, excluding the boundary cells"
-    },
-    {
-      "name": "waterVolumeTruncatedLost",
-      "type": "float",
-      "default": "0.0",
-      "description": "Water volume that has been truncated."
-    },
-    {
-      "name": "waveAction",
-      "type": "bool",
-      "default": "False",
-      "description": "Allow sinusoidal pressure condition to simulate ocean waves"
-    },
-    {
       "name": "windowsNo",
       "type": "int",
       "default": "10",
       "description": "Number of genrated windows(or zoomed samples)."
     },
     {
-      "name": "xmax",
+      "name": "surfaceTension",
+      "type": "float",
+      "default": "0.0728",
+      "description": "Water Surface Tension in contact with air at 20 Degrees Celsius is: 0.0728(N/m)",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "recursiveInvasion",
+      "type": "bool",
+      "default": "true",
+      "description": "If true the invasion stops only when no entry pc is less than current capillary pressure, implying simultaneous invasion of many pores. Else only one pore invasion per invasion step.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "initialWetting",
+      "type": "bool",
+      "default": "true",
+      "description": "Initial wetting saturated (=true) or non-wetting saturated (=false)",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isPhaseTrapped",
+      "type": "bool",
+      "default": "true",
+      "description": "If True, both phases can be entrapped by the other, which would correspond to snap-off. If false, both phases are always connected to their reservoirs, thus no snap-off.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isInvadeBoundary",
+      "type": "bool",
+      "default": "true",
+      "description": "Invasion side boundary condition. If True, pores of side boundary can be invaded; if False, the pore throats connecting side boundary are closed, those pores are excluded in saturation calculation.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "drainageFirst",
+      "type": "bool",
+      "default": "true",
+      "description": "If true, activate drainage first (initial saturated), then imbibition; if false, activate imbibition first (initial unsaturated), then drainage.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "dtDynTPF",
+      "type": "float",
+      "default": "0.0",
+      "description": "Parameter which stores the smallest time step, based on the residence time",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "entryPressureMethod",
       "type": "int",
       "default": "1",
-      "description": "See"
+      "description": "integer to define the method used to determine the pore throat radii and the according entry pressures. 1)radius of entry pore throat based on MS-P method; 2) radius of the inscribed circle; 3) radius of the circle with equivalent surface area of the pore throat.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "entryMethodCorrection",
+      "type": "float",
+      "default": "float(entryPressureMethod)",
+      "description": "Parameter that is used in computing entry pressure of a pore throat: P_ij =  entryMethodCorrection * surfaceTension / radius_porethroat",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "bndCondIsWaterReservoir",
+      "type": "vector<bool>",
+      "default": "vector<bool>(6,false)",
+      "description": "Boundary conditions, if bndCondIsPressure[] = True, is it air or water boundary condition? True is water reservoir",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "maxIDMergedCells",
+      "type": "int",
+      "default": "0",
+      "description": "maximum number of merged ID, this is computed in mergeCells()",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "waterPressurePartiallySatPores",
+      "type": "float",
+      "default": "0.0",
+      "description": "water pressure based on the volume-averaged water pressure in partially-saturated pore units (i.e. pore units having an interface)",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "waterPressure",
+      "type": "float",
+      "default": "0.0",
+      "description": "Volume-averaged water pressure",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "waterSaturation",
+      "type": "float",
+      "default": "0.0",
+      "description": "Water saturation, excluding the boundary cells",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "voidVolume",
+      "type": "float",
+      "default": "0.0",
+      "description": "total void volume, excluding boundary cells",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "stopSimulation",
+      "type": "bool",
+      "default": "false",
+      "description": "Boolean to indicate that dynamic flow simulations cannot find a solution (or next time step). If True, stop simulations",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "debugTPF",
+      "type": "bool",
+      "default": "false",
+      "description": "Print debuging messages two phase flow engine",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "airWaterInterfacialArea",
+      "type": "float",
+      "default": "0.0",
+      "description": "Air-water interfacial area, based on the pore-unit assembly and regular-shaped pore units",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "areaAveragedPressure",
+      "type": "float",
+      "default": "0.0",
+      "description": "Air-water interfacial area averaged water pressure",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "maximumRatioPoreThroatoverPoreBody",
+      "type": "float",
+      "default": "0.90",
+      "description": "maximum ratio of pore throat radius over pore body radius, this is used during merging of tetrahedra.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "totalWaterVolume",
+      "type": "float",
+      "default": "0.0",
+      "description": "total watervolume",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "modelRunName",
+      "type": "str",
+      "default": "\"dynamicDrainage\"",
+      "description": "Name of simulation, to be implemented into output files",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "safetyFactorTimeStep",
+      "type": "float",
+      "default": "1.0",
+      "description": "Safey coefficient for time step",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "fluxInViaWBC",
+      "type": "float",
+      "default": "0.0",
+      "description": "Total water flux over water boundary conditions",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "accumulativeFlux",
+      "type": "float",
+      "default": "0.0",
+      "description": "accumulative influx of water",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "truncationPrecision",
+      "type": "float",
+      "default": "1e-6",
+      "description": "threshold at which a saturation is truncated",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "numberOfPores",
+      "type": "int",
+      "default": "0",
+      "description": "Number of pores (i.e. number of tetrahedra, but compensated for merged tetrahedra",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "firstDynTPF",
+      "type": "bool",
+      "default": "true",
+      "description": "this bool activated the initialization of the dynamic flow engine, such as merging and defining initial values",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "keepTriangulation",
+      "type": "bool",
+      "default": "false",
+      "description": "this bool activated triangulation or not during initialization",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "remesh",
+      "type": "bool",
+      "default": "false",
+      "description": "update triangulation? -- YET TO BE IMPLEMENTED",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "deformation",
+      "type": "bool",
+      "default": "false",
+      "description": "Boolean to indicate whether simulations of dynamic flow are withing a deformating packing or not. If true, change of void volume due to deformation is considered in flow computations.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "iterationTPF",
+      "type": "int",
+      "default": "-1",
+      "description": "Iteration number",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "initialPC",
+      "type": "float",
+      "default": "2000.0",
+      "description": "Initial capillary pressure of the water-air inside the packing",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "accumulativeDeformationFlux",
+      "type": "float",
+      "default": "0.0",
+      "description": "accumulative internal flux caused by deformation",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "solvePressureSwitch",
+      "type": "bool",
+      "default": "true",
+      "description": "solve for pressure during actionTPF()",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "deltaTimeTruncation",
+      "type": "float",
+      "default": "0.0",
+      "description": "truncation of time step, to avoid very small time steps during local imbibition, NOTE it does affect the mass conservation not set to 0",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "waterBoundaryPressure",
+      "type": "float",
+      "default": "0.0",
+      "description": "Water pressure at boundary used in computations, is set automaticaly, but this value can be used to change water pressure during simulations",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "waterVolumeTruncatedLost",
+      "type": "float",
+      "default": "0.0",
+      "description": "Water volume that has been truncated.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "getQuantitiesUpdateCont",
+      "type": "bool",
+      "default": "false",
+      "description": "Continuous update of various macro-scale quantities or not. Note that the updating quantities is computationally expensive",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "simpleWaterPressure",
+      "type": "float",
+      "default": "0.0",
+      "description": "Water pressure based on averaging over pore volume",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "centroidAverageWaterPressure",
+      "type": "float",
+      "default": "0.0",
+      "description": "Water pressure based on centroid-corrected averaging, see Korteland et al. (2010) - what is the correct definition of average pressure?",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "fractionMinSaturationInvasion",
+      "type": "float",
+      "default": "-1.0",
+      "description": "Set the threshold saturation at which drainage can occur (Sthr = fractionMinSaturationInvasion), note that -1 implied the conventional definition of Sthr",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "setFractionParticles",
+      "type": "vector<Real>",
+      "default": "vector<Real>(scene->bodies->size(),0.0)",
+      "description": "Correction fraction for swelling of particles by mismatch of surface area of particles with those from actual surface area in pore units",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "primaryTPF",
+      "type": "bool",
+      "default": "true",
+      "description": "Boolean to indicate whether the initial conditions are for primary drainage of imbibition (dictated by drainageFirst) or secondary drainage or imbibition. Note that during simulations, a switch from drainage to imbibition or vise versa can easily be made by changing waterBoundaryPressure",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "swelling",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, include swelling of particles during TPF computations",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "useFastInvasion",
+      "type": "bool",
+      "default": "false",
+      "description": "use fast version of invasion",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isCellLabelActivated",
+      "type": "bool",
+      "default": "false",
+      "description": "Activate cell labels for marking disconnected wetting clusters. NW-reservoir label 0; W-reservoir label 1; disconnected W-clusters label from 2.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "computeForceActivated",
+      "type": "bool",
+      "default": "true",
+      "description": "Activate capillary force computation. WARNING: turning off means capillary force is not computed at all, but the drainage can still work.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isDrainageActivated",
+      "type": "bool",
+      "default": "true",
+      "description": "Activates drainage.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isImbibitionActivated",
+      "type": "bool",
+      "default": "false",
+      "description": "Activates imbibition.",
+      "inherited_from": "TwoPhaseFlowEngine"
+    },
+    {
+      "name": "isActivated",
+      "type": "bool",
+      "default": "true",
+      "description": "Activates Flow Engine",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "first",
+      "type": "bool",
+      "default": "true",
+      "description": "Controls the initialization/update phases",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "idOffset",
+      "type": "int",
+      "default": "0",
+      "description": "If the bounding walls of the fluid mesh are not walls of the scene (i.e. are not elements of O.bodies), the offset should be set equal to the size of O.bodies. If the bounding walls are bodies of the scene but are not numbered as 0-5 then offset should be the number of bodies comming before the walls. Set offset<0 to get it set equal to O.bodies.size(), it will also update",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "convertClumps",
+      "type": "bool",
+      "default": "true",
+      "description": "If true the clumps will be temptatively converted into equivalent spheres in the triangulation, and clump members are skipped. Else clumps are ignored and spherical clump members are triangulated as independent bodies.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "doInterpolate",
+      "type": "bool",
+      "default": "false",
+      "description": "Force the interpolation of cell's info while remeshing. By default, interpolation would be done only for compressible fluids. It can be forced with this flag.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "fluidBulkModulus",
+      "type": "float",
+      "default": "0.",
+      "description": "Bulk modulus of fluid (inverse of compressibility) K=-dP*V/dV [Pa]. Flow is compressible if fluidBulkModulus > 0, else incompressible.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "fluidRho",
+      "type": "float",
+      "default": "1000.",
+      "description": "Density of fluid (for thermalEngine).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "fluidCp",
+      "type": "float",
+      "default": "4181.3",
+      "description": "Heat capacity of fluid (for thermalEngine).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "dt",
+      "type": "float",
+      "default": "0",
+      "description": "timestep [s]",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "permeabilityMap",
+      "type": "bool",
+      "default": "false",
+      "description": "Enable/disable stocking of average permeability scalar in cell infos.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "slipBoundary",
+      "type": "bool",
+      "default": "true",
+      "description": "Controls friction condition on lateral walls",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "waveAction",
+      "type": "bool",
+      "default": "false",
+      "description": "Allow sinusoidal pressure condition to simulate ocean waves",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "sineMagnitude",
+      "type": "float",
+      "default": "0",
+      "description": "Pressure value (amplitude) when sinusoidal pressure is applied (p )",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "sineAverage",
+      "type": "float",
+      "default": "0",
+      "description": "Pressure value (average) when sinusoidal pressure is applied",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "debug",
+      "type": "bool",
+      "default": "false",
+      "description": "Activate debug messages",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "wallThickness",
+      "type": "float",
+      "default": "0",
+      "description": "Walls thickness",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "pZero",
+      "type": "float",
+      "default": "0",
+      "description": "The value used for initializing pore pressure. It is useless for incompressible fluid, but important for compressible model.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "tZero",
+      "type": "float",
+      "default": "0",
+      "description": "The value used for initializing pore temperatures in thermalEngine.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "tolerance",
+      "type": "float",
+      "default": "1e-06",
+      "description": "Gauss-Seidel tolerance",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "relax",
+      "type": "float",
+      "default": "1.9",
+      "description": "Gauss-Seidel relaxation",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "updateTriangulation",
+      "type": "bool",
+      "default": "0",
+      "description": "If true the medium is retriangulated. Can be switched on to force retriangulation after some events (else it will be true periodicaly based on defTolerance and meshUpdateInterval. Of course, it costs CPU time. Note that the new triangulation will start to be effectively used only after one iteration (i.e. O.run(2) gives a result with the new one, O.run(1) does not).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "meshUpdateInterval",
+      "type": "int",
+      "default": "1000",
+      "description": "Maximum number of timesteps between re-triangulation events (a negative value will never re-triangulate). See also",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "breakControlledRemesh",
+      "type": "int",
+      "default": "0",
+      "description": "If true, remesh will occur everytime a break occurs in JCFpmPhys. Designed to increase accuracy and efficiency in hydraulic fracture simulations.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "epsVolMax",
+      "type": "float",
+      "default": "0",
+      "description": "Maximal absolute volumetric strain computed at each iteration. |yupdate|",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "defTolerance",
+      "type": "float",
+      "default": "0",
+      "description": "Cumulated deformation threshold for which retriangulation of pore space is performed. If negative, the triangulation update will occure with a fixed frequency on the basis of",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "porosity",
+      "type": "float",
+      "default": "0",
+      "description": "Porosity computed at each retriangulation |yupdate|",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "meanKStat",
+      "type": "bool",
+      "default": "false",
+      "description": "report the local permeabilities' correction",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "clampKValues",
+      "type": "bool",
+      "default": "true",
+      "description": "If true, clamp local permeabilities in [minKdivKmean,maxKdivKmean]*globalK. This clamping can avoid singular values in the permeability matrix and may reduce numerical errors in the solve phase. It will also hide junk values if they exist, or bias all values in very heterogeneous problems. So, use this with care.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "minKdivKmean",
+      "type": "float",
+      "default": "0.0001",
+      "description": "define the min K value (see",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "maxKdivKmean",
+      "type": "float",
+      "default": "100",
+      "description": "define the max K value (see",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "permeabilityFactor",
+      "type": "float",
+      "default": "1.0",
+      "description": "Permability multiplier ($m$): $m=1$ (default) attempts to predicty the actual hydraulic conductivity using a Poiseuille equation; $m>0$ multiplies the default values by $m$; $m<0$ defines the conductivity independently of particle size and viscosity as if the material was a homogeneous continuum of conductivity $-m$",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "cavityFactor",
+      "type": "float",
+      "default": "1.",
+      "description": "Permeability/viscosity for cavity cell neighbors (arbitrarily high to model triangulated fluid filled cavity).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "volumeFactor",
+      "type": "float",
+      "default": "1.",
+      "description": "Factor used for simulating low porosity (for thermal considerations only) in high porosity DEM packings.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "flatThreshold",
+      "type": "float",
+      "default": "-1",
+      "description": "If >=0, pore volumes below flatThreshold value are blocked from flow calc. Useful for compressible flow involving odd triangulations with some very flat pores.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "viscosity",
+      "type": "float",
+      "default": "1.0",
+      "description": "viscosity of the fluid",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "tempDependentViscosity",
+      "type": "bool",
+      "default": "false",
+      "description": "boolean to vary viscosity (ultimately cell permeability) with cell temperature. Linear model for viscosity b/w 20-70 degC. If true, kFactor must also be set negative, and becomes the darcy permeability.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "desiredPorosity",
+      "type": "float",
+      "default": "0",
+      "description": "Correct the cell volumes to reflect this desired porosity (not active by default (0)).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "volumeCorrection",
+      "type": "float",
+      "default": "1",
+      "description": "Volume correction factor (not user controlled. auto computed if",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "stiffness",
+      "type": "float",
+      "default": "10000",
+      "description": "equivalent contact stiffness used in the lubrication model",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "useSolver",
+      "type": "unsigned",
+      "default": "3",
+      "description": "Solver to use. 0:Gauss-Seidel, 3: Cholesky factorization (via Eigen3 interface), 4:multicore CPU or GPU accelerated CHOLMOD (without Eigen3), 1-2: undefined.",
+      "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "xmin",
       "type": "int",
       "default": "0",
-      "description": "Index of the boundary $x_{min}$. This index is not equal the the id of the corresponding body in general, it may be used to access the corresponding attributes (e.g. flow.bndCondValue[flow.xmin], flow.wallId[flow.xmin],...)."
+      "description": "Index of the boundary $x_{min}$. This index is not equal the the id of the corresponding body in general, it may be used to access the corresponding attributes (e.g. flow.bndCondValue[flow.xmin], flow.wallId[flow.xmin],...).",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
-      "name": "ymax",
+      "name": "xmax",
       "type": "int",
-      "default": "3",
-      "description": "See"
+      "default": "1",
+      "description": "See xmin.",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "ymin",
       "type": "int",
       "default": "2",
-      "description": "See"
+      "description": "See xmin.",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
-      "name": "zmax",
+      "name": "ymax",
       "type": "int",
-      "default": "5",
-      "description": "See"
+      "default": "3",
+      "description": "See xmin.",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "zmin",
       "type": "int",
       "default": "4",
-      "description": "See"
+      "description": "See xmin.",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "zmax",
+      "type": "int",
+      "default": "5",
+      "description": "See xmin.",
+      "read_only": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "bndCondIsPressure",
+      "type": "vector<bool>",
+      "default": "vector<bool>(6,false)",
+      "description": "defines the type of boundary condition for each side. True if pressure is imposed, False for no-flux. Indexes can be retrieved with",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "bndCondIsTemperature",
+      "type": "vector<bool>",
+      "default": "vector<bool>(6,false)",
+      "description": "defines the type of boundary condition for each side of triangulation (used with ThermalEngine only). True if temperature is imposed, False for no heat-flux. Indexes can be retrieved with xmin and friends.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "bndCondValue",
+      "type": "vector<Real>",
+      "default": "vector<Real>(6,0)",
+      "description": "Imposed value of a boundary condition. Only applies if the boundary condition is imposed pressure, else the imposed flux is always zero presently (may be generalized to non-zero imposed fluxes in the future).",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "thermalBndCondValue",
+      "type": "vector<Real>",
+      "default": "vector<Real>(6,0)",
+      "description": "Imposed temperature boundary condition value for the cells in the triangulation (used with",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "boundaryVelocity",
+      "type": "vector<Vector3r>",
+      "default": "vector<Vector3r>(6,(0, 0, 0))",
+      "description": "velocity on top boundary, only change it using",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "ignoredBody",
+      "type": "int",
+      "default": "-1",
+      "description": "DEPRECATED, USE MASK - Id of a sphere to exclude from the triangulation.)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "wallIds",
+      "type": "vector<int>",
+      "default": "vector<int>(6)",
+      "description": "body ids of the boundaries (default values are ok only if aabbWalls are appended before spheres, i.e. numbered 0,...,5)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "boundaryUseMaxMin",
+      "type": "vector<bool>",
+      "default": "vector<bool>(6,true)",
+      "description": "If true (default value) bounding sphere is added as function of max/min sphere coord, if false as function of yade wall position",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "viscousShear",
+      "type": "bool",
+      "default": "false",
+      "description": "compute viscous shear terms as developped by Donia Marzougui (FIXME: ref.)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "shearLubrication",
+      "type": "bool",
+      "default": "false",
+      "description": "compute shear lubrication force as developped by Brule (FIXME: ref.)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "pumpTorque",
+      "type": "bool",
+      "default": "false",
+      "description": "Compute pump torque applied on particles",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "twistTorque",
+      "type": "bool",
+      "default": "false",
+      "description": "Compute twist torque applied on particles",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "eps",
+      "type": "float",
+      "default": "0.00001",
+      "description": "roughness defined as a fraction of particles size, giving the minimum distance between particles in the lubrication model.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "pressureForce",
+      "type": "bool",
+      "default": "true",
+      "description": "compute the pressure field and associated fluid forces. WARNING: turning off means fluid flow is not computed at all.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "normalLubrication",
+      "type": "bool",
+      "default": "false",
+      "description": "compute normal lubrication force as developped by Brule",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "viscousNormalBodyStress",
+      "type": "bool",
+      "default": "false",
+      "description": "compute normal viscous stress applied on each body",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "viscousShearBodyStress",
+      "type": "bool",
+      "default": "false",
+      "description": "compute shear viscous stress applied on each body",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "multithread",
+      "type": "bool",
+      "default": "false",
+      "description": "Build triangulation and factorize in the background (multi-thread mode)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "decoupleForces",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, viscous and pressure forces are not imposed on particles. Useful for speeding up simulations in ultra-stiff cohesive materials.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "getCHOLMODPerfTimings",
+      "type": "bool",
+      "default": "false",
+      "description": "Print CHOLMOD build, analyze, and factorize timings",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "numSolveThreads",
+      "type": "int",
+      "default": "1",
+      "description": "number of openblas threads in the solve phase.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "numFactorizeThreads",
+      "type": "int",
+      "default": "1",
+      "description": "number of openblas threads in the factorization phase",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "boundaryPressure",
+      "type": "vector<Real>",
+      "default": "vector<Real>()",
+      "description": "values defining pressure along x-axis for the top surface. See also",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "boundaryXPos",
+      "type": "vector<Real>",
+      "default": "vector<Real>()",
+      "description": "values of the x-coordinate for which pressure is defined. See also",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "blockHook",
+      "type": "str",
+      "default": "\"\"",
+      "description": "Python command to be run when remeshing. Anticipated usage: define blocked cells (see also FlowEngine.blockCell), or apply exotic types of boundary conditions which need to visit the newly built mesh",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "fixTriUpdatePermInt",
+      "type": "int",
+      "default": "-1",
+      "description": "If positive, triangulation is fixed and DFNFlow trickPermeability is run according to the interval. Activating this automatically sets",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "thermalEngine",
+      "type": "bool",
+      "default": "false",
+      "description": "activate thermalEngine within FlowEngine.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "iniVoidVolumes",
+      "type": "bool",
+      "default": "false",
+      "description": "activate the computation of the inverse of the initial void volumes in each cell when pore volumes are initialized.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "controlCavityPressure",
+      "type": "bool",
+      "default": "false",
+      "description": "use full cavity flux and fluidbulkmodulus to control cavity as dynamic pressure (dirichlet) boundary condition.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "controlCavityVolumeChange",
+      "type": "bool",
+      "default": "false",
+      "description": "cavity imposes a volume change on neighbor cells (shouldnt be used with controlCavityPressure)",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "phiZero",
+      "type": "float",
+      "default": "0",
+      "description": "if >0, considers water aircontent impact on fluid compressibility.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "cavityFlux",
+      "type": "float",
+      "default": "0",
+      "description": "For adding flux to pressuremanaged cavity model (controlCavityPressure). Negavite influx, postive outflux.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "cavityFluidDensity",
+      "type": "float",
+      "default": "0",
+      "description": ">0 means cavity compressibility model considers density changes instead of volume changes.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "thermalPorosity",
+      "type": "float",
+      "default": "0",
+      "description": ">0 means the void volume space will be factored by thermalPorosity for pore internal energy considerations.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "averageCavityPressure",
+      "type": "bool",
+      "default": "false",
+      "description": "true means the pressure in the cavity will be averaged each iteration.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "alphaBound",
+      "type": "float",
+      "default": "-1",
+      "description": "if 0, use an alphaBoundary condition where CGAL finds minimum alpha necessary for a single solid object. Any positive value will be used for the alpha. All negative values deactivate the functionality.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "alphaBoundValue",
+      "type": "float",
+      "default": "0",
+      "description": "value of alpha constant pressure condition",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "fixedAlpha",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, a constant-sized alpha vertex will be placed exactly above each facet. If false, logic is used to improve cell sizes in concave regions.",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "minimumPorosity",
+      "type": "float",
+      "default": "0",
+      "description": "value used to limit the allowable minimum porosity for pore volume calculations. Particularly useful if very small volumes are impacting stability",
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "meanK_opt",
+      "type": "bool",
+      "default": "True",
+      "description": "|ydeprecated| alias for clampKValues (the name changed)",
+      "no_save": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "forceMetis",
+      "type": "bool",
+      "default": "False",
+      "description": "If true, METIS is used for matrix preconditioning, else Cholmod is free to choose the best method (which may be METIS to, depending on the matrix). See ``nmethods`` in Cholmod documentation",
+      "no_save": true,
+      "inherited_from": "TwoPhaseFlowEngineT"
+    },
+    {
+      "name": "ids",
+      "type": "list[int]",
+      "default": "",
+      "description": "Ids list of bodies affected by this PartialEngine.",
+      "inherited_from": "PartialEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "TimingDeltas",
+      "default": "",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [

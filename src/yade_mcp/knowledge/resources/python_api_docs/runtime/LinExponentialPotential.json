@@ -5,40 +5,46 @@
   "description": "LinExponential Potential with only Cundall-and-Strack-like contact. The LinExponential potential formula is $F(u) = \\frac{k*(x_e-x_0)}{x_e}(u/a-x_0)\\exp\\left(\\frac{-(u/a)}{x_e-x_0}\\right)$. Where $k$ is the slope at the origin, $x_0$ is the position where the potential cross $0$ and $x_e$ is the position of the extremum.",
   "attributes": [
     {
-      "name": "F0",
-      "type": "Real",
-      "default": "1",
-      "description": "Force at contact. Force when $F_0 = F(u=0)$ (LinExponential)"
-    },
-    {
-      "name": "Fe",
-      "type": "Real",
-      "default": "1",
-      "description": "Extremum force. Value of force at extremum. (LinExponential)"
-    },
-    {
-      "name": "alpha",
-      "type": "Real",
-      "default": "1",
-      "description": "Bulk-to-roughness stiffness ratio"
-    },
-    {
-      "name": "k",
-      "type": "Real",
-      "default": "1",
-      "description": "Slope at the origin (stiffness). (LinExponential)"
-    },
-    {
       "name": "x0",
-      "type": "Real",
+      "type": "float",
       "default": "0",
-      "description": "Equilibrium distance. Potential force is 0 at $x_0$ (LinExponential)"
+      "description": "Equilibrium distance. Potential force is 0 at $x_0$ (LinExponential)",
+      "read_only": true
     },
     {
       "name": "xe",
-      "type": "Real",
+      "type": "float",
       "default": "1",
-      "description": "Extremum position. Position of local max/min of force. (LinExponential)"
+      "description": "Extremum position. Position of local max/min of force. (LinExponential)",
+      "read_only": true
+    },
+    {
+      "name": "k",
+      "type": "float",
+      "default": "1",
+      "description": "Slope at the origin (stiffness). (LinExponential)",
+      "read_only": true
+    },
+    {
+      "name": "F0",
+      "type": "float",
+      "default": "1",
+      "description": "Force at contact. Force when $F_0 = F(u=0)$ (LinExponential)",
+      "read_only": true
+    },
+    {
+      "name": "Fe",
+      "type": "float",
+      "default": "1",
+      "description": "Extremum force. Value of force at extremum. (LinExponential)",
+      "read_only": true
+    },
+    {
+      "name": "alpha",
+      "type": "float",
+      "default": "1",
+      "description": "Bulk-to-roughness stiffness ratio",
+      "inherited_from": "CundallStrackPotential"
     }
   ],
   "methods": [

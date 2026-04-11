@@ -5,70 +5,70 @@
   "description": "Preprocessor for a simple shear box model. The packing initially conforms a gas-like, very loose, state (see utils.makeCloud function), but importing some existing packing from a text file can be also performed after little change in the source code. In its current state, the preprocessor carries out an oedometric compression, until a value of normal stress equal to 2 MPa (and a stable mechanical state). Others Engines such as KinemCNDEngine, KinemCNSEngine and KinemCNLEngine, could be used to apply resp. constant normal displacement, constant normal rigidity and constant normal stress paths using such a simple shear box.",
   "attributes": [
     {
+      "name": "thickness",
+      "type": "float",
+      "default": "0.001",
+      "description": "thickness of the boxes constituting the shear box [$m$]"
+    },
+    {
+      "name": "length",
+      "type": "float",
+      "default": "0.1",
+      "description": "initial length (along x-axis) of the shear box [$m$]"
+    },
+    {
+      "name": "height",
+      "type": "float",
+      "default": "0.02",
+      "description": "initial height (along y-axis) of the shear box [$m$]"
+    },
+    {
+      "name": "width",
+      "type": "float",
+      "default": "0.04",
+      "description": "initial width (along z-axis) of the shear box [$m$]"
+    },
+    {
       "name": "density",
-      "type": "Real",
+      "type": "float",
       "default": "2600",
       "description": "density of the spheres [$kg/m^3$]"
+    },
+    {
+      "name": "matYoungModulus",
+      "type": "float",
+      "default": "4.0e9",
+      "description": "value of FrictMat.young for the bodies [$Pa$]"
+    },
+    {
+      "name": "matPoissonRatio",
+      "type": "float",
+      "default": "0.04",
+      "description": "value of FrictMat.poisson for the bodies [-]"
+    },
+    {
+      "name": "matFrictionDeg",
+      "type": "float",
+      "default": "37",
+      "description": "value of FrictMat.frictionAngle within the packing and for the two horizontal boundaries (friction is zero along other boundaries) [$^ circ$] (the necessary conversion in [$rad$] is done automatically)"
     },
     {
       "name": "gravApplied",
       "type": "bool",
       "default": "false",
-      "description": "depending on this,"
+      "description": "depending on this, GravityEngine is added or not to the scene to take into account the weight of particles"
     },
     {
       "name": "gravity",
-      "type": "Vector3r",
+      "type": "Vector3",
       "default": "Vector3r(0,-9.81,0)",
       "description": "vector corresponding to used gravity (if"
-    },
-    {
-      "name": "height",
-      "type": "Real",
-      "default": "0.02",
-      "description": "initial height (along y-axis) of the shear box [$m$]"
-    },
-    {
-      "name": "length",
-      "type": "Real",
-      "default": "0.1",
-      "description": "initial length (along x-axis) of the shear box [$m$]"
-    },
-    {
-      "name": "matFrictionDeg",
-      "type": "Real",
-      "default": "37",
-      "description": "value of"
-    },
-    {
-      "name": "matPoissonRatio",
-      "type": "Real",
-      "default": "0.04",
-      "description": "value of"
-    },
-    {
-      "name": "matYoungModulus",
-      "type": "Real",
-      "default": "4.0e9",
-      "description": "value of"
-    },
-    {
-      "name": "thickness",
-      "type": "Real",
-      "default": "0.001",
-      "description": "thickness of the boxes constituting the shear box [$m$]"
     },
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
       "default": "50",
-      "description": "value of"
-    },
-    {
-      "name": "width",
-      "type": "Real",
-      "default": "0.04",
-      "description": "initial width (along z-axis) of the shear box [$m$]"
+      "description": "value of timeStepUpdateInterval for the TimeStepper used here"
     }
   ],
   "methods": [

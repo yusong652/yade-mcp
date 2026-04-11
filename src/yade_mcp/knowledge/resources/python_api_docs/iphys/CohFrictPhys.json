@@ -5,64 +5,22 @@
   "description": "An interaction physics<IPhys> that extends RotStiffFrictPhys adding a breakable cohesive nature. Used e.g. by Law2_ScGeom6D_CohFrictPhys_CohesionMoment.",
   "attributes": [
     {
-      "name": "cohesionBroken",
-      "type": "bool",
-      "default": "True",
-      "description": "is cohesion active? Set to false at the creation of a cohesive contact, and set to true when a fragile contact is broken"
-    },
-    {
       "name": "cohesionDisablesFriction",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "is shear strength the sum of friction and adhesion or only adhesion?"
     },
     {
-      "name": "creep_viscosity",
-      "type": "float",
-      "default": "-1.0",
-      "description": "creep viscosity [Pa.s/m]."
+      "name": "cohesionBroken",
+      "type": "bool",
+      "default": "true",
+      "description": "is cohesion active? Set to false at the creation of a cohesive contact, and set to true when a fragile contact is broken"
     },
     {
       "name": "fragile",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "do cohesion disappear when contact strength is exceeded?"
-    },
-    {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "initCohesion",
-      "type": "bool",
-      "default": "False",
-      "description": "Initialize the cohesive behaviour with current state as equilibrium state (same as"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "kr",
-      "type": "float",
-      "default": "0.0",
-      "description": "rotational stiffness [N.m/rad]"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "ktw",
-      "type": "float",
-      "default": "0.0",
-      "description": "twist stiffness [N.m/rad]"
     },
     {
       "name": "maxRollPl",
@@ -77,76 +35,115 @@
       "description": "Coefficient of twisting friction (negative means elastic)."
     },
     {
-      "name": "momentRotationLaw",
-      "type": "bool",
-      "default": "False",
-      "description": "set from"
-    },
-    {
-      "name": "moment_bending",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Bending moment"
-    },
-    {
-      "name": "moment_twist",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Twist moment"
-    },
-    {
       "name": "normalAdhesion",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "tensile strength"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "rollingAdhesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "maximum bending moment when normal force is null (a frictional term might be added depending on"
     },
     {
       "name": "shearAdhesion",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "cohesive part of the shear strength (a frictional term might be added depending on"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "tangensOfFrictionAngle",
-      "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
-    },
-    {
-      "name": "twistingAdhesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "maximum twisting moment when normal force is null (a frictional term might be added depending on"
     },
     {
       "name": "unp",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "plastic normal displacement, only used for tensile behaviour and if"
     },
     {
       "name": "unpMax",
       "type": "float",
-      "default": "-1.0",
+      "default": "0",
       "description": "maximum value of plastic normal displacement (counted positively), after that the interaction breaks even if"
+    },
+    {
+      "name": "momentRotationLaw",
+      "type": "bool",
+      "default": "false",
+      "description": "set from momentRotationLaw in order to possibly use bending/twisting moment at contacts (if true). See always_use_moment_law for details."
+    },
+    {
+      "name": "initCohesion",
+      "type": "bool",
+      "default": "false",
+      "description": "Initialize the cohesive behaviour with current state as equilibrium state (same as"
+    },
+    {
+      "name": "creep_viscosity",
+      "type": "float",
+      "default": "-1",
+      "description": "creep viscosity [Pa.s/m]."
+    },
+    {
+      "name": "moment_twist",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,0)",
+      "description": "Twist moment"
+    },
+    {
+      "name": "moment_bending",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,0)",
+      "description": "Bending moment"
+    },
+    {
+      "name": "kr",
+      "type": "float",
+      "default": "0",
+      "description": "rotational stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
+    },
+    {
+      "name": "ktw",
+      "type": "float",
+      "default": "0",
+      "description": "twist stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "6",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

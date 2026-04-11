@@ -5,42 +5,18 @@
   "description": "Interaction between pair of bodies.",
   "attributes": [
     {
-      "name": "cellDist",
-      "type": "Vector3i",
-      "default": "Vector3i(0,0,0)",
-      "description": "Distance of bodies in cell size units, if using periodic boundary conditions; id2 is shifted by this number of cells from its"
-    },
-    {
-      "name": "geom",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Geometry part of the interaction."
-    },
-    {
       "name": "id1",
-      "type": "int",
-      "default": "0"
+      "type": "Body::id_t",
+      "default": "0",
+      "description": "Id of the first body in this interaction.",
+      "read_only": true
     },
     {
       "name": "id2",
-      "type": "int",
-      "default": "0"
-    },
-    {
-      "name": "isActive",
-      "type": "bool",
-      "default": "True"
-    },
-    {
-      "name": "isReal",
-      "type": "bool",
-      "default": "False"
-    },
-    {
-      "name": "iterBorn",
-      "type": "int",
-      "default": "-1",
-      "description": "Step number at which the interaction was added to simulation."
+      "type": "Body::id_t",
+      "default": "0",
+      "description": "Id of the second body in this interaction.",
+      "read_only": true
     },
     {
       "name": "iterMadeReal",
@@ -49,10 +25,42 @@
       "description": "Step number at which the interaction was fully (in the sense of geom and phys) created. (Should be touched only by"
     },
     {
+      "name": "geom",
+      "type": "IGeom",
+      "default": "",
+      "description": "Geometry part of the interaction."
+    },
+    {
       "name": "phys",
-      "type": "NoneType",
-      "default": "None",
+      "type": "IPhys",
+      "default": "",
       "description": "Physical (material) part of the interaction."
+    },
+    {
+      "name": "cellDist",
+      "type": "Vector3i",
+      "default": "Vector3i(0,0,0)",
+      "description": "Distance of bodies in cell size units, if using periodic boundary conditions; id2 is shifted by this number of cells from its pos coordinates for this interaction to exist. Assigned by the collider. .. warning:: (internal) cellDist must survive Interaction::reset(), it is only initialized in ctor. Interaction that was cancelled by the constitutive law, was reset() and became only potential must have the period information if the geometric functor again makes it real. Good to know after few days of debugging that :-)"
+    },
+    {
+      "name": "iterBorn",
+      "type": "int",
+      "default": "-1",
+      "description": "Step number at which the interaction was added to simulation."
+    },
+    {
+      "name": "isReal",
+      "type": "bool",
+      "default": "False",
+      "description": "True if this interaction has both geom and phys; False otherwise.",
+      "read_only": true
+    },
+    {
+      "name": "isActive",
+      "type": "bool",
+      "default": "True",
+      "description": "True if this interaction is active. Otherwise the forces from this interaction will not be taken into account. True by default.",
+      "no_save": true
     }
   ]
 }

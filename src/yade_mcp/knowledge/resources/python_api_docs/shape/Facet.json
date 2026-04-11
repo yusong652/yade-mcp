@@ -5,40 +5,55 @@
   "description": "Facet (triangular particle) geometry.",
   "attributes": [
     {
-      "name": "area",
-      "type": "float",
-      "default": "nan",
-      "description": "Facet's area"
-    },
-    {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
+      "name": "vertices",
+      "type": "vector<Vector3r>",
+      "default": "vector<Vector3r>(3,Vector3r(NaN,NaN,NaN))",
+      "description": "Vertex positions in local coordinates."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "Facet's normal $\\vec n$ (in local coordinate system) oriented towards $\\vec{e_0} \\times \\vec {e_1}$ with $\\vec {e_0} = \\vec{V_0V_1}$, $\\vec {e_1} = \\vec{V_1V_2}$ and $\\vec {V_i}$ the"
+      "default": "Vector3r(NaN,NaN,NaN)",
+      "description": "Facet's normal $\\vec n$ (in local coordinate system) oriented towards $\\vec{e_0} \\times \\vec {e_1}$ with $\\vec {e_0} = \\vec{V_0V_1}$, $\\vec {e_1} = \\vec{V_1V_2}$ and $\\vec {V_i}$ the",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "vertices",
-      "type": "list",
-      "default": "[Vector3(nan,nan,nan), Vector3(nan,nan,nan), Vector3(nan,nan,nan)]",
-      "description": "Vertex positions in local coordinates."
+      "name": "area",
+      "type": "float",
+      "default": "NaN",
+      "description": "Facet's area",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "7",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ],
   "methods": [

@@ -5,16 +5,45 @@
   "description": "Calculate physical response of 2 Polyhedra in interaction, based on penetration configuration given by PolyhedraGeom. Normal force is proportional to the volume of intersection",
   "attributes": [
     {
+      "name": "volumePower",
+      "type": "float",
+      "default": "1.",
+      "description": "Power of volume used in evaluation of normal force. Default is 1.0 - normal force is linearly proportional to volume. 1.0/3.0 would mean that normal force is proportional to the cube root of volume, approximation of penetration depth."
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force from last step of the interaction that has just been handled by InteractionLoop (for debugging 2 bodies simulations, mostly)"
+    },
+    {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing"
     },
     {
-      "name": "volumePower",
-      "type": "float",
-      "default": "1.0",
-      "description": "Power of volume used in evaluation of normal force. Default is 1.0 - normal force is linearly proportional to volume. 1.0/3.0 would mean that normal force is proportional to the cube root of volume, approximation of penetration depth."
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['PolyhedraGeom', 'PolyhedraPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [

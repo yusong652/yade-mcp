@@ -5,63 +5,10 @@
   "description": "State information about body use by cpm-model<CpmMat>.\n\nNone of that is used for computation (at least not now), only for post-processing.",
   "attributes": [
     {
-      "name": "angMom",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular momentum"
-    },
-    {
-      "name": "angVel",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular velocity"
-    },
-    {
-      "name": "blockedDOFs",
-      "type": "str",
-      "default": "''"
-    },
-    {
-      "name": "damageTensor",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Damage tensor computed with microplane theory averaging. state.damageTensor.trace() = state.normDmg"
-    },
-    {
-      "name": "densityScaling",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per"
-    },
-    {
       "name": "epsVolumetric",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Volumetric strain around this body (unused for now)"
-    },
-    {
-      "name": "inertia",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Inertia of associated body, in local coordinate system."
-    },
-    {
-      "name": "isDamped",
-      "type": "bool",
-      "default": "True",
-      "description": "Damping in"
-    },
-    {
-      "name": "mass",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mass of this body"
-    },
-    {
-      "name": "normDmg",
-      "type": "float",
-      "default": "0.0",
-      "description": "Average damage including already deleted contacts (it is really not damage, but 1-relResidualStrength now)"
     },
     {
       "name": "numBrokenCohesive",
@@ -76,44 +23,124 @@
       "description": "Number of contacts with this body"
     },
     {
-      "name": "ori",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
-    },
-    {
-      "name": "pos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "refOri",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Reference orientation"
-    },
-    {
-      "name": "refPos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Reference position"
-    },
-    {
-      "name": "se3",
-      "type": "tuple",
-      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))",
-      "description": "Position and"
+      "name": "normDmg",
+      "type": "float",
+      "default": "0",
+      "description": "Average damage including already deleted contacts (it is really not damage, but 1-relResidualStrength now)"
     },
     {
       "name": "stress",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
+      "default": "Matrix3.Zero",
       "description": "Stress tensor of the spherical particle (under assumption that particle volume = pi*r*r*r*4/3.) for packing fraction 0.62"
+    },
+    {
+      "name": "damageTensor",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "Damage tensor computed with microplane theory averaging. state.damageTensor.trace() = state.normDmg"
+    },
+    {
+      "name": "se3",
+      "type": "Se3r",
+      "default": "Se3r((0, 0, 0),Quaternion.Identity)",
+      "description": "Position and orientation as one object.",
+      "inherited_from": "State"
     },
     {
       "name": "vel",
       "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current linear velocity.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "mass",
+      "type": "float",
+      "default": "0",
+      "description": "Mass of this body",
+      "inherited_from": "State"
+    },
+    {
+      "name": "angVel",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular velocity",
+      "inherited_from": "State"
+    },
+    {
+      "name": "angMom",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular momentum",
+      "inherited_from": "State"
+    },
+    {
+      "name": "inertia",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Inertia of associated body, in local coordinate system.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "refPos",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Reference position",
+      "inherited_from": "State"
+    },
+    {
+      "name": "refOri",
+      "type": "Quaternion",
+      "default": "Quaternion.Identity",
+      "description": "Reference orientation",
+      "inherited_from": "State"
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "int",
+      "default": "0",
+      "description": "Degress of freedom where linear/angular velocity will be always constant (equal to zero, or to an user-defined value), regardless of applied force/torque. String that may contain 'xyzXYZ' (translations and rotations).",
+      "inherited_from": "State"
+    },
+    {
+      "name": "isDamped",
+      "type": "bool",
+      "default": "true",
+      "description": "Damping in NewtonIntegrator can be deactivated for individual particles by setting this variable to FALSE. E.g. damping is inappropriate for particles in free flight under gravity but it might still be applicable to other particles in the same simulation.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "densityScaling",
+      "type": "float",
+      "default": "-1",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per",
+      "read_only": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "1",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "pos",
+      "type": "Vector3",
       "default": "Vector3(0,0,0)",
-      "description": "Current linear velocity."
+      "description": "Current position.",
+      "no_save": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "ori",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Current orientation.",
+      "no_save": true,
+      "inherited_from": "State"
     }
   ],
   "methods": [

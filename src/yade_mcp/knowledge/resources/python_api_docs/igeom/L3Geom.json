@@ -5,52 +5,66 @@
   "description": "Geometry of contact given in local coordinates with 3 degress of freedom: normal and two in shear plane. [experimental]",
   "attributes": [
     {
-      "name": "F",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Applied force in local coordinates [debugging only, will be removed]"
-    },
-    {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(1.011846442682872922e-320,0,6.944499766239071868e-310)",
-      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
-    },
-    {
-      "name": "normal",
-      "type": "Vector3",
-      "default": "Vector3(2.547345948847582943e-316,0,6.944499766182155505e-310)",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
-    },
-    {
-      "name": "refR1",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #1. |ycomp|"
-    },
-    {
-      "name": "refR2",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #2. |ycomp|"
-    },
-    {
-      "name": "trsf",
-      "type": "Matrix3",
-      "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
-      "description": "Transformation (rotation) from global to local coordinates. (the translation part is in"
-    },
-    {
       "name": "u",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Displacement components, in local coordinates. |yupdate|"
+      "default": "(0, 0, 0)",
+      "description": "Displacement components, in local coordinates. |yupdate|",
+      "read_only": true
     },
     {
       "name": "u0",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Zero displacement value; u0 should be always subtracted from the *geometrical* displacement *u* computed by appropriate"
+      "default": "(0, 0, 0)",
+      "description": "Zero displacement value; u0 should be always subtracted from the *geometrical* displacement *u* computed by appropriate IGeomFunctor, resulting in *u*. This value can be changed for instance #. by IGeomFunctor, e.g. to take in account large shear displacement value unrepresentable by underlying geomeric algorithm based on quaternions) #. by LawFunctor, to account for normal equilibrium position different from zero geometric overlap (set once, just after the interaction is created) #. by LawFunctor to account for plastic slip. .. note:: Never set an absolute value of *u0*, only increment, since both IGeomFunctor and LawFunctor use it. If you need to keep track of plastic deformation, store it in IPhys isntead (this might be changed: have *u0* for LawFunctor exclusively, and a separate value stored (when that is needed) inside classes deriving from L3Geom."
+    },
+    {
+      "name": "trsf",
+      "type": "Matrix3",
+      "default": "Matrix3.Identity",
+      "description": "Transformation (rotation) from global to local coordinates. (the translation part is in"
+    },
+    {
+      "name": "F",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Applied force in local coordinates [debugging only, will be removed]"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "read_only": true,
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #1. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #2. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "8",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ]
 }

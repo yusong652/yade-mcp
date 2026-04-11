@@ -5,58 +5,40 @@
   "description": "Disturbs a simple shear sample in a given displacement direction\n\nThis engine allows one to apply, on a simple shear sample, a loading controlled by du/dgamma = cste, which is equivalent to du + cste' * dgamma = 0 (proportionnal path loadings).\nTo do so, the upper plate of the simple shear box is...",
   "attributes": [
     {
-      "name": "Key",
-      "type": "str",
-      "default": "''",
-      "description": "string to add at the names of the saved files, and of the output file filled by *saveData*"
-    },
-    {
-      "name": "LOG",
-      "type": "bool",
-      "default": "False",
-      "description": "boolean controling the output of messages on the screen"
-    },
-    {
-      "name": "id_boxback",
-      "type": "int",
-      "default": "4",
-      "description": "the id of the wall at the back of the sample"
+      "name": "id_topbox",
+      "type": "Body::id_t",
+      "default": "3",
+      "description": "the id of the upper wall"
     },
     {
       "name": "id_boxbas",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "1",
       "description": "the id of the lower wall"
     },
     {
-      "name": "id_boxfront",
-      "type": "int",
-      "default": "5",
-      "description": "the id of the wall in front of the sample"
-    },
-    {
       "name": "id_boxleft",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "0",
       "description": "the id of the left wall"
     },
     {
       "name": "id_boxright",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "2",
       "description": "the id of the right wall"
     },
     {
-      "name": "id_topbox",
-      "type": "int",
-      "default": "3",
-      "description": "the id of the upper wall"
+      "name": "id_boxfront",
+      "type": "Body::id_t",
+      "default": "5",
+      "description": "the id of the wall in front of the sample"
     },
     {
-      "name": "nbre_iter",
-      "type": "int",
-      "default": "0",
-      "description": "the number of iterations of loading to perform"
+      "name": "id_boxback",
+      "type": "Body::id_t",
+      "default": "4",
+      "description": "the id of the wall at the back of the sample"
     },
     {
       "name": "theta",
@@ -69,6 +51,69 @@
       "type": "float",
       "default": "0.0",
       "description": "the speed at which the perturbation is imposed. In case of samples which are more sensitive to normal loadings than tangential ones, one possibility is to take v = V_shear - | (V_shear-V_comp)*sin(theta) | => v=V_shear in shear; V_comp in compression [m/s]"
+    },
+    {
+      "name": "nbre_iter",
+      "type": "int",
+      "default": "0",
+      "description": "the number of iterations of loading to perform"
+    },
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "\"\"",
+      "description": "string to add at the names of the saved files, and of the output file filled by *saveData*"
+    },
+    {
+      "name": "LOG",
+      "type": "bool",
+      "default": "false",
+      "description": "boolean controling the output of messages on the screen"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

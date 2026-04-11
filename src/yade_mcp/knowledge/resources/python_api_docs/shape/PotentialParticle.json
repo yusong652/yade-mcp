@@ -5,100 +5,58 @@
   "description": "EXPERIMENTAL. Geometry of PotentialParticle.",
   "attributes": [
     {
-      "name": "AabbMinMax",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether the exact Aabb should be calculated. If false, an approximate cubic Aabb is defined with edges of ``2R``"
-    },
-    {
-      "name": "R",
-      "type": "float",
-      "default": "1.0",
-      "description": "R in Potential Particles"
-    },
-    {
-      "name": "a",
-      "type": "list",
-      "default": "[]",
-      "description": "List of a coefficients of plane normals"
-    },
-    {
-      "name": "b",
-      "type": "list",
-      "default": "[]",
-      "description": "List of b coefficients of plane normals"
-    },
-    {
-      "name": "boundaryNormal",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal direction of boundary if fixedNormal=True"
-    },
-    {
-      "name": "c",
-      "type": "list",
-      "default": "[]",
-      "description": "List of c coefficients of plane normals"
-    },
-    {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "d",
-      "type": "list",
-      "default": "[]",
-      "description": "List of d coefficients of plane normals"
-    },
-    {
-      "name": "fixedNormal",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to fix the contact normal at a boundary, using boundaryNormal"
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
+      "name": "id",
+      "type": "int",
+      "default": "1",
+      "description": "Particle id (for graphics in vtk output)"
     },
     {
       "name": "isBoundary",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Whether the particle is part of a boundary particle"
     },
     {
-      "name": "k",
-      "type": "float",
-      "default": "0.1",
-      "description": "k in Potential Particles"
+      "name": "fixedNormal",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to fix the contact normal at a boundary, using boundaryNormal"
     },
     {
-      "name": "maxAabb",
+      "name": "boundaryNormal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Max from box centre: Used for visualisation in vtk and qt"
+      "default": "(0, 0, 0)",
+      "description": "Normal direction of boundary if fixedNormal=True"
     },
     {
-      "name": "maxAabbRotated",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Max from box centre: Used for primary contact detection"
+      "name": "AabbMinMax",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether the exact Aabb should be calculated. If false, an approximate cubic Aabb is defined with edges of ``2R``"
     },
     {
       "name": "minAabb",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Min from box centre: Used for visualisation in vtk and qt"
+    },
+    {
+      "name": "maxAabb",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Max from box centre: Used for visualisation in vtk and qt"
     },
     {
       "name": "minAabbRotated",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Min from box centre: Used for primary contact detection"
+    },
+    {
+      "name": "maxAabbRotated",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Max from box centre: Used for primary contact detection"
     },
     {
       "name": "r",
@@ -107,16 +65,75 @@
       "description": "r in Potential Particles"
     },
     {
+      "name": "R",
+      "type": "float",
+      "default": "1.0",
+      "description": "R in Potential Particles"
+    },
+    {
+      "name": "k",
+      "type": "float",
+      "default": "0.1",
+      "description": "k in Potential Particles"
+    },
+    {
       "name": "vertices",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Vector3r>",
+      "default": "",
       "description": "Vertices"
+    },
+    {
+      "name": "a",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "List of a coefficients of plane normals"
+    },
+    {
+      "name": "b",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "List of b coefficients of plane normals"
+    },
+    {
+      "name": "c",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "List of c coefficients of plane normals"
+    },
+    {
+      "name": "d",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "List of d coefficients of plane normals"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "16",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ]
 }

@@ -5,28 +5,51 @@
   "description": "Convert 2 instances of ViscElMat to ViscElPhys using the rule of consecutive connection.",
   "attributes": [
     {
+      "name": "tc",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining contact time"
+    },
+    {
       "name": "en",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining restitution coefficient in normal direction"
     },
     {
       "name": "et",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining restitution coefficient in tangential direction"
     },
     {
       "name": "frictAngle",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used."
     },
     {
-      "name": "tc",
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Instance of"
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['ViscElMat', 'ViscElMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

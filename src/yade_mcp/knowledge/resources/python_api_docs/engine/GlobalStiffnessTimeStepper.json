@@ -5,52 +5,23 @@
   "description": "An engine assigning the time-step as a fraction of the minimum eigen-period in the problem. The derivation is detailed in the chapter on DEM formulation <DEMSimulations>. The viscEl option enables to evaluate the timestep in a similar way for the visco-elastic contact law...",
   "attributes": [
     {
-      "name": "active",
-      "type": "bool",
-      "default": "True",
-      "description": "is the engine active?"
-    },
-    {
       "name": "defaultDt",
       "type": "float",
-      "default": "-1.0",
+      "default": "-1",
       "description": "used as the initial value of the timestep (especially useful in the first steps when no contact exist). If negative, it will be defined by"
-    },
-    {
-      "name": "densityScaling",
-      "type": "bool",
-      "default": "False",
-      "description": "|yupdate| don't modify this value if you don't plan to modify the scaling factor manually for some bodies. In most cases, it is enough to set"
     },
     {
       "name": "maxDt",
       "type": "float",
-      "default": "1.7976931348623157e+308",
+      "default": "Mathr::MAX_REAL",
       "description": "if positive, used as max value of the timestep whatever the computed value"
-    },
-    {
-      "name": "parallelMode",
-      "type": "bool",
-      "default": "False",
-      "description": "if parallelMode, dt is set to min of all subdomain dt."
     },
     {
       "name": "previousDt",
       "type": "float",
-      "default": "1.7976931348623157e+308",
-      "description": "last computed dt |yupdate|"
-    },
-    {
-      "name": "targetDt",
-      "type": "float",
-      "default": "1.0",
-      "description": "if"
-    },
-    {
-      "name": "timeStepUpdateInterval",
-      "type": "int",
-      "default": "1",
-      "description": "dt update interval"
+      "default": "Mathr::MAX_REAL",
+      "description": "last computed dt |yupdate|",
+      "read_only": true
     },
     {
       "name": "timestepSafetyCoefficient",
@@ -59,10 +30,82 @@
       "description": "safety factor between the minimum eigen-period and the final assigned dt (less than 1)"
     },
     {
+      "name": "densityScaling",
+      "type": "bool",
+      "default": "false",
+      "description": "|yupdate| don't modify this value if you don't plan to modify the scaling factor manually for some bodies. In most cases, it is enough to set",
+      "read_only": true
+    },
+    {
+      "name": "targetDt",
+      "type": "float",
+      "default": "1",
+      "description": "if densityScaling is active, this value will be used as the simulation timestep and the scaling will use this value of dt as the target value. The value of targetDt is arbitrary and should have no effect in the result in general. However if some bodies have imposed velocities, for instance, they will move more or less per each step depending on this value."
+    },
+    {
       "name": "viscEl",
       "type": "bool",
-      "default": "False",
-      "description": "To use with"
+      "default": "false",
+      "description": "To use with ViscElPhys. if True, evaluate separetly the minimum eigen-period in the problem considering only the elastic contribution on one hand (spring only), and only the viscous contribution on the other hand (dashpot only). Take then the minimum of the two and use the safety coefficient timestepSafetyCoefficient to take into account the possible coupling between the two contribution."
+    },
+    {
+      "name": "active",
+      "type": "bool",
+      "default": "true",
+      "description": "is the engine active?",
+      "inherited_from": "TimeStepper"
+    },
+    {
+      "name": "timeStepUpdateInterval",
+      "type": "int",
+      "default": "1",
+      "description": "dt update interval",
+      "inherited_from": "TimeStepper"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

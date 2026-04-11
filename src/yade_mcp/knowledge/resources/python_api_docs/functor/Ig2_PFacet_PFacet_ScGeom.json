@@ -5,16 +5,40 @@
   "description": "Create/update a ScGridCoGeom instance representing intersection of Facet and Sphere.",
   "attributes": [
     {
-      "name": "interactionDetectionFactor",
-      "type": "float",
-      "default": "1.0",
-      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions."
-    },
-    {
       "name": "shrinkFactor",
       "type": "float",
-      "default": "0.0",
+      "default": "((void)\"no shrinking\",0)",
       "description": "The radius of the inscribed circle of the facet is decreased by the value of the sphere's radius multipled by *shrinkFactor*. From the definition of contact point on the surface made of facets, the given surface is not continuous and becomes in effect surface covered with triangular tiles, with gap between the separate tiles equal to the sphere's radius multiplied by 2\u00d7*shrinkFactor*. If zero, no shrinking is done."
+    },
+    {
+      "name": "interactionDetectionFactor",
+      "type": "float",
+      "default": "1",
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions.",
+      "inherited_from": "Ig2_Sphere_GridConnection_ScGridCoGeom"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['PFacet', 'PFacet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

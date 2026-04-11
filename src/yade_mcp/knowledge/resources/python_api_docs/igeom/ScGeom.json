@@ -5,40 +5,57 @@
   "description": "Class representing geometry<IGeom> of a contact point between two bodies<Body>. It is more general than sphere-sphere contact even though it is primarily focused on spheres contact interactions (reason for the 'Sc' naming); it is also used for representing contacts of a Sphere with non-spherical...",
   "attributes": [
     {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(0,-nan,4800)",
-      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
-    },
-    {
-      "name": "normal",
-      "type": "Vector3",
-      "default": "Vector3(2.121995790471206669e-314,2.751831419358424755e-316,0)",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
-    },
-    {
       "name": "penetrationDepth",
       "type": "float",
-      "default": "nan",
-      "description": "Penetration distance of spheres (positive if overlapping)"
-    },
-    {
-      "name": "refR1",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #1. |ycomp|"
-    },
-    {
-      "name": "refR2",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #2. |ycomp|"
+      "default": "NaN",
+      "description": "Penetration distance of spheres (positive if overlapping)",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear displacement increment in the last step"
+      "default": "(0, 0, 0)",
+      "description": "Shear displacement increment in the last step",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "read_only": true,
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #1. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "",
+      "description": "Reference radius of particle #2. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "1",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ],
   "methods": [

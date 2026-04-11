@@ -5,45 +5,15 @@
   "description": "Read accelerometer in Thinkpad laptops (`HDAPS <http://en.wikipedia.org/wiki/Active_hard_drive_protection>`__ and accordingly set gravity within the simulation. This code draws from `hdaps-gl <https://sourceforge.net/project/showfiles.php?group_id=138242>`__ . See :ysrc:`scripts/test/hdaps.py` for...",
   "attributes": [
     {
-      "name": "accel",
-      "type": "Vector2i",
-      "default": "Vector2i(0,0)",
-      "description": "reading from the sysfs file"
-    },
-    {
-      "name": "calibrate",
-      "type": "Vector2i",
-      "default": "Vector2i(0,0)",
-      "description": "Zero position; if NaN, will be read from the *hdapsDir* / calibrate."
-    },
-    {
-      "name": "calibrated",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether *calibrate* was already updated. Do not set to ``True`` by hand unless you also give a meaningful value for *calibrate*."
-    },
-    {
-      "name": "gravity",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Acceleration [kgms\u207b\u00b2]"
-    },
-    {
       "name": "hdapsDir",
       "type": "str",
-      "default": "'/sys/devices/platform/hdaps'",
+      "default": "\"/sys/devices/platform/hdaps\"",
       "description": "Hdaps directory; contains ``position`` (with accelerometer readings) and ``calibration`` (zero acceleration)."
-    },
-    {
-      "name": "mask",
-      "type": "int",
-      "default": "0",
-      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected."
     },
     {
       "name": "msecUpdate",
       "type": "float",
-      "default": "50.0",
+      "default": "50",
       "description": "How often to update the reading."
     },
     {
@@ -53,16 +23,96 @@
       "description": "Minimum difference of reading from the file before updating gravity, to avoid jitter."
     },
     {
-      "name": "warnOnce",
+      "name": "accel",
+      "type": "Vector2i",
+      "default": "Vector2i::Zero()",
+      "description": "reading from the sysfs file",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "calibrate",
+      "type": "Vector2i",
+      "default": "Vector2i::Zero()",
+      "description": "Zero position; if NaN, will be read from the *hdapsDir* / calibrate."
+    },
+    {
+      "name": "calibrated",
       "type": "bool",
-      "default": "True",
-      "description": "For deprecation warning once."
+      "default": "false",
+      "description": "Whether *calibrate* was already updated. Do not set to ``True`` by hand unless you also give a meaningful value for *calibrate*."
     },
     {
       "name": "zeroGravity",
       "type": "Vector3",
-      "default": "Vector3(0,0,-1)",
+      "default": "Vector3r(0,0,-1)",
       "description": "Gravity if the accelerometer is in flat (zero) position."
+    },
+    {
+      "name": "gravity",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Acceleration [kgms\u207b\u00b2]",
+      "inherited_from": "GravityEngine"
+    },
+    {
+      "name": "mask",
+      "type": "int",
+      "default": "0",
+      "description": "If mask defined, only bodies with corresponding groupMask will be affected by this engine. If 0, all bodies will be affected.",
+      "inherited_from": "GravityEngine"
+    },
+    {
+      "name": "warnOnce",
+      "type": "bool",
+      "default": "true",
+      "description": "For deprecation warning once.",
+      "inherited_from": "GravityEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

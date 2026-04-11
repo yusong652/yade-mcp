@@ -5,28 +5,39 @@
   "description": "Tetrahedron geometry.",
   "attributes": [
     {
+      "name": "v",
+      "type": "list[Vector3]",
+      "default": "std::vector<Vector3r>(4)",
+      "description": "Tetrahedron vertices (in local coordinate system)."
+    },
+    {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "v",
-      "type": "list",
-      "default": "[Vector3(2.928517594614104652e-316,0,2.93104800122584518e-316), Vector3(6.944534",
-      "description": "Tetrahedron vertices (in local coordinate system)."
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "17",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ]
 }

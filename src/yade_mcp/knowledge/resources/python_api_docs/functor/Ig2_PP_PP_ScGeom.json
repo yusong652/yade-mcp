@@ -7,31 +7,19 @@
     {
       "name": "accuracyTol",
       "type": "float",
-      "default": "1e-07",
+      "default": "pow(10,-7)",
       "description": "accuracy desired, tolerance criteria for SOCP"
-    },
-    {
-      "name": "areaStep",
-      "type": "int",
-      "default": "5",
-      "description": "Angular step (degrees) to calculate"
-    },
-    {
-      "name": "calContactArea",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether to calculate jointLength for 2-D contacts and contactArea for 2-D and 3-D contacts"
     },
     {
       "name": "twoDdir",
       "type": "Vector3",
-      "default": "Vector3(0,1,0)",
+      "default": "Vector3r(0,1,0)",
       "description": "Direction of 2D"
     },
     {
       "name": "twoDimension",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Whether the contact is 2-D"
     },
     {
@@ -39,6 +27,41 @@
       "type": "float",
       "default": "1.0",
       "description": "Unit width in 2D"
+    },
+    {
+      "name": "calContactArea",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether to calculate jointLength for 2-D contacts and contactArea for 2-D and 3-D contacts"
+    },
+    {
+      "name": "areaStep",
+      "type": "int",
+      "default": "5",
+      "description": "Angular step (degrees) to calculate KnKsPhys.contactArea. Must be a divisor of 360, e.g. 1,2,3,4,5,6,8,9 and so on, to form a closed loop. Must be smaller than 90 degrees. Smaller angles lead to more accurate calculations but are more expensive"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['PotentialParticle', 'PotentialParticle']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

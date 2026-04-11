@@ -3,5 +3,29 @@
   "category": "engines",
   "parent": "IGeomFunctor",
   "description": "Creates or updates a ScGeom instance representing the intersection of one LevelSet body with one Box body. Normal is given by the box geometry while overlap and contact points are defined likewise to Ig2_LevelSet_LevelSet_ScGeom. Restricted to the case of Boxes for which local and global axes...",
-  "attributes": []
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Box', 'LevelSet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ]
 }

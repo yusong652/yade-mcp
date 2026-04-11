@@ -5,40 +5,58 @@
   "description": "Engine recording snapshots of simulation into series of \\*.vtu files, readable by VTK-based postprocessing programs such as Paraview. Both bodies (depending on their shapes<Shape>) and interactions can be recorded, with various vector/scalar quantities that are defined on...",
   "attributes": [
     {
-      "name": "Key",
-      "type": "str",
-      "default": "''",
-      "description": "Necessary if"
+      "name": "compress",
+      "type": "bool",
+      "default": "false",
+      "description": "Compress output XML files [experimental]."
     },
     {
       "name": "ascii",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Store data as readable text in the XML file (sets `vtkXMLWriter <http://www.vtk.org/doc/nightly/html/classvtkXMLWriter.html>`__ data mode to ``vtkXMLWriter::Ascii``, while the default is ``Appended``)"
     },
     {
-      "name": "compress",
+      "name": "skipFacetIntr",
       "type": "bool",
-      "default": "False",
-      "description": "Compress output XML files [experimental]."
+      "default": "true",
+      "description": "Skip interactions that are not of sphere-sphere type (e.g. sphere-facet, sphere-box...), when saving interactions"
+    },
+    {
+      "name": "skipNondynamic",
+      "type": "bool",
+      "default": "false",
+      "description": "Skip non-dynamic spheres (but not facets)."
+    },
+    {
+      "name": "multiblock",
+      "type": "bool",
+      "default": "false",
+      "description": "Use multi-block (``.vtm``) files to store data, rather than separate ``.vtu`` files."
+    },
+    {
+      "name": "multiblockLS",
+      "type": "bool",
+      "default": "false",
+      "description": "For executing, when True and with lsBodies in *recorders*, a serial export of the LevelSet bodies into one unique multi-block (``.vtm``) file, rather than a OpenMP export of separate ``.vtu`` files, when False. Compatibility with *multiblock* has not been implemented yet"
     },
     {
       "name": "fileName",
       "type": "str",
-      "default": "''",
+      "default": "\"\"",
       "description": "Base file name; it will be appended with {lsBody*,spheres,intrs,facets}.243100.vtu (unless *multiblock* or *multiblockLS* is ``True``) depending on active recorders and step number (243100 in this case). It can contain slashes, but the directory must exist already."
     },
     {
-      "name": "initRun",
-      "type": "bool",
-      "default": "True",
-      "description": "Run the first time we are called as well."
+      "name": "recorders",
+      "type": "vector<string>",
+      "default": "vector<string>(1,string(\"all\"))",
+      "description": "List of active recorders (as strings). ``all`` (the default value) enables all base (``lsBodies'' excepted) and generic recorders. **Base recorders** Base recorders save the geometry (unstructured or structured grids) on which other data is defined. They are implicitly activated by many of the other recorders. Each of them creates a new file (or a block, if multiblock is set). ``spheres`` Saves positions and radii (``radii``) of spherical particles. ``facets`` Save facets positions (vertices). ``boxes`` Save boxes positions (edges). ``lsBodies`` Exports LevelSet shaped bodies in global frame, after mapping to current positions and orientations their grid with distance fields. ``intr`` Store interactions as lines between nodes at respective particles positions. Additionally stores magnitude of normal (``forceN``) and shear (``absForceT``) forces on interactions (the :yref:`geom<Interaction.geom> must be of type NormShearPhys). **Generic recorders** Generic recorders do not depend on specific model being used and save commonly useful data. ``id`` Saves id's (field ``id``) of spheres; active only if ``spheres`` is active. ``mass`` Saves masses (field ``mass``) of spheres; active only if ``spheres`` is active. ``clumpId`` Saves id's of clumps to which each sphere belongs (field ``clumpId``); active only if ``spheres`` is active. ``colors`` Saves colors of spheres and of facets (field ``color``); only active if ``spheres`` or ``facets`` are activated. ``mask`` Saves groupMasks of spheres and of facets (field ``mask``); only active if ``spheres`` or ``facets`` are activated. ``materialId`` Saves materialID of spheres and of facets; only active if ``spheres`` or ``facets`` are activated. ``coordNumber`` Saves coordination number (number of neighbours) of spheres and of facets; only active if ``spheres`` or ``facets`` are activated. ``velocity`` Saves linear and angular velocities of spherical particles as Vector3 and length(fields ``linVelVec``, ``linVelLen`` and ``angVelVec``, ``angVelLen`` respectively``); only effective with ``spheres``. ``stress`` Saves stresses of spheres and of facets as Vector3 and length; only active if ``spheres`` or ``facets`` are activated. ``force`` Saves force and torque of spheres, facets and boxes as Vector3 and length (norm); only active if ``spheres``, ``facets`` or ``boxes`` are activated. ``pericell`` Saves the shape of the cell (simulation has to be periodic). ``bstresses`` Considering the per-particle stress tensors as given by bodyStressTensors, saves the per-particle principal stresses, sigI (most tensile) $ geq$ sigII $ geq$ sigIII (most compressive), and the associated principal directions dirI, dirII, dirIII. **Specific recorders** The following should only be activated in when appropriate engines/contact laws are in use, otherwise crashes can occur due to violation of type presuppositions. ``cpm`` Saves data pertaining to the concrete model: ``cpmDamage`` (normalized residual strength averaged on particle), ``cpmStress`` (stress on particle); ``intr`` is activated automatically by ``cpm`` ``wpm`` Saves data pertaining to the wire particle model: ``wpmForceNFactor`` shows the loading factor for the wire, e.g. normal force divided by threshold normal force. ``jcfpm`` Saves data pertaining to the rock (smooth)-jointed model: ``damage`` is defined by JCFpmState.tensBreak + JCFpmState.shearBreak; ``intr`` is activated automatically by ``jcfpm``, and on joint or cohesive interactions can be vizualized. ``cracks`` Saves other data pertaining to the rock model: ``cracks`` shows locations where cohesive bonds failed during the simulation, with their types (0/1 for tensile/shear breakages), their sizes (0.5*(R1+R2)), and their normal directions. The corresponding attribute has to be activated, and Key attributes have to be consistent. ``moments`` Saves data pertaining to the required corresponding attributeacoustic emissions model: ``moments`` shows locations of acoustic emissions, the number of broken bonds comprising the acoustic emission, the magnitude. ``thermal`` Saves temperature of bodies computed using Yade's ThermalEngine. ``liquid`` Saves the liquid volume associated with capillary models. ``cohfrict`` Saves interaction information associated with the cohesive frictional model, including isBroken, unp, and breakType. ``SPH`` Saves sphere information associated with Yade's SPH module. ``deform`` Saves interaction information associated with Yade's deformation module. ``lubrication`` Saves lubrications stress from LubricationPhys. ``spheres`` must be active. ``partialsat`` Saves suction and radii changes of spheres associated with PartialSatClayEngine. ``spheres`` must be active. ``hertz`` Saves bond data from hertzmindlin such as displacement or 'broken' where broken follows a displacement criteria set by user in Law2_ScGeom_MindlinPhys_Mindlin."
     },
     {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
+      "name": "Key",
+      "type": "str",
+      "default": "\"\"",
+      "description": "Necessary if recorders contains 'cracks' or 'moments'. A string specifying the name of file 'cracks___.txt' that is considered in this case (see corresponding attribute)."
     },
     {
       "name": "mask",
@@ -47,58 +65,123 @@
       "description": "If mask defined, only bodies with corresponding groupMask will be exported. If 0, all bodies will be exported."
     },
     {
-      "name": "multiblock",
-      "type": "bool",
-      "default": "False",
-      "description": "Use multi-block (``.vtm``) files to store data, rather than separate ``.vtu`` files."
-    },
-    {
-      "name": "multiblockLS",
-      "type": "bool",
-      "default": "False",
-      "description": "For executing, when True and with lsBodies in *recorders*, a serial export of the"
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
-    },
-    {
-      "name": "parallelMode",
-      "type": "bool",
-      "default": "False",
-      "description": "For MPI parallel runs, each proc writes their own vtu/vtp files. Master proc writes a pvtu/pvtp file containing metadata about worker vtu files. load the pvtu/pvtp in paraview for visualization."
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
       "name": "realPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "recorders",
-      "type": "list",
-      "default": "['all']",
-      "description": "List of active recorders (as strings). ``all`` (the default value) enables all base (``lsBodies'' excepted) and generic recorders.\n\n**Base recorders**\n\n\tBase recorders save the geometry (unstructured or structured grids) on which other data is defined. They are implicitly activated by many of the other recorders. Each of them creates a new file (or a block, if"
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "skipFacetIntr",
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
       "type": "bool",
-      "default": "True",
-      "description": "Skip interactions that are not of sphere-sphere type (e.g. sphere-facet, sphere-box...), when saving interactions"
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "skipNondynamic",
-      "type": "bool",
-      "default": "False",
-      "description": "Skip non-dynamic spheres (but not facets)."
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "virtPeriod",
+      "name": "virtLast",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

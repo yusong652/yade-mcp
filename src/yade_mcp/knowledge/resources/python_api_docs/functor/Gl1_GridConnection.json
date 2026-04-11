@@ -5,10 +5,51 @@
   "description": "Renders Cylinder object\n\n.. ystaticattr:: Gl1_GridConnection.wire(=false)\n\n\tOnly show wireframe (controlled by ``glutSlices`` and ``glutStacks``.\n\n.. ystaticattr:: Gl1_GridConnection.glutNormalize(=true)\n\n\tFix normals for non-wire rendering\n\n.. ystaticattr:: Gl1_GridConnection.glutSlices(=8)\n\n\tNumber of cylinder slices.\n\n.. ystaticattr:: Gl1_GridConnection.glutStacks(=4)\n\n\tNumber of cylinder stacks.",
   "attributes": [
     {
+      "name": "wire",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "glutNormalize",
+      "type": "bool",
+      "default": "True",
+      "description": ""
+    },
+    {
+      "name": "glutSlices",
+      "type": "int",
+      "default": "8",
+      "description": ""
+    },
+    {
+      "name": "glutStacks",
+      "type": "int",
+      "default": "4",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['GridConnection']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

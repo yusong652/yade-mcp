@@ -5,64 +5,10 @@
   "description": "Engine recording potential blocks as surfaces into files with given periodicity.",
   "attributes": [
     {
-      "name": "REC_COLORS",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to record colors"
-    },
-    {
-      "name": "REC_ID",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether to record id"
-    },
-    {
-      "name": "REC_INTERACTION",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to record contact point and forces"
-    },
-    {
-      "name": "REC_VELOCITY",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to record velocity"
-    },
-    {
       "name": "fileName",
       "type": "str",
-      "default": "''",
+      "default": "",
       "description": "File prefix to save to"
-    },
-    {
-      "name": "initRun",
-      "type": "bool",
-      "default": "False",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "maxDimension",
-      "type": "float",
-      "default": "30.0",
-      "description": "Maximum allowed distance between consecutive grid lines"
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
-    },
-    {
-      "name": "realPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "sampleX",
@@ -83,16 +29,159 @@
       "description": "Number of divisions in the Z direction for triangulation"
     },
     {
+      "name": "maxDimension",
+      "type": "float",
+      "default": "30",
+      "description": "Maximum allowed distance between consecutive grid lines"
+    },
+    {
       "name": "twoDimension",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Whether to render the particles as 2-D"
+    },
+    {
+      "name": "REC_INTERACTION",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to record contact point and forces"
+    },
+    {
+      "name": "REC_COLORS",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to record colors"
+    },
+    {
+      "name": "REC_VELOCITY",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to record velocity"
+    },
+    {
+      "name": "REC_ID",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether to record id"
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

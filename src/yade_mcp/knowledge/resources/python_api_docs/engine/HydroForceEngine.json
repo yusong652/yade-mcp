@@ -5,135 +5,94 @@
   "description": "Engine performing a coupling of the DEM with a volume-averaged 1D fluid resolution to simulate steady uniform unidirectional fluid flow. It has been developed and used to model steady uniform gravity-driven turbulent bedload transport [Maurin2015b]_ [Maurin2016]_ [Maurin2018]_, but can be also used...",
   "attributes": [
     {
-      "name": "Cl",
-      "type": "float",
-      "default": "0.2",
-      "description": "Value of the lift coefficient taken from [Wiberg1985]_"
-    },
-    {
-      "name": "ReynoldStresses",
-      "type": "list",
-      "default": "[]",
-      "description": "Vector of size equal to"
-    },
-    {
-      "name": "averageDrag",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized average drag depth profile. No role in the engine, output parameter. For practical reason, it can be evaluated directly inside the engine, calling from python the averageProfile() method of the engine"
-    },
-    {
-      "name": "averageDrag1",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized average drag depth profile of particles of type 1. Evaluated when"
-    },
-    {
-      "name": "averageDrag2",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized average drag depth profile of particles of type 2. Evaluated when"
-    },
-    {
-      "name": "bedElevation",
-      "type": "float",
-      "default": "0.0",
-      "description": "Elevation of the bed above which the fluid flow is turbulent and the particles undergo turbulent velocity fluctuation."
-    },
-    {
-      "name": "channelWidth",
-      "type": "float",
-      "default": "1.0",
-      "description": "Fluid resolution: Channel width for the evaluation of the fluid wall friction inside the fluid resolution."
-    },
-    {
-      "name": "compatibilityOldVersion",
-      "type": "bool",
-      "default": "False",
-      "description": "Option to make HydroForceEngine compatible with former scripts. Slow down slightly the calculation and will eventually be removed."
-    },
-    {
-      "name": "convAcc",
-      "type": "list",
-      "default": "[]",
-      "description": "Convective acceleration, depth dependent"
+      "name": "gravity",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,-9.81)",
+      "description": "Gravity vector"
     },
     {
       "name": "convAccOption",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "To activate the convective acceleration option in order to account for a convective acceleration term inside the momentum balance."
+    },
+    {
+      "name": "radiusParts",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Variables containing the number of different radius of particles in the simulation. Allow to perform class averaging by particle size."
+    },
+    {
+      "name": "compatibilityOldVersion",
+      "type": "bool",
+      "default": "false",
+      "description": "Option to make HydroForceEngine compatible with former scripts. Slow down slightly the calculation and will eventually be removed."
+    },
+    {
+      "name": "nCell",
+      "type": "int",
+      "default": "1",
+      "description": "Number of cell in the depth"
+    },
+    {
+      "name": "zRef",
+      "type": "float",
+      "default": "0.",
+      "description": "Position of the reference point which correspond to the first value of the fluid velocity, i.e. to the ground."
     },
     {
       "name": "deltaZ",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Height of the discretization cell."
+    },
+    {
+      "name": "vCell",
+      "type": "float",
+      "default": "",
+      "description": "Volume of averaging cell"
+    },
+    {
+      "name": "vxFluid",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized streamwise fluid velocity depth profile at t"
     },
     {
       "name": "densFluid",
       "type": "float",
-      "default": "1000.0",
+      "default": "1000",
       "description": "Density of the fluid, by default - density of water"
+    },
+    {
+      "name": "viscoDyn",
+      "type": "float",
+      "default": "1e-3",
+      "description": "Dynamic viscosity of the fluid, by default - viscosity of water"
+    },
+    {
+      "name": "radiusPart",
+      "type": "float",
+      "default": "0.",
+      "description": "Reference particle radius"
     },
     {
       "name": "dpdx",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "pressure gradient along streamwise direction"
     },
     {
-      "name": "dtFluct",
+      "name": "turbulentViscosity",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Fluid Resolution: turbulent viscocity as a function of the depth"
+    },
+    {
+      "name": "phiMax",
       "type": "float",
-      "default": "0.0",
-      "description": "Execution time step of the turbulent fluctuation model."
-    },
-    {
-      "name": "enableMultiClassAverage",
-      "type": "bool",
-      "default": "False",
-      "description": "Enables specific averaging for all the different particle size. Uses a lot of memory if using a lots of different particle size"
-    },
-    {
-      "name": "expoRZ",
-      "type": "float",
-      "default": "3.1",
-      "description": "Value of the Richardson-Zaki exponent, for the drag correction due to hindrance"
-    },
-    {
-      "name": "fluctTime",
-      "type": "list",
-      "default": "[]",
-      "description": "Vector containing the time of life of the fluctuations associated to each particles."
-    },
-    {
-      "name": "fluidFrictionCoef",
-      "type": "float",
-      "default": "1.0",
-      "description": "Fluid resolution: fitting coefficient for the fluid wall friction"
-    },
-    {
-      "name": "fluidWallFriction",
-      "type": "bool",
-      "default": "False",
-      "description": "Fluid resolution: if set to true, introduce a sink term to account for the fluid friction at the wall, see [Maurin2015]_ for details. Requires to set the width of the channel. It might slow down significantly the calculation."
-    },
-    {
-      "name": "gravity",
-      "type": "Vector3",
-      "default": "Vector3(0,0,-9.810000000000000497)",
-      "description": "Gravity vector"
-    },
-    {
-      "name": "ids",
-      "type": "list",
-      "default": "[]"
-    },
-    {
-      "name": "ilm",
-      "type": "int",
-      "default": "2",
-      "description": "Fluid resolution: type of mixing length resolution applied: 0: classical Prandtl mixing length, 1: Prandtl mixing length with free-surface effects, 2: Damp turbulence accounting for the presence of particles [Li1995]_, see [RevilBaudard2013]_ for more details."
+      "default": "0.64",
+      "description": "Fluid resolution: maximum solid volume fraction."
     },
     {
       "name": "irheolf",
@@ -148,10 +107,22 @@
       "description": "Fluid resolution: activate the turbulence resolution, 1, or not, 0"
     },
     {
+      "name": "ilm",
+      "type": "int",
+      "default": "2",
+      "description": "Fluid resolution: type of mixing length resolution applied: 0: classical Prandtl mixing length, 1: Prandtl mixing length with free-surface effects, 2: Damp turbulence accounting for the presence of particles [Li1995]_, see [RevilBaudard2013]_ for more details."
+    },
+    {
       "name": "iusl",
       "type": "int",
       "default": "1",
       "description": "Fluid resolution: option to set the boundary condition at the top of the fluid, 0: Dirichlet, fixed ($u=uTop$ en $z=h$), 1:Neumann, free-surface ($du/dz=0$ en $z=h$)."
+    },
+    {
+      "name": "uTop",
+      "type": "float",
+      "default": "1.",
+      "description": "Fluid resolution: fluid velocity at the top boundary when iusl = 0"
     },
     {
       "name": "kappa",
@@ -160,58 +131,28 @@
       "description": "Fluid resolution: Von Karman constant. Can be tuned to account for the effect of particles on the fluid turbulence, see e.g. [RevilBaudard2015]_"
     },
     {
-      "name": "lift",
-      "type": "bool",
-      "default": "False",
-      "description": "Option to activate or not the evaluation of the lift"
-    },
-    {
-      "name": "lubrication",
-      "type": "bool",
-      "default": "False",
-      "description": "Condition to activate the calculation of the lubrication force."
-    },
-    {
-      "name": "multiDragPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Spatial-averaged mean drag force for each class of particle. Un-used ? Or just for debug."
-    },
-    {
-      "name": "multiPhiPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Spatial-averaged solid volume fraction for each class of particle."
-    },
-    {
-      "name": "multiVxPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Spatial-averaged velocity in x direction for each class of particle."
-    },
-    {
-      "name": "multiVyPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Spatial-averaged velocity in y direction for each class of particle."
-    },
-    {
-      "name": "multiVzPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Spatial-averaged velocity in z direction for each class of particle."
-    },
-    {
-      "name": "nCell",
-      "type": "int",
-      "default": "1",
-      "description": "Number of cell in the depth"
-    },
-    {
-      "name": "nbAverageT",
+      "name": "viscousSubLayer",
       "type": "int",
       "default": "0",
-      "description": "If >0, perform a time-averaging (in addition to the spatial averaging) over nbAverage steps."
+      "description": "Fluid resolution: solve the viscous sublayer close to the bottom boundary if set to 1"
+    },
+    {
+      "name": "fluidWallFriction",
+      "type": "bool",
+      "default": "false",
+      "description": "Fluid resolution: if set to true, introduce a sink term to account for the fluid friction at the wall, see [Maurin2015]_ for details. Requires to set the width of the channel. It might slow down significantly the calculation."
+    },
+    {
+      "name": "fluidFrictionCoef",
+      "type": "float",
+      "default": "1.",
+      "description": "Fluid resolution: fitting coefficient for the fluid wall friction"
+    },
+    {
+      "name": "channelWidth",
+      "type": "float",
+      "default": "1.",
+      "description": "Fluid resolution: Channel width for the evaluation of the fluid wall friction inside the fluid resolution."
     },
     {
       "name": "phiBed",
@@ -220,220 +161,320 @@
       "description": "Turbulence modelling parameter. Associated with mixing length modelling ilm = 5."
     },
     {
-      "name": "phiMax",
+      "name": "expoRZ",
       "type": "float",
-      "default": "0.64",
-      "description": "Fluid resolution: maximum solid volume fraction."
+      "default": "3.1",
+      "description": "Value of the Richardson-Zaki exponent, for the drag correction due to hindrance"
+    },
+    {
+      "name": "lift",
+      "type": "bool",
+      "default": "false",
+      "description": "Option to activate or not the evaluation of the lift"
+    },
+    {
+      "name": "Cl",
+      "type": "float",
+      "default": "0.2",
+      "description": "Value of the lift coefficient taken from [Wiberg1985]_"
+    },
+    {
+      "name": "convAcc",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Convective acceleration, depth dependent"
+    },
+    {
+      "name": "taufsi",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Fluid Resolution: Create Taufsi/rhof = dragTerm/(rhof(vf-vxp)) to transmit to the fluid code"
+    },
+    {
+      "name": "steadyFlow",
+      "type": "bool",
+      "default": "true",
+      "description": "Condition to modify the buoyancy force according to the physical difference between a fluid at rest and a steady fluid flow. For more details see [Maurin2018]_"
+    },
+    {
+      "name": "lubrication",
+      "type": "bool",
+      "default": "false",
+      "description": "Condition to activate the calculation of the lubrication force."
+    },
+    {
+      "name": "roughnessPartScale",
+      "type": "float",
+      "default": "1e-3",
+      "description": "Roughness length scale of the particle. In practice, the lubrication force is cut off when the two particles are at a distance roughnessPartScale."
     },
     {
       "name": "phiPart",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid volume fraction depth profile. Can be taken as input parameter or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
-      "name": "phiPart1",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized solid volume fraction depth profile of particles of type 1. Evaluated when"
+      "name": "vPart",
+      "type": "vector<Vector3r>",
+      "default": "",
+      "description": "Discretized streamwise solid velocity depth profile, in x, y and z direction. Only the x direction measurement is taken into account in the 1D fluid coupling resolution. The two other can be used as output parameters. The x component can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
-      "name": "phiPart2",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized solid volume fraction depth profile of particles of type 2. Evaluated when"
+      "name": "nbAverageT",
+      "type": "int",
+      "default": "0",
+      "description": "If >0, perform a time-averaging (in addition to the spatial averaging) over nbAverage steps."
     },
     {
       "name": "pointParticleAverage",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Evaluate the averaged with a point particle method. If False, consider the particle extent and weigth the averaged by the volume contained in each averaging cell."
     },
     {
-      "name": "radiusPart",
+      "name": "enableMultiClassAverage",
+      "type": "bool",
+      "default": "false",
+      "description": "Enables specific averaging for all the different particle size. Uses a lot of memory if using a lots of different particle size"
+    },
+    {
+      "name": "multiVxPart",
+      "type": "vector<vector<Real>>",
+      "default": "",
+      "description": "Spatial-averaged velocity in x direction for each class of particle."
+    },
+    {
+      "name": "multiVyPart",
+      "type": "vector<vector<Real>>",
+      "default": "",
+      "description": "Spatial-averaged velocity in y direction for each class of particle."
+    },
+    {
+      "name": "multiVzPart",
+      "type": "vector<vector<Real>>",
+      "default": "",
+      "description": "Spatial-averaged velocity in z direction for each class of particle."
+    },
+    {
+      "name": "multiPhiPart",
+      "type": "vector<vector<Real>>",
+      "default": "",
+      "description": "Spatial-averaged solid volume fraction for each class of particle."
+    },
+    {
+      "name": "velFluct",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, activate the determination of turbulent fluid velocity fluctuation for the next time step only at the position of each particle, using a simple discrete random walk (DRW) model based on the Reynolds stresses profile ("
+    },
+    {
+      "name": "vFluctX",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Vector associating a streamwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
+    },
+    {
+      "name": "vFluctY",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Vector associating a spanwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
+    },
+    {
+      "name": "vFluctZ",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Vector associating a normal fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
+    },
+    {
+      "name": "ReynoldStresses",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Vector of size equal to nCell containing the Reynolds stresses as a function of the depth. ReynoldStresses(z) $= rho^f <u_x'u_z'>(z)^2$"
+    },
+    {
+      "name": "bedElevation",
       "type": "float",
-      "default": "0.0",
-      "description": "Reference particle radius"
+      "default": "0.",
+      "description": "Elevation of the bed above which the fluid flow is turbulent and the particles undergo turbulent velocity fluctuation."
+    },
+    {
+      "name": "fluctTime",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Vector containing the time of life of the fluctuations associated to each particles."
+    },
+    {
+      "name": "dtFluct",
+      "type": "float",
+      "default": "",
+      "description": "Execution time step of the turbulent fluctuation model."
+    },
+    {
+      "name": "unCorrelatedFluctuations",
+      "type": "bool",
+      "default": "false",
+      "description": "Condition to generate uncorrelated fluid fluctuations. Default case represent in free-surface flows, for which the vertical and streamwise fluid velocity fluctuations are correlated (see e.g. reference book of Nezu & Nagakawa 1992, turbulence in open channel flows)."
+    },
+    {
+      "name": "twoSize",
+      "type": "bool",
+      "default": "false",
+      "description": "Not maintained anymore. Option to activate when considering two particle size in the simulation. When activated evaluate the average solid volume fraction and drag force for the two type of particles of diameter diameterPart1 and diameterPart2 independently."
     },
     {
       "name": "radiusPart1",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Radius of the particles of type 1. Useful only when"
     },
     {
       "name": "radiusPart2",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Radius of the particles of type 2. Useful only when"
     },
     {
-      "name": "radiusParts",
-      "type": "list",
-      "default": "[]",
-      "description": "Variables containing the number of different radius of particles in the simulation. Allow to perform class averaging by particle size."
+      "name": "phiPart1",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized solid volume fraction depth profile of particles of type 1. Evaluated when"
     },
     {
-      "name": "roughnessPartScale",
-      "type": "float",
-      "default": "0.001",
-      "description": "Roughness length scale of the particle. In practice, the lubrication force is cut off when the two particles are at a distance roughnessPartScale."
+      "name": "phiPart2",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized solid volume fraction depth profile of particles of type 2. Evaluated when"
     },
     {
-      "name": "steadyFlow",
-      "type": "bool",
-      "default": "True",
-      "description": "Condition to modify the buoyancy force according to the physical difference between a fluid at rest and a steady fluid flow. For more details see [Maurin2018]_"
+      "name": "averageDrag1",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized average drag depth profile of particles of type 1. Evaluated when"
     },
     {
-      "name": "taufsi",
-      "type": "list",
-      "default": "[]",
-      "description": "Fluid Resolution: Create Taufsi/rhof = dragTerm/(rhof(vf-vxp)) to transmit to the fluid code"
-    },
-    {
-      "name": "turbulentViscosity",
-      "type": "list",
-      "default": "[]",
-      "description": "Fluid Resolution: turbulent viscocity as a function of the depth"
-    },
-    {
-      "name": "twoSize",
-      "type": "bool",
-      "default": "False",
-      "description": "Not maintained anymore. Option to activate when considering two particle size in the simulation. When activated evaluate the average solid volume fraction and drag force for the two type of particles of diameter diameterPart1 and diameterPart2 independently."
-    },
-    {
-      "name": "uTop",
-      "type": "float",
-      "default": "1.0",
-      "description": "Fluid resolution: fluid velocity at the top boundary when iusl = 0"
-    },
-    {
-      "name": "unCorrelatedFluctuations",
-      "type": "bool",
-      "default": "False",
-      "description": "Condition to generate uncorrelated fluid fluctuations. Default case represent in free-surface flows, for which the vertical and streamwise fluid velocity fluctuations are correlated (see e.g. reference book of Nezu & Nagakawa 1992, turbulence in open channel flows)."
-    },
-    {
-      "name": "vCell",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volume of averaging cell"
-    },
-    {
-      "name": "vFluctX",
-      "type": "list",
-      "default": "[]",
-      "description": "Vector associating a streamwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
-    },
-    {
-      "name": "vFluctY",
-      "type": "list",
-      "default": "[]",
-      "description": "Vector associating a spanwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
-    },
-    {
-      "name": "vFluctZ",
-      "type": "list",
-      "default": "[]",
-      "description": "Vector associating a normal fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
-    },
-    {
-      "name": "vPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized streamwise solid velocity depth profile, in x, y and z direction. Only the x direction measurement is taken into account in the 1D fluid coupling resolution. The two other can be used as output parameters. The x component can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
-    },
-    {
-      "name": "velFluct",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, activate the determination of turbulent fluid velocity fluctuation for the next time step only at the position of each particle, using a simple discrete random walk (DRW) model based on the Reynolds stresses profile ("
-    },
-    {
-      "name": "viscoDyn",
-      "type": "float",
-      "default": "0.001",
-      "description": "Dynamic viscosity of the fluid, by default - viscosity of water"
-    },
-    {
-      "name": "viscousSubLayer",
-      "type": "int",
-      "default": "0",
-      "description": "Fluid resolution: solve the viscous sublayer close to the bottom boundary if set to 1"
-    },
-    {
-      "name": "vxFluid",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized streamwise fluid velocity depth profile at t"
-    },
-    {
-      "name": "vxPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized streamwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
+      "name": "averageDrag2",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized average drag depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "vxPart1",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid streamwise velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vxPart2",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid streamwise velocity depth profile of particles of type 2. Evaluated when"
     },
     {
-      "name": "vyPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized spanwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
-    },
-    {
       "name": "vyPart1",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid spanwise velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vyPart2",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid spanwise velocity depth profile of particles of type 2. Evaluated when"
     },
     {
-      "name": "vzPart",
-      "type": "list",
-      "default": "[]",
-      "description": "Discretized wall-normal solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
-    },
-    {
       "name": "vzPart1",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid wall-normal velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vzPart2",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Real>",
+      "default": "",
       "description": "Discretized solid wall-normal velocity depth profile of particles of type 2. Evaluated when"
     },
     {
-      "name": "wallFrictionModel",
-      "type": "int",
-      "default": "0",
-      "description": "Model used to compute the wall friction factor $f$. 0: Blasius (1913) explicit formula $f=0.3164/Re^{1/4}$ (faster), 1: Graf and Altinakar (1998) implicit formula $f=(2\\log_{10}(Re \\sqrt{f_{old}} /4) + 0.32)^{-2}$."
+      "name": "vxPart",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized streamwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
-      "name": "zRef",
-      "type": "float",
-      "default": "0.0",
-      "description": "Position of the reference point which correspond to the first value of the fluid velocity, i.e. to the ground."
+      "name": "vyPart",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized spanwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
+    },
+    {
+      "name": "vzPart",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized wall-normal solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
+    },
+    {
+      "name": "averageDrag",
+      "type": "vector<Real>",
+      "default": "",
+      "description": "Discretized average drag depth profile. No role in the engine, output parameter. For practical reason, it can be evaluated directly inside the engine, calling from python the averageProfile() method of the engine"
+    },
+    {
+      "name": "multiDragPart",
+      "type": "vector< vector<Real> >",
+      "default": "",
+      "description": "Spatial-averaged mean drag force for each class of particle. Un-used ? Or just for debug."
+    },
+    {
+      "name": "ids",
+      "type": "list[int]",
+      "default": "",
+      "description": "Ids list of bodies affected by this PartialEngine.",
+      "inherited_from": "PartialEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [

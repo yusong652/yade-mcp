@@ -5,76 +5,168 @@
   "description": "Engine saves the total torque according to the given axis and ZeroPoint, the force is taken from bodies, listed in `ids`  For instance, can be useful for defining the torque, which affects on ball mill during its work.",
   "attributes": [
     {
-      "name": "addIterNum",
-      "type": "bool",
-      "default": "False",
-      "description": "Adds an iteration number to the file name, when the file was created. Useful for creating new files at each call (false by default)"
-    },
-    {
-      "name": "file",
-      "type": "str",
-      "default": "''",
-      "description": "Name of file to save to; must not be empty."
-    },
-    {
       "name": "ids",
-      "type": "list",
-      "default": "[]",
+      "type": "list[int]",
+      "default": "",
       "description": "List of bodies whose state will be measured"
-    },
-    {
-      "name": "initRun",
-      "type": "bool",
-      "default": "True",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
-    },
-    {
-      "name": "realPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
     },
     {
       "name": "rotationAxis",
       "type": "Vector3",
-      "default": "Vector3(1,0,0)",
+      "default": "Vector3r::UnitX()",
       "description": "Rotation axis"
-    },
-    {
-      "name": "totalTorque",
-      "type": "float",
-      "default": "0.0",
-      "description": "Resultant torque, returning by the function."
-    },
-    {
-      "name": "truncate",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to delete current file contents, if any, when opening (false by default)"
-    },
-    {
-      "name": "virtPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
     },
     {
       "name": "zeroPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Point of rotation center"
+    },
+    {
+      "name": "totalTorque",
+      "type": "float",
+      "default": "0",
+      "description": "Resultant torque, returning by the function."
+    },
+    {
+      "name": "file",
+      "type": "str",
+      "default": "",
+      "description": "Name of file to save to; must not be empty.",
+      "inherited_from": "Recorder"
+    },
+    {
+      "name": "truncate",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to delete current file contents, if any, when opening (false by default)",
+      "inherited_from": "Recorder"
+    },
+    {
+      "name": "addIterNum",
+      "type": "bool",
+      "default": "false",
+      "description": "Adds an iteration number to the file name, when the file was created. Useful for creating new files at each call (false by default)",
+      "inherited_from": "Recorder"
+    },
+    {
+      "name": "virtPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

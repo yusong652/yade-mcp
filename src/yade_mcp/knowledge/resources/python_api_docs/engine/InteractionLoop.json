@@ -5,21 +5,82 @@
   "description": "Unified dispatcher for handling interaction loop at every step, for parallel performance reasons.\n\n.. admonition:: Special constructor\n\n\tConstructs from 3 lists of Ig2<IGeomFunctor>, Ip2<IPhysFunctor>, Law2<LawFunctor> functors respectively; they will be passed to internal dispatchers, which you...",
   "attributes": [
     {
+      "name": "geomDispatcher",
+      "type": "IGeomDispatcher",
+      "default": "new IGeomDispatcher",
+      "description": "IGeomDispatcher object that is used for dispatch.",
+      "read_only": true
+    },
+    {
+      "name": "physDispatcher",
+      "type": "IPhysDispatcher",
+      "default": "new IPhysDispatcher",
+      "description": "IPhysDispatcher object used for dispatch.",
+      "read_only": true
+    },
+    {
+      "name": "lawDispatcher",
+      "type": "LawDispatcher",
+      "default": "new LawDispatcher",
+      "description": "LawDispatcher object used for dispatch.",
+      "read_only": true
+    },
+    {
       "name": "callbacks",
-      "type": "list",
-      "default": "[]"
+      "type": "vector<shared_ptr<IntrCallback> >",
+      "default": "",
+      "description": "Callbacks which will be called for every Interaction, if activated."
     },
     {
       "name": "loopOnSortedInteractions",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "If true, the main interaction loop will occur on a sorted list of interactions. This is SLOW but useful to workaround floating point force addition non reproducibility when debugging parallel implementations of yade."
     },
     {
-      "name": "warnRoleIg2",
+      "name": "dead",
       "type": "bool",
-      "default": "True",
-      "description": "Whether warnings are output (if true) in case the"
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

@@ -5,22 +5,45 @@
   "description": "Ip2 creating LubricationPhys from two Material instances.",
   "attributes": [
     {
+      "name": "eta",
+      "type": "float",
+      "default": "1",
+      "description": "Fluid viscosity [Pa.s]"
+    },
+    {
       "name": "eps",
       "type": "float",
       "default": "0.001",
       "description": "Roughness: fraction of radius enlargement for contact asperities"
     },
     {
-      "name": "eta",
-      "type": "float",
-      "default": "1.0",
-      "description": "Fluid viscosity [Pa.s]"
-    },
-    {
       "name": "keps",
       "type": "float",
-      "default": "1.0",
+      "default": "1",
       "description": "Dimensionless stiffness coefficient of the asperities, relative to the stiffness of the surface (the final stiffness will be keps*kn). Only used with resolution method=0, with resolution>0 it is always equal to 1. [-]"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['FrictMat', 'FrictMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

@@ -5,58 +5,34 @@
   "description": "Axial displacing two groups of bodies in the opposite direction with given strain rate.",
   "attributes": [
     {
+      "name": "strainRate",
+      "type": "float",
+      "default": "NaN",
+      "description": "Rate of strain, starting at 0, linearly raising to strainRate. [-]"
+    },
+    {
       "name": "absSpeed",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "alternatively, absolute speed of boundary motion can be specified; this is effective only at the beginning and if strainRate is not set; changing absSpeed directly during simulation wil have no effect. [ms\u207b\u00b9]"
+    },
+    {
+      "name": "initAccelTime",
+      "type": "float",
+      "default": "-200",
+      "description": "Time for strain reaching the requested value (linear interpolation). If negative, the time is dt*(-initAccelTime), where dt is  the timestep at the first iteration. [s]"
+    },
+    {
+      "name": "stopStrain",
+      "type": "float",
+      "default": "NaN",
+      "description": "Strain at which we will pause simulation; inactive (nan) by default; must be reached from below (in absolute value)"
     },
     {
       "name": "active",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "Whether this engine is activated"
-    },
-    {
-      "name": "asymmetry",
-      "type": "int",
-      "default": "0",
-      "description": "If 0, straining is symmetric for negIds and posIds; for 1 (or -1), only posIds are strained and negIds don't move (or vice versa)"
-    },
-    {
-      "name": "avgStress",
-      "type": "float",
-      "default": "0.0",
-      "description": "Current average stress  |yupdate| [Pa]"
-    },
-    {
-      "name": "axis",
-      "type": "int",
-      "default": "2",
-      "description": "The axis which is strained (0,1,2 for x,y,z)"
-    },
-    {
-      "name": "blockDisplacements",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether displacement of boundary bodies perpendicular to the strained axis are blocked or are free"
-    },
-    {
-      "name": "blockRotations",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether rotations of boundary bodies are blocked."
-    },
-    {
-      "name": "crossSectionArea",
-      "type": "float",
-      "default": "nan",
-      "description": "crossSection perpendicular to he strained axis; must be given explicitly [m\u00b2]"
-    },
-    {
-      "name": "currentStrainRate",
-      "type": "float",
-      "default": "nan",
-      "description": "Current strain rate (update automatically). |yupdate|"
     },
     {
       "name": "idleIterations",
@@ -65,70 +41,142 @@
       "description": "Number of iterations that will pass without straining activity after stopStrain has been reached"
     },
     {
-      "name": "initAccelTime",
+      "name": "currentStrainRate",
       "type": "float",
-      "default": "-200.0",
-      "description": "Time for strain reaching the requested value (linear interpolation). If negative, the time is dt*(-initAccelTime), where dt is  the timestep at the first iteration. [s]"
+      "default": "NaN",
+      "description": "Current strain rate (update automatically). |yupdate|",
+      "read_only": true
     },
     {
-      "name": "limitStrain",
-      "type": "float",
-      "default": "0.0",
-      "description": "Invert the sense of straining (sharply, without transition) one this value of strain is reached. Not effective if 0."
+      "name": "axis",
+      "type": "int",
+      "default": "2",
+      "description": "The axis which is strained (0,1,2 for x,y,z)"
+    },
+    {
+      "name": "asymmetry",
+      "type": "int",
+      "default": "((void)\"symmetric\",0)",
+      "description": "If 0, straining is symmetric for negIds and posIds; for 1 (or -1), only posIds are strained and negIds don't move (or vice versa)"
+    },
+    {
+      "name": "posIds",
+      "type": "vector<Body::id_t>",
+      "default": "",
+      "description": "Bodies on which strain will be applied (on the positive end along the axis)"
     },
     {
       "name": "negIds",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Body::id_t>",
+      "default": "",
       "description": "Bodies on which strain will be applied (on the negative end along the axis)"
-    },
-    {
-      "name": "notYetReversed",
-      "type": "bool",
-      "default": "True",
-      "description": "Flag whether the sense of straining has already been reversed (only used internally)."
     },
     {
       "name": "originalLength",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Distance of reference bodies in the direction of axis before straining started (computed automatically) [m]"
     },
     {
-      "name": "posIds",
-      "type": "list",
-      "default": "[]",
-      "description": "Bodies on which strain will be applied (on the positive end along the axis)"
-    },
-    {
-      "name": "setSpeeds",
-      "type": "bool",
-      "default": "False",
-      "description": "should we set speeds at the beginning directly, instead of increasing strain rate progressively?"
-    },
-    {
-      "name": "stopStrain",
+      "name": "limitStrain",
       "type": "float",
-      "default": "nan",
-      "description": "Strain at which we will pause simulation; inactive (nan) by default; must be reached from below (in absolute value)"
+      "default": "((void)\"disabled\",0)",
+      "description": "Invert the sense of straining (sharply, without transition) one this value of strain is reached. Not effective if 0."
+    },
+    {
+      "name": "notYetReversed",
+      "type": "bool",
+      "default": "true",
+      "description": "Flag whether the sense of straining has already been reversed (only used internally)."
+    },
+    {
+      "name": "crossSectionArea",
+      "type": "float",
+      "default": "NaN",
+      "description": "crossSection perpendicular to he strained axis; must be given explicitly [m\u00b2]"
     },
     {
       "name": "strain",
       "type": "float",
-      "default": "0.0",
-      "description": "Current strain value, elongation/originalLength |yupdate| [-]"
+      "default": "0",
+      "description": "Current strain value, elongation/originalLength |yupdate| [-]",
+      "read_only": true
     },
     {
-      "name": "strainRate",
+      "name": "avgStress",
       "type": "float",
-      "default": "nan",
-      "description": "Rate of strain, starting at 0, linearly raising to strainRate. [-]"
+      "default": "0",
+      "description": "Current average stress  |yupdate| [Pa]",
+      "read_only": true
+    },
+    {
+      "name": "blockDisplacements",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether displacement of boundary bodies perpendicular to the strained axis are blocked or are free"
+    },
+    {
+      "name": "blockRotations",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether rotations of boundary bodies are blocked."
+    },
+    {
+      "name": "setSpeeds",
+      "type": "bool",
+      "default": "false",
+      "description": "should we set speeds at the beginning directly, instead of increasing strain rate progressively?"
     },
     {
       "name": "stressUpdateInterval",
       "type": "int",
       "default": "10",
       "description": "How often to recompute stress on supports."
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

@@ -5,22 +5,58 @@
   "description": "PIDController servo-engine for applying prescribed force on bodies. http://en.wikipedia.org/wiki/PID_controller",
   "attributes": [
     {
+      "name": "maxVelocity",
+      "type": "float",
+      "default": "0.0",
+      "description": "Velocity [m/s]"
+    },
+    {
       "name": "axis",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Unit vector along which apply the velocity [-]"
+    },
+    {
+      "name": "target",
+      "type": "float",
+      "default": "0.0",
+      "description": "Target value for the controller [N]"
+    },
+    {
+      "name": "current",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current value for the controller [N]"
+    },
+    {
+      "name": "kP",
+      "type": "float",
+      "default": "0.0",
+      "description": "Proportional gain/coefficient for the PID-controller [-]"
+    },
+    {
+      "name": "kI",
+      "type": "float",
+      "default": "0.0",
+      "description": "Integral gain/coefficient for the PID-controller [-]"
+    },
+    {
+      "name": "kD",
+      "type": "float",
+      "default": "0.0",
+      "description": "Derivative gain/coefficient for the PID-controller [-]"
+    },
+    {
+      "name": "iTerm",
+      "type": "float",
+      "default": "0.0",
+      "description": "Integral term [N]"
     },
     {
       "name": "curVel",
       "type": "float",
       "default": "0.0",
       "description": "Current applied velocity [m/s]"
-    },
-    {
-      "name": "current",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current value for the controller [N]"
     },
     {
       "name": "errorCur",
@@ -35,69 +71,82 @@
       "description": "Previous error [N]"
     },
     {
-      "name": "iTerm",
-      "type": "float",
-      "default": "0.0",
-      "description": "Integral term [N]"
-    },
-    {
-      "name": "ids",
-      "type": "list",
-      "default": "[]"
-    },
-    {
       "name": "iterPeriod",
       "type": "int",
-      "default": "100",
+      "default": "100.0",
       "description": "Periodicity criterion of velocity correlation [-]"
     },
     {
       "name": "iterPrevStart",
       "type": "int",
-      "default": "-1",
+      "default": "-1.0",
       "description": "Previous iteration of velocity correlation [-]"
-    },
-    {
-      "name": "kD",
-      "type": "float",
-      "default": "0.0",
-      "description": "Derivative gain/coefficient for the PID-controller [-]"
-    },
-    {
-      "name": "kI",
-      "type": "float",
-      "default": "0.0",
-      "description": "Integral gain/coefficient for the PID-controller [-]"
-    },
-    {
-      "name": "kP",
-      "type": "float",
-      "default": "0.0",
-      "description": "Proportional gain/coefficient for the PID-controller [-]"
-    },
-    {
-      "name": "maxVelocity",
-      "type": "float",
-      "default": "0.0",
-      "description": "Velocity [m/s]"
-    },
-    {
-      "name": "target",
-      "type": "float",
-      "default": "0.0",
-      "description": "Target value for the controller [N]"
-    },
-    {
-      "name": "translationAxis",
-      "type": "Vector3",
-      "default": "Vector3(6.91630760659163825e-310,6.916325544482055346e-310,6.916325476112856022e",
-      "description": "Direction of imposed translation [Vector3]"
     },
     {
       "name": "velocity",
       "type": "float",
-      "default": "0.0",
-      "description": "Scalar value of the imposed velocity [m/s]. Imposed vector velocity is"
+      "default": "",
+      "description": "Scalar value of the imposed velocity [m/s]. Imposed vector velocity is",
+      "inherited_from": "TranslationEngine"
+    },
+    {
+      "name": "translationAxis",
+      "type": "Vector3",
+      "default": "",
+      "description": "Direction of imposed translation [Vector3]",
+      "inherited_from": "TranslationEngine"
+    },
+    {
+      "name": "ids",
+      "type": "list[int]",
+      "default": "",
+      "description": "Ids list of bodies affected by this PartialEngine.",
+      "inherited_from": "PartialEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

@@ -5,10 +5,57 @@
   "description": "Render L3Geom geometry.\n\n.. ystaticattr:: Gl1_L3Geom.axesLabels(=false)\n\n\tWhether to display labels for local axes (x,y,z)\n\n.. ystaticattr:: Gl1_L3Geom.axesScale(=1.)\n\n\tScale local axes, their reference length being half of the minimum radius.\n\n.. ystaticattr:: Gl1_L3Geom.axesWd(=1.)\n\n\tWidth of axes lines, in pixels; not drawn if non-positive\n\n.. ystaticattr:: Gl1_L3Geom.uPhiWd(=2.)\n\n\tWidth of lines for drawing displacements (and rotations for L6Geom); not drawn if non-positive.\n\n.. ystaticattr:: Gl1_L3Geom.uScale(=1.)\n\n\tScale local displacements (u<L3Geom.u> - u0<L3Geom.u0>); 1 means the true scale, 0 disables drawing local displacements; negative values are permissible.",
   "attributes": [
     {
+      "name": "axesLabels",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "axesScale",
+      "type": "float",
+      "default": "1.0",
+      "description": ""
+    },
+    {
+      "name": "axesWd",
+      "type": "float",
+      "default": "1.0",
+      "description": ""
+    },
+    {
+      "name": "uPhiWd",
+      "type": "float",
+      "default": "2.0",
+      "description": ""
+    },
+    {
+      "name": "uScale",
+      "type": "float",
+      "default": "1.0",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['L3Geom']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

@@ -3,5 +3,29 @@
   "category": "interactions",
   "parent": "LawFunctor",
   "description": "Material law for mortar layer according to [Lourenco1994]_. The contact behaves elastic until brittle failure when reaching strength envelope. The envelope has three parts.\n\nTensile with condition $\\sigma_N-f_t$.\n\nShear part with Mohr-Coulomb condition...",
-  "attributes": []
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['GenericSpheresContact', 'MortarPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ]
 }

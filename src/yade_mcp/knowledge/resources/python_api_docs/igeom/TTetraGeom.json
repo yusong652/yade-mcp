@@ -5,46 +5,54 @@
   "description": "Geometry of interaction between 2 tetrahedra<Tetra>, including volumetric characteristics",
   "attributes": [
     {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(-4516999929266176,1.287677866613876784e-290,-65536.047607421875)",
-      "description": "Contact point (global coords)"
+      "name": "penetrationVolume",
+      "type": "float",
+      "default": "NaN",
+      "description": "Volume of overlap [m\u00b3]"
     },
     {
       "name": "equivalentCrossSection",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Cross-section of the overlap (perpendicular to the axis of least inertia"
-    },
-    {
-      "name": "equivalentPenetrationDepth",
-      "type": "float",
-      "default": "nan",
-      "description": "??"
     },
     {
       "name": "maxPenetrationDepthA",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "??"
     },
     {
       "name": "maxPenetrationDepthB",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "??"
+    },
+    {
+      "name": "equivalentPenetrationDepth",
+      "type": "float",
+      "default": "NaN",
+      "description": "??"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "",
+      "description": "Contact point (global coords)"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(8.557478558370078878e-311,0,6.924272242393752482e-310)",
+      "default": "",
       "description": "Normal of the interaction, directed in the sense of least inertia of the overlap volume"
     },
     {
-      "name": "penetrationVolume",
-      "type": "float",
-      "default": "nan",
-      "description": "Volume of overlap [m\u00b3]"
+      "name": "dispIndex",
+      "type": "int",
+      "default": "12",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ]
 }

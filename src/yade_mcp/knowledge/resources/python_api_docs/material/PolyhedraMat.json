@@ -7,26 +7,32 @@
     {
       "name": "IsSplitable",
       "type": "bool",
-      "default": "False",
+      "default": "0",
       "description": "To be splitted ... or not"
     },
     {
-      "name": "Wei_P",
+      "name": "strength",
       "type": "float",
-      "default": "-1.0",
-      "description": "Weibull Formulation, failure  probability, P, [Gladky2017]_."
+      "default": "100",
+      "description": "Stress at which polyhedra of volume 4/3*pi [mm] breaks."
     },
     {
-      "name": "Wei_S0",
+      "name": "strengthTau",
       "type": "float",
-      "default": "-1.0",
-      "description": "Weibull Formulation, Sigma0, Pa, (if negative - disabled), [Gladky2017]_"
+      "default": "-1",
+      "description": "Tangential stress at which polyhedra of volume 4/3*pi [mm] breaks."
     },
     {
-      "name": "Wei_V0",
+      "name": "sigmaCZ",
       "type": "float",
-      "default": "1e-09",
-      "description": "Weibull Formulation, V0, m^3, representative volume, [Gladky2017]_."
+      "default": "-1",
+      "description": "Mohr-Coulomb failure criterium SigmaCZ, Pa, maximal tensile strength (if negative - disabled), [Gladky2017]_"
+    },
+    {
+      "name": "sigmaCD",
+      "type": "float",
+      "default": "-1",
+      "description": "Mohr-Coulomb failure criterium SigmaCD, Pa,  maximal compressive strength (if negative - disabled), [Gladky2017]_"
     },
     {
       "name": "Wei_m",
@@ -35,52 +41,72 @@
       "description": "Weibull Formulation, Weibull modulus, m, (if negative - disabled), [Gladky2017]_"
     },
     {
-      "name": "density",
+      "name": "Wei_S0",
       "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
+      "default": "-1",
+      "description": "Weibull Formulation, Sigma0, Pa, (if negative - disabled), [Gladky2017]_"
     },
     {
-      "name": "frictionAngle",
+      "name": "Wei_V0",
       "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
+      "default": "1e-9",
+      "description": "Weibull Formulation, V0, m^3, representative volume, [Gladky2017]_."
     },
     {
-      "name": "poisson",
+      "name": "Wei_P",
       "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "sigmaCD",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Mohr-Coulomb failure criterium SigmaCD, Pa,  maximal compressive strength (if negative - disabled), [Gladky2017]_"
-    },
-    {
-      "name": "sigmaCZ",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Mohr-Coulomb failure criterium SigmaCZ, Pa, maximal tensile strength (if negative - disabled), [Gladky2017]_"
-    },
-    {
-      "name": "strength",
-      "type": "float",
-      "default": "100.0",
-      "description": "Stress at which polyhedra of volume 4/3*pi [mm] breaks."
-    },
-    {
-      "name": "strengthTau",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Tangential stress at which polyhedra of volume 4/3*pi [mm] breaks."
+      "default": "-1",
+      "description": "Weibull Formulation, failure  probability, P, [Gladky2017]_."
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
+      "default": "1e8",
       "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "18",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

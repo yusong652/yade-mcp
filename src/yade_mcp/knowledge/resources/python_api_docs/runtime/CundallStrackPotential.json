@@ -6,7 +6,7 @@
   "attributes": [
     {
       "name": "alpha",
-      "type": "Real",
+      "type": "float",
       "default": "1",
       "description": "Bulk-to-roughness stiffness ratio"
     }

@@ -5,28 +5,37 @@
   "description": "Class uniting ScGeom and L3Geom, for the purposes of GlobalStiffnessTimeStepper. (It might be removed in the future). Do not use this class directly.",
   "attributes": [
     {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(0,1,1000)",
-      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
-    },
-    {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(2.121995790471206669e-314,2.270983808179756584e-316,0)",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
+      "default": "",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "read_only": true
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Reference radius of particle #1. |ycomp|"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Reference radius of particle #2. |ycomp|"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "0",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ]
 }

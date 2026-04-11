@@ -7,40 +7,116 @@
     {
       "name": "E",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "normal modulus (stiffness / crossSection) [Pa]"
-    },
-    {
-      "name": "Fn",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "Fs",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
     },
     {
       "name": "G",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "shear modulus [Pa]"
+    },
+    {
+      "name": "tanFrictionAngle",
+      "type": "float",
+      "default": "NaN",
+      "description": "tangens of internal friction angle [-]"
+    },
+    {
+      "name": "undamagedCohesion",
+      "type": "float",
+      "default": "NaN",
+      "description": "virgin material cohesion [Pa]"
     },
     {
       "name": "crossSection",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "equivalent cross-section associated with this contact [m\u00b2]"
     },
     {
-      "name": "cummBetaCount",
-      "type": "int",
-      "default": "0"
+      "name": "refLength",
+      "type": "float",
+      "default": "NaN",
+      "description": "initial length of interaction [m]"
     },
     {
-      "name": "cummBetaIter",
-      "type": "int",
-      "default": "0"
+      "name": "refPD",
+      "type": "float",
+      "default": "NaN",
+      "description": "initial penetration depth of interaction [m] (used with ScGeom)"
+    },
+    {
+      "name": "epsCrackOnset",
+      "type": "float",
+      "default": "NaN",
+      "description": "strain at which the material starts to behave non-linearly"
+    },
+    {
+      "name": "relDuctility",
+      "type": "float",
+      "default": "NaN",
+      "description": "Relative ductility of bonds in normal direction"
+    },
+    {
+      "name": "epsFracture",
+      "type": "float",
+      "default": "NaN",
+      "description": "strain at which the bond is fully broken [-]"
+    },
+    {
+      "name": "equivStrainShearContrib",
+      "type": "float",
+      "default": "NaN",
+      "description": "Coefficient of shear contribution to equivalent strain"
+    },
+    {
+      "name": "dmgTau",
+      "type": "float",
+      "default": "-1",
+      "description": "characteristic time for damage (if non-positive, the law without rate-dependence is used)"
+    },
+    {
+      "name": "dmgRateExp",
+      "type": "float",
+      "default": "0",
+      "description": "exponent in the rate-dependent damage evolution"
+    },
+    {
+      "name": "dmgStrain",
+      "type": "float",
+      "default": "0",
+      "description": "damage strain (at previous or current step)"
+    },
+    {
+      "name": "dmgOverstress",
+      "type": "float",
+      "default": "0",
+      "description": "damage viscous overstress (at previous step or at current step)"
+    },
+    {
+      "name": "plTau",
+      "type": "float",
+      "default": "-1",
+      "description": "characteristic time for viscoplasticity (if non-positive, no rate-dependence for shear)"
+    },
+    {
+      "name": "plRateExp",
+      "type": "float",
+      "default": "0",
+      "description": "exponent in the rate-dependent viscoplasticity"
+    },
+    {
+      "name": "isoPrestress",
+      "type": "float",
+      "default": "0",
+      "description": "\"prestress\" of this link (used to simulate isotropic stress)"
+    },
+    {
+      "name": "neverDamage",
+      "type": "bool",
+      "default": "false",
+      "description": "the damage evolution function will always return virgin state"
     },
     {
       "name": "damLaw",
@@ -49,175 +125,148 @@
       "description": "Law for softening part of uniaxial tension. 0 for linear, 1 for exponential (default)"
     },
     {
-      "name": "dmgOverstress",
-      "type": "float",
-      "default": "0.0",
-      "description": "damage viscous overstress (at previous step or at current step)"
-    },
-    {
-      "name": "dmgRateExp",
-      "type": "float",
-      "default": "0.0",
-      "description": "exponent in the rate-dependent damage evolution"
-    },
-    {
-      "name": "dmgStrain",
-      "type": "float",
-      "default": "0.0",
-      "description": "damage strain (at previous or current step)"
-    },
-    {
-      "name": "dmgTau",
-      "type": "float",
-      "default": "-1.0",
-      "description": "characteristic time for damage (if non-positive, the law without rate-dependence is used)"
-    },
-    {
-      "name": "epsCrackOnset",
-      "type": "float",
-      "default": "nan",
-      "description": "strain at which the material starts to behave non-linearly"
-    },
-    {
-      "name": "epsFracture",
-      "type": "float",
-      "default": "nan",
-      "description": "strain at which the bond is fully broken [-]"
-    },
-    {
-      "name": "epsN",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "epsNPl",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "epsT",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "epsTPl",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "equivStrainShearContrib",
-      "type": "float",
-      "default": "nan",
-      "description": "Coefficient of shear contribution to equivalent strain"
-    },
-    {
       "name": "isCohesive",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "if not cohesive, interaction is deleted when distance is greater than zero."
-    },
-    {
-      "name": "isoPrestress",
-      "type": "float",
-      "default": "0.0",
-      "description": "\"prestress\" of this link (used to simulate isotropic stress)"
-    },
-    {
-      "name": "kappaD",
-      "type": "float",
-      "default": "0.0"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "neverDamage",
-      "type": "bool",
-      "default": "False",
-      "description": "the damage evolution function will always return virgin state"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
     },
     {
       "name": "omega",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Damage internal variable (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "plRateExp",
+      "name": "Fn",
       "type": "float",
       "default": "0.0",
-      "description": "exponent in the rate-dependent viscoplasticity"
+      "description": "Magnitude of normal force (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "plTau",
-      "type": "float",
-      "default": "-1.0",
-      "description": "characteristic time for viscoplasticity (if non-positive, no rate-dependence for shear)"
-    },
-    {
-      "name": "refLength",
-      "type": "float",
-      "default": "nan",
-      "description": "initial length of interaction [m]"
-    },
-    {
-      "name": "refPD",
-      "type": "float",
-      "default": "nan",
-      "description": "initial penetration depth of interaction [m] (used with ScGeom)"
-    },
-    {
-      "name": "relDuctility",
-      "type": "float",
-      "default": "nan",
-      "description": "Relative ductility of bonds in normal direction"
-    },
-    {
-      "name": "relResidualStrength",
-      "type": "float",
-      "default": "6.94451619504194e-310"
-    },
-    {
-      "name": "shearForce",
+      "name": "Fs",
       "type": "Vector3",
       "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "description": "Magnitude of shear force (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "epsN",
+      "type": "float",
+      "default": "0.0",
+      "description": "Current normal strain (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "epsT",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "Current shear strain (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "sigmaN",
       "type": "float",
-      "default": "6.9445161950388e-310"
+      "default": "1e-323",
+      "description": "Current normal stress (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "sigmaT",
       "type": "Vector3",
-      "default": "Vector3(6.944536850125823878e-310,6.944516195045103742e-310,6.944518512660408586"
+      "default": "Vector3(0,0,0)",
+      "description": "Current shear stress (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "tanFrictionAngle",
+      "name": "kappaD",
       "type": "float",
-      "default": "nan",
-      "description": "tangens of internal friction angle [-]"
+      "default": "0.0",
+      "description": "Up to now maximum normal strain (semi-norm), non-decreasing in time (auto-updated)",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "undamagedCohesion",
+      "name": "epsNPl",
       "type": "float",
-      "default": "nan",
-      "description": "virgin material cohesion [Pa]"
+      "default": "0.0",
+      "description": "normal plastic strain (initially zero) (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "epsTPl",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "shear plastic strain (initially zero) (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "relResidualStrength",
+      "type": "float",
+      "default": "0.0",
+      "description": "Relative residual strength (auto-updated)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "cummBetaIter",
+      "type": "int",
+      "default": "0",
+      "description": "",
+      "no_save": true
+    },
+    {
+      "name": "cummBetaCount",
+      "type": "int",
+      "default": "0",
+      "description": "",
+      "no_save": true
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "7",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ],
   "methods": [

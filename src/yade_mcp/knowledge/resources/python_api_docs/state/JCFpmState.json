@@ -5,81 +5,28 @@
   "description": "JCFpm state information about each body.",
   "attributes": [
     {
-      "name": "Cp",
-      "type": "float",
-      "default": "0.0",
-      "description": "Heat capacity of the body"
-    },
-    {
-      "name": "Tcondition",
-      "type": "bool",
-      "default": "False",
-      "description": "indicates if particle is assigned dirichlet (constant temp) condition"
-    },
-    {
-      "name": "alpha",
-      "type": "float",
-      "default": "0.0",
-      "description": "coefficient of thermal expansion"
-    },
-    {
-      "name": "angMom",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular momentum"
-    },
-    {
-      "name": "angVel",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Current angular velocity"
-    },
-    {
-      "name": "blockedDOFs",
-      "type": "str",
-      "default": "''"
-    },
-    {
-      "name": "boundaryId",
+      "name": "nbInitBonds",
       "type": "int",
-      "default": "-1",
-      "description": "identifies if a particle is associated with constant temperature thrermal boundary condition"
+      "default": "0",
+      "description": "Number of initial bonds. [-]"
+    },
+    {
+      "name": "nbBrokenBonds",
+      "type": "int",
+      "default": "0",
+      "description": "Number of broken bonds. [-]"
     },
     {
       "name": "damageIndex",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Ratio of broken bonds over initial bonds. [-]"
     },
     {
-      "name": "delRadius",
-      "type": "float",
-      "default": "0.0",
-      "description": "radius change due to thermal expansion"
-    },
-    {
-      "name": "densityScaling",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per"
-    },
-    {
-      "name": "inertia",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Inertia of associated body, in local coordinate system."
-    },
-    {
-      "name": "isCavity",
+      "name": "onJoint",
       "type": "bool",
-      "default": "False",
-      "description": "flag used for unbounding cavity bodies"
-    },
-    {
-      "name": "isDamped",
-      "type": "bool",
-      "default": "True",
-      "description": "Damping in"
+      "default": "false",
+      "description": "Identifies if the particle is on a joint surface."
     },
     {
       "name": "joint",
@@ -90,114 +37,122 @@
     {
       "name": "jointNormal1",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Specifies the normal direction to the joint plane 1. Rk: the ideal here would be to create a vector of vector wich size is defined by the joint integer (as much joint normals as joints). However, it needs to make the pushback function works with python since joint detection is done through a python script. lines 272 to 312 of cpp file should therefore be adapted. [-]"
     },
     {
       "name": "jointNormal2",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Specifies the normal direction to the joint plane 2. [-]"
     },
     {
       "name": "jointNormal3",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Specifies the normal direction to the joint plane 3. [-]"
     },
     {
-      "name": "k",
-      "type": "float",
-      "default": "0.0",
-      "description": "thermal conductivity of the body"
-    },
-    {
-      "name": "mass",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mass of this body"
-    },
-    {
-      "name": "nbBrokenBonds",
-      "type": "int",
-      "default": "0",
-      "description": "Number of broken bonds. [-]"
-    },
-    {
-      "name": "nbInitBonds",
-      "type": "int",
-      "default": "0",
-      "description": "Number of initial bonds. [-]"
-    },
-    {
-      "name": "oldTemp",
-      "type": "float",
-      "default": "0.0",
-      "description": "change of temp (for thermal expansion)"
-    },
-    {
-      "name": "onJoint",
-      "type": "bool",
-      "default": "False",
-      "description": "Identifies if the particle is on a joint surface."
-    },
-    {
-      "name": "ori",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)"
-    },
-    {
-      "name": "pos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "refOri",
-      "type": "Quaternion",
-      "default": "Quaternion((1,0,0),0)",
-      "description": "Reference orientation"
-    },
-    {
-      "name": "refPos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Reference position"
-    },
-    {
       "name": "se3",
-      "type": "tuple",
-      "default": "(Vector3(0,0,0), Quaternion((1,0,0),0))",
-      "description": "Position and"
-    },
-    {
-      "name": "stabilityCoefficient",
-      "type": "float",
-      "default": "0.0",
-      "description": "sum of solid and fluid thermal resistivities for use in automatic timestep estimation"
-    },
-    {
-      "name": "stepFlux",
-      "type": "float",
-      "default": "0.0",
-      "description": "flux during current step"
-    },
-    {
-      "name": "temp",
-      "type": "float",
-      "default": "0.0",
-      "description": "temperature of the body"
-    },
-    {
-      "name": "thermalMass",
-      "type": "float",
-      "default": "0.0",
-      "description": "mass of the body used for thermal calculations"
+      "type": "Se3r",
+      "default": "Se3r((0, 0, 0),Quaternion.Identity)",
+      "description": "Position and orientation as one object.",
+      "inherited_from": "State"
     },
     {
       "name": "vel",
       "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current linear velocity.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "mass",
+      "type": "float",
+      "default": "0",
+      "description": "Mass of this body",
+      "inherited_from": "State"
+    },
+    {
+      "name": "angVel",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular velocity",
+      "inherited_from": "State"
+    },
+    {
+      "name": "angMom",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Current angular momentum",
+      "inherited_from": "State"
+    },
+    {
+      "name": "inertia",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Inertia of associated body, in local coordinate system.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "refPos",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Reference position",
+      "inherited_from": "State"
+    },
+    {
+      "name": "refOri",
+      "type": "Quaternion",
+      "default": "Quaternion.Identity",
+      "description": "Reference orientation",
+      "inherited_from": "State"
+    },
+    {
+      "name": "blockedDOFs",
+      "type": "int",
+      "default": "0",
+      "description": "Degress of freedom where linear/angular velocity will be always constant (equal to zero, or to an user-defined value), regardless of applied force/torque. String that may contain 'xyzXYZ' (translations and rotations).",
+      "inherited_from": "State"
+    },
+    {
+      "name": "isDamped",
+      "type": "bool",
+      "default": "true",
+      "description": "Damping in NewtonIntegrator can be deactivated for individual particles by setting this variable to FALSE. E.g. damping is inappropriate for particles in free flight under gravity but it might still be applicable to other particles in the same simulation.",
+      "inherited_from": "State"
+    },
+    {
+      "name": "densityScaling",
+      "type": "float",
+      "default": "-1",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per",
+      "read_only": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "2",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "pos",
+      "type": "Vector3",
       "default": "Vector3(0,0,0)",
-      "description": "Current linear velocity."
+      "description": "Current position.",
+      "no_save": true,
+      "inherited_from": "State"
+    },
+    {
+      "name": "ori",
+      "type": "Quaternion",
+      "default": "Quaternion((1,0,0),0)",
+      "description": "Current orientation.",
+      "no_save": true,
+      "inherited_from": "State"
     }
   ],
   "methods": [

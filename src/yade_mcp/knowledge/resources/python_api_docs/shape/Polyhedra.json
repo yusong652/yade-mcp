@@ -5,40 +5,51 @@
   "description": "Polyhedral (convex) geometry.",
   "attributes": [
     {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
+      "name": "v",
+      "type": "list[Vector3]",
+      "default": "",
+      "description": "Polyhedron vertices in local coordinate system."
     },
     {
       "name": "seed",
       "type": "int",
-      "default": "1774880220",
+      "default": "time(__null)",
       "description": "Seed for random generator."
     },
     {
       "name": "size",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)",
+      "default": "Vector3r(1.,1.,1.)",
       "description": "Size of the grain in meters - x,y,z - before random rotation"
     },
     {
-      "name": "v",
-      "type": "list",
-      "default": "[]",
-      "description": "Polyhedron vertices in local coordinate system."
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "15",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ],
   "methods": [

@@ -5,40 +5,73 @@
   "description": "Handle the triangulation of spheres in a scene, build tesselation on request, and give access to computed quantities (see also the dedicated section in user manual <MicroStressAndMicroStrain>). The calculation of microstrain is explained in [Catalano2014a]_ \n\nSee example usage in script...",
   "attributes": [
     {
-      "name": "alphaCapsVol",
-      "type": "float",
-      "default": "0.0",
-      "description": "The volume of the packing as defined by the boundary alpha cap polygons"
-    },
-    {
-      "name": "far",
-      "type": "float",
-      "default": "10000.0",
-      "description": "Defines the radius of the large virtual spheres used to define nearly flat boundaries around the assembly. The radius will be the (scene's) bounding box size multiplied by 'far'. Higher values will minimize the error theoretically (since the infinite sphere really defines a plane), but it may increase numerical errors at some point. The default should give a resonable compromize."
-    },
-    {
-      "name": "grad_u",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "The Displacement Gradient Tensor"
-    },
-    {
-      "name": "groupMask",
-      "type": "int",
-      "default": "0",
-      "description": "Bitmask for filtering spheres, ignored if 0."
-    },
-    {
-      "name": "mma",
-      "type": "auto",
-      "default": "",
-      "description": "underlying object processing the data - see specific settings in"
-    },
-    {
       "name": "n_spheres",
       "type": "int",
       "default": "0",
       "description": "|ycomp|"
+    },
+    {
+      "name": "far",
+      "type": "float",
+      "default": "10000.",
+      "description": "Defines the radius of the large virtual spheres used to define nearly flat boundaries around the assembly. The radius will be the (scene's) bounding box size multiplied by 'far'. Higher values will minimize the error theoretically (since the infinite sphere really defines a plane), but it may increase numerical errors at some point. The default should give a resonable compromize."
+    },
+    {
+      "name": "alphaCapsVol",
+      "type": "float",
+      "default": "0.",
+      "description": "The volume of the packing as defined by the boundary alpha cap polygons"
+    },
+    {
+      "name": "grad_u",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "The Displacement Gradient Tensor"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [

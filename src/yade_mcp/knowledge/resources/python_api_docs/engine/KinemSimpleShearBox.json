@@ -5,70 +5,52 @@
   "description": "This class is supposed to be a mother class for all Engines performing loadings on the simple shear box of SimpleShear. It is not intended to be used by itself, but its declaration and implentation will thus contain all what is useful for all these Engines. The script...",
   "attributes": [
     {
-      "name": "Key",
-      "type": "str",
-      "default": "''",
-      "description": "string to add at the names of the saved files"
-    },
-    {
-      "name": "LOG",
-      "type": "bool",
-      "default": "False",
-      "description": "boolean controling the output of messages on the screen"
-    },
-    {
       "name": "alpha",
       "type": "float",
-      "default": "1.5707963267948966",
+      "default": "Mathr::PI/2.0",
       "description": "the angle from the lower box to the left box (trigo wise). Measured by this Engine. Has to be saved, but not to be changed by the user."
     },
     {
-      "name": "f0",
-      "type": "float",
-      "default": "0.0",
-      "description": "the (vertical) force acting on the upper plate on the very first time step (determined by the Engine). Controls of the loadings in case of"
+      "name": "temoin_save",
+      "type": "list[float]",
+      "default": "",
+      "description": "vector (same length as 'gamma_save' for ex), with 0 or 1 depending whether the save for the corresponding value of gamma has been done (1) or not (0)."
     },
     {
-      "name": "firstRun",
-      "type": "bool",
-      "default": "True",
-      "description": "boolean set to false as soon as the engine has done its job one time : useful to know if initial height of, and normal force sustained by, the upper box are known or not (and thus if they have to be initialized)."
-    },
-    {
-      "name": "id_boxback",
-      "type": "int",
-      "default": "4",
-      "description": "the id of the wall at the back of the sample"
+      "name": "id_topbox",
+      "type": "Body::id_t",
+      "default": "3",
+      "description": "the id of the upper wall"
     },
     {
       "name": "id_boxbas",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "1",
       "description": "the id of the lower wall"
     },
     {
-      "name": "id_boxfront",
-      "type": "int",
-      "default": "5",
-      "description": "the id of the wall in front of the sample"
-    },
-    {
       "name": "id_boxleft",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "0",
       "description": "the id of the left wall"
     },
     {
       "name": "id_boxright",
-      "type": "int",
+      "type": "Body::id_t",
       "default": "2",
       "description": "the id of the right wall"
     },
     {
-      "name": "id_topbox",
-      "type": "int",
-      "default": "3",
-      "description": "the id of the upper wall"
+      "name": "id_boxfront",
+      "type": "Body::id_t",
+      "default": "5",
+      "description": "the id of the wall in front of the sample"
+    },
+    {
+      "name": "id_boxback",
+      "type": "Body::id_t",
+      "default": "4",
+      "description": "the id of the wall at the back of the sample"
     },
     {
       "name": "max_vel",
@@ -77,22 +59,85 @@
       "description": "to limit the speed of the vertical displacements done to control $\\sigma$ (CNL or CNS cases) [$m/s$]"
     },
     {
-      "name": "temoin_save",
-      "type": "list",
-      "default": "[]",
-      "description": "vector (same length as 'gamma_save' for ex), with 0 or 1 depending whether the save for the corresponding value of gamma has been done (1) or not (0)."
-    },
-    {
       "name": "wallDamping",
       "type": "float",
       "default": "0.2",
       "description": "the vertical displacements done to to control $\\sigma$ (CNL or CNS cases) are in fact damped, through this wallDamping"
     },
     {
+      "name": "firstRun",
+      "type": "bool",
+      "default": "true",
+      "description": "boolean set to false as soon as the engine has done its job one time : useful to know if initial height of, and normal force sustained by, the upper box are known or not (and thus if they have to be initialized)."
+    },
+    {
+      "name": "f0",
+      "type": "float",
+      "default": "0.0",
+      "description": "the (vertical) force acting on the upper plate on the very first time step (determined by the Engine). Controls of the loadings in case of"
+    },
+    {
       "name": "y0",
       "type": "float",
       "default": "0.0",
       "description": "the height of the upper plate at the very first time step : the engine finds its value [$m$]. Has to be saved, but not to be changed by the user."
+    },
+    {
+      "name": "LOG",
+      "type": "bool",
+      "default": "false",
+      "description": "boolean controling the output of messages on the screen"
+    },
+    {
+      "name": "Key",
+      "type": "str",
+      "default": "\"\"",
+      "description": "string to add at the names of the saved files"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

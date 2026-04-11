@@ -5,16 +5,40 @@
   "description": "material for bubble interactions, for use with other Bubble classes",
   "attributes": [
     {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
-    },
-    {
       "name": "surfaceTension",
       "type": "float",
       "default": "0.07197",
       "description": "The surface tension in the fluid surrounding the bubbles. The default value is that of water at 25 degrees Celcius."
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "0",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

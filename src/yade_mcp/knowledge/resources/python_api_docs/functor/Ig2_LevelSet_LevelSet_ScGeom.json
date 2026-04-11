@@ -3,7 +3,31 @@
   "category": "engines",
   "parent": "IGeomFunctor",
   "description": "Creates or updates a ScGeom instance representing the contact of two convex LevelSet-shaped bodies after executing a master-slave algorithm that combines distance function $\\phi$ (LevelSet.distField) with surface nodes $\\vec{N}$ (LevelSet.surfNodes) [Duriez2021a]_ [Duriez2021b]_. Denoting $S$,...",
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['LevelSet', 'LevelSet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ],
   "methods": [
     {
       "name": "normalMismatch",

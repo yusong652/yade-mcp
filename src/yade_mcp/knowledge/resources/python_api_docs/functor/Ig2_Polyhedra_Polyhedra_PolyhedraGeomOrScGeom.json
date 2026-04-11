@@ -7,20 +7,43 @@
     {
       "name": "createScGeom",
       "type": "bool",
-      "default": "True",
-      "description": "When true (resp. false), new contacts'"
+      "default": "true",
+      "description": "When true (resp. false), new contacts' IGeom are created as ScGeom (resp. PolyhedraGeom). Existing contacts are dealt with according to their present IGeom instance."
     },
     {
       "name": "ig2polyhedraGeom",
       "type": "Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
-      "default": "<Ig2_Polyhedra_Polyhedra_PolyhedraGeom instance at 0x1f18cb0>",
+      "default": "new Ig2_Polyhedra_Polyhedra_PolyhedraGeom",
       "description": "Helper Ig2 functor responsible for handling"
     },
     {
       "name": "ig2scGeom",
       "type": "Ig2_Polyhedra_Polyhedra_ScGeom",
-      "default": "<Ig2_Polyhedra_Polyhedra_ScGeom instance at 0x1f283b0>",
+      "default": "new Ig2_Polyhedra_Polyhedra_ScGeom",
       "description": "Helper Ig2 functor responsible for handling"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Polyhedra', 'Polyhedra']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

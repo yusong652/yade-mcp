@@ -5,118 +5,16 @@
   "description": "EXPERIMENTAL. IPhys for PotentialParticle.",
   "attributes": [
     {
-      "name": "brittleLength",
-      "type": "float",
-      "default": "5.0",
-      "description": "Shear length where strength degrades, not fully in use"
-    },
-    {
-      "name": "cohesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "Cohesion"
-    },
-    {
-      "name": "cohesionBroken",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether cohesion is already broken. Considered true for particles with isBoundary=True"
-    },
-    {
-      "name": "contactArea",
-      "type": "float",
-      "default": "0.0",
-      "description": "Contact area |yupdate|"
-    },
-    {
-      "name": "cumulative_us",
-      "type": "float",
-      "default": "0.0",
-      "description": "Cumulative shear translation (not fully in use)"
-    },
-    {
-      "name": "effective_phi",
-      "type": "float",
-      "default": "0.0",
-      "description": "Friction angle in clay after displacement"
-    },
-    {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
       "name": "frictionAngle",
       "type": "float",
       "default": "0.0",
       "description": "Friction angle"
     },
     {
-      "name": "initialShearDir",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Initial shear direction"
-    },
-    {
-      "name": "intactRock",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether to consider cohesive force in the Mohr-Coulomb criterion, if allowBreakage=False and cohesionBroken=False."
-    },
-    {
-      "name": "isSliding",
-      "type": "bool",
-      "default": "False",
-      "description": "Check if the contact is sliding (useful to calculate the ratio of sliding contacts)"
-    },
-    {
-      "name": "jointLength",
-      "type": "float",
-      "default": "1.0",
-      "description": "Approximated contact length"
-    },
-    {
-      "name": "jointType",
-      "type": "int",
-      "default": "0",
-      "description": "jointType"
-    },
-    {
-      "name": "kn",
+      "name": "viscousDamping",
       "type": "float",
       "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "knVol",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volumetric normal stiffness = Knormal"
-    },
-    {
-      "name": "kn_i",
-      "type": "float",
-      "default": "5.0",
-      "description": "Currently, we assume kn_i and Knormal are adopting the same value in Ip2 initialisation"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "ksVol",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volumetric shear stiffness = Kshear"
-    },
-    {
-      "name": "ks_i",
-      "type": "float",
-      "default": "5.0",
-      "description": "Currently, we assume ks_i and Kshear are adopting the same value in Ip2 initialisation"
+      "description": "Viscous damping ratio, taken equal to"
     },
     {
       "name": "maxClosure",
@@ -125,22 +23,161 @@
       "description": "not fully in use, vmi"
     },
     {
-      "name": "mobilizedShear",
+      "name": "u_elastic",
       "type": "float",
       "default": "0.0",
-      "description": "Percentage of mobilized shear force as the ratio of the current shear force to the current frictional limit. Represents a quantified measure of the isSliding parameter"
+      "description": "Elastic shear displacement, not fully in use"
     },
     {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "name": "brittleLength",
+      "type": "float",
+      "default": "5.0",
+      "description": "Shear length where strength degrades, not fully in use"
+    },
+    {
+      "name": "knVol",
+      "type": "float",
+      "default": "0.0",
+      "description": "Volumetric normal stiffness = Knormal"
+    },
+    {
+      "name": "ksVol",
+      "type": "float",
+      "default": "0.0",
+      "description": "Volumetric shear stiffness = Kshear"
+    },
+    {
+      "name": "kn_i",
+      "type": "float",
+      "default": "5.0",
+      "description": "Currently, we assume kn_i and Knormal are adopting the same value in Ip2 initialisation"
+    },
+    {
+      "name": "ks_i",
+      "type": "float",
+      "default": "5.0",
+      "description": "Currently, we assume ks_i and Kshear are adopting the same value in Ip2 initialisation"
     },
     {
       "name": "normalViscous",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Viscous normal force"
+    },
+    {
+      "name": "shearViscous",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Viscous shear force (assumed zero at the moment)"
+    },
+    {
+      "name": "intactRock",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to consider cohesive force in the Mohr-Coulomb criterion, if allowBreakage=False and cohesionBroken=False."
+    },
+    {
+      "name": "jointType",
+      "type": "int",
+      "default": "0",
+      "description": "jointType"
+    },
+    {
+      "name": "shearDir",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear direction"
+    },
+    {
+      "name": "prevNormal",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Previous normal"
+    },
+    {
+      "name": "warmstart",
+      "type": "bool",
+      "default": "false",
+      "description": "Warmstart for SOCP, not fully in use"
+    },
+    {
+      "name": "ptOnP1",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Point on particle 1"
+    },
+    {
+      "name": "ptOnP2",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Point on particle 2"
+    },
+    {
+      "name": "cumulative_us",
+      "type": "float",
+      "default": "0.0",
+      "description": "Cumulative shear translation (not fully in use)"
+    },
+    {
+      "name": "mobilizedShear",
+      "type": "float",
+      "default": "",
+      "description": "Percentage of mobilized shear force as the ratio of the current shear force to the current frictional limit. Represents a quantified measure of the isSliding parameter"
+    },
+    {
+      "name": "contactArea",
+      "type": "float",
+      "default": "0.0",
+      "description": "Contact area |yupdate|",
+      "read_only": true
+    },
+    {
+      "name": "prevSigma",
+      "type": "float",
+      "default": "0.0",
+      "description": "Previous normal stress"
+    },
+    {
+      "name": "jointLength",
+      "type": "float",
+      "default": "1.0",
+      "description": "Approximated contact length"
+    },
+    {
+      "name": "shearIncrementForCD",
+      "type": "float",
+      "default": "0.0",
+      "description": "toSeeWhether it is necessary to update contactArea"
+    },
+    {
+      "name": "useFaceProperties",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether to get face properties from the intersecting particles"
+    },
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "0.0",
+      "description": "Cohesion"
+    },
+    {
+      "name": "tension",
+      "type": "float",
+      "default": "0.0",
+      "description": "Tension"
+    },
+    {
+      "name": "cohesionBroken",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether cohesion is already broken. Considered true for particles with isBoundary=True"
+    },
+    {
+      "name": "tensionBroken",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether tension is already broken. Considered true for particles with isBoundary=True"
     },
     {
       "name": "phi_b",
@@ -155,100 +192,71 @@
       "description": "Residual friction angle (degrees)"
     },
     {
-      "name": "prevNormal",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Previous normal"
-    },
-    {
-      "name": "prevSigma",
-      "type": "float",
-      "default": "0.0",
-      "description": "Previous normal stress"
-    },
-    {
-      "name": "ptOnP1",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Point on particle 1"
-    },
-    {
-      "name": "ptOnP2",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Point on particle 2"
-    },
-    {
-      "name": "shearDir",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear direction"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "shearIncrementForCD",
-      "type": "float",
-      "default": "0.0",
-      "description": "toSeeWhether it is necessary to update contactArea"
-    },
-    {
-      "name": "shearViscous",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Viscous shear force (assumed zero at the moment)"
-    },
-    {
-      "name": "tangensOfFrictionAngle",
-      "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
-    },
-    {
-      "name": "tension",
-      "type": "float",
-      "default": "0.0",
-      "description": "Tension"
-    },
-    {
-      "name": "tensionBroken",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether tension is already broken. Considered true for particles with isBoundary=True"
-    },
-    {
       "name": "u_cumulative",
       "type": "float",
       "default": "0.0",
       "description": "Cumulative translation"
     },
     {
-      "name": "u_elastic",
+      "name": "initialShearDir",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Initial shear direction"
+    },
+    {
+      "name": "effective_phi",
       "type": "float",
       "default": "0.0",
-      "description": "Elastic shear displacement, not fully in use"
+      "description": "Friction angle in clay after displacement"
     },
     {
-      "name": "useFaceProperties",
+      "name": "isSliding",
       "type": "bool",
-      "default": "False",
-      "description": "Whether to get face properties from the intersecting particles"
+      "default": "false",
+      "description": "Check if the contact is sliding (useful to calculate the ratio of sliding contacts)"
     },
     {
-      "name": "viscousDamping",
+      "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "0.0",
-      "description": "Viscous damping ratio, taken equal to"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
     },
     {
-      "name": "warmstart",
-      "type": "bool",
-      "default": "False",
-      "description": "Warmstart for SOCP, not fully in use"
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "11",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

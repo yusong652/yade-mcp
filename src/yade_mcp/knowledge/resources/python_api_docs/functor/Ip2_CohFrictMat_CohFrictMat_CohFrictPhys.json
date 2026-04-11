@@ -5,46 +5,57 @@
   "description": "Generates cohesive-frictional interactions with moments, used in the contact law Law2_ScGeom6D_CohFrictPhys_CohesionMoment. The normal/shear stiffness and friction definitions are the same as in Ip2_FrictMat_FrictMat_FrictPhys, check the documentation there for details.\n\nAdhesions related to the...",
   "attributes": [
     {
-      "name": "frictAngle",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
-    },
-    {
-      "name": "normalCohesion",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
-    },
-    {
-      "name": "rollingCohesion",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
-    },
-    {
       "name": "setCohesionNow",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "If true, assign cohesion to all existing contacts in current time-step. The flag is turned false automatically, so that assignment is done in the current timestep only."
     },
     {
       "name": "setCohesionOnNewContacts",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "If true, assign cohesion at all new contacts. If false, only existing contacts can be cohesive (also see"
     },
     {
-      "name": "shearCohesion",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Instance of"
+      "name": "normalCohesion",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining tensile strength"
     },
     {
-      "name": "twistingCohesion",
+      "name": "shearCohesion",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining cohesive part of the shear strength (a frictional term might be added depending on cohesionDisablesFriction)"
+    },
+    {
+      "name": "frictAngle",
+      "type": "MatchMaker",
+      "default": "",
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used."
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Instance of"
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['CohFrictMat', 'CohFrictMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [

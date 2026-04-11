@@ -5,220 +5,250 @@
   "description": "Adds capillary physics to Mindlin's interaction physics.",
   "attributes": [
     {
+      "name": "meniscus",
+      "type": "bool",
+      "default": "false",
+      "description": "True when a meniscus with a non-zero liquid volume (",
+      "read_only": true
+    },
+    {
+      "name": "isBroken",
+      "type": "bool",
+      "default": "false",
+      "description": "Might be set to true by the user to make liquid bridge inactive (capillary force is zero)"
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "float",
+      "default": "0.",
+      "description": "Value of the capillary pressure Uc. Defined as Ugas-Uliquid, obtained from"
+    },
+    {
+      "name": "vMeniscus",
+      "type": "float",
+      "default": "0.",
+      "description": "Volume of the meniscus"
+    },
+    {
       "name": "Delta1",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Defines the surface area wetted by the meniscus on the smallest grains of radius R1 (R1<R2)"
     },
     {
       "name": "Delta2",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Defines the surface area wetted by the meniscus on the biggest grains of radius R2 (R1<R2)"
-    },
-    {
-      "name": "Fs",
-      "type": "Vector2",
-      "default": "Vector2(0,0)",
-      "description": "Shear force in local axes (computed incrementally)"
-    },
-    {
-      "name": "adhesionForce",
-      "type": "float",
-      "default": "0.0",
-      "description": "Force of adhesion as predicted by DMT"
-    },
-    {
-      "name": "beta",
-      "type": "float",
-      "default": "0.0",
-      "description": "Auxiliary parameter used in the viscous damping model of [Mueller2011]_"
-    },
-    {
-      "name": "betan",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal Damping Ratio. Fraction of the viscous damping coefficient (normal direction) equal to $\\frac{c_{n}}{C_{n,crit}}$."
-    },
-    {
-      "name": "betas",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear Damping Ratio. Fraction of the viscous damping coefficient (shear direction) equal to $\\frac{c_{s}}{C_{s,crit}}$."
-    },
-    {
-      "name": "capillaryPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Value of the capillary pressure Uc. Defined as Ugas-Uliquid, obtained from"
     },
     {
       "name": "fCap",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Capillary Force produces by the presence of the meniscus. This is the force acting on particle #2"
     },
     {
-      "name": "frictDissip",
-      "type": "float",
-      "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
       "name": "fusionNumber",
-      "type": "int",
-      "default": "0",
+      "type": "short int",
+      "default": "0.",
       "description": "Indicates the number of meniscii that overlap with this one"
-    },
-    {
-      "name": "initD",
-      "type": "float",
-      "default": "0.0",
-      "description": "initial penetration distance, used for crackaperture estimate"
-    },
-    {
-      "name": "isAdhesive",
-      "type": "bool",
-      "default": "False",
-      "description": "bool to identify if the contact is adhesive, that is to say if the contact force is attractive"
-    },
-    {
-      "name": "isBroken",
-      "type": "bool",
-      "default": "False",
-      "description": "Might be set to true by the user to make liquid bridge inactive (capillary force is zero)"
-    },
-    {
-      "name": "isSliding",
-      "type": "bool",
-      "default": "False",
-      "description": "check if the contact is sliding (useful to calculate the ratio of sliding contacts)"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
     },
     {
       "name": "kno",
       "type": "float",
       "default": "0.0",
-      "description": "Constant value in the formulation of the normal stiffness"
-    },
-    {
-      "name": "kr",
-      "type": "float",
-      "default": "0.0",
-      "description": "rotational stiffness [N.m/rad]"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
+      "description": "Constant value in the formulation of the normal stiffness",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "kso",
       "type": "float",
       "default": "0.0",
-      "description": "Constant value in the formulation of the tangential stiffness"
-    },
-    {
-      "name": "ktw",
-      "type": "float",
-      "default": "0.0",
-      "description": "twist stiffness [N.m/rad]"
+      "description": "Constant value in the formulation of the tangential stiffness",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "maxBendPl",
       "type": "float",
       "default": "0.0",
-      "description": "Coefficient to determine the maximum plastic moment to apply at the contact"
-    },
-    {
-      "name": "meniscus",
-      "type": "bool",
-      "default": "False",
-      "description": "True when a meniscus with a non-zero liquid volume ("
-    },
-    {
-      "name": "momentBend",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Artificial bending moment to provide rolling resistance in order to account for some degree of interlocking between particles"
-    },
-    {
-      "name": "momentTwist",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Artificial twisting moment (no plastic condition can be applied at the moment)"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "description": "Coefficient to determine the maximum plastic moment to apply at the contact",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "normalViscous",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal viscous component"
-    },
-    {
-      "name": "prevU",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Previous local displacement; only used with"
-    },
-    {
-      "name": "radius",
-      "type": "float",
-      "default": "nan",
-      "description": "Contact radius (only computed with"
-    },
-    {
-      "name": "shearElastic",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear force"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "(0, 0, 0)",
+      "description": "Normal viscous component",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "shearViscous",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear viscous component"
+      "default": "(0, 0, 0)",
+      "description": "Shear viscous component",
+      "inherited_from": "MindlinPhys"
     },
     {
-      "name": "tangensOfFrictionAngle",
-      "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "name": "shearElastic",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear force",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "usElastic",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear displacement (only elastic part)"
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear displacement (only elastic part)",
+      "inherited_from": "MindlinPhys"
     },
     {
       "name": "usTotal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Total elastic shear displacement (elastic+plastic part)"
+      "default": "(0, 0, 0)",
+      "description": "Total elastic shear displacement (elastic+plastic part)",
+      "inherited_from": "MindlinPhys"
     },
     {
-      "name": "vMeniscus",
+      "name": "momentBend",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Artificial bending moment to provide rolling resistance in order to account for some degree of interlocking between particles",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "momentTwist",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Artificial twisting moment (no plastic condition can be applied at the moment)",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "NaN",
+      "description": "Contact radius (only computed with",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "adhesionForce",
       "type": "float",
       "default": "0.0",
-      "description": "Volume of the meniscus"
+      "description": "Force of adhesion as predicted by DMT",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "isAdhesive",
+      "type": "bool",
+      "default": "false",
+      "description": "bool to identify if the contact is adhesive, that is to say if the contact force is attractive",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "isSliding",
+      "type": "bool",
+      "default": "false",
+      "description": "check if the contact is sliding (useful to calculate the ratio of sliding contacts)",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "betan",
+      "type": "float",
+      "default": "0.0",
+      "description": "Normal Damping Ratio. Fraction of the viscous damping coefficient (normal direction) equal to $\\frac{c_{n}}{C_{n,crit}}$.",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "betas",
+      "type": "float",
+      "default": "0.0",
+      "description": "Shear Damping Ratio. Fraction of the viscous damping coefficient (shear direction) equal to $\\frac{c_{s}}{C_{s,crit}}$.",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "alpha",
+      "type": "float",
+      "default": "0.0",
+      "description": "Constant coefficient to define contact viscous damping for non-linear elastic force-displacement relationship.",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "prevU",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Previous local displacement; only used with",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "Fs",
+      "type": "Vector2",
+      "default": "(0, 0)",
+      "description": "Shear force in local axes (computed incrementally)",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "initD",
+      "type": "float",
+      "default": "0",
+      "description": "initial penetration distance, used for crackaperture estimate",
+      "inherited_from": "MindlinPhys"
+    },
+    {
+      "name": "kr",
+      "type": "float",
+      "default": "0",
+      "description": "rotational stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
+    },
+    {
+      "name": "ktw",
+      "type": "float",
+      "default": "0",
+      "description": "twist stiffness [N.m/rad]",
+      "inherited_from": "RotStiffFrictPhys"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
+      "type": "float",
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "ks",
+      "type": "float",
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "15",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
     }
   ]
 }

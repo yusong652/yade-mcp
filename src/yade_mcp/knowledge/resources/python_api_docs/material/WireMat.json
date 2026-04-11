@@ -5,33 +5,33 @@
   "description": "Material for use with the Wire classes. In conjunction with the corresponding functors it can be used to model steel wire meshes [Thoeni2014]_, geotextiles [Cheng2016]_ and more.",
   "attributes": [
     {
-      "name": "as",
-      "type": "float",
-      "default": "0.0",
-      "description": "Cross-section area of a single wire used to transform stress into force. [m\u00b2]"
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
-    },
-    {
       "name": "diameter",
       "type": "float",
       "default": "0.0027",
       "description": "Diameter of the single wire in [m] (the diameter is used to compute the cross-section area of the wire)."
     },
     {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
+      "name": "type",
+      "type": "int",
+      "default": "0",
+      "description": "Three different types are considered:\n\n== ===============================================================\n0  Corresponds to Bertrand's approach (see [Bertrand2008]_): only one stress-strain curve is used\n1  New approach: two separate stress-strain curves can be used (see [Thoeni2013]_)\n2  New approach with stochastically distorted contact model: two separate stress-strain curves with changed initial stiffness and horizontal shift (shift is random if $\\text{seed}\\geq0$, for more details see [Thoeni2013]_)\n== ===============================================================\n\nBy default the type is 0."
+    },
+    {
+      "name": "strainStressValues",
+      "type": "vector<Vector2r>",
+      "default": "",
+      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for one single wire. Tension only is considered and the point (0,0) is not needed! NOTE: Vector needs to be initialized!"
+    },
+    {
+      "name": "strainStressValuesDT",
+      "type": "vector<Vector2r>",
+      "default": "",
+      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for the double twist. Tension only is considered and the point (0,0) is not needed! If this value is given the calculation will be based on two different stress-strain curves without considering the parameter introduced by [Bertrand2008]_ (see [Thoeni2013]_)."
     },
     {
       "name": "isDoubleTwist",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Type of the mesh. If true two particles of the same material which body ids differ by one will be considered as double-twisted interaction."
     },
     {
@@ -41,28 +41,10 @@
       "description": "Parameter between 0 and 1 to reduce strain at failure of a double-twisted wire (as used by [Bertrand2008]_). [-]"
     },
     {
-      "name": "lambdaF",
-      "type": "float",
-      "default": "1.0",
-      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines where the shifted force-displacement curve intersects with the new initial stiffness: $F^*=\\lambda_F F_{\\text{elastic}}$. [-]"
-    },
-    {
       "name": "lambdak",
       "type": "float",
       "default": "0.73",
       "description": "Parameter between 0 and 1 to compute the elastic stiffness of a double-twisted wire (as used by [Bertrand2008]_): $k^D=2(\\lambda_k k_h + (1-\\lambda_k)k^S)$. [-]"
-    },
-    {
-      "name": "lambdau",
-      "type": "float",
-      "default": "0.2",
-      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines the maximum shift of the force-displacement curve in order to take an additional initial elongation (e.g. wire distortion/imperfections, slipping, system flexibility) into account: $\\Delta l^*=\\lambda_u l_0 \\text{rnd(seed)}$. [-]"
-    },
-    {
-      "name": "poisson",
-      "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
       "name": "seed",
@@ -71,28 +53,74 @@
       "description": "Integer used to initialize the random number generator for the calculation of the distortion. If the integer is equal to 0 a internal seed number based on the time is computed. [-]"
     },
     {
-      "name": "strainStressValues",
-      "type": "list",
-      "default": "[]",
-      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for one single wire. Tension only is considered and the point (0,0) is not needed! NOTE: Vector needs to be initialized!"
+      "name": "lambdau",
+      "type": "float",
+      "default": "0.2",
+      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines the maximum shift of the force-displacement curve in order to take an additional initial elongation (e.g. wire distortion/imperfections, slipping, system flexibility) into account: $\\Delta l^*=\\lambda_u l_0 \\text{rnd(seed)}$. [-]"
     },
     {
-      "name": "strainStressValuesDT",
-      "type": "list",
-      "default": "[]",
-      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for the double twist. Tension only is considered and the point (0,0) is not needed! If this value is given the calculation will be based on two different stress-strain curves without considering the parameter introduced by [Bertrand2008]_ (see [Thoeni2013]_)."
+      "name": "lambdaF",
+      "type": "float",
+      "default": "1.0",
+      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines where the shifted force-displacement curve intersects with the new initial stiffness: $F^*=\\lambda_F F_{\\text{elastic}}$. [-]"
     },
     {
-      "name": "type",
-      "type": "int",
-      "default": "0",
-      "description": "Three different types are considered:\n\n== ===============================================================\n0  Corresponds to Bertrand's approach (see [Bertrand2008]_): only one stress-strain curve is used\n1  New approach: two separate stress-strain curves can be used (see [Thoeni2013]_)\n2  New approach with stochastically distorted contact model: two separate stress-strain curves with changed initial stiffness and horizontal shift (shift is random if $\\text{seed}\\geq0$, for more details see [Thoeni2013]_)\n== ===============================================================\n\nBy default the type is 0."
+      "name": "as",
+      "type": "float",
+      "default": "0.",
+      "description": "Cross-section area of a single wire used to transform stress into force. [m\u00b2]",
+      "read_only": true
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "21",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

@@ -5,50 +5,60 @@
   "description": "Geometry of interaction between 2 Polyhedra, including volumetric characteristics",
   "attributes": [
     {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Contact point (global coords), centroid of the overlapping polyhedron"
+      "name": "penetrationVolume",
+      "type": "float",
+      "default": "NaN",
+      "description": "Volume of overlap [m\u00b3]"
     },
     {
       "name": "equivalentCrossSection",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "Cross-section area of the overlap (perpendicular to the normal) - not used"
     },
     {
       "name": "equivalentPenetrationDepth",
       "type": "float",
-      "default": "nan",
+      "default": "NaN",
       "description": "volume / equivalentCrossSection - not used"
     },
     {
-      "name": "normal",
+      "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal direction of the interaction"
-    },
-    {
-      "name": "orthonormal_axis",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "penetrationVolume",
-      "type": "float",
-      "default": "nan",
-      "description": "Volume of overlap [m\u00b3]"
+      "default": "(0, 0, 0)",
+      "description": "Contact point (global coords), centroid of the overlapping polyhedron"
     },
     {
       "name": "shearInc",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Shear displacement increment in the last step"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal direction of the interaction"
     },
     {
       "name": "twist_axis",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "(0, 0, 0)",
+      "description": ""
+    },
+    {
+      "name": "orthonormal_axis",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": ""
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "10",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ]
 }

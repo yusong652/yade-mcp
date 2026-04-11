@@ -5,32 +5,47 @@
   "description": "Rigid aggregate of bodies whose usage is detailed here<ClumpSection>",
   "attributes": [
     {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
       "name": "ids",
-      "type": "list",
-      "default": "[]"
+      "type": "vector<int>",
+      "default": "",
+      "description": "Ids of constituent particles (only informative; direct modifications will have no effect).",
+      "read_only": true
     },
     {
       "name": "members",
       "type": "dict",
-      "default": "{}"
+      "default": "{}",
+      "description": "Return clump members as {'id1':(relPos,relOri),...}",
+      "no_save": true
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "4",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ]
 }

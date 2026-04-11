@@ -7,32 +7,58 @@
     {
       "name": "alpha",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Mass propotional damping constant of Rayleigh Damping."
     },
     {
       "name": "beta",
       "type": "float",
-      "default": "0.0",
+      "default": "0",
       "description": "Stiffness propotional damping constant of Rayleigh Damping."
-    },
-    {
-      "name": "density",
-      "type": "float",
-      "default": "1.0",
-      "description": "Density of the material."
-    },
-    {
-      "name": "poissonratio",
-      "type": "float",
-      "default": "0.33",
-      "description": "Poisson ratio. Initially aluminium."
     },
     {
       "name": "youngmodulus",
       "type": "float",
-      "default": "78000.0",
-      "description": "Young's modulus. Initially aluminium."
+      "default": ".78e5",
+      "description": "Young's modulus. Initially aluminium.",
+      "inherited_from": "LinIsoElastMat"
+    },
+    {
+      "name": "poissonratio",
+      "type": "float",
+      "default": ".33",
+      "description": "Poisson ratio. Initially aluminium.",
+      "inherited_from": "LinIsoElastMat"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1",
+      "description": "Density of the material.",
+      "inherited_from": "DeformableElementMaterial"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "14",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
     }
   ]
 }

@@ -19,31 +19,19 @@
     {
       "name": "brittleLength",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Shear length for degradation"
-    },
-    {
-      "name": "cohesion",
-      "type": "float",
-      "default": "0.0",
-      "description": "Cohesion"
-    },
-    {
-      "name": "cohesionBroken",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether cohesion is already broken"
     },
     {
       "name": "kn_i",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Currently, we assume kn_i and Knormal are adopting the same value in Ip2 initialisation"
     },
     {
       "name": "ks_i",
       "type": "float",
-      "default": "0.0",
+      "default": "",
       "description": "Currently, we assume ks_i and Kshear are adopting the same value in Ip2 initialisation"
     },
     {
@@ -53,10 +41,16 @@
       "description": "not fully in use"
     },
     {
-      "name": "phi_b",
+      "name": "viscousDamping",
       "type": "float",
       "default": "0.0",
-      "description": "Basic friction angle"
+      "description": "Viscous damping ratio $\\beta_n$, see"
+    },
+    {
+      "name": "cohesion",
+      "type": "float",
+      "default": "0.0",
+      "description": "Cohesion"
     },
     {
       "name": "tension",
@@ -65,22 +59,51 @@
       "description": "Tension"
     },
     {
+      "name": "cohesionBroken",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether cohesion is already broken"
+    },
+    {
       "name": "tensionBroken",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "Whether tension is already broken"
+    },
+    {
+      "name": "phi_b",
+      "type": "float",
+      "default": "0.0",
+      "description": "Basic friction angle"
     },
     {
       "name": "useFaceProperties",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Whether to get face properties from the intersecting particles"
     },
     {
-      "name": "viscousDamping",
-      "type": "float",
-      "default": "0.0",
-      "description": "Viscous damping ratio $\\beta_n$, see"
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['FrictMat', 'FrictMat']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

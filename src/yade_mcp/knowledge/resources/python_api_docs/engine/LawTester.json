@@ -6,88 +6,60 @@
   "attributes": [
     {
       "name": "disPath",
-      "type": "list",
-      "default": "[]",
+      "type": "vector<Vector3r>",
+      "default": "",
       "description": "Loading path, where each Vector3 contains desired normal displacement and two components of the shear displacement (in local coordinate system, which is being tracked automatically. If shorter than"
+    },
+    {
+      "name": "rotPath",
+      "type": "vector<Vector3r>",
+      "default": "",
+      "description": "Rotational components of the loading path, where each item contains torsion and two bending rotations in local coordinates. If shorter than"
+    },
+    {
+      "name": "hooks",
+      "type": "vector<string>",
+      "default": "",
+      "description": "Python commands to be run when the corresponding point in path is reached, before doing other things in that particular step. See also"
+    },
+    {
+      "name": "uGeom",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current generalized displacements (3 displacements, 3 rotations), as stored in the interation itself. They should corredpond to"
+    },
+    {
+      "name": "uTest",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Current generalized displacements (3 displacements, 3 rotations), as they should be according to this"
     },
     {
       "name": "displIsRel",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "Whether displacement values in *disPath* are normalized by reference contact length (r1+r2 for 2 spheres)."
     },
     {
-      "name": "doneHook",
-      "type": "str",
-      "default": "''",
-      "description": "Python command (as string) to run when end of the path is achieved. If empty, the engine will be set"
-    },
-    {
-      "name": "hooks",
-      "type": "list",
-      "default": "[]",
-      "description": "Python commands to be run when the corresponding point in path is reached, before doing other things in that particular step. See also"
-    },
-    {
-      "name": "idWeight",
-      "type": "float",
-      "default": "1.0",
-      "description": "Float, usually \u2208\u23290,1\u232a, determining on how are displacements distributed between particles (0 for id1, 1 for id2); intermediate values will apply respective part to each of them. This parameter is ignored with 6-DoFs"
-    },
-    {
-      "name": "ids",
-      "type": "list",
-      "default": "[]"
-    },
-    {
       "name": "pathSteps",
-      "type": "list",
-      "default": "[1]",
-      "description": "Step number for corresponding values in"
+      "type": "vector<int>",
+      "default": "((void)\"(constant step)\",vector<int>(1,1))",
+      "description": "Step number for corresponding values in path; if shorter than path, distance between last 2 values is used for the rest."
     },
     {
-      "name": "ptGeom",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "name": "trsf",
+      "type": "Matrix3",
+      "default": "",
+      "description": "Transformation matrix for the local coordinate system. |yupdate|",
+      "read_only": true,
+      "no_save": true
     },
     {
-      "name": "ptOurs",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "refLength",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference contact length, for rendering only."
-    },
-    {
-      "name": "renderLength",
-      "type": "float",
-      "default": "0.0",
-      "description": "Characteristic length for the purposes of rendering, set equal to the smaller radius."
-    },
-    {
-      "name": "rotGeom",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "rotOurs",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "rotPath",
-      "type": "list",
-      "default": "[]",
-      "description": "Rotational components of the loading path, where each item contains torsion and two bending rotations in local coordinates. If shorter than"
-    },
-    {
-      "name": "rotWeight",
-      "type": "float",
-      "default": "1.0",
-      "description": "Float \u2208\u23290,1\u232a determining whether shear displacement is applied as rotation or displacement on arc (0 is displacement-only, 1 is rotation-only). Not effective when mutual rotation is specified."
+      "name": "uuPrev",
+      "type": "Vector6",
+      "default": "(0, 0, 0, 0, 0, 0)",
+      "description": "Generalized displacement values reached in the previous step, for knowing which increment to apply in the current step.",
+      "read_only": true
     },
     {
       "name": "step",
@@ -96,28 +68,115 @@
       "description": "Step number in which this engine is active; determines position in path, using pathSteps."
     },
     {
-      "name": "trsf",
-      "type": "Matrix3",
-      "default": "Matrix3(1.39804328609528886e-76,1.39804328609528886e-76,1.39804328609528886e-76,",
-      "description": "Transformation matrix for the local coordinate system. |yupdate|"
+      "name": "doneHook",
+      "type": "str",
+      "default": "",
+      "description": "Python command (as string) to run when end of the path is achieved. If empty, the engine will be set"
     },
     {
-      "name": "uGeom",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current generalized displacements (3 displacements, 3 rotations), as stored in the interation itself. They should corredpond to"
+      "name": "renderLength",
+      "type": "float",
+      "default": "0",
+      "description": "Characteristic length for the purposes of rendering, set equal to the smaller radius."
     },
     {
-      "name": "uTest",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Current generalized displacements (3 displacements, 3 rotations), as they should be according to this"
+      "name": "refLength",
+      "type": "float",
+      "default": "0",
+      "description": "Reference contact length, for rendering only.",
+      "read_only": true
     },
     {
-      "name": "uuPrev",
-      "type": "Vector6",
-      "default": "Vector6(0,0,0, 0,0,0)",
-      "description": "Generalized displacement values reached in the previous step, for knowing which increment to apply in the current step."
+      "name": "idWeight",
+      "type": "float",
+      "default": "1",
+      "description": "Float, usually \u2208\u23290,1\u232a, determining on how are displacements distributed between particles (0 for id1, 1 for id2); intermediate values will apply respective part to each of them. This parameter is ignored with 6-DoFs"
+    },
+    {
+      "name": "rotWeight",
+      "type": "float",
+      "default": "1",
+      "description": "Float \u2208\u23290,1\u232a determining whether shear displacement is applied as rotation or displacement on arc (0 is displacement-only, 1 is rotation-only). Not effective when mutual rotation is specified."
+    },
+    {
+      "name": "ptOurs",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "first 3 components of uTest |ydeprecated|",
+      "no_save": true
+    },
+    {
+      "name": "ptGeom",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "first 3 components of uGeom |ydeprecated|",
+      "no_save": true
+    },
+    {
+      "name": "rotOurs",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "last 3 components of uTest |ydeprecated|",
+      "no_save": true
+    },
+    {
+      "name": "rotGeom",
+      "type": "Vector3",
+      "default": "Vector3(0,0,0)",
+      "description": "last 3 components of uGeom |ydeprecated|",
+      "no_save": true
+    },
+    {
+      "name": "ids",
+      "type": "list[int]",
+      "default": "",
+      "description": "Ids list of bodies affected by this PartialEngine.",
+      "inherited_from": "PartialEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

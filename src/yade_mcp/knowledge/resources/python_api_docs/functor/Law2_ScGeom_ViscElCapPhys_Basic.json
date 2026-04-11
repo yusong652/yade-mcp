@@ -5,16 +5,41 @@
   "description": "Extended version of Linear viscoelastic model with capillary parameters.",
   "attributes": [
     {
-      "name": "NLiqBridg",
-      "type": "int",
-      "default": "0",
-      "description": "The total number of liquid bridges"
+      "name": "VLiqBridg",
+      "type": "OpenMPAccumulator<Real>",
+      "default": "",
+      "description": "The total volume of liquid bridges",
+      "no_save": true
     },
     {
-      "name": "VLiqBridg",
-      "type": "float",
-      "default": "0.0",
-      "description": "The total volume of liquid bridges"
+      "name": "NLiqBridg",
+      "type": "OpenMPAccumulator<int>",
+      "default": "",
+      "description": "The total number of liquid bridges",
+      "no_save": true
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['ScGeom', 'ViscElCapPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

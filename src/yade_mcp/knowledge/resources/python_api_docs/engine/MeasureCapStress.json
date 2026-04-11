@@ -5,70 +5,51 @@
   "description": "Post-processing engine giving the capillary stress tensor<MeasureCapStress.sigmaCap> (the fluids mixture contribution to the total stress in unsaturated, i.e. triphasic, conditions) according to the $\\mu$UNSAT expression detailled in [Duriez2017c]_. Although this expression differs in nature from...",
   "attributes": [
     {
-      "name": "capillaryPressure",
-      "type": "float",
-      "default": "0.0",
-      "description": "Capillary pressure $u_c$, to be defined equal to"
-    },
-    {
-      "name": "debug",
-      "type": "bool",
-      "default": "False",
-      "description": "To output some debugging messages."
-    },
-    {
-      "name": "initRun",
-      "type": "bool",
-      "default": "False",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "muGamma",
+      "name": "sigmaCap",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Tensorial contribution to"
-    },
-    {
-      "name": "muSnw",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Tensorial contribution to"
-    },
-    {
-      "name": "muSsw",
-      "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Tensorial contribution to"
+      "default": "Matrix3.Zero",
+      "description": "The capillary stress tensor $\\boldsymbol{\\sigma^{cap}}$ itself, expressed as $\\boldsymbol{\\sigma^{cap}} = 1/V \\, [ u_c (\\boldsymbol{\\mu_{Vw}} + \\boldsymbol{\\mu_{Ssw}}) + \\gamma_{nw} (\\boldsymbol{\\mu_{Snw}} + \\boldsymbol{\\mu_{\\Gamma}}) ]$ where the four microstructure tensors $\\boldsymbol{\\mu_{Vw}}, \\boldsymbol{\\mu_{Ssw}}, \\boldsymbol{\\mu_{Snw}}, \\boldsymbol{\\mu_{\\Gamma}}$ correspond to",
+      "read_only": true
     },
     {
       "name": "muVw",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "Tensorial contribution (spherical i.e. isotropic) to"
+      "default": "Matrix3.Zero",
+      "description": "Tensorial contribution (spherical i.e. isotropic) to sigmaCap from the wetting fluid volume: $ boldsymbol{ mu_{Vw}} = V_w , boldsymbol{ delta}$ with $V_w =$ vW and $ boldsymbol{ delta}$ the identity tensor. (auto-updated)",
+      "read_only": true
     },
     {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
-    },
-    {
-      "name": "realPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
-    },
-    {
-      "name": "sigmaCap",
+      "name": "muSsw",
       "type": "Matrix3",
-      "default": "Matrix3(0,0,0, 0,0,0, 0,0,0)",
-      "description": "The capillary stress tensor $\\boldsymbol{\\sigma^{cap}}$ itself, expressed as $\\boldsymbol{\\sigma^{cap}} = 1/V \\, [ u_c (\\boldsymbol{\\mu_{Vw}} + \\boldsymbol{\\mu_{Ssw}}) + \\gamma_{nw} (\\boldsymbol{\\mu_{Snw}} + \\boldsymbol{\\mu_{\\Gamma}}) ]$ where the four microstructure tensors $\\boldsymbol{\\mu_{Vw}}, \\boldsymbol{\\mu_{Ssw}}, \\boldsymbol{\\mu_{Snw}}, \\boldsymbol{\\mu_{\\Gamma}}$ correspond to"
+      "default": "Matrix3.Zero",
+      "description": "Tensorial contribution to sigmaCap from the wetted solid surfaces $Ssw$: $ boldsymbol{ mu_{Ssw}} = int_{Ssw} vec n otimes vec x dS$ with $ vec n$ the outward normal and $ vec x$ the position. (auto-updated)",
+      "read_only": true
+    },
+    {
+      "name": "muSnw",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "Tensorial contribution to sigmaCap from the wetting/non-wetting (e.g. liquid/gas) interface $S{nw}$: $ boldsymbol{ mu_{Snw}} = int_{Snw} ( boldsymbol delta - vec n otimes vec n) dS$ with $ vec n$ the outward normal and $ boldsymbol{ delta}$ the identity tensor. (auto-updated)",
+      "read_only": true
+    },
+    {
+      "name": "muGamma",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
+      "description": "Tensorial contribution to sigmaCap from the contact lines $ Gamma$: $ boldsymbol{ mu_{ Gamma}} = int_{ Gamma} vec nu_{nw} otimes vec x , dl$ with $ vec nu_{nw}$ the fluid-fluid interface conormal [Duriez2017c]_, and $ vec x$ the position. (auto-updated)",
+      "read_only": true
+    },
+    {
+      "name": "wettAngle",
+      "type": "float",
+      "default": "0",
+      "description": "Wetting, i.e. contact, angle value (radians). To be defined consistently with the value upon which the capillary files (used by"
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "float",
+      "default": "0",
+      "description": "Capillary pressure $u_c$, to be defined equal to Law2_ScGeom_CapillaryPhys_Capillarity.capillaryPressure."
     },
     {
       "name": "surfaceTension",
@@ -77,22 +58,136 @@
       "description": "Fluid-fluid surface tension $\\gamma_{nw}$, to be defined equal to"
     },
     {
+      "name": "debug",
+      "type": "bool",
+      "default": "0",
+      "description": "To output some debugging messages."
+    },
+    {
       "name": "vW",
       "type": "float",
-      "default": "0.0",
-      "description": "Wetting fluid volume, summing"
+      "default": "0",
+      "description": "Wetting fluid volume, summing menisci volumes (faster here than through python loops). (auto-updated)",
+      "read_only": true
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
     },
     {
-      "name": "wettAngle",
+      "name": "realPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Wetting, i.e. contact, angle value (radians). To be defined consistently with the value upon which the capillary files (used by"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

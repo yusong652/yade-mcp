@@ -5,21 +5,28 @@
   "description": "compute fabric tensor, local porosity, local deformation, and other micromechanicaly defined quantities based on triangulation/tesselation of the packing.",
   "attributes": [
     {
-      "name": "compDeformation",
-      "type": "bool",
-      "default": "False",
-      "description": "Is the engine just saving states or also computing and outputing deformations for each increment?"
-    },
-    {
-      "name": "compIncrt",
-      "type": "bool",
-      "default": "False",
-      "description": "Should increments of force and displacements be defined on [n,n+1]? If not, states will be saved with only positions and forces (no displacements)."
+      "name": "stateNumber",
+      "type": "int",
+      "default": "0",
+      "description": "A number incremented and appended at the end of output files to reflect increment number."
     },
     {
       "name": "incrtNumber",
       "type": "int",
-      "default": "1"
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "outputFile",
+      "type": "str",
+      "default": "\"MicroMacroAnalysis\"",
+      "description": "Base name for increment analysis output file."
+    },
+    {
+      "name": "stateFileName",
+      "type": "str",
+      "default": "\"state\"",
+      "description": "Base name of state files."
     },
     {
       "name": "interval",
@@ -28,28 +35,67 @@
       "description": "Number of timesteps between analyzed states."
     },
     {
+      "name": "compDeformation",
+      "type": "bool",
+      "default": "false",
+      "description": "Is the engine just saving states or also computing and outputing deformations for each increment?"
+    },
+    {
+      "name": "compIncrt",
+      "type": "bool",
+      "default": "false",
+      "description": "Should increments of force and displacements be defined on [n,n+1]? If not, states will be saved with only positions and forces (no displacements)."
+    },
+    {
       "name": "nonSphereAsFictious",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "bodies that are not spheres will be used to defines bounds (else just skipped)."
     },
     {
-      "name": "outputFile",
-      "type": "str",
-      "default": "'MicroMacroAnalysis'",
-      "description": "Base name for increment analysis output file."
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
     },
     {
-      "name": "stateFileName",
-      "type": "str",
-      "default": "'state'",
-      "description": "Base name of state files."
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
     },
     {
-      "name": "stateNumber",
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "A number incremented and appended at the end of output files to reflect increment number."
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ]
 }

@@ -5,40 +5,61 @@
   "description": "Axis-aligned bounding box, for use with InsertionSortCollider. (This class is quasi-redundant since min,max are already contained in Bound itself. That might change at some point, though.)",
   "attributes": [
     {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering this object"
-    },
-    {
       "name": "lastUpdateIter",
       "type": "int",
       "default": "0",
-      "description": "record iteration of last reference position update |yupdate|"
-    },
-    {
-      "name": "max",
-      "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "Upper corner of box containing this bound (and the"
-    },
-    {
-      "name": "min",
-      "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "Lower corner of box containing this bound (and the"
+      "description": "record iteration of last reference position update |yupdate|",
+      "read_only": true,
+      "inherited_from": "Bound"
     },
     {
       "name": "refPos",
       "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "Reference position, updated at current body position each time the bound dispatcher update bounds |yupdate|"
+      "default": "Vector3r(NaN,NaN,NaN)",
+      "description": "Reference position, updated at current body position each time the bound dispatcher update bounds |yupdate|",
+      "read_only": true,
+      "inherited_from": "Bound"
     },
     {
       "name": "sweepLength",
       "type": "float",
-      "default": "0.0",
-      "description": "The length used to increase the bounding boxe size, can be adjusted on the basis of previous displacement if"
+      "default": "0",
+      "description": "The length used to increase the bounding boxe size, can be adjusted on the basis of previous displacement if",
+      "read_only": true,
+      "inherited_from": "Bound"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering this object",
+      "inherited_from": "Bound"
+    },
+    {
+      "name": "min",
+      "type": "Vector3",
+      "default": "Vector3r(NaN,NaN,NaN)",
+      "description": "Lower corner of box containing this bound (and the",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "Bound"
+    },
+    {
+      "name": "max",
+      "type": "Vector3",
+      "default": "Vector3r(NaN,NaN,NaN)",
+      "description": "Upper corner of box containing this bound (and the",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "Bound"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "0",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Bound"
     }
   ]
 }

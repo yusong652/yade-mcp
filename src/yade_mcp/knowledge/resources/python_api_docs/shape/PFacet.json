@@ -5,10 +5,62 @@
   "description": "PFacet (particle facet) geometry (see [Effeindzourou2016]_, [Effeindzourou2015a]_). It is highly recommended to use the helper functions in yade.gridpfacet (e.g., gridpfacet.pfacetCreator1-4) to generate correct PFacet<PFacet> elements.",
   "attributes": [
     {
+      "name": "node1",
+      "type": "Body",
+      "default": "",
+      "description": "First Body the Pfacet is connected to."
+    },
+    {
+      "name": "node2",
+      "type": "Body",
+      "default": "",
+      "description": "Second Body the Pfacet is connected to."
+    },
+    {
+      "name": "node3",
+      "type": "Body",
+      "default": "",
+      "description": "third Body the Pfacet is connected to."
+    },
+    {
+      "name": "conn1",
+      "type": "Body",
+      "default": "",
+      "description": "First Body the Pfacet is connected to."
+    },
+    {
+      "name": "conn2",
+      "type": "Body",
+      "default": "",
+      "description": "Second Body the Pfacet is connected to."
+    },
+    {
+      "name": "conn3",
+      "type": "Body",
+      "default": "",
+      "description": "third Body the Pfacet is connected to."
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "Vector3r(NaN,NaN,NaN)",
+      "description": "PFacet's normal (in local coordinate system)",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "radius",
+      "type": "float",
+      "default": "-1",
+      "description": "PFacet's radius"
+    },
+    {
       "name": "area",
       "type": "float",
-      "default": "nan",
-      "description": "PFacet's area"
+      "default": "NaN",
+      "description": "PFacet's area",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "cellDist",
@@ -19,68 +71,31 @@
     {
       "name": "color",
       "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "conn1",
-      "type": "NoneType",
-      "default": "None",
-      "description": "First"
-    },
-    {
-      "name": "conn2",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Second"
-    },
-    {
-      "name": "conn3",
-      "type": "NoneType",
-      "default": "None",
-      "description": "third"
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "node1",
-      "type": "NoneType",
-      "default": "None",
-      "description": "First"
-    },
-    {
-      "name": "node2",
-      "type": "NoneType",
-      "default": "None",
-      "description": "Second"
-    },
-    {
-      "name": "node3",
-      "type": "NoneType",
-      "default": "None",
-      "description": "third"
-    },
-    {
-      "name": "normal",
-      "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "PFacet's normal (in local coordinate system)"
-    },
-    {
-      "name": "radius",
-      "type": "float",
-      "default": "-1.0",
-      "description": "PFacet's radius"
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "14",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
     }
   ]
 }

@@ -3,5 +3,29 @@
   "category": "engines",
   "parent": "IGeomFunctor",
   "description": "Creates or updates a ScGeom instance representing the intersection of one LevelSet-shaped body with one Wall-shaped body, where overlap is chosen to occur on the opposite wall side than the LevelSet body's center. Contact normal<ScGeom.normal> is given by the wall normal (relative orientation of...",
-  "attributes": []
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Wall', 'LevelSet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ]
 }

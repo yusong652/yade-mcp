@@ -5,10 +5,68 @@
   "description": "Render L6Geom geometry.\n\n.. ystaticattr:: Gl1_L6Geom.phiScale(=1.)\n\n\tScale local rotations (phi<L6Geom.phi> - phi0<L6Geom.phi0>). The default scale is to draw $\\pi$ rotation with length equal to minimum radius.",
   "attributes": [
     {
+      "name": "phiScale",
+      "type": "float",
+      "default": "1.0",
+      "description": ""
+    },
+    {
+      "name": "axesLabels",
+      "type": "bool",
+      "default": "False",
+      "description": "",
+      "inherited_from": "Gl1_L3Geom"
+    },
+    {
+      "name": "axesScale",
+      "type": "float",
+      "default": "1.0",
+      "description": "",
+      "inherited_from": "Gl1_L3Geom"
+    },
+    {
+      "name": "axesWd",
+      "type": "float",
+      "default": "1.0",
+      "description": "",
+      "inherited_from": "Gl1_L3Geom"
+    },
+    {
+      "name": "uPhiWd",
+      "type": "float",
+      "default": "2.0",
+      "description": "",
+      "inherited_from": "Gl1_L3Geom"
+    },
+    {
+      "name": "uScale",
+      "type": "float",
+      "default": "1.0",
+      "description": "",
+      "inherited_from": "Gl1_L3Geom"
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['L6Geom']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

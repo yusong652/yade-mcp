@@ -5,10 +5,75 @@
   "description": "Render CpmPhys objects of interactions.\n\n.. ystaticattr:: Gl1_CpmPhys.contactLine(=true)\n\n\tShow contact line\n\n.. ystaticattr:: Gl1_CpmPhys.dmgLabel(=true)\n\n\tNumerically show contact damage parameter\n\n.. ystaticattr:: Gl1_CpmPhys.dmgPlane(=false)\n\n\t[what is this?]\n\n.. ystaticattr:: Gl1_CpmPhys.epsT(=false)\n\n\tShow shear strain \n\n.. ystaticattr:: Gl1_CpmPhys.epsTAxes(=false)\n\n\tShow axes of shear plane \n\n.. ystaticattr:: Gl1_CpmPhys.normal(=false)\n\n\tShow contact normal\n\n.. ystaticattr:: Gl1_CpmPhys.colorStrainRatio(=-1)\n\n\tIf positive, set the interaction (wire) color based on $\\eps_N$ normalized by $\\eps_0$ x colorStrainRatio<CpmPhys.colorStrainRatio> ($\\eps_0$ = CpmPhys.epsCrackOnset ). Otherwise, color based on the residual strength.\n\n.. ystaticattr:: Gl1_CpmPhys.epsNLabel(=false)\n\n\tNumerically show normal strain",
   "attributes": [
     {
+      "name": "contactLine",
+      "type": "bool",
+      "default": "True",
+      "description": ""
+    },
+    {
+      "name": "dmgLabel",
+      "type": "bool",
+      "default": "True",
+      "description": ""
+    },
+    {
+      "name": "dmgPlane",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "epsT",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "epsTAxes",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "normal",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
+      "name": "colorStrainRatio",
+      "type": "float",
+      "default": "-1.0",
+      "description": ""
+    },
+    {
+      "name": "epsNLabel",
+      "type": "bool",
+      "default": "False",
+      "description": ""
+    },
+    {
       "name": "label",
-      "type": "string",
+      "type": "str",
       "default": "",
-      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python."
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['CpmPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ]
 }

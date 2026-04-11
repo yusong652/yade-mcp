@@ -5,22 +5,55 @@
   "description": "Dispatcher calling functors<GlShapeFunctor> based on received argument type(s).",
   "attributes": [
     {
+      "name": "functors",
+      "type": "vector<shared_ptr<GlShapeFunctor> >",
+      "default": "[]",
+      "description": "Functors associated with this dispatcher."
+    },
+    {
       "name": "dead",
       "type": "bool",
       "default": "false",
-      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point."
-    },
-    {
-      "name": "label",
-      "type": "string",
-      "default": "",
-      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python."
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
     },
     {
       "name": "ompThreads",
       "type": "int",
       "default": "-1",
-      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g."
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [

@@ -5,111 +5,40 @@
   "description": "Create a scene for triaxal test.\n\n**Introduction**\n\tYade includes tools to simulate triaxial tests on particles assemblies. This pre-processor (and variants like e.g. CapillaryTriaxialTest) illustrate how to use them. It generates a scene which will - by default - go through the following steps :\n\n\t* generate random loose packings in a parallelepiped.\n\t* compress the packing isotropicaly, either squeezing the packing between moving rigid boxes or expanding the particles while boxes are fixed (depending on flag internalCompaction<TriaxialTest.internalCompaction>). The confining pressure in this stage is defined via sigmaIsoCompaction<TriaxialTest.sigmaIsoCompaction>.\n\t* when the packing is dense and stable, simulate a loading path and get the mechanical response as a result. \n\n\tThe default loading path corresponds to a constant lateral stress (sigmaLateralConfinement<TriaxialTest.sigmaLateralConfinement>) in 2 directions and constant strain rate on the third direction. This default loading path is performed when the flag autoCompressionActivation<TriaxialTest.autoCompressionActivation> it ``True``, otherwise the simulation stops after isotropic compression.\n\n\tDifferent loading paths might be performed. In order to define them, the user can modify the flags found in engine TriaxialStressController at any point in the simulation (in c++). If ``TriaxialStressController.wall_X_activated`` is ``true`` boundary X is moved automatically to maintain the defined stress level *sigmaN* (see axis conventions below). If ``false`` the boundary is not controlled by the engine at all. In that case the user is free to prescribe fixed position, constant velocity, or more complex conditions.\n\n\t.. note:: *Axis conventions.* Boundaries perpendicular to the *x* axis are called \"left\" and \"right\", *y* corresponds to \"top\" and \"bottom\", and axis *z* to \"front\" and \"back\". In the default loading path, strain rate is assigned along *y*, and constant stresses are assigned on *x* and *z*.\n\n**Essential engines**\n\t#. The TriaxialCompressionEngine is used for controlling the state of the sample and simulating loading paths. TriaxialCompressionEngine inherits from TriaxialStressController, which computes stress- and strain-like quantities in the packing and maintain a constant level of stress at each boundary. TriaxialCompressionEngine has few more members in order to impose constant strain rate and control the transition between isotropic compression and triaxial test. Transitions are defined by changing some flags of the TriaxialStressController, switching from/to imposed strain rate to/from imposed stress.\n\t#. The class TriaxialStateRecorder is used to write to a file the history of stresses and strains.\n\t#. TriaxialTest is using GlobalStiffnessTimeStepper to compute an appropriate $\\Dt$ for the numerical scheme. \n\n\t.. note:: ``TriaxialStressController::ComputeUnbalancedForce`` returns a value that can be useful for evaluating the stability of the packing. It is defined as (mean force on particles)/(mean contact force), so that it tends to 0 in a stable packing. This parameter is checked by TriaxialCompressionEngine to switch from one stage of the simulation to the next one (e.g. stop isotropic confinment and start axial loading)\n\n.. admonition:: Frequently Asked Questions\n\n\t#. How is generated the packing? How to change particles sizes distribution? Why do I have a message \"Exceeded 3000 tries to insert non-overlapping sphere?\n\t\tThe initial positioning of spheres is done by generating random (x,y,z) in a box and checking if a sphere of radius R (R also randomly generated with respect to a uniform distribution between mean*(1-std_dev) and mean*(1+std_dev) can be inserted at this location without overlaping with others.\n\n\t\tIf the sphere overlaps, new (x,y,z)'s are generated until a free position for the new sphere is found. This explains the message you have: after 3000 trial-and-error, the sphere couldn't be placed, and the algorithm stops.\n\t\t\n\t\tYou get the message above if you try to generate an initialy dense packing, which is not possible with this algorithm. It can only generate clouds. You should keep the default value of porosity (n~0.7), or even increase if it is still to low in some cases. The dense state will be obtained in the second step (compaction, see below).\n\t\n\t#. How is the compaction done, what are the parameters maxWallVelocity<TriaxialTest.maxWallVelocity> and finalMaxMultiplier<TriaxialTest.finalMaxMultiplier>?\n\t\tCompaction is done\n\t\t\t#. by moving rigid boxes or\n\t\t\t#. by increasing the sizes of the particles (decided using the option internalCompaction<TriaxialTest.internalCompaction> \u21d2 size increase).\n\n\t\tBoth algorithm needs numerical parameters to prevent instabilities. For instance, with the method (1) maxWallVelocity<TriaxialTest.maxWallVelocity> is the maximum wall velocity, with method (2) finalMaxMultiplier<TriaxialTest.finalMaxMultiplier> is the max value of the multiplier applied on sizes at each iteration (always something like 1.00001).\n\n\t#. During the simulation of triaxial compression test, the wall in one direction moves with an increment of strain while the stresses in other two directions are adjusted to sigma_iso<TriaxialStressController.sigma_iso>. How the stresses in other directions are maintained constant to sigma_iso<TriaxialStressController.sigma_iso>? What is the mechanism? Where is it implemented in Yade?\n\t\tThe control of stress on a boundary is based on the total stiffness *K* of all contacts between the packing and this boundary. In short, at each step, displacement=stress_error/K. This algorithm is implemented in TriaxialStressController, and the control itself is in ``TriaxialStressController::ControlExternalStress``. The control can be turned off independently for each boundary, using the flags ``wall_XXX_activated``, with *XXX*\\ \u2208{*top*, *bottom*, *left*, *right*, *back*, *front*}. The imposed sress is a unique value (sigma_iso<TriaxialStressController.sigma_iso>) for all directions if TriaxialStressController.isAxisymetric, or 3 independent values sigma1<TriaxialStressController.sigma1>, sigma2<TriaxialStressController.sigma2>, sigma3<TriaxialStressController.sigma3>.\n\n\t#. Which value of friction angle do you use during the compaction phase of the Triaxial Test?\n\t\tThe friction during the compaction (whether you are using the expansion method or the compression one for the specimen generation) can be anything between 0 and the final value used during the Triaxial phase. Note that higher friction than the final one would result in volumetric collapse at the beginning of the test. The purpose of using a different value of friction during this phase is related to the fact that the final porosity you get at the end of the sample generation essentially depends on it as well as on the assumed Particle Size Distribution. Changing the initial value of friction will get to a different value of the final porosity.\n\n\t#. Which is the aim of the ``bool isRadiusControlIteration``?\n\t\tThis internal variable (updated automatically) is true each *N* timesteps (with *N*\\ =\\ radiusControlInterval<TriaxialTest.radiusControlInterval>). For other timesteps, there is no expansion. Cycling without expanding is just a way to speed up the simulation, based on the idea that 1% increase each 10 iterations needs less operations than 0.1% at each iteration, but will give similar results.\n\n\t#. How comes the unbalanced force reaches a low value only after many timesteps in the compaction phase?\n\t\tThe value of unbalanced force (dimensionless) is expected to reach low value (i.e. identifying a static-equilibrium condition for the specimen) only at the end of the compaction phase. The code is not aiming at simulating a quasistatic isotropic compaction process, it is only giving a stable packing at the end of it.",
   "attributes": [
     {
+      "name": "lowerCorner",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,0)",
+      "description": "Lower corner of the box."
+    },
+    {
+      "name": "upperCorner",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Upper corner of the box."
+    },
+    {
+      "name": "importFilename",
+      "type": "str",
+      "default": "\"\"",
+      "description": "File with positions and sizes of spheres."
+    },
+    {
       "name": "Key",
-      "type": "string",
+      "type": "str",
       "default": "\"\"",
       "description": "A code that is added to output filenames."
     },
     {
-      "name": "StabilityCriterion",
-      "type": "Real",
-      "default": "0.01",
-      "description": "Value of unbalanced force for which the system is considered stable. Used in conditionals to switch between loading stages."
-    },
-    {
-      "name": "WallStressRecordFile",
-      "type": "string",
-      "default": "\"./WallStresses\"+Key"
-    },
-    {
-      "name": "autoCompressionActivation",
-      "type": "bool",
-      "default": "true",
-      "description": "Do we just want to generate a stable packing under isotropic pressure (false) or do we want the triaxial loading to start automatically right after compaction stage (true)?"
-    },
-    {
-      "name": "autoStopSimulation",
-      "type": "bool",
-      "default": "false",
-      "description": "freeze the simulation when conditions are reached (don't activate this if you want to be able to run/stop from Qt GUI)"
-    },
-    {
-      "name": "autoUnload",
-      "type": "bool",
-      "default": "true",
-      "description": "auto adjust the isotropic stress state from"
-    },
-    {
-      "name": "boxFrictionDeg",
-      "type": "Real",
-      "default": "0.0",
-      "description": "Friction angle [\u00b0] of boundaries contacts."
-    },
-    {
-      "name": "boxKsDivKn",
-      "type": "Real",
-      "default": "0.5",
-      "description": "Ratio of shear vs. normal contact stiffness for boxes."
-    },
-    {
-      "name": "boxYoungModulus",
-      "type": "Real",
-      "default": "15000000.0",
-      "description": "Stiffness of boxes."
-    },
-    {
-      "name": "compactionFrictionDeg",
-      "type": "Real",
-      "default": "sphereFrictionDeg",
-      "description": "Friction angle [\u00b0] of spheres during compaction (different values result in different porosities)]. This value is overridden by"
-    },
-    {
-      "name": "dampingForce",
-      "type": "Real",
-      "default": "0.2",
-      "description": "Coefficient of Cundal-Non-Viscous damping (applied on on the 3 components of forces)"
-    },
-    {
-      "name": "dampingMomentum",
-      "type": "Real",
-      "default": "0.2",
-      "description": "Coefficient of Cundal-Non-Viscous damping (applied on on the 3 components of torques)"
-    },
-    {
-      "name": "defaultDt",
-      "type": "Real",
-      "default": "-1",
-      "description": "Max time-step. Used as initial value if defined. Latter adjusted by the time stepper."
-    },
-    {
-      "name": "density",
-      "type": "Real",
-      "default": "2600",
-      "description": "density of spheres"
-    },
-    {
-      "name": "facetWalls",
-      "type": "bool",
-      "default": "false",
-      "description": "Use facets for boundaries (not tested)"
-    },
-    {
-      "name": "finalMaxMultiplier",
-      "type": "Real",
-      "default": "1.001",
-      "description": "max multiplier of diameters during internal compaction (secondary precise adjustment)"
-    },
-    {
       "name": "fixedBoxDims",
-      "type": "string",
+      "type": "str",
       "default": "\"\"",
       "description": "string that contains some subset (max. 2) of {'x','y','z'} ; contains axes will have box dimension hardcoded, even if box is scaled as mean_radius is prescribed: scaling will be applied on the rest."
     },
     {
-      "name": "importFilename",
-      "type": "string",
-      "default": "\"\"",
-      "description": "File with positions and sizes of spheres."
+      "name": "WallStressRecordFile",
+      "type": "str",
+      "default": "\"./WallStresses\"+Key",
+      "description": ""
     },
     {
       "name": "internalCompaction",
@@ -118,22 +47,22 @@
       "description": "flag for choosing between moving boundaries or increasing particles sizes during the compaction stage."
     },
     {
-      "name": "lowerCorner",
-      "type": "Vector3r",
-      "default": "Vector3r(0,0,0)",
-      "description": "Lower corner of the box."
+      "name": "autoCompressionActivation",
+      "type": "bool",
+      "default": "true",
+      "description": "Do we just want to generate a stable packing under isotropic pressure (false) or do we want the triaxial loading to start automatically right after compaction stage (true)?"
     },
     {
-      "name": "maxMultiplier",
-      "type": "Real",
-      "default": "1.01",
-      "description": "max multiplier of diameters during internal compaction (initial fast increase)"
+      "name": "autoUnload",
+      "type": "bool",
+      "default": "true",
+      "description": "auto adjust the isotropic stress state from sigmaIsoCompaction to sigmaLateralConfinement if they have different values. See docs for autoUnload"
     },
     {
-      "name": "maxWallVelocity",
-      "type": "Real",
-      "default": "10",
-      "description": "max velocity of boundaries. Usually useless, but can help stabilizing the system in some cases."
+      "name": "autoStopSimulation",
+      "type": "bool",
+      "default": "false",
+      "description": "freeze the simulation when conditions are reached (don't activate this if you want to be able to run/stop from Qt GUI)"
     },
     {
       "name": "noFiles",
@@ -142,34 +71,40 @@
       "description": "Do not create any files during run (.xml, .spheres, wall stress records)"
     },
     {
-      "name": "numberOfGrains",
-      "type": "int",
-      "default": "400",
-      "description": "Number of generated spheres."
+      "name": "facetWalls",
+      "type": "bool",
+      "default": "false",
+      "description": "Use facets for boundaries (not tested)"
     },
     {
-      "name": "radiusControlInterval",
-      "type": "int",
-      "default": "10",
-      "description": "interval between size changes when growing spheres."
+      "name": "wallWalls",
+      "type": "bool",
+      "default": "false",
+      "description": "Use walls for boundaries (not tested)"
     },
     {
-      "name": "radiusMean",
-      "type": "Real",
-      "default": "-1",
-      "description": "Mean radius. If negative (default), autocomputed to as a function of box size and"
+      "name": "thickness",
+      "type": "float",
+      "default": "0.001",
+      "description": "thickness of boundaries. It is arbitrary and should have no effect"
+    },
+    {
+      "name": "maxMultiplier",
+      "type": "float",
+      "default": "1.01",
+      "description": "max multiplier of diameters during internal compaction (initial fast increase)"
+    },
+    {
+      "name": "finalMaxMultiplier",
+      "type": "float",
+      "default": "1.001",
+      "description": "max multiplier of diameters during internal compaction (secondary precise adjustment)"
     },
     {
       "name": "radiusStdDev",
-      "type": "Real",
+      "type": "float",
       "default": "0.3",
       "description": "Normalized standard deviation of generated sizes."
-    },
-    {
-      "name": "recordIntervalIter",
-      "type": "int",
-      "default": "20",
-      "description": "interval between file outputs"
     },
     {
       "name": "seed",
@@ -178,64 +113,118 @@
       "description": "Seed used for the call to makeCloud"
     },
     {
+      "name": "radiusMean",
+      "type": "float",
+      "default": "-1",
+      "description": "Mean radius. If negative (default), autocomputed to as a function of box size and"
+    },
+    {
+      "name": "sphereYoungModulus",
+      "type": "float",
+      "default": "15000000.0",
+      "description": "Stiffness of spheres."
+    },
+    {
+      "name": "sphereKsDivKn",
+      "type": "float",
+      "default": "0.5",
+      "description": "Ratio of shear vs. normal contact stiffness for spheres."
+    },
+    {
+      "name": "sphereFrictionDeg",
+      "type": "float",
+      "default": "18.0",
+      "description": "Friction angle [\u00b0] of spheres assigned just before triaxial testing."
+    },
+    {
+      "name": "compactionFrictionDeg",
+      "type": "float",
+      "default": "sphereFrictionDeg",
+      "description": "Friction angle [\u00b0] of spheres during compaction (different values result in different porosities)]. This value is overridden by"
+    },
+    {
+      "name": "boxYoungModulus",
+      "type": "float",
+      "default": "15000000.0",
+      "description": "Stiffness of boxes."
+    },
+    {
+      "name": "maxWallVelocity",
+      "type": "float",
+      "default": "10",
+      "description": "max velocity of boundaries. Usually useless, but can help stabilizing the system in some cases."
+    },
+    {
+      "name": "boxKsDivKn",
+      "type": "float",
+      "default": "0.5",
+      "description": "Ratio of shear vs. normal contact stiffness for boxes."
+    },
+    {
+      "name": "boxFrictionDeg",
+      "type": "float",
+      "default": "0.0",
+      "description": "Friction angle [\u00b0] of boundaries contacts."
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "2600",
+      "description": "density of spheres"
+    },
+    {
+      "name": "strainRate",
+      "type": "float",
+      "default": "0.1",
+      "description": "Strain rate in triaxial loading."
+    },
+    {
+      "name": "defaultDt",
+      "type": "float",
+      "default": "-1",
+      "description": "Max time-step. Used as initial value if defined. Latter adjusted by the time stepper."
+    },
+    {
+      "name": "dampingForce",
+      "type": "float",
+      "default": "0.2",
+      "description": "Coefficient of Cundal-Non-Viscous damping (applied on on the 3 components of forces)"
+    },
+    {
+      "name": "dampingMomentum",
+      "type": "float",
+      "default": "0.2",
+      "description": "Coefficient of Cundal-Non-Viscous damping (applied on on the 3 components of torques)"
+    },
+    {
+      "name": "StabilityCriterion",
+      "type": "float",
+      "default": "0.01",
+      "description": "Value of unbalanced force for which the system is considered stable. Used in conditionals to switch between loading stages."
+    },
+    {
+      "name": "wallOversizeFactor",
+      "type": "float",
+      "default": "1.3",
+      "description": "Make boundaries larger than the packing to make sure spheres don't go out during deformation."
+    },
+    {
       "name": "sigmaIsoCompaction",
-      "type": "Real",
+      "type": "float",
       "default": "-50000",
       "description": "Confining stress during isotropic compaction (< 0 for real - compressive - compaction)."
     },
     {
       "name": "sigmaLateralConfinement",
-      "type": "Real",
+      "type": "float",
       "default": "-50000",
       "description": "Lateral stress during triaxial loading (< 0 for classical compressive cases). An isotropic unloading is performed if the value is not equal to"
-    },
-    {
-      "name": "sphereFrictionDeg",
-      "type": "Real",
-      "default": "18.0",
-      "description": "Friction angle [\u00b0] of spheres assigned just before triaxial testing."
-    },
-    {
-      "name": "sphereKsDivKn",
-      "type": "Real",
-      "default": "0.5",
-      "description": "Ratio of shear vs. normal contact stiffness for spheres."
-    },
-    {
-      "name": "sphereYoungModulus",
-      "type": "Real",
-      "default": "15000000.0",
-      "description": "Stiffness of spheres."
-    },
-    {
-      "name": "strainRate",
-      "type": "Real",
-      "default": "0.1",
-      "description": "Strain rate in triaxial loading."
-    },
-    {
-      "name": "thickness",
-      "type": "Real",
-      "default": "0.001",
-      "description": "thickness of boundaries. It is arbitrary and should have no effect"
     },
     {
       "name": "timeStepUpdateInterval",
       "type": "int",
       "default": "50",
-      "description": "interval for"
-    },
-    {
-      "name": "upperCorner",
-      "type": "Vector3r",
-      "default": "Vector3r(1,1,1)",
-      "description": "Upper corner of the box."
-    },
-    {
-      "name": "wallOversizeFactor",
-      "type": "Real",
-      "default": "1.3",
-      "description": "Make boundaries larger than the packing to make sure spheres don't go out during deformation."
+      "description": "interval for GlobalStiffnessTimeStepper"
     },
     {
       "name": "wallStiffnessUpdateInterval",
@@ -244,10 +233,22 @@
       "description": "interval for updating the stiffness of sample/boundaries contacts"
     },
     {
-      "name": "wallWalls",
-      "type": "bool",
-      "default": "false",
-      "description": "Use walls for boundaries (not tested)"
+      "name": "radiusControlInterval",
+      "type": "int",
+      "default": "10",
+      "description": "interval between size changes when growing spheres."
+    },
+    {
+      "name": "numberOfGrains",
+      "type": "int",
+      "default": "400",
+      "description": "Number of generated spheres."
+    },
+    {
+      "name": "recordIntervalIter",
+      "type": "int",
+      "default": "20",
+      "description": "interval between file outputs"
     }
   ],
   "methods": [
