@@ -110,7 +110,7 @@
       "name": "ilm",
       "type": "int",
       "default": "2",
-      "description": "Fluid resolution: type of mixing length resolution applied: 0: classical Prandtl mixing length, 1: Prandtl mixing length with free-surface effects, 2: Damp turbulence accounting for the presence of particles [Li1995]_, see [RevilBaudard2013]_ for more details."
+      "description": "Fluid resolution: type of mixing length resolution applied: 0: classical Prandtl mixing length, 1: Prandtl mixing length with free-surface effects, 2: Damp turbulence accounting for the presence of particles (Li1995), see (RevilBaudard2013) for more details."
     },
     {
       "name": "iusl",
@@ -128,7 +128,7 @@
       "name": "kappa",
       "type": "float",
       "default": "0.41",
-      "description": "Fluid resolution: Von Karman constant. Can be tuned to account for the effect of particles on the fluid turbulence, see e.g. [RevilBaudard2015]_"
+      "description": "Fluid resolution: Von Karman constant. Can be tuned to account for the effect of particles on the fluid turbulence, see e.g. (RevilBaudard2015)"
     },
     {
       "name": "viscousSubLayer",
@@ -140,7 +140,7 @@
       "name": "fluidWallFriction",
       "type": "bool",
       "default": "false",
-      "description": "Fluid resolution: if set to true, introduce a sink term to account for the fluid friction at the wall, see [Maurin2015]_ for details. Requires to set the width of the channel. It might slow down significantly the calculation."
+      "description": "Fluid resolution: if set to true, introduce a sink term to account for the fluid friction at the wall, see (Maurin2015) for details. Requires to set the width of the channel. It might slow down significantly the calculation."
     },
     {
       "name": "fluidFrictionCoef",
@@ -176,7 +176,7 @@
       "name": "Cl",
       "type": "float",
       "default": "0.2",
-      "description": "Value of the lift coefficient taken from [Wiberg1985]_"
+      "description": "Value of the lift coefficient taken from (Wiberg1985)"
     },
     {
       "name": "convAcc",
@@ -194,7 +194,7 @@
       "name": "steadyFlow",
       "type": "bool",
       "default": "true",
-      "description": "Condition to modify the buoyancy force according to the physical difference between a fluid at rest and a steady fluid flow. For more details see [Maurin2018]_"
+      "description": "Condition to modify the buoyancy force according to the physical difference between a fluid at rest and a steady fluid flow. For more details see (Maurin2018)"
     },
     {
       "name": "lubrication",
@@ -456,7 +456,7 @@
       "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -464,7 +464,7 @@
       "name": "execCount",
       "type": "int",
       "default": "0",
-      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -472,35 +472,75 @@
       "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
-      "name": "averageProfile",
-      "description": "Compute and store the particle velocity (vxPart<HydroForceEngine.vxPart>, vyPart<HydroForceEngine.vyPart>, vzPart<HydroForceEngine.vzPart>) and solid volume fraction (phiPart<HydroForceEngine.phiPart>) depth profile. For each defined cell z, the k component of the average particle velocity reads:"
-    },
-    {
-      "name": "computeRadiusParts",
-      "description": "compute the different class of radius present in the simulation."
-    },
-    {
-      "name": "fluidResolution",
-      "description": "Solve the 1D volume-averaged fluid momentum balance on the defined mesh (nCell<HydroForceEngine.nCell>, deltaZ<HydroForceEngine.deltaZ>) from the volume-averaged solid profiles (phiPart<HydroForceEngine.phiPart>,vxPart<HydroForceEngine.vxPart>,averageDrag<HydroForceEngine.averageDrag>), which can be evaluated with the averageProfile function."
-    },
-    {
       "name": "initialization",
+      "args": [],
+      "returns": "None",
       "description": "Initialize the necessary parameters to make HydroForceEngine run. Necessary to execute before any simulation run, otherwise it crashes"
     },
     {
+      "name": "averageProfile",
+      "args": [],
+      "returns": "None",
+      "description": "Compute and store the particle velocity (vxPart, vyPart, vzPart) and solid volume fraction (phiPart) depth profile. For each defined cell z, the k component of the average particle velocity reads: $<v_k>^z= sum_p V^p v_k^p/ sum_p V^p$, where the sum is made over the particles contained in the cell, $v_k^p$ is the k component of the velocity associated to particle p, and $V^p$ is the part of the volume of the particle p contained inside the cell. This definition allows to smooth the averaging, and is equivalent to taking into account the center of the particles only when there is a lot of particles in each cell. As for the solid volume fraction, it is evaluated in the same way: for each defined cell z, it reads: $< phi>^z= frac{1}{V_{cell}} sum_p V^p$, where $V_{cell}$ is the volume of the cell considered, and $V^p$ is the volume of particle p contained in cell z. This function gives depth profiles of average velocity and solid volume fraction, returning the average quantities in each cell of height dz, from the reference horizontal plane at elevation zRef (input parameter) until the plane of elevation zRef plus nCell times deltaZ (input parameters). When the option twoSize is set to True, evaluate in addition the average drag (averageDrag1 and averageDrag2) and solid volume fraction (phiPart1 and phiPart2) depth profiles considering only the particles of radius respectively radiusPart1 and radiusPart2 in the averaging."
+    },
+    {
+      "name": "fluidResolution",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "float"
+        },
+        {
+          "name": "arg3",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "Solve the 1D volume-averaged fluid momentum balance on the defined mesh (nCell<HydroForceEngine.nCell>, deltaZ<HydroForceEngine.deltaZ>) from the volume-averaged solid profiles (phiPart<HydroForceEngine.phiPart>,vxPart<HydroForceEngine.vxPart>,averageDrag<HydroForceEngine.averageDrag>), which can be evaluated with the averageProfile function."
+    },
+    {
       "name": "turbulentFluctuation",
-      "description": "Apply a discrete random walk model to the evaluation of the drag force to account for the fluid velocity turbulent fluctuations. Very simple model applying fluctuations from the values of the Reynolds stresses in order to recover the property $<u_x'u_z'> (z) = <R^f_{xz}>(z)/\\rho^f$. The random fluctuations are modified over a time scale given by the eddy turn over time."
+      "args": [],
+      "returns": "None",
+      "description": "Apply a discrete random walk model to the evaluation of the drag force to account for the fluid velocity turbulent fluctuations. Very simple model applying fluctuations from the values of the Reynolds stresses in order to recover the property $<u_x'u_z'> (z) = <R^f_{xz}>(z)/ rho^f$. The random fluctuations are modified over a time scale given by the eddy turn over time."
     },
     {
       "name": "turbulentFluctuationZDep",
+      "args": [],
+      "returns": "None",
       "description": "Apply turbulent fluctuation to the problem similarly to turbulentFluctuation but with an update of the fluctuation depending on the particle position."
+    },
+    {
+      "name": "computeRadiusParts",
+      "args": [],
+      "returns": "None",
+      "description": "compute the different class of radius present in the simulation."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

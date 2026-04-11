@@ -5,79 +5,188 @@
   "description": "Tetrahedral Deformable Element Composed of Nodes",
   "attributes": [
     {
-      "name": "color",
-      "type": "auto",
+      "name": "nodepairs",
+      "type": "NodePairsMap",
       "default": "",
-      "description": "Color for rendering (normalized RGB)."
+      "description": "Ids and relative position+orientation difference of members of the cohesive deformable element in the inital condition (should not be accessed directly)",
+      "inherited_from": "DeformableCohesiveElement"
+    },
+    {
+      "name": "localmap",
+      "type": "NodeMap",
+      "default": "",
+      "description": "Ids and relative positions+orientations of members of the deformable element (should not be accessed directly)",
+      "inherited_from": "DeformableElement"
     },
     {
       "name": "elementframe",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "",
+      "inherited_from": "DeformableElement"
     },
     {
       "name": "faces",
-      "type": "auto",
+      "type": "Triangles",
       "default": "",
-      "description": "Faces of the element for drawing"
+      "description": "Faces of the element for drawing",
+      "inherited_from": "DeformableElement"
     },
     {
-      "name": "highlight",
-      "type": "auto",
-      "default": "",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "localmap",
-      "type": "auto",
-      "default": "",
-      "description": "Ids and relative positions+orientations of members of the deformable element (should not be accessed directly)"
-    },
-    {
-      "name": "nodepairs",
-      "type": "auto",
-      "default": "",
-      "description": "Ids and relative position+orientation difference of members of the cohesive deformable element in the inital condition (should not be accessed directly)"
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
       "type": "auto",
       "default": "",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "description": "Return class index of this instance.",
+      "inherited_from": "Shape"
     }
   ],
   "methods": [
     {
-      "name": "addFace",
-      "description": "Add a face into the element"
-    },
-    {
-      "name": "addNode",
-      "description": "Add a node shared_pt<:yref:'Body'>& as into the element"
-    },
-    {
       "name": "addPair",
-      "description": "Add a node shared_pt<:yref:'Body'>& as into the element"
-    },
-    {
-      "name": "delNode",
-      "description": "Remove a node shared_pt<:yref:'Body'>& from the element"
-    },
-    {
-      "name": "getNode",
-      "description": "Get a node shared_pt<:yref:'Body'>& as into the element"
-    },
-    {
-      "name": "getVolume",
-      "description": "Get volume of the element"
-    },
-    {
-      "name": "removeLastFace",
-      "description": "Remove a face from the element"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        },
+        {
+          "name": "arg3",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Add a node shared_pt<:yref:'Body'>& as into the element",
+      "inherited_from": "DeformableCohesiveElement"
     },
     {
       "name": "removePair",
-      "description": "Add a node shared_pt<:yref:'Body'>& as into the element"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        },
+        {
+          "name": "arg3",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Add a node shared_pt<:yref:'Body'>& as into the element",
+      "inherited_from": "DeformableCohesiveElement"
+    },
+    {
+      "name": "addNode",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Add a node shared_pt<:yref:'Body'>& as into the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "getNode",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Body",
+      "description": "Get a node shared_pt<:yref:'Body'>& as into the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "delNode",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Remove a node shared_pt<:yref:'Body'>& from the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "addFace",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "None",
+      "description": "Add a face into the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "removeLastFace",
+      "args": [],
+      "returns": "None",
+      "description": "Remove a face from the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Get volume of the element",
+      "inherited_from": "DeformableElement"
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

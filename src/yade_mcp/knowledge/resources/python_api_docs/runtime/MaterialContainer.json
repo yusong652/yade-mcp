@@ -7,10 +7,24 @@
   "methods": [
     {
       "name": "append",
-      "description": "Add new shared Material; changes its id and return it."
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Material"
+        }
+      ],
+      "returns": "int",
+      "description": "Add new shared Material; changes its id and return it. append( (MaterialContainer)arg1, (object)arg2) -> object : Append list of Material instances, return list of ids."
     },
     {
       "name": "index",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        }
+      ],
+      "returns": "int",
       "description": "Return id of material, given its label."
     }
   ]

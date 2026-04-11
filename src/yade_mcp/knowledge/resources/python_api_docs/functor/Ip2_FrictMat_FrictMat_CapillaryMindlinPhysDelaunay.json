@@ -8,13 +8,13 @@
       "name": "betan",
       "type": "NoneType",
       "default": "None",
-      "description": "Normal viscous damping ratio $\\beta_n$."
+      "description": "Normal viscous damping ratio $ beta_n$."
     },
     {
       "name": "betas",
       "type": "NoneType",
       "default": "None",
-      "description": "Shear viscous damping ratio $\\beta_s$."
+      "description": "Shear viscous damping ratio $ beta_s$."
     },
     {
       "name": "computeDefault",
@@ -68,7 +68,7 @@
       "name": "vn",
       "type": "NoneType",
       "default": "None",
-      "description": "Impact velocity corresponding to the en value to calculate the dissipative constant $An$ used in the viscous damping model of [Mueller2011]_."
+      "description": "Impact velocity corresponding to the en value to calculate the dissipative constant $An$ used in the viscous damping model of (Mueller2011)."
     }
   ]
 }

@@ -8,14 +8,14 @@
       "name": "trsf",
       "type": "Matrix3",
       "default": "Matrix3(1,0,0, 0,1,0, 0,0,1)",
-      "description": "Current transformation matrix of the cell $ mat{F}$ giving current Cell vector $d vec{x}$ from its reference state $d vec{X}$ as per $d vec{x} = mat{F} d vec{X}$. Obtained from time integration of velGrad$ times mat{F}$ as detailed in the :ref:`documentation<sect-PBC>` during the prologue of a YADE iteration (before the O.engines loop). (auto-updated)",
+      "description": "Current transformation matrix of the cell $ mat{F}$ giving current Cell vector $d vec{x}$ from its reference state $d vec{X}$ as per $d vec{x} = mat{F} d vec{X}$. Obtained from time integration of velGrad$ times mat{F}$ as detailed in the documentation during the prologue of a YADE iteration (before the O.engines loop). (auto-updated)",
       "read_only": true
     },
     {
       "name": "refHSize",
       "type": "Matrix3",
       "default": "Matrix3.Identity",
-      "description": "Reference cell configuration, only used with OpenGLRenderer.dispScale. Updated automatically when hSize or trsf is assigned directly; also modified by yade.utils.setRefSe3 (called e.g. by the ``Reference`` button in the UI)."
+      "description": "Reference cell configuration, only used with OpenGLRenderer.dispScale. Updated automatically when hSize or trsf is assigned directly; also modified by yade.utils.setRefSe3 (called e.g. by the Reference button in the UI)."
     },
     {
       "name": "hSize",
@@ -54,7 +54,7 @@
       "name": "homoDeform",
       "type": "int",
       "default": "2",
-      "description": "If >0, deform (velGrad) the cell homothetically by adjusting positions and velocities of bodies. The velocity change is obtained by deriving the expression v=\u2207v.x with respect to time, where \u2207v is the macroscopic velocity gradient, giving in an incremental form: \u0394v=\u0394 \u2207v x + \u2207v \u0394x across one DEM iteration. As a result, velocities are modified as soon as ``velGrad`` changes, according to the first term: \u0394v(t)=\u0394 \u2207v x(t), while the 2nd term reflects a convective term: \u0394v'= \u2207v v(t-dt/2). The second term is neglected if homoDeform=1. All terms are included if homoDeform=2 (default)"
+      "description": "If >0, deform (velGrad) the cell homothetically by adjusting positions and velocities of bodies. The velocity change is obtained by deriving the expression v=\u2207v.x with respect to time, where \u2207v is the macroscopic velocity gradient, giving in an incremental form: \u0394v=\u0394 \u2207v x + \u2207v \u0394x across one DEM iteration. As a result, velocities are modified as soon as velGrad changes, according to the first term: \u0394v(t)=\u0394 \u2207v x(t), while the 2nd term reflects a convective term: \u0394v'= \u2207v v(t-dt/2). The second term is neglected if homoDeform=1. All terms are included if homoDeform=2 (default)"
     },
     {
       "name": "velGradChanged",
@@ -109,76 +109,144 @@
   ],
   "methods": [
     {
-      "name": "flipCell",
-      "description": "Flip periodic cell so that angles between $R^3$ axes and transformed axes are as small as possible, using the two following facts:1. repeating in $R^3$ space the corners of a periodic cell defines a regular grid; 2. two cells leading through this process to a unique grid are equivalent and can be flipped one over another. Flipping includes adjustment of Interaction.cellDist for interactions that cross the boundary and didn't before (or vice versa), and re-initialization of collider. See also :ref:`collision detection<sect-cell-approx-collision>`"
-    },
-    {
-      "name": "getDefGrad",
-      "description": "Returns trsf<Cell.trsf> = deformation gradient tensor $\\mat{F}$ of the cell deformation (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getEulerianAlmansiStrain",
-      "description": "Returns Eulerian-Almansi strain tensor $\\mat{e}=\\frac{1}{2}(\\mat{I}-\\mat{b}^{-1})=\\frac{1}{2}(\\mat{I}-(\\mat{F}\\mat{F}^T)^{-1})$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getFluctuationVelocity",
-      "description": "get velocity fluctuation of a body, i.e. the velocity relative to mean field velocity: $\\tilde{\\vec{v} }= \\vec{v} - (\\nabla \\vec{v}_m)\\cdot \\vec{x}$"
-    },
-    {
-      "name": "getLCauchyGreenDef",
-      "description": "Returns left Cauchy-Green deformation tensor $\\mat{b}=\\mat{F}\\mat{F}^T$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getLagrangianStrain",
-      "description": "Returns Lagrangian strain tensor $\\mat{E}=\\frac{1}{2}(\\mat{C}-\\mat{I})=\\frac{1}{2}(\\mat{F}^T\\mat{F}-\\mat{I})=\\frac{1}{2}(\\mat{U}^2-\\mat{I})$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getLeftStretch",
-      "description": "Returns left (spatial) stretch tensor of the cell (matrix $\\mat{U}$ from polar decomposition $\\mat{F}=\\mat{RU}$ )"
-    },
-    {
-      "name": "getPolarDecOfDefGrad",
-      "description": "Returns orthogonal matrix $\\mat{R}$ and symmetric positive semi-definite matrix $\\mat{U}$ as polar decomposition of deformation gradient $\\mat{F}$ of the cell ( $\\mat{F}=\\mat{RU}$ )"
-    },
-    {
-      "name": "getRCauchyGreenDef",
-      "description": "Returns right Cauchy-Green deformation tensor $\\mat{C}=\\mat{F}^T\\mat{F}$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getRightStretch",
-      "description": "Returns right (material) stretch tensor of the cell (matrix $\\mat{V}$ from polar decomposition $\\mat{F}=\\mat{RU}=\\mat{VR}\\ \\rightarrow\\ \\mat{V}=\\mat{FR}^T$ )"
-    },
-    {
-      "name": "getRotation",
-      "description": "Returns rotation of the cell (orthogonal matrix $\\mat{R}$ from polar decomposition $\\mat{F}=\\mat{RU}$ )"
-    },
-    {
-      "name": "getSmallStrain",
-      "description": "Returns small strain tensor $\\mat{\\varepsilon}=\\frac{1}{2}(\\mat{F}+\\mat{F}^T)-\\mat{I}$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
-    },
-    {
-      "name": "getSpin",
-      "description": "Returns the spin defined by the skew symmetric part of velGrad<Cell.velGrad>"
-    },
-    {
       "name": "setBox",
-      "description": "Set Cell shape to be rectangular, with dimensions along axes specified by given argument. Shorthand for assigning diagonal matrix with respective entries to hSize<Cell.hSize>."
-    },
-    {
-      "name": "shearPt",
-      "description": "Apply shear (cell skew+rot) on the point"
-    },
-    {
-      "name": "unshearPt",
-      "description": "Apply inverse shear on the point (removes skew+rot of the cell)"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "None",
+      "description": "Set Cell shape to be rectangular, with dimensions along axes specified by given argument. Shorthand for assigning diagonal matrix with respective entries to hSize. setBox( (Cell)arg1, (float)arg2, (float)arg3, (float)arg4) -> None : Set Cell shape to be rectangular, with dimensions along $x$, $y$, $z$ specified by arguments. Shorthand for assigning diagonal matrix with the respective entries to hSize."
     },
     {
       "name": "wrap",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Transform an arbitrary point into a point in the reference cell"
     },
     {
+      "name": "unshearPt",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Apply inverse shear on the point (removes skew+rot of the cell)"
+    },
+    {
+      "name": "shearPt",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Apply shear (cell skew+rot) on the point"
+    },
+    {
       "name": "wrapPt",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Wrap point inside the reference cell, assuming the cell has no skew+rot."
+    },
+    {
+      "name": "getDefGrad",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns trsf<Cell.trsf> = deformation gradient tensor $ mat{F}$ of the cell deformation (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getSmallStrain",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns small strain tensor $ mat{ varepsilon}= frac{1}{2}( mat{F}+ mat{F}^T)- mat{I}$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getRCauchyGreenDef",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns right Cauchy-Green deformation tensor $ mat{C}= mat{F}^T mat{F}$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getLCauchyGreenDef",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns left Cauchy-Green deformation tensor $ mat{b}= mat{F} mat{F}^T$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getLagrangianStrain",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns Lagrangian strain tensor $ mat{E}= frac{1}{2}( mat{C}- mat{I})= frac{1}{2}( mat{F}^T mat{F}- mat{I})= frac{1}{2}( mat{U}^2- mat{I})$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getEulerianAlmansiStrain",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns Eulerian-Almansi strain tensor $ mat{e}= frac{1}{2}( mat{I}- mat{b}^{-1})= frac{1}{2}( mat{I}-( mat{F} mat{F}^T)^{-1})$ of the cell (http://en.wikipedia.org/wiki/Finite_strain_theory)"
+    },
+    {
+      "name": "getPolarDecOfDefGrad",
+      "args": [],
+      "returns": "tuple",
+      "description": "Returns orthogonal matrix $ mat{R}$ and symmetric positive semi-definite matrix $ mat{U}$ as polar decomposition of deformation gradient $ mat{F}$ of the cell ( $ mat{F}= mat{RU}$ )"
+    },
+    {
+      "name": "getRotation",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns rotation of the cell (orthogonal matrix $ mat{R}$ from polar decomposition $ mat{F}= mat{RU}$ )"
+    },
+    {
+      "name": "getLeftStretch",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns left (spatial) stretch tensor of the cell (matrix $ mat{U}$ from polar decomposition $ mat{F}= mat{RU}$ )"
+    },
+    {
+      "name": "getRightStretch",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Returns right (material) stretch tensor of the cell (matrix $ mat{V}$ from polar decomposition $ mat{F}= mat{RU}= mat{VR} rightarrow mat{V}= mat{FR}^T$ )"
+    },
+    {
+      "name": "getSpin",
+      "args": [],
+      "returns": "Vector3",
+      "description": "Returns the spin defined by the skew symmetric part of velGrad<Cell.velGrad>"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

@@ -21,7 +21,7 @@
       "name": "theta",
       "type": "float",
       "default": "0.55",
-      "description": "parameter of the 'theta'-method, 1: backward Euler, 0.5: trapezoidal rule, 0: not used,  0.55: suggested optimum)",
+      "description": "parameter of the 'theta'-method, 1: backward Euler, 0.5: trapezoidal rule, 0: not used, 0.55: suggested optimum)",
       "inherited_from": "Law2_ScGeom_ImplicitLubricationPhys"
     },
     {
@@ -99,12 +99,37 @@
   ],
   "methods": [
     {
-      "name": "getStressForEachBody",
-      "description": "Get stresses tensors for each bodies: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
+      "name": "staticmethod",
+      "args": [],
+      "returns": "method\n\nConvert a function to be a static method.\n\nA static method does not receive an implicit first argument.\nTo declare a static method, use this idiom",
+      "description": "class C: @staticmethod def f(arg1, arg2, ...): ... It can be called either on the class (e.g. C.f()) or on an instance (e.g. C().f()). Both the class and the instance are ignored, and neither is passed implicitly as the first argument to the method. Static methods in Python are similar to those found in Java or C++. For a more advanced concept, see the classmethod builtin.",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
     },
     {
-      "name": "getTotalStresses",
-      "description": "Get total stresses tensors: normal contact stress, shear contact stress, normal lubrication stress, shear lubrication stress, stress from additionnal potential forces."
+      "name": "staticmethod",
+      "args": [],
+      "returns": "method\n\nConvert a function to be a static method.\n\nA static method does not receive an implicit first argument.\nTo declare a static method, use this idiom",
+      "description": "class C: @staticmethod def f(arg1, arg2, ...): ... It can be called either on the class (e.g. C.f()) or on an instance (e.g. C().f()). Both the class and the instance are ignored, and neither is passed implicitly as the first argument to the method. Static methods in Python are similar to those found in Java or C++. For a more advanced concept, see the classmethod builtin.",
+      "inherited_from": "Law2_ScGeom_VirtualLubricationPhys"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

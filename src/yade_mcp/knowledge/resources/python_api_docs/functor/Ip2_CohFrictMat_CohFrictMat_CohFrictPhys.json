@@ -32,7 +32,7 @@
       "name": "frictAngle",
       "type": "MatchMaker",
       "default": "",
-      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used."
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used."
     },
     {
       "name": "label",
@@ -60,8 +60,23 @@
   ],
   "methods": [
     {
-      "name": "setCohesion",
-      "description": "Bond or un-bond an interaction with cohesion."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

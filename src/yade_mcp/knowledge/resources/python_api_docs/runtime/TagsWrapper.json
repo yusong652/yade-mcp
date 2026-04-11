@@ -3,5 +3,24 @@
   "category": "engines",
   "parent": "instance",
   "description": "Container emulating dictionary semantics for accessing tags associated with simulation. Tags are accesed by strings.",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "keys",
+      "args": [],
+      "returns": "None",
+      "description": "list"
+    },
+    {
+      "name": "has_key",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        }
+      ],
+      "returns": "None",
+      "description": "bool"
+    }
+  ]
 }

@@ -14,7 +14,7 @@
       "name": "normal",
       "type": "Vector3",
       "default": "Vector3(6.942907781812343346e-310,6.942926429186561406e-310,6.942926429189723426",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|"
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)"
     },
     {
       "name": "penetrationDepth",

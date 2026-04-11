@@ -2,7 +2,7 @@
   "name": "Gl1_LevelSet",
   "category": "engines",
   "parent": "GlShapeFunctor",
-  "description": "Renders LevelSet object\n\n.. ystaticattr:: Gl1_LevelSet.recompute(=false)\n\n\tWhether to recompute the triangulation every time it is rendered.\n\n.. ystaticattr:: Gl1_LevelSet.wire(=false)\n\n\tOnly show wireframe.\n\n.. ystaticattr:: Gl1_LevelSet.surfNodes(=false)\n\n\tRender surface nodes<LevelSet.surfNodes>.\n\n.. ystaticattr:: Gl1_LevelSet.surface(=true)\n\n\tRender particle surface as a zero contour of the distance field<LevelSet.distField> using the Marching Cubes algorithm.",
+  "description": "Renders LevelSet object .. ystaticattr:: Gl1_LevelSet.recompute(=false) Whether to recompute the triangulation every time it is rendered. .. ystaticattr:: Gl1_LevelSet.wire(=false) Only show wireframe. .. ystaticattr:: Gl1_LevelSet.surfNodes(=false) Render surface nodes<LevelSet.surfNodes>. .. ystaticattr:: Gl1_LevelSet.surface(=true) Render particle surface as a zero contour of the distance field<LevelSet.distField> using the Marching Cubes algorithm.",
   "attributes": [
     {
       "name": "label",

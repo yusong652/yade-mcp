@@ -3,43 +3,112 @@
   "category": "bodies",
   "parent": "instance",
   "description": "Access to interactions<Interaction> of simulation, by using \n\n#. id's of both Bodies<Body> of the interactions, e.g. ``O.interactions[23,65]``\n#. iteraction over the whole container::\n\n\tfor i in O.interactions: print i.id1,i.id2\n\n.. note::\n\tIteration silently skips interactions that are virtual...",
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "serializeSorted",
+      "type": "auto",
+      "default": "",
+      "description": ""
+    }
+  ],
   "methods": [
     {
-      "name": "all",
-      "description": "Return list of all interactions. Virtual interaction are filtered out if onlyReal=True, else (default) it dumps the full content."
-    },
-    {
-      "name": "clear",
-      "description": "Remove all interactions, and invalidate persistent collider data (if the collider supports it)."
-    },
-    {
-      "name": "countReal",
-      "description": "Return number of interactions that are real<Interaction.isReal>."
-    },
-    {
-      "name": "erase",
-      "description": "Erase one interaction, given by id1, id2 (internally, ``requestErase`` is called -- the interaction might still exist as potential, if the Collider decides so)."
-    },
-    {
-      "name": "eraseNonReal",
-      "description": "Erase all interactions that are not real <Interaction.isReal>."
-    },
-    {
       "name": "has",
+      "args": [
+        {
+          "name": "id1",
+          "type": "int"
+        },
+        {
+          "name": "id2",
+          "type": "int"
+        },
+        {
+          "name": "onlyReal",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "bool",
       "description": "Tell if a pair of ids *id1*, *id2* corresponds to an existing interaction (real<Interaction.isReal> or not depending on *onlyReal*)"
     },
     {
+      "name": "countReal",
+      "args": [],
+      "returns": "int",
+      "description": "Return number of interactions that are real<Interaction.isReal>."
+    },
+    {
       "name": "nth",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Interaction",
       "description": "Return n-th interaction from the container (usable for picking random interaction). The virtual interactions are not reached."
     },
     {
       "name": "withBody",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "list",
       "description": "Return list of real<Interaction.isReal> interactions of given body."
     },
     {
       "name": "withBodyAll",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "list",
       "description": "Return list of all (real<Interaction.isReal> as well as non-real) interactions of given body."
+    },
+    {
+      "name": "all",
+      "args": [
+        {
+          "name": "onlyReal",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of all interactions. Virtual interaction are filtered out if onlyReal=True, else (default) it dumps the full content."
+    },
+    {
+      "name": "eraseNonReal",
+      "args": [],
+      "returns": "None",
+      "description": "Erase all interactions that are not real <Interaction.isReal>."
+    },
+    {
+      "name": "erase",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "Erase one interaction, given by id1, id2 (internally, requestErase is called -- the interaction might still exist as potential, if the Collider decides so)."
+    },
+    {
+      "name": "clear",
+      "args": [],
+      "returns": "None",
+      "description": "Remove all interactions, and invalidate persistent collider data (if the collider supports it)."
     }
   ]
 }

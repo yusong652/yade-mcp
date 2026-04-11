@@ -101,7 +101,7 @@
       "name": "segmentArea",
       "type": "float",
       "default": "0.0",
-      "description": "Area of one segment of the body  (unit is $1000^2$ smaller than surface unit of the simulation, see"
+      "description": "Area of one segment of the body (unit is $1000^2$ smaller than surface unit of the simulation, see"
     },
     {
       "name": "vel",

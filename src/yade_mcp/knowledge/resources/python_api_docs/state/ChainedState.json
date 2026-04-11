@@ -135,15 +135,60 @@
   "methods": [
     {
       "name": "addToChain",
+      "args": [
+        {
+          "name": "bodyId",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
       "description": "Add body to current active chain"
     },
     {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "State"
+    },
+    {
       "name": "displ",
-      "description": "Displacement from reference position<State.refPos> (pos<State.pos> - refPos<State.refPos>)"
+      "args": [],
+      "returns": "Vector3",
+      "description": "Displacement from reference position<State.refPos> (pos<State.pos> - refPos<State.refPos>)",
+      "inherited_from": "State"
     },
     {
       "name": "rot",
-      "description": "Rotation from reference orientation<State.refOri> (as rotation vector)"
+      "args": [],
+      "returns": "Vector3",
+      "description": "Rotation from reference orientation<State.refOri> (as rotation vector)",
+      "inherited_from": "State"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

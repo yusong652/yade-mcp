@@ -27,13 +27,34 @@
       "name": "speed",
       "type": "float",
       "default": "1",
-      "description": "Keep to 1 for a true distance, 2 for the flake-like rose verification of [Duriez2021b]_."
+      "description": "Keep to 1 for a true distance, 2 for the flake-like rose verification of (Duriez2021b)."
     }
   ],
   "methods": [
     {
       "name": "phi",
+      "args": [],
+      "returns": "object",
       "description": "Executes the FMM and returns its solution as a list of list of list, with the [i][j][k] element corresponding to grid.gridPoint(i,j,k)."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

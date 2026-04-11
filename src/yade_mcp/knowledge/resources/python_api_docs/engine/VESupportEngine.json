@@ -2,7 +2,7 @@
   "name": "VESupportEngine",
   "category": "engines",
   "parent": "BoundaryController",
-  "description": "Engine that constraints given bodies in place (refPos) with a visco-elastic constrain according to the Burgers model. \n\n.. figure:: fig/rheological-scheme.*\n\t:width: 3cm\n\nBurger's rheological scheme with adopted designations. \n\nThe model of applied constraint can be degenerated to simpler models....",
+  "description": "Engine that constraints given bodies in place (refPos) with a visco-elastic constrain according to the Burgers model. .. figure:: fig/rheological-scheme.* :width: 3cm Burger's rheological scheme with adopted designations. The model of applied constraint can be degenerated to simpler models....",
   "attributes": [
     {
       "name": "bIds",

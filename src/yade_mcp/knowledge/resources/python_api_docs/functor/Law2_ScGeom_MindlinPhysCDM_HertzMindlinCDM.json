@@ -37,11 +37,34 @@
   "methods": [
     {
       "name": "ratioSlidingContacts",
+      "args": [],
+      "returns": "float",
       "description": "Return the ratio between the number of contacts sliding to the total number at a given time."
     },
     {
       "name": "ratioYieldingContacts",
+      "args": [],
+      "returns": "float",
       "description": "Return the ratio between the number of contacts yielding to the total number at a given time."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "name": "CapillarityEngine",
   "category": "engines",
   "parent": "GlobalEngine",
-  "description": "This engine loops over interactions with physics CapillaryPhysDelaunay and it assign pendular bridges to them. It is a reimplementation of [Scholtes2009b]_, adding the option of imposing the bridge volume (instead of only capillary pressure) and enabling using unstructured input data by...",
+  "description": "This engine loops over interactions with physics CapillaryPhysDelaunay and it assign pendular bridges to them. It is a reimplementation of (Scholtes2009b), adding the option of imposing the bridge volume (instead of only capillary pressure) and enabling using unstructured input data by...",
   "attributes": [
     {
       "name": "binaryFusion",
@@ -20,7 +20,7 @@
       "name": "createDistantMeniscii",
       "type": "bool",
       "default": "False",
-      "description": "Generate meniscii between distant spheres? Else only maintain the existing one. For modeling a wetting path this flag should always be false. For a drying path it should be true for one step (initialization) then false, as in the logic of [Scholtes2009c]_. The engine turns it off automatically after one execution."
+      "description": "Generate meniscii between distant spheres? Else only maintain the existing one. For modeling a wetting path this flag should always be false. For a drying path it should be true for one step (initialization) then false, as in the logic of (Scholtes2009c). The engine turns it off automatically after one execution."
     },
     {
       "name": "disp",
@@ -50,7 +50,7 @@
       "name": "hertzOn",
       "type": "bool",
       "default": "False",
-      "description": "|yupdate| true if hertz model is used"
+      "description": "(auto-updated) true if hertz model is used"
     },
     {
       "name": "imposePressure",

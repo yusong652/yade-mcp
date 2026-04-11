@@ -7,11 +7,39 @@
   "methods": [
     {
       "name": "generate",
+      "args": [
+        {
+          "name": "out",
+          "type": "str"
+        }
+      ],
+      "returns": "None",
       "description": "Generate scene, save to given file"
     },
     {
       "name": "load",
+      "args": [],
+      "returns": "None",
       "description": "Generate scene, save to temporary file and load immediately"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

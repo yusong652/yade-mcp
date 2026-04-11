@@ -3,5 +3,49 @@
   "category": "engines",
   "parent": "enum",
   "description": "",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "conjugate",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    },
+    {
+      "name": "bit_length",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    },
+    {
+      "name": "bit_count",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    },
+    {
+      "name": "to_bytes",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    },
+    {
+      "name": "from_bytes",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    },
+    {
+      "name": "as_integer_ratio",
+      "args": [],
+      "returns": "auto",
+      "description": "",
+      "inherited_from": "int"
+    }
+  ]
 }

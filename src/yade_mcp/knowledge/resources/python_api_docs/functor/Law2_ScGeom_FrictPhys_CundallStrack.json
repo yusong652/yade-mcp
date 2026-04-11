@@ -49,15 +49,45 @@
   "methods": [
     {
       "name": "elasticEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts"
     },
     {
+      "name": "plasticDissipation",
+      "args": [],
+      "returns": "float",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
+    },
+    {
       "name": "initPlasticDissipation",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
     },
     {
-      "name": "plasticDissipation",
-      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

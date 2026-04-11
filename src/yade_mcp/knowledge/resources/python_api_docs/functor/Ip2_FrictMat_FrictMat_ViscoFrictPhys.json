@@ -8,21 +8,21 @@
       "name": "kn",
       "type": "MatchMaker",
       "default": "",
-      "description": "Instance of MatchMaker determining how to compute interaction's normal stiffness. If ``None``, harmonic average is used.",
+      "description": "Instance of MatchMaker determining how to compute interaction's normal stiffness. If None, harmonic average is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
       "name": "ks",
       "type": "MatchMaker",
       "default": "",
-      "description": "Instance of MatchMaker determining how to compute interaction's shear stiffness. If ``None``, harmonic average is used.",
+      "description": "Instance of MatchMaker determining how to compute interaction's shear stiffness. If None, harmonic average is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
       "default": "",
-      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If ``None``, minimum value is used.",
+      "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
@@ -47,6 +47,27 @@
       "description": "Ordered list of types (as strings) this functor accepts.",
       "no_save": true,
       "inherited_from": "Functor"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

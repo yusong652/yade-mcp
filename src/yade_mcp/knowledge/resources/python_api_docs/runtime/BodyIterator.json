@@ -3,5 +3,13 @@
   "category": "engines",
   "parent": "instance",
   "description": "",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "__next__",
+      "args": [],
+      "returns": "None",
+      "description": "Body"
+    }
+  ]
 }

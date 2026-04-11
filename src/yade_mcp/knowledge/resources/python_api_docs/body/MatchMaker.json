@@ -8,7 +8,7 @@
       "name": "matches",
       "type": "list[Vector3]",
       "default": "",
-      "description": "Array of ``(id1,id2,value)`` items; queries matching ``id1`` + ``id2`` or ``id2`` + ``id1`` will return ``value``",
+      "description": "Array of (id1,id2,value) items; queries matching id1 + id2 or id2 + id1 will return value",
       "read_only": true
     },
     {
@@ -27,7 +27,37 @@
   "methods": [
     {
       "name": "computeFallback",
+      "args": [
+        {
+          "name": "val1",
+          "type": "float"
+        },
+        {
+          "name": "val2",
+          "type": "float"
+        }
+      ],
+      "returns": "float",
       "description": "Compute algo value for *val1* and *val2*, using algorithm specified by algo<MatchMaker.algo>."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

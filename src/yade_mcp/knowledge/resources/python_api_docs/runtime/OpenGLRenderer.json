@@ -163,20 +163,57 @@
   ],
   "methods": [
     {
-      "name": "hideBody",
-      "description": "Hide body from id (see OpenGLRenderer::showBody)"
-    },
-    {
-      "name": "render",
-      "description": "Render the scene in the current OpenGL context."
-    },
-    {
       "name": "setRefSe3",
+      "args": [],
+      "returns": "None",
       "description": "Make current positions and orientation reference for scaleDisplacements and scaleRotations."
     },
     {
+      "name": "render",
+      "args": [],
+      "returns": "None",
+      "description": "Render the scene in the current OpenGL context."
+    },
+    {
+      "name": "hideBody",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "Hide body from id (see OpenGLRenderer::showBody)"
+    },
+    {
       "name": "showBody",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
       "description": "Make body visible (see OpenGLRenderer::hideBody)"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

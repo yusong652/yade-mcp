@@ -22,20 +22,20 @@
       "name": "surfNodes",
       "type": "vector<Vector3r>",
       "default": "",
-      "description": "Surface discretization nodes (the list of) used for exact contact treatment in Ig2_LevelSet_LevelSet_ScGeom, previously coined boundNodes in [Duriez2021b]_. Expressed in local frame. Getting them back after a save/load cycle requires to launch one iteration or to first ask for shape.center.",
+      "description": "Surface discretization nodes (the list of) used for exact contact treatment in Ig2_LevelSet_LevelSet_ScGeom, previously coined boundNodes in (Duriez2021b). Expressed in local frame. Getting them back after a save/load cycle requires to launch one iteration or to first ask for shape.center.",
       "read_only": true
     },
     {
       "name": "nSurfNodes",
       "type": "int",
       "default": "100",
-      "description": "The number of boundary nodes in surfNodes, previously coined nNodes in [Duriez2021b]_. Usually set through utils levelSetBody() function (has to be set at instantiation in all cases). Please use a perfect square + 2 if not twoD and if nodesPath = 1."
+      "description": "The number of boundary nodes in surfNodes, previously coined nNodes in (Duriez2021b). Usually set through utils levelSetBody() function (has to be set at instantiation in all cases). Please use a perfect square + 2 if not twoD and if nodesPath = 1."
     },
     {
       "name": "nodesPath",
       "type": "int",
       "default": "2",
-      "description": "Defines how the space of spherical coordinates $( theta in [0; pi] , varphi in [0;2 pi])$ is discretized when ray tracing the boundary nodes: 1 gives a rectangular partition of that space, plus two nodes at $ theta = 0 [ pi]$; 2 locates the nodes along a spiral path [Duriez2021a]_"
+      "description": "Defines how the space of spherical coordinates $( theta in [0; pi] , varphi in [0;2 pi])$ is discretized when ray tracing the boundary nodes: 1 gives a rectangular partition of that space, plus two nodes at $ theta = 0 [ pi]$; 2 locates the nodes along a spiral path (Duriez2021a)"
     },
     {
       "name": "nodesTol",
@@ -96,64 +96,93 @@
   ],
   "methods": [
     {
-      "name": "assignSurfNodes",
-      "description": "Assigns given *nodes* (as a list of Vector3r points conforming local frame) to surfNodes<LevelSet.surfNodes>, erasing pre-existing ones if any."
-    },
-    {
-      "name": "binarize",
-      "description": "Returns (for any user-defined purpose) a voxellised description of the shape volume. Selection (as being part of the particle) of voxels associated with a strictly zero value of distance depends on *surface*."
+      "name": "volume",
+      "args": [],
+      "returns": "float",
+      "description": "A 2025/09-deprecated version of getVolume<LevelSet.getVolume>. Please use the latter instead."
     },
     {
       "name": "center",
+      "args": [],
+      "returns": "Vector3",
       "description": "The center of mass of the volume<LevelSet.volume> (considering obviously an uniform density for this volume), in local axes (for verification purposes, by comparison with the origin)."
     },
     {
-      "name": "computeMarchingCubes",
-      "description": "Compute or recompute the triangulation of the particle surface after using the Marching Cubes algorithm on distField<LevelSet.distField>."
-    },
-    {
-      "name": "distance",
-      "description": "Distance to surface at *pt*, with pt being expressed in the local frame. The 'unbound' flag (if True) allows the computation of distance values outside of the grid<LevelSet.lsGrid> extents, which otherwise returns NaN together with an error."
-    },
-    {
-      "name": "getSurface",
-      "description": "Compute particle surface by differentiation of Level Set volume around $\\phi = 0$, where best results have usually been obtained using smearCoeff<LevelSet.smearCoeff> = 1. Given argument *epsilon* (as a length quantity) serves to initialize the recursive limit search in the derivative expression (see [Duriez2025]_)"
-    },
-    {
-      "name": "getVolume",
-      "description": "Returns the shape volume as the negative domain of the level set function<LevelSet.distField>, in a voxellised fashion, where a negative value of the level set, distField[i][j][k]<LevelSet.distField> $\\leq$ 0, is considered to correspond to a material cubic voxel of side lsGrid.spacing<RegularGrid.spacing> and centered at lsGrid.gridPoint(i,j,k)<RegularGrid.gridPoint>. Smearing considerations may apply as per smearCoeff<LevelSet.smearCoeff>."
-    },
-    {
       "name": "inertia",
+      "args": [],
+      "returns": "Vector3",
       "description": "The diagonal coefficients (i.e., eigenvalues, in a consistent workflow) of the geometric inertia matrix (the one considering the infinitesimal volume as the integrand, instead of infinitesimal mass) of the particle volume<LevelSet.getVolume>, as a (xx,yy,zz) Vector3r."
     },
     {
-      "name": "marchingCubesNbTriangles",
-      "description": "Returns the number of triangles forming the surface triangulation as per the Marching Cubes algorithm (executed on distField<LevelSet.distField>)."
+      "name": "distance",
+      "args": [
+        {
+          "name": "pt",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "float",
+      "description": "Distance to surface at *pt*, with pt being expressed in the local frame. The 'unbound' flag (if True) allows the computation of distance values outside of the grid<LevelSet.lsGrid> extents, which otherwise returns NaN together with an error."
     },
     {
-      "name": "marchingCubesNormals",
-      "description": "Returns the normals for a surface triangulation obtained after executing the Marching Cubes algorithm on distField<LevelSet.distField>."
-    },
-    {
-      "name": "marchingCubesVertices",
-      "description": "Returns the vertices for a surface triangulation obtained after executing the Marching Cubes algorithm on distField<LevelSet.distField>."
+      "name": "marchingCubes",
+      "args": [],
+      "returns": "object",
+      "description": "Vertices of a triangulation of the particle surface after executing the Marching Cubes algorithm on distField."
     },
     {
       "name": "normal",
+      "args": [
+        {
+          "name": "pt",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Unit normal vector to the surface, at some pt. Local frame applies to both output normal and input pt. Has an 'unbound' flag signaling whether to allow (if True) the computation of the normal outside of the grid<LevelSet.lsGrid> extents."
     },
     {
       "name": "rayTrace",
+      "args": [
+        {
+          "name": "ray",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "None",
       "description": "Performs one ray tracing along *ray* (to be given in cartesian coordinates, see spher2cart() if a conversion is useful from spherical ones; norm should not matter) and returns the obtained surface points (without modifying surfNodes<LevelSet.surfNodes>). Argument *nodesTol* has the same meaning as in rayTraceSurfNodes<LevelSet.rayTraceSurfNodes>, see therein. Provided for debugging or shape analysis purposes."
     },
     {
-      "name": "rayTraceSurfNodes",
-      "description": "Defines all surface nodes (i.e., surfNodes<LevelSet.surfNodes>) by ray tracing, erasing pre-existing ones if any, according to given arguments"
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "Shape"
     },
     {
-      "name": "volume",
-      "description": "A 2025/09-deprecated version of getVolume<LevelSet.getVolume>. Please use the latter instead."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

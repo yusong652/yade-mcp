@@ -44,19 +44,19 @@
       "name": "beta",
       "type": "float",
       "default": "0.0",
-      "description": "Auxiliary parameter used in the viscous damping model of [Mueller2011]_"
+      "description": "Auxiliary parameter used in the viscous damping model of (Mueller2011)"
     },
     {
       "name": "betan",
       "type": "float",
       "default": "0.0",
-      "description": "Normal Damping Ratio. Fraction of the viscous damping coefficient (normal direction) equal to $\\frac{c_{n}}{C_{n,crit}}$."
+      "description": "Normal Damping Ratio. Fraction of the viscous damping coefficient (normal direction) equal to $ frac{c_{n}}{C_{n,crit}}$."
     },
     {
       "name": "betas",
       "type": "float",
       "default": "0.0",
-      "description": "Shear Damping Ratio. Fraction of the viscous damping coefficient (shear direction) equal to $\\frac{c_{s}}{C_{s,crit}}$."
+      "description": "Shear Damping Ratio. Fraction of the viscous damping coefficient (shear direction) equal to $ frac{c_{s}}{C_{s,crit}}$."
     },
     {
       "name": "capillaryPressure",

@@ -14,7 +14,7 @@
       "name": "initialOrientation1",
       "type": "Quaternion",
       "default": "Quaternionr(1.0,0.0,0.0,0.0)",
-      "description": "Orientation of body 1 one at initialisation time |yupdate|",
+      "description": "Orientation of body 1 one at initialisation time (auto-updated)",
       "read_only": true,
       "inherited_from": "ScGeom6D"
     },
@@ -22,7 +22,7 @@
       "name": "initialOrientation2",
       "type": "Quaternion",
       "default": "Quaternionr(1.0,0.0,0.0,0.0)",
-      "description": "Orientation of body 2 one at initialisation time |yupdate|",
+      "description": "Orientation of body 2 one at initialisation time (auto-updated)",
       "read_only": true,
       "inherited_from": "ScGeom6D"
     },
@@ -30,7 +30,7 @@
       "name": "twistCreep",
       "type": "Quaternion",
       "default": "Quaternionr(1.0,0.0,0.0,0.0)",
-      "description": "Stored creep, substracted from total relative rotation for computation of elastic moment |yupdate|",
+      "description": "Stored creep, substracted from total relative rotation for computation of elastic moment (auto-updated)",
       "read_only": true,
       "inherited_from": "ScGeom6D"
     },
@@ -72,7 +72,7 @@
       "name": "normal",
       "type": "Vector3",
       "default": "",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)",
       "read_only": true,
       "inherited_from": "GenericSpheresContact"
     },
@@ -109,11 +109,64 @@
   "methods": [
     {
       "name": "incidentVel",
-      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+      "args": [
+        {
+          "name": "i",
+          "type": "Interaction"
+        },
+        {
+          "name": "avoidGranularRatcheting",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument).",
+      "inherited_from": "ScGeom"
     },
     {
       "name": "relAngVel",
-      "description": "Return relative angular velocity of the interaction."
+      "args": [
+        {
+          "name": "i",
+          "type": "Interaction"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Return relative angular velocity of the interaction.",
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

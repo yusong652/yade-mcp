@@ -3,5 +3,26 @@
   "category": "engines",
   "parent": "Serializable",
   "description": "Abstract callback object which will be called for every (real) Interaction after the interaction has been processed by InteractionLoop.\n\nAt the beginning of the interaction loop, ``stepInit`` is called, initializing the object; it returns either ``NULL`` (to deactivate the callback during this time step) or pointer to function, which will then be passed (1) pointer to the callback object itself and (2) pointer to Interaction.\n\n.. note::\n\t(NOT YET DONE) This functionality is accessible from python by passing 4th argument to InteractionLoop constructor, or by appending the callback object to InteractionLoop::callbacks.",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
+    }
+  ]
 }

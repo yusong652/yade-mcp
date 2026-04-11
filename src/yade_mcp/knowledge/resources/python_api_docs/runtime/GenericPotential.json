@@ -3,5 +3,26 @@
   "category": "engines",
   "parent": "Serializable",
   "description": "Generic class for potential representation in PotentialLubrication law. Don't do anything. If set as potential, the result will be a lubrication-only simulation.",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
+    }
+  ]
 }

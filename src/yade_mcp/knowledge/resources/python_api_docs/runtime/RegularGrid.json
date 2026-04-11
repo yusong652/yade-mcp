@@ -28,20 +28,65 @@
   ],
   "methods": [
     {
-      "name": "closestCorner",
-      "description": "Returns the Vector3i indices of the closest gridpoint which is smaller (for all components) than *pt*."
-    },
-    {
-      "name": "dims",
-      "description": "Returns the grid dimensions along the three axes, as a Vector3."
-    },
-    {
       "name": "gridPoint",
+      "args": [
+        {
+          "name": "i",
+          "type": "int"
+        },
+        {
+          "name": "j",
+          "type": "int"
+        },
+        {
+          "name": "k",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Returns the Vector3 position of any grid point, given its indices *i* (along the X-axis), *j* (Y-axis), *k* (Z-axis)."
     },
     {
       "name": "max",
+      "args": [],
+      "returns": "Vector3",
       "description": "Returns the maximum corner of the grid."
+    },
+    {
+      "name": "dims",
+      "args": [],
+      "returns": "Vector3",
+      "description": "Returns the grid dimensions along the three axes, as a Vector3."
+    },
+    {
+      "name": "closestCorner",
+      "args": [
+        {
+          "name": "pt",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "Vector3i",
+      "description": "Returns the Vector3i indices of the closest gridpoint which is smaller (for all components) than *pt*."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

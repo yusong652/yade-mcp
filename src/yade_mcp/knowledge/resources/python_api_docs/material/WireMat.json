@@ -14,7 +14,7 @@
       "name": "type",
       "type": "int",
       "default": "0",
-      "description": "Three different types are considered:\n\n== ===============================================================\n0  Corresponds to Bertrand's approach (see [Bertrand2008]_): only one stress-strain curve is used\n1  New approach: two separate stress-strain curves can be used (see [Thoeni2013]_)\n2  New approach with stochastically distorted contact model: two separate stress-strain curves with changed initial stiffness and horizontal shift (shift is random if $\\text{seed}\\geq0$, for more details see [Thoeni2013]_)\n== ===============================================================\n\nBy default the type is 0."
+      "description": "Three different types are considered: == =============================================================== 0 Corresponds to Bertrand's approach (see (Bertrand2008)): only one stress-strain curve is used 1 New approach: two separate stress-strain curves can be used (see (Thoeni2013)) 2 New approach with stochastically distorted contact model: two separate stress-strain curves with changed initial stiffness and horizontal shift (shift is random if $ text{seed} geq0$, for more details see (Thoeni2013)) == =============================================================== By default the type is 0."
     },
     {
       "name": "strainStressValues",
@@ -26,7 +26,7 @@
       "name": "strainStressValuesDT",
       "type": "vector<Vector2r>",
       "default": "",
-      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for the double twist. Tension only is considered and the point (0,0) is not needed! If this value is given the calculation will be based on two different stress-strain curves without considering the parameter introduced by [Bertrand2008]_ (see [Thoeni2013]_)."
+      "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for the double twist. Tension only is considered and the point (0,0) is not needed! If this value is given the calculation will be based on two different stress-strain curves without considering the parameter introduced by (Bertrand2008) (see (Thoeni2013))."
     },
     {
       "name": "isDoubleTwist",
@@ -38,13 +38,13 @@
       "name": "lambdaEps",
       "type": "float",
       "default": "0.47",
-      "description": "Parameter between 0 and 1 to reduce strain at failure of a double-twisted wire (as used by [Bertrand2008]_). [-]"
+      "description": "Parameter between 0 and 1 to reduce strain at failure of a double-twisted wire (as used by (Bertrand2008)). [-]"
     },
     {
       "name": "lambdak",
       "type": "float",
       "default": "0.73",
-      "description": "Parameter between 0 and 1 to compute the elastic stiffness of a double-twisted wire (as used by [Bertrand2008]_): $k^D=2(\\lambda_k k_h + (1-\\lambda_k)k^S)$. [-]"
+      "description": "Parameter between 0 and 1 to compute the elastic stiffness of a double-twisted wire (as used by (Bertrand2008)): $k^D=2( lambda_k k_h + (1- lambda_k)k^S)$. [-]"
     },
     {
       "name": "seed",
@@ -56,13 +56,13 @@
       "name": "lambdau",
       "type": "float",
       "default": "0.2",
-      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines the maximum shift of the force-displacement curve in order to take an additional initial elongation (e.g. wire distortion/imperfections, slipping, system flexibility) into account: $\\Delta l^*=\\lambda_u l_0 \\text{rnd(seed)}$. [-]"
+      "description": "Parameter between 0 and 1 introduced by (Thoeni2013) which defines the maximum shift of the force-displacement curve in order to take an additional initial elongation (e.g. wire distortion/imperfections, slipping, system flexibility) into account: $ Delta l^*= lambda_u l_0 text{rnd(seed)}$. [-]"
     },
     {
       "name": "lambdaF",
       "type": "float",
       "default": "1.0",
-      "description": "Parameter between 0 and 1 introduced by [Thoeni2013]_ which defines where the shifted force-displacement curve intersects with the new initial stiffness: $F^*=\\lambda_F F_{\\text{elastic}}$. [-]"
+      "description": "Parameter between 0 and 1 introduced by (Thoeni2013) which defines where the shifted force-displacement curve intersects with the new initial stiffness: $F^*= lambda_F F_{ text{elastic}}$. [-]"
     },
     {
       "name": "as",
@@ -121,6 +121,47 @@
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Material"
+    }
+  ],
+  "methods": [
+    {
+      "name": "newAssocState",
+      "args": [],
+      "returns": "State",
+      "description": "Return new State instance, which is associated with this Material. Some materials have special requirement on state type and calling this function when the body is created will ensure that they match. (This is done automatically if you use utils.sphere, \u2026 functions from python).",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

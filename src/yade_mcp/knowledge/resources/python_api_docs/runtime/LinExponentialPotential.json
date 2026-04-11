@@ -49,20 +49,91 @@
   ],
   "methods": [
     {
+      "name": "setParameters",
+      "args": [
+        {
+          "name": "x0",
+          "type": "float"
+        },
+        {
+          "name": "xe",
+          "type": "float"
+        },
+        {
+          "name": "k",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "Set parameters of the potential"
+    },
+    {
       "name": "computeParametersFromF0",
+      "args": [
+        {
+          "name": "F0",
+          "type": "float"
+        },
+        {
+          "name": "xe",
+          "type": "float"
+        },
+        {
+          "name": "k",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Set parameters of the potential, with $k$ computed from $F_0$"
     },
     {
       "name": "computeParametersFromF0Fe",
+      "args": [
+        {
+          "name": "xe",
+          "type": "float"
+        },
+        {
+          "name": "Fe",
+          "type": "float"
+        },
+        {
+          "name": "F0",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Set parameters of the potential, with $k$ and $x_0$ computed from $F_0$ and $F_e$"
     },
     {
       "name": "potential",
+      "args": [
+        {
+          "name": "u",
+          "type": "float"
+        }
+      ],
+      "returns": "float",
       "description": "Get potential value at any point."
     },
     {
-      "name": "setParameters",
-      "description": "Set parameters of the potential"
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

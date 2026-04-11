@@ -3,10 +3,19 @@
   "category": "engines",
   "parent": "instance",
   "description": "",
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "data",
+      "type": "list",
+      "default": "[]",
+      "description": "Get timing data as list of tuples (label, execTime[nsec], execCount) (one tuple per checkpoint)"
+    }
+  ],
   "methods": [
     {
       "name": "reset",
+      "args": [],
+      "returns": "None",
       "description": "Reset timing information"
     }
   ]

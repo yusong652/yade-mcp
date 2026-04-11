@@ -14,7 +14,7 @@
       "name": "goal",
       "type": "Vector3",
       "default": "(0, 0, 0)",
-      "description": "Desired stress or strain values (depending on stressMask), strains defined as ``strain(i)=log(Fii)`` with ``Fii`` the cell transformation matrix.\n\n.. warning:: Strains are relative to the"
+      "description": "Desired stress or strain values (depending on stressMask), strains defined as strain(i)=log(Fii) with Fii the cell transformation matrix. .. warning:: Strains are relative to the"
     },
     {
       "name": "stressMask",
@@ -38,19 +38,19 @@
       "name": "absStressTol",
       "type": "float",
       "default": "1e3",
-      "description": "Absolute stress tolerance with respect to ``goal``."
+      "description": "Absolute stress tolerance with respect to goal."
     },
     {
       "name": "relStressTol",
       "type": "float",
       "default": "3e-5",
-      "description": "Relative stress tolerance with respect to ``goal``."
+      "description": "Relative stress tolerance with respect to goal."
     },
     {
       "name": "growDamping",
       "type": "float",
       "default": ".25",
-      "description": "Damping of cell resizing (0=perfect control, 1=no control at all); see also ``wallDamping`` in"
+      "description": "Damping of cell resizing (0=perfect control, 1=no control at all); see also wallDamping in"
     },
     {
       "name": "globUpdate",
@@ -86,28 +86,28 @@
       "name": "strain",
       "type": "Vector3",
       "default": "(0, 0, 0)",
-      "description": "Cell true strain |yupdate|",
+      "description": "Cell true strain (auto-updated)",
       "read_only": true
     },
     {
       "name": "strainRate",
       "type": "Vector3",
       "default": "(0, 0, 0)",
-      "description": "cell strain rate |yupdate|",
+      "description": "cell strain rate (auto-updated)",
       "read_only": true
     },
     {
       "name": "stiff",
       "type": "Vector3",
       "default": "(0, 0, 0)",
-      "description": "average stiffness (only every globUpdate steps recomputed from interactions) |yupdate|",
+      "description": "average stiffness (only every globUpdate steps recomputed from interactions) (auto-updated)",
       "read_only": true
     },
     {
       "name": "currUnbalanced",
       "type": "float",
       "default": "NaN",
-      "description": "current unbalanced force (updated every globUpdate) |yupdate|",
+      "description": "current unbalanced force (updated every globUpdate) (auto-updated)",
       "read_only": true
     },
     {
@@ -153,7 +153,7 @@
       "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -161,7 +161,7 @@
       "name": "execCount",
       "type": "int",
       "default": "0",
-      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -169,9 +169,30 @@
       "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

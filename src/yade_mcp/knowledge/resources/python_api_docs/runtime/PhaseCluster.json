@@ -37,48 +37,147 @@
   ],
   "methods": [
     {
+      "name": "getPores",
+      "args": [],
+      "returns": "object",
+      "description": "get the list of pores by index"
+    },
+    {
+      "name": "getInterfaces",
+      "args": [
+        {
+          "name": "CellId",
+          "type": "int",
+          "default": "-1"
+        }
+      ],
+      "returns": "list",
+      "description": "get the list of interfacial pore-throats associated to a cluster, listed as [id1,id2,area,index] where id2 is the neighbor pore outside the cluster and index is the position in the global cluster's list of interfaces. If cellId>=0 only the interfaces adjacent to the corresponding inner cell are returned."
+    },
+    {
+      "name": "getFlux",
+      "args": [
+        {
+          "name": "interface",
+          "type": "int"
+        }
+      ],
+      "returns": "float",
+      "description": "get flux at an interface (i.e. velocity of the menicus), the index to be used is the rank of the interface in the same order as in getInterfaces()."
+    },
+    {
+      "name": "setCapPressure",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        },
+        {
+          "name": "pCap",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "set local capillary pressure"
+    },
+    {
       "name": "getCapPressure",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        }
+      ],
+      "returns": "float",
       "description": "get local capillary pressure"
     },
     {
+      "name": "setCapVol",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        },
+        {
+          "name": "vCap",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "set position of the meniscus - in terms of volume"
+    },
+    {
       "name": "getCapVol",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        }
+      ],
+      "returns": "float",
       "description": "get position of the meniscus - in terms of volume"
     },
     {
       "name": "getConductivity",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        }
+      ],
+      "returns": "float",
       "description": "get conductivity"
     },
     {
-      "name": "getFlux",
-      "description": "get flux at an interface (i.e. velocity of the menicus), the index to be used is the rank of the interface in the same order as in getInterfaces()."
-    },
-    {
-      "name": "getInterfaces",
-      "description": "get the list of interfacial pore-throats associated to a cluster, listed as [id1,id2,area,index] where id2 is the neighbor pore outside the cluster and index is the position in the global cluster's list of interfaces. If cellId>=0 only the interfaces adjacent to the corresponding inner cell are returned."
-    },
-    {
-      "name": "getPores",
-      "description": "get the list of pores by index"
-    },
-    {
-      "name": "setCapPressure",
-      "description": "set local capillary pressure"
-    },
-    {
-      "name": "setCapVol",
-      "description": "set position of the meniscus - in terms of volume"
-    },
-    {
-      "name": "solvePressure",
-      "description": "Solve 1-phase flow in one single cluster defined by its id."
-    },
-    {
       "name": "updateCapVol",
+      "args": [
+        {
+          "name": "numf",
+          "type": "int"
+        },
+        {
+          "name": "dt",
+          "type": "float"
+        }
+      ],
+      "returns": "float",
       "description": "increments throat's volume of given interface by flux*dt"
     },
     {
       "name": "updateCapVolList",
+      "args": [
+        {
+          "name": "dt",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "increments throat's volume of all interfaces by flux*dt"
+    },
+    {
+      "name": "solvePressure",
+      "args": [],
+      "returns": "None",
+      "description": "Solve 1-phase flow in one single cluster defined by its id."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

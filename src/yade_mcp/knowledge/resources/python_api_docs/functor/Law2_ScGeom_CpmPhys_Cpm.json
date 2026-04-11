@@ -66,12 +66,52 @@
   ],
   "methods": [
     {
+      "name": "yieldSigmaTMagnitude",
+      "args": [
+        {
+          "name": "sigmaN",
+          "type": "float"
+        },
+        {
+          "name": "omega",
+          "type": "float"
+        },
+        {
+          "name": "undamagedCohesion",
+          "type": "float"
+        },
+        {
+          "name": "tanFrictionAngle",
+          "type": "float"
+        }
+      ],
+      "returns": "float",
+      "description": "Return radius of yield surface for given material and state parameters; uses attributes of the current instance (*yieldSurfType* etc), change them before calling if you need that."
+    },
+    {
       "name": "elasticEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute and return the total elastic energy in all \"CpmPhys\" contacts"
     },
     {
-      "name": "yieldSigmaTMagnitude",
-      "description": "Return radius of yield surface for given material and state parameters; uses attributes of the current instance (*yieldSurfType* etc), change them before calling if you need that."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

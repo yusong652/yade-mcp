@@ -2,6 +2,6 @@
   "name": "Ig2_Sphere_LevelSet_ScGeom",
   "category": "engines",
   "parent": "IGeomFunctor",
-  "description": "Creates or updates a ScGeom instance representing the intersection of one LevelSet-shaped body with one Sphere-shaped body, where overlap is always chosen to occur inside the level set body (i.e. spheres will always be expelled). \n\tContact normal<ScGeom.normal> $\\vec{n}$ is given by the level set...",
+  "description": "Creates or updates a ScGeom instance representing the intersection of one LevelSet-shaped body with one Sphere-shaped body, where overlap is always chosen to occur inside the level set body (i.e. spheres will always be expelled). Contact normal<ScGeom.normal> $ vec{n}$ is given by the level set...",
   "attributes": []
 }

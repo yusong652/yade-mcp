@@ -20,7 +20,7 @@
       "name": "initAccelTime",
       "type": "float",
       "default": "-200",
-      "description": "Time for strain reaching the requested value (linear interpolation). If negative, the time is dt*(-initAccelTime), where dt is  the timestep at the first iteration. [s]"
+      "description": "Time for strain reaching the requested value (linear interpolation). If negative, the time is dt*(-initAccelTime), where dt is the timestep at the first iteration. [s]"
     },
     {
       "name": "stopStrain",
@@ -44,7 +44,7 @@
       "name": "currentStrainRate",
       "type": "float",
       "default": "NaN",
-      "description": "Current strain rate (update automatically). |yupdate|",
+      "description": "Current strain rate (update automatically). (auto-updated)",
       "read_only": true
     },
     {
@@ -99,14 +99,14 @@
       "name": "strain",
       "type": "float",
       "default": "0",
-      "description": "Current strain value, elongation/originalLength |yupdate| [-]",
+      "description": "Current strain value, elongation/originalLength (auto-updated) [-]",
       "read_only": true
     },
     {
       "name": "avgStress",
       "type": "float",
       "default": "0",
-      "description": "Current average stress  |yupdate| [Pa]",
+      "description": "Current average stress (auto-updated) [Pa]",
       "read_only": true
     },
     {
@@ -158,7 +158,7 @@
       "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -166,7 +166,7 @@
       "name": "execCount",
       "type": "int",
       "default": "0",
-      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -174,9 +174,30 @@
       "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

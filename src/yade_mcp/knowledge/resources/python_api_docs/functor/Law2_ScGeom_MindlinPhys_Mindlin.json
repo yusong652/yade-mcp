@@ -89,15 +89,40 @@
   "methods": [
     {
       "name": "contactsAdhesive",
+      "args": [],
+      "returns": "float",
       "description": "Compute total number of adhesive contacts."
     },
     {
+      "name": "ratioSlidingContacts",
+      "args": [],
+      "returns": "float",
+      "description": "Return the ratio between the number of contacts sliding to the total number at a given time."
+    },
+    {
       "name": "normElastEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute normal elastic potential energy. It handles the DMT formulation if Law2_ScGeom_MindlinPhys_Mindlin::includeAdhesion is set to true."
     },
     {
-      "name": "ratioSlidingContacts",
-      "description": "Return the ratio between the number of contacts sliding to the total number at a given time."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

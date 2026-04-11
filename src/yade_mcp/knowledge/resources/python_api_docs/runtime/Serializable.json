@@ -3,5 +3,24 @@
   "category": "engines",
   "parent": "instance",
   "description": "",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes."
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary"
+    }
+  ]
 }

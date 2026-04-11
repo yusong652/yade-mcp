@@ -3,5 +3,18 @@
   "category": "engines",
   "parent": "instance",
   "description": "",
-  "attributes": []
+  "attributes": [],
+  "methods": [
+    {
+      "name": "ymport",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        }
+      ],
+      "returns": "None",
+      "description": "object"
+    }
+  ]
 }

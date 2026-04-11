@@ -6,23 +6,222 @@
   "methods": [
     {
       "name": "append",
-      "description": "\nappend( (BodyContainer)arg1, (Body)arg2) -> int :\n    Append one Body instance, return its id.\n\nappend( (BodyContainer)arg1, (object)arg2) -> object :\n    Append list of Body instance, return list of"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        }
+      ],
+      "returns": "int",
+      "description": "append( (BodyContainer)arg1, (Body)arg2) -> int : Append one Body instance, return its id. append( (BodyContainer)arg1, (object)arg2) -> object : Append list of Body instance, return list of"
     },
     {
-      "name": "erase",
-      "description": "\nerase( (BodyContainer)arg1, (int)arg2 [, (bool)eraseClumpMembers=0]) -> bool :\n    Erase body with the given id; all interaction will be deleted by InteractionLoop in the next step. If a clump is era"
-    },
-    {
-      "name": "clear",
-      "description": "\nclear( (BodyContainer)arg1) -> None :\n    Remove all bodies (interactions not checked)"
+      "name": "appendClumped",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "object"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "tuple",
+      "description": "Append given list of bodies as a clump (rigid aggregate); returns a tuple of (clumpId,[memberId1,memberId2,...]). Clump masses and inertia are computed automatically depending upon *discretization* (for details see clump())."
     },
     {
       "name": "clump",
-      "description": "\nclump( (BodyContainer)arg1, (object)arg2 [, (int)discretization=0]) -> int :\n    Clump given bodies together (creating a rigid aggregate); returns ``clumpId``. A precise definition of clump masses an"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "object"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "int",
+      "description": "Clump given bodies together (creating a rigid aggregate); returns clumpId. A precise definition of clump masses and inertia when clump members overlap requires *discretization*>0 and is achieved in this case by integration/summation over mass points using a regular grid of cells (grid cells length is defined as $L_{min}/discretization$, where $L_{min}$ is the minimum length of an Axis-Aligned Bounding Box. If *discretization*<=0 sum of inertias from members is simply used, which is faster but accurate only for non-overlapping members)."
+    },
+    {
+      "name": "updateClumpProperties",
+      "args": [
+        {
+          "name": "excludeList",
+          "type": "list"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "5"
+        }
+      ],
+      "returns": "None",
+      "description": "Manually force Yade to update clump properties mass, volume and inertia (for details of 'discretization' value see clump()). Can be used, when clumps are modified or erased during a simulation. Clumps can be excluded from the calculation by giving a list of ids: *O.bodies.updateProperties([ids])*."
+    },
+    {
+      "name": "deleteClumpMember",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        },
+        {
+          "name": "arg3",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Erase clump member."
+    },
+    {
+      "name": "deleteClumpBody",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        }
+      ],
+      "returns": "None",
+      "description": "Erase clump member."
+    },
+    {
+      "name": "addToClump",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "object"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "None",
+      "description": "Add body b (or a list of bodies) to an existing clump c. c must be clump and b may not be a clump member of c. Clump masses and inertia are adapted automatically (for details see clump()). See :ysrc:`examples/clumps/addToClump-example.py` for an example script. .. note:: If b is a clump itself, then all members will be added to c and b will be deleted. If b is a clump member of clump d, then all members from d will be added to c and d will be deleted. If you need to add just clump member b, release this member from d first."
+    },
+    {
+      "name": "releaseFromClump",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "None",
+      "description": "Release body b from clump c. b must be a clump member of c. Clump masses and inertia are adapted automatically (for details see clump()). See :ysrc:`examples/clumps/releaseFromClump-example.py` for an example script. .. note:: If c contains only 2 members b will not be released and a warning will appear. In this case clump c should be erased."
     },
     {
       "name": "replaceByClumps",
-      "description": "\nreplaceByClumps( (BodyContainer)arg1, (list)arg2, (object)arg3 [, (int)discretization=0]) -> list :\n    Replace spheres by clumps using a list of clump templates and a list of amounts; returns a list"
+      "args": [
+        {
+          "name": "arg2",
+          "type": "list"
+        },
+        {
+          "name": "arg3",
+          "type": "object"
+        },
+        {
+          "name": "discretization",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "list",
+      "description": "Replace spheres by clumps using a list of clump templates and a list of amounts; returns a list of tuples: [(clumpId1,[memberId1,memberId2,...]),(clumpId2,[memberId1,memberId2,...]),...]. A new clump will have the same volume as the sphere, that was replaced. Clump masses and inertia are adapted automatically (for details see clump()). *O.bodies.replaceByClumps( [utils.clumpTemplate([1,1],[.5,.5])] , [.9] ) #will replace 90 % of all standalone spheres by 'dyads'* See :ysrc:`examples/clumps/replaceByClumps-example.py` for an example script."
+    },
+    {
+      "name": "getRoundness",
+      "args": [
+        {
+          "name": "excludeList",
+          "type": "list"
+        }
+      ],
+      "returns": "float",
+      "description": "Returns roundness coefficient RC = R2/R1. R1 is the equivalent sphere radius of a clump. R2 is the minimum radius of a sphere, that imbeds the clump. If just spheres are present RC = 1. If clumps are present 0 < RC < 1. Bodies can be excluded from the calculation by giving a list of ids: *O.bodies.getRoundness([ids])*. See :ysrc:`examples/clumps/replaceByClumps-example.py` for an example script."
+    },
+    {
+      "name": "clear",
+      "args": [],
+      "returns": "None",
+      "description": "clear( (BodyContainer)arg1) -> None : Remove all bodies (interactions not checked)"
+    },
+    {
+      "name": "erase",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "eraseClumpMembers",
+          "type": "bool",
+          "default": "0"
+        }
+      ],
+      "returns": "bool",
+      "description": "erase( (BodyContainer)arg1, (int)arg2 [, (bool)eraseClumpMembers=0]) -> bool : Erase body with the given id; all interaction will be deleted by InteractionLoop in the next step. If a clump is era"
+    },
+    {
+      "name": "replace",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "object"
+        }
+      ],
+      "returns": "None",
+      "description": "object"
+    },
+    {
+      "name": "insertAtId",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Body"
+        },
+        {
+          "name": "insertatid",
+          "type": "int"
+        }
+      ],
+      "returns": "int",
+      "description": "Insert a body at theid, (no body should exist in this id)"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "useRedirection",
+      "type": "auto",
+      "default": "",
+      "description": "true if the scene uses up-to-date lists for boundedBodies and realBodies; turned true automatically 1/ after removal of bodies if enableRedirection=True , and 2/ in MPI execution. (auto-updated)",
+      "read_only": true
+    },
+    {
+      "name": "enableRedirection",
+      "type": "auto",
+      "default": "",
+      "description": "let collider switch to optimized algorithm with body redirection when bodies are erased - true by default"
     }
   ]
 }

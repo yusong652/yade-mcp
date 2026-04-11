@@ -5,106 +5,474 @@
   "description": "Central simulation controller, accessed as O. Manages scene, bodies, engines, and simulation lifecycle.",
   "attributes": [
     {
-      "name": "bodies",
-      "type": "BodyContainer",
-      "default": "<yade.wrapper.BodyContainer object at 0x7f9108a56740>"
-    },
-    {
-      "name": "interactions",
-      "type": "InteractionContainer",
-      "default": "<yade.wrapper.InteractionContainer object at 0x7f910960bbc0>"
-    },
-    {
-      "name": "materials",
-      "type": "MaterialContainer",
-      "default": "<yade.wrapper.MaterialContainer object at 0x7f9107ec1200>"
-    },
-    {
-      "name": "engines",
-      "type": "list",
-      "default": "[<ForceResetter instance at 0x18c94d0>, <InsertionSortCollider instance at 0x161"
-    },
-    {
-      "name": "dt",
-      "type": "float",
-      "default": "1e-08"
-    },
-    {
       "name": "iter",
       "type": "int",
-      "default": "0"
+      "default": "0",
+      "description": "Get current step number"
+    },
+    {
+      "name": "subStep",
+      "type": "int",
+      "default": "-1",
+      "description": "Get the current subStep number (only meaningful if O.subStepping==True); -1 when outside the loop, otherwise either 0 (O.subStepping==False) or number of engine to be run (O.subStepping==True)"
+    },
+    {
+      "name": "subStepping",
+      "type": "bool",
+      "default": "False",
+      "description": "Get/set whether subStepping is active."
+    },
+    {
+      "name": "stopAtIter",
+      "type": "int",
+      "default": "0",
+      "description": "Get/set number of iteration after which the simulation will stop."
+    },
+    {
+      "name": "stopAtTime",
+      "type": "float",
+      "default": "0.0",
+      "description": "Get/set time after which the simulation will stop."
     },
     {
       "name": "time",
       "type": "float",
-      "default": "0.0"
+      "default": "0.0",
+      "description": "Return virtual (model world) time of the simulation."
     },
     {
       "name": "realtime",
       "type": "float",
-      "default": "0.226"
+      "default": "1393.471",
+      "description": "Return clock (human world) time the simulation has been running."
     },
     {
-      "name": "periodic",
+      "name": "speed",
+      "type": "float",
+      "default": "0.0",
+      "description": "Return current calculation speed [iter/sec]."
+    },
+    {
+      "name": "dt",
+      "type": "float",
+      "default": "1e-08",
+      "description": "Current timestep (\u0394t) value. See dynDt for enabling/disabling automatic \u0394t updates through a TimeStepper."
+    },
+    {
+      "name": "dynDt",
       "type": "bool",
-      "default": "False"
+      "default": "True",
+      "description": "Whether a TimeStepper (when present in O.engines) is used for dynamic \u0394t control."
     },
     {
-      "name": "cell",
+      "name": "dynDtAvailable",
+      "type": "bool",
+      "default": "True",
+      "description": "Whether a TimeStepper is amongst O.engines, activated or not."
+    },
+    {
+      "name": "running",
+      "type": "bool",
+      "default": "False",
+      "description": "Whether background thread is currently running a simulation."
+    },
+    {
+      "name": "filename",
       "type": "NoneType",
-      "default": "None"
+      "default": "None",
+      "description": "Filename under which the current simulation was saved (None if never saved)."
+    },
+    {
+      "name": "thisScene",
+      "type": "int",
+      "default": "0",
+      "description": "Return current scene's id."
+    },
+    {
+      "name": "engines",
+      "type": "list",
+      "default": "[<ForceResetter instance at 0xaaaae264b0e0>, <InsertionSortCollider instance ...",
+      "description": "List of engines in the simulation (corresponds to Scene::engines in C++ source code)."
+    },
+    {
+      "name": "miscParams",
+      "type": "list",
+      "default": "[]",
+      "description": "MiscParams in the simulation (Scene::mistParams), usually used to save serializables that don't fit anywhere else, like GL functors"
+    },
+    {
+      "name": "bodies",
+      "type": "BodyContainer",
+      "default": "",
+      "description": "Bodies in the current simulation (container supporting index access by id and iteration)"
+    },
+    {
+      "name": "interactions",
+      "type": "InteractionContainer",
+      "default": "",
+      "description": "Access to interactions of simulation, by using #. id's of both Bodies of the interactions, e.g. O.interactions[23,65] #. iteraction over the whole container:: for i in O.interactions: print i.id1,i.id2 .. note:: Iteration silently skips interactions that are not real."
+    },
+    {
+      "name": "materials",
+      "type": "MaterialContainer",
+      "default": "",
+      "description": "Shared materials; they can be accessed by id or by label"
+    },
+    {
+      "name": "forces",
+      "type": "ForceContainer",
+      "default": "",
+      "description": "ForceContainer (forces, torques, displacements) in the current simulation."
+    },
+    {
+      "name": "energy",
+      "type": "EnergyTracker",
+      "default": "",
+      "description": "EnergyTracker of the current simulation. (meaningful only with O.trackEnergy)"
     },
     {
       "name": "trackEnergy",
       "type": "bool",
-      "default": "False"
+      "default": "False",
+      "description": "When energy tracking is enabled or disabled in this simulation."
     },
     {
       "name": "tags",
       "type": "TagsWrapper",
-      "default": "<yade.wrapper.TagsWrapper object at 0x7f9107ec1200>"
+      "default": "",
+      "description": "Tags (string=string dictionary) of the current simulation (container supporting string-index access/assignment)"
+    },
+    {
+      "name": "timingEnabled",
+      "type": "bool",
+      "default": "False",
+      "description": "Globally enable/disable timing services (see documentation of the timing module)."
+    },
+    {
+      "name": "forceSyncCount",
+      "type": "int",
+      "default": "0",
+      "description": "Counter for number of syncs in ForceContainer, for profiling purposes."
+    },
+    {
+      "name": "numThreads",
+      "type": "int",
+      "default": "1",
+      "description": "Get maximum number of threads openMP can use."
+    },
+    {
+      "name": "cell",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Periodic Cell of the current scene (None if the scene is aperiodic)."
+    },
+    {
+      "name": "periodic",
+      "type": "bool",
+      "default": "False",
+      "description": "Get/set whether the scene is periodic or not (True/False)."
     }
   ],
   "methods": [
     {
-      "name": "run",
-      "signature": "O.run(*args, **kwargs)",
-      "description": ""
+      "name": "load",
+      "args": [
+        {
+          "name": "file",
+          "type": "str"
+        },
+        {
+          "name": "quiet",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "load( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None : Load simulation from file. The file should have been saved in the same version of Yade built or compiled with the"
     },
     {
-      "name": "pause",
-      "signature": "O.pause()",
-      "description": "\npause( (Omega)arg1) -> None :\n    Stop simulation execution. (May be called from within the loop, and it will stop after the current step)."
-    },
-    {
-      "name": "wait",
-      "signature": "O.wait()",
-      "description": "\nwait( (Omega)arg1) -> None :\n    Don't return until the simulation will have been paused. (Returns immediately if not running)."
-    },
-    {
-      "name": "reset",
-      "signature": "O.reset()",
-      "description": "\nreset( (Omega)arg1) -> None :\n    Reset simulations completely (including another scenes!)."
+      "name": "reload",
+      "args": [
+        {
+          "name": "quiet",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "Reload current simulation"
     },
     {
       "name": "save",
-      "signature": "O.save()",
-      "description": "\nsave( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Save current simulation to file (should be .xml or .xml.bz2 or .yade or .yade.gz). .xml files are bigger than .yade, but can be more "
-    },
-    {
-      "name": "load",
-      "signature": "O.load()",
-      "description": "\nload( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None :\n    Load simulation from file. The file should have been :yref:`saved<Omega.save>` in the same version of Yade built or compiled with the"
-    },
-    {
-      "name": "saveTmp",
-      "signature": "O.saveTmp()",
-      "description": "\nsaveTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Save simulation to memory (disappears at shutdown), can be loaded later with loadTmp. *mark* optionally distinguishes differ"
+      "args": [
+        {
+          "name": "file",
+          "type": "str"
+        },
+        {
+          "name": "quiet",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "save( (Omega)arg1, (str)file [, (bool)quiet=False]) -> None : Save current simulation to file (should be .xml or .xml.bz2 or .yade or .yade.gz). .xml files are bigger than .yade, but can be more"
     },
     {
       "name": "loadTmp",
-      "signature": "O.loadTmp()",
-      "description": "\nloadTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None :\n    Load simulation previously stored in memory by saveTmp. *mark* optionally distinguishes multiple saved simulations"
+      "args": [
+        {
+          "name": "mark",
+          "type": "str",
+          "default": "''"
+        },
+        {
+          "name": "quiet",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "loadTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None : Load simulation previously stored in memory by saveTmp. *mark* optionally distinguishes multiple saved simulations"
+    },
+    {
+      "name": "saveTmp",
+      "args": [
+        {
+          "name": "mark",
+          "type": "str",
+          "default": "''"
+        },
+        {
+          "name": "quiet",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "saveTmp( (Omega)arg1 [, (str)mark='' [, (bool)quiet=False]]) -> None : Save simulation to memory (disappears at shutdown), can be loaded later with loadTmp. *mark* optionally distinguishes differ"
+    },
+    {
+      "name": "lsTmp",
+      "args": [],
+      "returns": "list",
+      "description": "Return list of all memory-saved simulations."
+    },
+    {
+      "name": "tmpToFile",
+      "args": [
+        {
+          "name": "fileName",
+          "type": "str"
+        },
+        {
+          "name": "mark",
+          "type": "str",
+          "default": "''"
+        }
+      ],
+      "returns": "None",
+      "description": "Save XML of saveTmp'd simulation into *fileName*."
+    },
+    {
+      "name": "tmpToString",
+      "args": [
+        {
+          "name": "mark",
+          "type": "str",
+          "default": "''"
+        }
+      ],
+      "returns": "str",
+      "description": "Return XML of saveTmp'd simulation as string."
+    },
+    {
+      "name": "run",
+      "args": [
+        {
+          "name": "nSteps",
+          "type": "int",
+          "default": "-1"
+        },
+        {
+          "name": "wait",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
+      "description": "Run the simulation. *nSteps* how many steps to run, then stop (if positive); *wait* will cause not returning to python until simulation will have stopped."
+    },
+    {
+      "name": "pause",
+      "args": [],
+      "returns": "None",
+      "description": "pause( (Omega)arg1) -> None : Stop simulation execution. (May be called from within the loop, and it will stop after the current step)."
+    },
+    {
+      "name": "step",
+      "args": [],
+      "returns": "None",
+      "description": "Advance the simulation by one step. Returns after the step will have finished."
+    },
+    {
+      "name": "wait",
+      "args": [],
+      "returns": "None",
+      "description": "wait( (Omega)arg1) -> None : Don't return until the simulation will have been paused. (Returns immediately if not running)."
+    },
+    {
+      "name": "reset",
+      "args": [],
+      "returns": "None",
+      "description": "reset( (Omega)arg1) -> None : Reset simulations completely (including another scenes!)."
+    },
+    {
+      "name": "resetThisScene",
+      "args": [],
+      "returns": "None",
+      "description": "Reset current scene."
+    },
+    {
+      "name": "resetCurrentScene",
+      "args": [],
+      "returns": "None",
+      "description": "Reset current scene."
+    },
+    {
+      "name": "resetAllScenes",
+      "args": [],
+      "returns": "None",
+      "description": "Reset all scenes."
+    },
+    {
+      "name": "addScene",
+      "args": [],
+      "returns": "int",
+      "description": "Add new scene to Omega, returns its number"
+    },
+    {
+      "name": "switchToScene",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "Switch to defined scene. Default scene has number 0, other scenes have to be created by addScene method."
+    },
+    {
+      "name": "switchScene",
+      "args": [],
+      "returns": "None",
+      "description": "Switch to alternative simulation (while keeping the old one). Calling the function again switches back to the first one. Note that most variables from the first simulation will still refer to the first simulation even after the switch (e.g. b=O.bodies[4]; O.switchScene(); [b still refers to the body in the first simulation here])"
+    },
+    {
+      "name": "sceneToString",
+      "args": [],
+      "returns": "object",
+      "description": "Return the entire scene as a string. Equivalent to using O.save(...) except that the scene goes to a string instead of a file. (see also stringToScene())"
+    },
+    {
+      "name": "stringToScene",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        },
+        {
+          "name": "mark",
+          "type": "str",
+          "default": "''"
+        }
+      ],
+      "returns": "None",
+      "description": "Load simulation from a string passed as argument (see also sceneToString)."
+    },
+    {
+      "name": "labeledEngine",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        }
+      ],
+      "returns": "object",
+      "description": "Return instance of engine/functor with the given label. This function shouldn't be called by the user directly; every ehange in O.engines will assign respective global python variables according to labels. For example: *O.engines=[InsertionSortCollider(label='collider')]* *collider.nBins=5 # collider has become a variable after assignment to O.engines automatically*"
+    },
+    {
+      "name": "resetTime",
+      "args": [],
+      "returns": "None",
+      "description": "Reset simulation time: step number, virtual and real time. (Doesn't touch anything else, including timings)."
+    },
+    {
+      "name": "plugins",
+      "args": [],
+      "returns": "list",
+      "description": "Return list of all plugins registered in the class factory."
+    },
+    {
+      "name": "childClassesNonrecursive",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of all classes deriving from given class, as registered in the class factory"
+    },
+    {
+      "name": "isChildClassOf",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "str"
+        },
+        {
+          "name": "arg3",
+          "type": "str"
+        }
+      ],
+      "returns": "bool",
+      "description": "Tells whether the first class derives from the second one (both given as strings)."
+    },
+    {
+      "name": "exitNoBacktrace",
+      "args": [
+        {
+          "name": "status",
+          "type": "int",
+          "default": "0"
+        }
+      ],
+      "returns": "None",
+      "description": "Disable SEGV handler and exit, optionally with given status number."
+    },
+    {
+      "name": "disableGdb",
+      "args": [],
+      "returns": "None",
+      "description": "Revert SEGV and ABRT handlers to system defaults."
+    },
+    {
+      "name": "runEngine",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Engine"
+        }
+      ],
+      "returns": "None",
+      "description": "Run given engine exactly once; simulation time, step number etc. will not be incremented (use only if you know what you do)."
+    },
+    {
+      "name": "tmpFilename",
+      "args": [],
+      "returns": "str",
+      "description": "Return unique name of file in temporary directory which will be deleted when yade exits."
     }
   ]
 }

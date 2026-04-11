@@ -3,51 +3,172 @@
   "category": "bodies",
   "parent": "instance",
   "description": "",
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "syncCount",
+      "type": "auto",
+      "default": "",
+      "description": "Number of synchronizations of ForceContainer (cummulative); if significantly higher than number of steps, there might be unnecessary syncs hurting performance."
+    }
+  ],
   "methods": [
     {
+      "name": "f",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "sync",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Resultant force on body, excluding gravity<NewtonIntegrator.gravity>. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
+    },
+    {
+      "name": "t",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "sync",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Torque applied on body. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
+    },
+    {
+      "name": "m",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "sync",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Deprecated alias for t (torque)."
+    },
+    {
       "name": "addF",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "f",
+          "type": "Vector3"
+        },
+        {
+          "name": "permanent",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
       "description": "Apply force on body (accumulates). The force applies for one iteration, then it is reset by ForceResetter."
     },
     {
       "name": "addT",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "t",
+          "type": "Vector3"
+        },
+        {
+          "name": "permanent",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "None",
       "description": "Apply torque on body (accumulates). The torque applies for one iteration, then it is reset by ForceResetter."
     },
     {
-      "name": "f",
-      "description": "Resultant force on body, excluding gravity<NewtonIntegrator.gravity>. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
-    },
-    {
-      "name": "getPermForceUsed",
-      "description": "Check wether permanent forces are present."
-    },
-    {
-      "name": "m",
-      "description": "Deprecated alias for t (torque)."
-    },
-    {
       "name": "permF",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
       "description": "read the value of permanent force on body (set with setPermF())."
     },
     {
       "name": "permT",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
       "description": "read the value of permanent torque on body (set with setPermT())."
     },
     {
-      "name": "reset",
-      "description": "Reset the force container, including user defined permanent forces/torques. resetAll=False will keep permanent forces/torques unchanged."
-    },
-    {
       "name": "setPermF",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "None",
       "description": "set the value of permanent force on body."
     },
     {
       "name": "setPermT",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "Vector3"
+        }
+      ],
+      "returns": "None",
       "description": "set the value of permanent torque on body."
     },
     {
-      "name": "t",
-      "description": "Torque applied on body. For clumps in openMP, synchronize the force container with sync=True, else the value will be wrong."
+      "name": "reset",
+      "args": [
+        {
+          "name": "resetAll",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "None",
+      "description": "Reset the force container, including user defined permanent forces/torques. resetAll=False will keep permanent forces/torques unchanged."
+    },
+    {
+      "name": "getPermForceUsed",
+      "args": [],
+      "returns": "bool",
+      "description": "Check wether permanent forces are present."
     }
   ]
 }

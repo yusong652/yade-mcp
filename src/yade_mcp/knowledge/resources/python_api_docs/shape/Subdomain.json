@@ -134,11 +134,11 @@
     },
     {
       "name": "mpiIrecvStates",
-      "description": "mpi-Irecv states from another domain  (non-blocking)"
+      "description": "mpi-Irecv states from another domain (non-blocking)"
     },
     {
       "name": "mpiRecvStates",
-      "description": "mpi-recv states from another domain  (blocking)"
+      "description": "mpi-recv states from another domain (blocking)"
     },
     {
       "name": "mpiSendStates",

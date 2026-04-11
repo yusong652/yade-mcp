@@ -86,14 +86,14 @@
       "name": "dynamic",
       "type": "bool",
       "default": "true",
-      "description": "Whether this body will be moved by forces. (In c++, use ``Body::isDynamic``/``Body::setDynamic``)",
+      "description": "Whether this body will be moved by forces. (In c++, use Body::isDynamic/Body::setDynamic)",
       "no_save": true
     },
     {
       "name": "bounded",
       "type": "bool",
       "default": "true",
-      "description": "Whether this body should have Body.bound created. Note that bodies without a bound do not participate in collision detection. (In c++, use ``Body::isBounded``/``Body::setBounded``)",
+      "description": "Whether this body should have Body.bound created. Note that bodies without a bound do not participate in collision detection. (In c++, use Body::isBounded/Body::setBounded)",
       "no_save": true
     },
     {
@@ -135,7 +135,28 @@
   "methods": [
     {
       "name": "intrs",
+      "args": [],
+      "returns": "list",
       "description": "Return list of all real interactions in which this body participates."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

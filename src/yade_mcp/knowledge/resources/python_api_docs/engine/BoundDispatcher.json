@@ -26,7 +26,7 @@
       "name": "minSweepDistFactor",
       "type": "float",
       "default": "0.2",
-      "description": "Minimal distance by which enlarge all bounding boxes; superseeds computed value of sweepDist when lower that (minSweepDistFactor x sweepDist). Updated by the collider. |yupdate|.",
+      "description": "Minimal distance by which enlarge all bounding boxes; superseeds computed value of sweepDist when lower that (minSweepDistFactor x sweepDist). Updated by the collider. (auto-updated).",
       "read_only": true
     },
     {
@@ -68,7 +68,7 @@
       "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -76,7 +76,7 @@
       "name": "execCount",
       "type": "int",
       "default": "0",
-      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -84,19 +84,53 @@
       "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
+      "name": "dispMatrix",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "dict",
+      "description": "Return dictionary with contents of the dispatch matrix."
+    },
+    {
       "name": "dispFunctor",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Shape"
+        }
+      ],
+      "returns": "BoundFunctor",
       "description": "Return functor that would be dispatched for given argument(s); None if no dispatch; ambiguous dispatch throws."
     },
     {
-      "name": "dispMatrix",
-      "description": "Return dictionary with contents of the dispatch matrix."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

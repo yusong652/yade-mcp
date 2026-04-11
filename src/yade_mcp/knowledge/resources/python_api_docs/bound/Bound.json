@@ -8,14 +8,14 @@
       "name": "lastUpdateIter",
       "type": "int",
       "default": "0",
-      "description": "record iteration of last reference position update |yupdate|",
+      "description": "record iteration of last reference position update (auto-updated)",
       "read_only": true
     },
     {
       "name": "refPos",
       "type": "Vector3",
       "default": "Vector3r(NaN,NaN,NaN)",
-      "description": "Reference position, updated at current body position each time the bound dispatcher update bounds |yupdate|",
+      "description": "Reference position, updated at current body position each time the bound dispatcher update bounds (auto-updated)",
       "read_only": true
     },
     {
@@ -53,6 +53,39 @@
       "default": "-1",
       "description": "Return class index of this instance.",
       "no_save": true
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

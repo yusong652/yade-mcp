@@ -15,7 +15,7 @@
       "name": "allowBiggerThanPeriod",
       "type": "bool",
       "default": "false",
-      "description": "If true, tests on bodies sizes will be disabled, and the simulation will run normaly even if bodies larger than period are found. It can be useful when the periodic problem include e.g. a floor modelized with wall/box/facet.\nBe sure you know what you are doing if you touch this flag. The result is undefined if one large body moves out of the (0,0,0) period.",
+      "description": "If true, tests on bodies sizes will be disabled, and the simulation will run normaly even if bodies larger than period are found. It can be useful when the periodic problem include e.g. a floor modelized with wall/box/facet. Be sure you know what you are doing if you touch this flag. The result is undefined if one large body moves out of the (0,0,0) period.",
       "inherited_from": "InsertionSortCollider"
     },
     {
@@ -64,7 +64,7 @@
       "name": "fastestBodyMaxDist",
       "type": "float",
       "default": "0",
-      "description": "Normalized maximum displacement of the fastest body since last run; if >= 1, we could get out of bboxes and will trigger full run. |yupdate|",
+      "description": "Normalized maximum displacement of the fastest body since last run; if >= 1, we could get out of bboxes and will trigger full run. (auto-updated)",
       "read_only": true,
       "inherited_from": "InsertionSortCollider"
     },
@@ -94,7 +94,7 @@
       "name": "keepListsShort",
       "type": "bool",
       "default": "false",
-      "description": "if true remove bounds of non-existent or unbounded bodies from the lists |yupdate|; turned true automatically in MPI mode and if bodies are erased with",
+      "description": "if true remove bounds of non-existent or unbounded bodies from the lists (auto-updated); turned true automatically in MPI mode and if bodies are erased with",
       "read_only": true,
       "inherited_from": "InsertionSortCollider"
     },
@@ -171,7 +171,7 @@
       "name": "execTime",
       "type": "int",
       "default": "0",
-      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -179,7 +179,7 @@
       "name": "execCount",
       "type": "int",
       "default": "0",
-      "description": "Cumulative count this engine was run (only used if O.timingEnabled == ``True``).",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "no_save": true,
       "inherited_from": "Engine"
     },
@@ -187,7 +187,7 @@
       "name": "timingDeltas",
       "type": "NoneType",
       "default": "None",
-      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == ``True``.",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"
     }
@@ -195,11 +195,36 @@
   "methods": [
     {
       "name": "dumpBounds",
-      "description": "Return representation of the internal sort data. The format is ``([...],[...],[...])`` for 3 axes, where each ``...`` is a list of entries (bounds). The entry is a tuple with the fllowing items:"
+      "args": [],
+      "returns": "tuple",
+      "description": "Return representation of the internal sort data. The format is ([...],[...],[...]) for 3 axes, where each ... is a list of entries (bounds). The entry is a tuple with the fllowing items:",
+      "inherited_from": "InsertionSortCollider"
     },
     {
       "name": "isActivated",
-      "description": "Return true if collider needs execution at next iteration."
+      "args": [],
+      "returns": "bool",
+      "description": "Return true if collider needs execution at next iteration.",
+      "inherited_from": "InsertionSortCollider"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

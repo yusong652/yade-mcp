@@ -8,13 +8,13 @@
       "name": "interactionDetectionFactor",
       "type": "float",
       "default": "1",
-      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions.\n\nInteractionGeometry will be computed when interactionDetectionFactor*(rad1+rad2) > distance.\n\n.. note::\n\t This parameter is functionally coupled with"
+      "description": "Enlarge both radii by this factor (if >1), to permit creation of distant interactions. InteractionGeometry will be computed when interactionDetectionFactor*(rad1+rad2) > distance. .. note:: This parameter is functionally coupled with"
     },
     {
       "name": "avoidGranularRatcheting",
       "type": "bool",
       "default": "true",
-      "description": "Define relative velocity so that ratcheting is avoided. It applies for sphere-sphere contacts. It eventualy also apply for sphere-emulating interactions (i.e. convertible into the ScGeom type), if the virtual sphere's motion is defined correctly (see e.g. Ig2_Sphere_ChainedCylinder_CylScGeom). Short explanation of what we want to avoid : Numerical ratcheting is best understood considering a small elastic cycle at a contact between two grains : assuming b1 is fixed, impose this displacement to b2 : #. translation *dx* in the normal direction #. rotation *a* #. translation *-dx* (back to the initial position) #. rotation *-a* (back to the initial orientation) If the branch vector used to define the relative shear in rotation\u00d7branch is not constant (typically if it is defined from the vector center\u2192contactPoint), then the shear displacement at the end of this cycle is not zero: rotations *a* and *-a* are multiplied by branches of different lengths. It results in a finite contact force at the end of the cycle even though the positions and orientations are unchanged, in total contradiction with the elastic nature of the problem. It could also be seen as an *inconsistent energy creation or loss*. Given that DEM simulations tend to generate oscillations around equilibrium (damped mass-spring), it can have a significant impact on the evolution of the packings, resulting for instance in slow creep in iterations under constant load. The solution adopted here to avoid ratcheting is as proposed by McNamara and co-workers. They analyzed the ratcheting problem in detail - even though they comment on the basis of a cycle that differs from the one shown above. One will find interesting discussions in e.g. [McNamara2008]_, even though solution it suggests is not fully applied here (equations of motion are not incorporating alpha, in contradiction with what is suggested by McNamara et al.)."
+      "description": "Define relative velocity so that ratcheting is avoided. It applies for sphere-sphere contacts. It eventualy also apply for sphere-emulating interactions (i.e. convertible into the ScGeom type), if the virtual sphere's motion is defined correctly (see e.g. Ig2_Sphere_ChainedCylinder_CylScGeom). Short explanation of what we want to avoid : Numerical ratcheting is best understood considering a small elastic cycle at a contact between two grains : assuming b1 is fixed, impose this displacement to b2 : #. translation *dx* in the normal direction #. rotation *a* #. translation *-dx* (back to the initial position) #. rotation *-a* (back to the initial orientation) If the branch vector used to define the relative shear in rotation\u00d7branch is not constant (typically if it is defined from the vector center\u2192contactPoint), then the shear displacement at the end of this cycle is not zero: rotations *a* and *-a* are multiplied by branches of different lengths. It results in a finite contact force at the end of the cycle even though the positions and orientations are unchanged, in total contradiction with the elastic nature of the problem. It could also be seen as an *inconsistent energy creation or loss*. Given that DEM simulations tend to generate oscillations around equilibrium (damped mass-spring), it can have a significant impact on the evolution of the packings, resulting for instance in slow creep in iterations under constant load. The solution adopted here to avoid ratcheting is as proposed by McNamara and co-workers. They analyzed the ratcheting problem in detail - even though they comment on the basis of a cycle that differs from the one shown above. One will find interesting discussions in e.g. (McNamara2008), even though solution it suggests is not fully applied here (equations of motion are not incorporating alpha, in contradiction with what is suggested by McNamara et al.)."
     },
     {
       "name": "label",
@@ -38,6 +38,27 @@
       "description": "Ordered list of types (as strings) this functor accepts.",
       "no_save": true,
       "inherited_from": "Functor"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

@@ -6,7 +6,7 @@
   "attributes": [
     {
       "name": "energies",
-      "type": "auto",
+      "type": "OpenMPArrayAccumulator<Real>",
       "default": "",
       "description": "Energy values, in linear array"
     }
@@ -14,19 +14,46 @@
   "methods": [
     {
       "name": "clear",
+      "args": [],
+      "returns": "None",
       "description": "Clear all stored values."
     },
     {
-      "name": "items",
-      "description": "Return contents as list of (name,value) tuples."
-    },
-    {
       "name": "keys",
+      "args": [],
+      "returns": "list",
       "description": "Return defined energies."
     },
     {
+      "name": "items",
+      "args": [],
+      "returns": "list",
+      "description": "Return contents as list of (name,value) tuples."
+    },
+    {
       "name": "total",
+      "args": [],
+      "returns": "float",
       "description": "Return sum of all energies."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

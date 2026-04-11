@@ -30,5 +30,44 @@
       "description": "Return class index of this instance.",
       "no_save": true
     }
+  ],
+  "methods": [
+    {
+      "name": "newAssocState",
+      "args": [],
+      "returns": "State",
+      "description": "Return new State instance, which is associated with this Material. Some materials have special requirement on state type and calling this function when the body is created will ensure that they match. (This is done automatically if you use utils.sphere, \u2026 functions from python)."
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
+    }
   ]
 }

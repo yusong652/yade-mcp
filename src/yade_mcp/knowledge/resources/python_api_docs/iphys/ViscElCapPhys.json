@@ -7,26 +7,26 @@
     {
       "name": "Capillar",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "True, if capillar forces need to be added."
     },
     {
-      "name": "CapillarType",
-      "type": "auto",
-      "default": "",
-      "description": "Different types of capillar interaction: Willett_numeric, Willett_analytic, Weigert, Rabinovich, Lambert, Soulie"
+      "name": "liqBridgeCreated",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether liquid bridge was created, only after a normal contact of spheres"
     },
     {
-      "name": "Fn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Linear-elastic part of the normal force of the contact"
+      "name": "liqBridgeActive",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether liquid bridge is active at the moment"
     },
     {
-      "name": "Fv",
+      "name": "sCrit",
       "type": "float",
-      "default": "0.0",
-      "description": "Viscous part of the normal force of the contact"
+      "default": "false",
+      "description": "Critical bridge length [m]"
     },
     {
       "name": "Vb",
@@ -35,16 +35,22 @@
       "description": "Liquid bridge volume [m^3]"
     },
     {
-      "name": "cn",
+      "name": "gamma",
       "type": "float",
-      "default": "nan",
-      "description": "Normal viscous constant"
+      "default": "0.0",
+      "description": "Surface tension [N/m]"
     },
     {
-      "name": "cs",
+      "name": "theta",
       "type": "float",
-      "default": "nan",
-      "description": "Shear viscous constant"
+      "default": "0.0",
+      "description": "Contact angle [rad]"
+    },
+    {
+      "name": "CapillarType",
+      "type": "CapType",
+      "default": "None_Capillar",
+      "description": "Different types of capillar interaction: Willett_numeric, Willett_analytic, Weigert, Rabinovich, Lambert, Soulie"
     },
     {
       "name": "dcap",
@@ -53,82 +59,122 @@
       "description": "Damping coefficient for the capillary phase [-]"
     },
     {
-      "name": "frictDissip",
+      "name": "cn",
+      "type": "float",
+      "default": "NaN",
+      "description": "Normal viscous constant",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "cs",
+      "type": "float",
+      "default": "NaN",
+      "description": "Shear viscous constant",
+      "inherited_from": "ViscElPhys"
+    },
+    {
+      "name": "Fn",
       "type": "float",
       "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
+      "description": "Linear-elastic part of the normal force of the contact",
+      "inherited_from": "ViscElPhys"
     },
     {
-      "name": "gamma",
+      "name": "Fv",
       "type": "float",
       "default": "0.0",
-      "description": "Surface tension [N/m]"
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
-    },
-    {
-      "name": "ks",
-      "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "liqBridgeActive",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether liquid bridge is active at the moment"
-    },
-    {
-      "name": "liqBridgeCreated",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether liquid bridge was created, only after a normal contact of spheres"
+      "description": "Viscous part of the normal force of the contact",
+      "inherited_from": "ViscElPhys"
     },
     {
       "name": "mR",
       "type": "float",
       "default": "0.0",
-      "description": "Rolling resistance, see [Zhou1999536]_."
+      "description": "Rolling resistance, see [Zhou1999536]_.",
+      "inherited_from": "ViscElPhys"
     },
     {
       "name": "mRtype",
       "type": "int",
       "default": "1",
-      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
-    },
-    {
-      "name": "sCrit",
-      "type": "float",
-      "default": "0.0",
-      "description": "Critical bridge length [m]"
-    },
-    {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "description": "Rolling resistance type, see [Zhou1999536]_. mRtype=1 - equation (3) in [Zhou1999536]_; mRtype=2 - equation (4) in [Zhou1999536]_",
+      "inherited_from": "ViscElPhys"
     },
     {
       "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
     },
     {
-      "name": "theta",
+      "name": "ks",
       "type": "float",
-      "default": "0.0",
-      "description": "Contact angle [rad]"
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "shearForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
+    },
+    {
+      "name": "kn",
+      "type": "float",
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "19",
+      "description": "Return class index of this instance.",
+      "inherited_from": "IPhys"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IPhys"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

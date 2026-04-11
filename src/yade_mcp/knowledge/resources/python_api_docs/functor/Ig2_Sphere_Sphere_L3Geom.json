@@ -14,7 +14,7 @@
       "name": "distFactor",
       "type": "float",
       "default": "1",
-      "description": "Create interaction if spheres are not futher than *distFactor* \\*(r1+r2). If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the ''zero'' one)."
+      "description": "Create interaction if spheres are not futher than *distFactor* *(r1+r2). If negative, zero normal deformation will be set to be the initial value (otherwise, the geometrical distance is the ''zero'' one)."
     },
     {
       "name": "trsfRenorm",
@@ -26,7 +26,7 @@
       "name": "approxMask",
       "type": "int",
       "default": "0",
-      "description": "Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled.\n\n== ===============================================================\n1  use previous transformation to transform velocities (which are known at mid-steps), instead of mid-step transformation computed as quaternion slerp at t=0.5.\n2  do not take average (mid-step) normal when computing relative shear displacement, use previous value instead\n4  do not re-normalize average (mid-step) normal, if used.\u2026\n== ===============================================================\n\nBy default, the mask is zero, wherefore none of these approximations is used."
+      "description": "Selectively enable geometrical approximations (bitmask); add the values for approximations to be enabled. == =============================================================== 1 use previous transformation to transform velocities (which are known at mid-steps), instead of mid-step transformation computed as quaternion slerp at t=0.5. 2 do not take average (mid-step) normal when computing relative shear displacement, use previous value instead 4 do not re-normalize average (mid-step) normal, if used.\u2026 == =============================================================== By default, the mask is zero, wherefore none of these approximations is used."
     },
     {
       "name": "label",
@@ -50,6 +50,27 @@
       "description": "Ordered list of types (as strings) this functor accepts.",
       "no_save": true,
       "inherited_from": "Functor"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

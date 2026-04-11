@@ -44,19 +44,19 @@
       "name": "betan",
       "type": "MatchMaker",
       "default": "",
-      "description": "Normal viscous damping ratio $\\beta_n$."
+      "description": "Normal viscous damping ratio $ beta_n$."
     },
     {
       "name": "betas",
       "type": "MatchMaker",
       "default": "",
-      "description": "Shear viscous damping ratio $\\beta_s$."
+      "description": "Shear viscous damping ratio $ beta_s$."
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
       "default": "",
-      "description": "Instance of MatchMaker determining how to compute the friction angle of an interaction. If ``None``, minimum value is used."
+      "description": "Instance of MatchMaker determining how to compute the friction angle of an interaction. If None, minimum value is used."
     },
     {
       "name": "label",
@@ -80,6 +80,27 @@
       "description": "Ordered list of types (as strings) this functor accepts.",
       "no_save": true,
       "inherited_from": "Functor"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

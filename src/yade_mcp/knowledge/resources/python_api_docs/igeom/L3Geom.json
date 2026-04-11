@@ -8,7 +8,7 @@
       "name": "u",
       "type": "Vector3",
       "default": "(0, 0, 0)",
-      "description": "Displacement components, in local coordinates. |yupdate|",
+      "description": "Displacement components, in local coordinates. (auto-updated)",
       "read_only": true
     },
     {
@@ -33,7 +33,7 @@
       "name": "normal",
       "type": "Vector3",
       "default": "",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. |yupdate|",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)",
       "read_only": true,
       "inherited_from": "GenericSpheresContact"
     },
@@ -65,6 +65,40 @@
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IGeom"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

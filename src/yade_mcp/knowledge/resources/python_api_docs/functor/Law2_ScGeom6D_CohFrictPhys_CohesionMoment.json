@@ -72,36 +72,70 @@
   ],
   "methods": [
     {
-      "name": "bendingElastEnergy",
-      "description": "Compute bending elastic energy."
-    },
-    {
-      "name": "checkConsistency",
-      "description": "Runs consistency checks on an interaction physics and warn if some issues are suspected (e.g. if there is finite cohesion on the shear force and pure elasticity on bending moment). Most inconsistencies should occur when interaction properties are modified in a script; they are not supposed to result from the interaction loop, else please report the bug. This function is called automatically by the law functor on the first instance of a cohesive interaction. To call it in a script: `law.checkConsistency(i.phys,i.id1,i.id2)`."
-    },
-    {
-      "name": "elasticEnergy",
-      "description": "Compute total elastic energy."
-    },
-    {
-      "name": "initPlasticDissipation",
-      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
-    },
-    {
       "name": "normElastEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute normal elastic energy."
     },
     {
-      "name": "plasticDissipation",
-      "description": "Total energy dissipated in plastic slips at all CohFrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
-    },
-    {
       "name": "shearElastEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute shear elastic energy."
     },
     {
+      "name": "bendingElastEnergy",
+      "args": [],
+      "returns": "float",
+      "description": "Compute bending elastic energy."
+    },
+    {
       "name": "twistElastEnergy",
+      "args": [],
+      "returns": "float",
       "description": "Compute twist elastic energy."
+    },
+    {
+      "name": "elasticEnergy",
+      "args": [],
+      "returns": "float",
+      "description": "Compute total elastic energy."
+    },
+    {
+      "name": "plasticDissipation",
+      "args": [],
+      "returns": "float",
+      "description": "Total energy dissipated in plastic slips at all CohFrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
+    },
+    {
+      "name": "initPlasticDissipation",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }
