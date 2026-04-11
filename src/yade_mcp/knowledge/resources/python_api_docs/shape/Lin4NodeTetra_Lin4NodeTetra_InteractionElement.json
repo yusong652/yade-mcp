@@ -7,21 +7,21 @@
     {
       "name": "nodepairs",
       "type": "NodePairsMap",
-      "default": "",
+      "default": "None",
       "description": "Ids and relative position+orientation difference of members of the cohesive deformable element in the inital condition (should not be accessed directly)",
       "inherited_from": "DeformableCohesiveElement"
     },
     {
       "name": "localmap",
       "type": "NodeMap",
-      "default": "",
+      "default": "None",
       "description": "Ids and relative positions+orientations of members of the deformable element (should not be accessed directly)",
       "inherited_from": "DeformableElement"
     },
     {
       "name": "elementframe",
-      "type": "auto",
-      "default": "",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
       "description": "",
       "inherited_from": "DeformableElement"
     },
@@ -55,7 +55,7 @@
     },
     {
       "name": "dispIndex",
-      "type": "auto",
+      "type": "int",
       "default": "",
       "description": "Return class index of this instance.",
       "inherited_from": "Shape"

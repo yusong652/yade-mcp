@@ -6,14 +6,14 @@
   "attributes": [
     {
       "name": "comb",
-      "type": "vector<shared_ptr<KinematicEngine> >",
-      "default": "",
+      "type": "list[KinematicEngine]",
+      "default": "[]",
       "description": "Kinematic engines that will be combined by this one, run in the order given."
     },
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -34,7 +34,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

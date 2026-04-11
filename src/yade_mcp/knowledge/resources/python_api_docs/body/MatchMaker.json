@@ -7,7 +7,7 @@
     {
       "name": "matches",
       "type": "list[Vector3]",
-      "default": "",
+      "default": "[]",
       "description": "Array of (id1,id2,value) items; queries matching id1 + id2 or id2 + id1 will return value",
       "read_only": true
     },

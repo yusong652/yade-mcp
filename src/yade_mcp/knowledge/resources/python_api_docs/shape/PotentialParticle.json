@@ -78,32 +78,32 @@
     },
     {
       "name": "vertices",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "Vertices"
     },
     {
       "name": "a",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of a coefficients of plane normals"
     },
     {
       "name": "b",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of b coefficients of plane normals"
     },
     {
       "name": "c",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of c coefficients of plane normals"
     },
     {
       "name": "d",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of d coefficients of plane normals"
     },
     {

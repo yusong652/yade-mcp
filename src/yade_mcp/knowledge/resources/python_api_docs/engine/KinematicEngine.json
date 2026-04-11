@@ -7,7 +7,7 @@
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -28,7 +28,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

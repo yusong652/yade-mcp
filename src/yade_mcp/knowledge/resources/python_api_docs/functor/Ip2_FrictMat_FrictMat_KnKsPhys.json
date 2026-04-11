@@ -19,19 +19,19 @@
     {
       "name": "brittleLength",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Shear length for degradation"
     },
     {
       "name": "kn_i",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Currently, we assume kn_i and Knormal are adopting the same value in Ip2 initialisation"
     },
     {
       "name": "ks_i",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Currently, we assume ks_i and Kshear are adopting the same value in Ip2 initialisation"
     },
     {
@@ -85,7 +85,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

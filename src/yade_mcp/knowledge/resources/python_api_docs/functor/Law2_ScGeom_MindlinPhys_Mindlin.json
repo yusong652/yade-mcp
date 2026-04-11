@@ -37,35 +37,35 @@
     {
       "name": "frictionDissipation",
       "type": "OpenMPAccumulator<Real>",
-      "default": "",
+      "default": "0.0",
       "description": "Energy dissipation due to sliding",
       "no_save": true
     },
     {
       "name": "shearEnergy",
       "type": "OpenMPAccumulator<Real>",
-      "default": "",
+      "default": "0.0",
       "description": "Shear elastic potential energy",
       "no_save": true
     },
     {
       "name": "normDampDissip",
       "type": "OpenMPAccumulator<Real>",
-      "default": "",
+      "default": "0.0",
       "description": "Energy dissipated by normal damping",
       "no_save": true
     },
     {
       "name": "shearDampDissip",
       "type": "OpenMPAccumulator<Real>",
-      "default": "",
+      "default": "0.0",
       "description": "Energy dissipated by tangential damping",
       "no_save": true
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

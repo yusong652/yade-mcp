@@ -6,14 +6,14 @@
   "attributes": [
     {
       "name": "times",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of time points at which velocities are given; must be increasing [s]"
     },
     {
       "name": "angularVelocities",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "List of angular velocities; manadatorily of same length as times. [rad/s]"
     },
     {
@@ -74,7 +74,7 @@
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -95,7 +95,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

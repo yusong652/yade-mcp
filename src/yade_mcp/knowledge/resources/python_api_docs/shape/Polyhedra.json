@@ -7,7 +7,7 @@
     {
       "name": "v",
       "type": "list[Vector3]",
-      "default": "",
+      "default": "[]",
       "description": "Polyhedron vertices in local coordinate system."
     },
     {

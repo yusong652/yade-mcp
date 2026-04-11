@@ -37,13 +37,13 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Contact point (global coords)"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Normal of the interaction, directed in the sense of least inertia of the overlap volume"
     },
     {

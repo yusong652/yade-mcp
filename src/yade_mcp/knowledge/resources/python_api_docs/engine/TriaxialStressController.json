@@ -242,56 +242,56 @@
     },
     {
       "name": "strain",
-      "type": "auto",
-      "default": "",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
       "description": "Current strain in a vector (exx,eyy,ezz). The values reflect true (logarithmic) strain."
     },
     {
       "name": "strainRate",
-      "type": "auto",
-      "default": "",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
       "description": "Current strain rate in a vector d/dt(exx,eyy,ezz)."
     },
     {
       "name": "porosity",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "Porosity of the packing, computed from particlesVolume and boxVolume. (auto-updated)",
       "read_only": true
     },
     {
       "name": "boxVolume",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "Total packing volume."
     },
     {
       "name": "particlesVolume",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "Total volume of particles (clumps and dynamic spheres). |ycomp|"
     },
     {
       "name": "spheresVolume",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "Shorthand for particlesVolume"
     },
     {
       "name": "max_vel1",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "see max_vel |ycomp|"
     },
     {
       "name": "max_vel2",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "see max_vel |ycomp|"
     },
     {
       "name": "max_vel3",
-      "type": "auto",
+      "type": "float",
       "default": "",
       "description": "see max_vel |ycomp|"
     },
@@ -312,28 +312,28 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "\"\"",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },
     {
       "name": "execTime",
-      "type": "auto",
+      "type": "int",
       "default": "",
       "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
       "inherited_from": "Engine"
     },
     {
       "name": "execCount",
-      "type": "auto",
+      "type": "int",
       "default": "",
       "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
       "inherited_from": "Engine"
     },
     {
       "name": "timingDeltas",
-      "type": "auto",
-      "default": "",
+      "type": "TimingDeltas",
+      "default": "None",
       "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "inherited_from": "Engine"
     }

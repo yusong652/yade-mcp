@@ -27,8 +27,8 @@
     },
     {
       "name": "callbacks",
-      "type": "vector<shared_ptr<IntrCallback> >",
-      "default": "",
+      "type": "list[IntrCallback]",
+      "default": "[]",
       "description": "Callbacks which will be called for every Interaction, if activated."
     },
     {
@@ -54,7 +54,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

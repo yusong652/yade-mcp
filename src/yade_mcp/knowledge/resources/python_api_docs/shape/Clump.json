@@ -6,8 +6,8 @@
   "attributes": [
     {
       "name": "ids",
-      "type": "vector<int>",
-      "default": "",
+      "type": "list[int]",
+      "default": "[]",
       "description": "Ids of constituent particles (only informative; direct modifications will have no effect).",
       "read_only": true
     },

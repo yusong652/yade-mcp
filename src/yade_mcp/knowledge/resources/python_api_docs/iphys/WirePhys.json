@@ -24,15 +24,15 @@
     },
     {
       "name": "displForceValues",
-      "type": "vector<Vector2r>",
-      "default": "",
+      "type": "list[Vector2]",
+      "default": "[]",
       "description": "Defines the values for force-displacement curve.",
       "read_only": true
     },
     {
       "name": "stiffnessValues",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Defines the values for the various stiffnesses (the elastic stiffness is stored as kn).",
       "read_only": true
     },

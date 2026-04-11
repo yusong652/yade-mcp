@@ -7,28 +7,28 @@
     {
       "name": "kn",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's normal stiffness. If None, harmonic average is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
       "name": "ks",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's shear stiffness. If None, harmonic average is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used.",
       "inherited_from": "Ip2_FrictMat_FrictMat_FrictPhys"
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

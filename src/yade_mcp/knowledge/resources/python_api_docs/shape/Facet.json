@@ -6,7 +6,7 @@
   "attributes": [
     {
       "name": "vertices",
-      "type": "vector<Vector3r>",
+      "type": "list[Vector3]",
       "default": "vector<Vector3r>(3,Vector3r(NaN,NaN,NaN))",
       "description": "Vertex positions in local coordinates."
     },

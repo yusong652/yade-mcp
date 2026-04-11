@@ -7,7 +7,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },
@@ -21,8 +21,8 @@
     },
     {
       "name": "bases",
-      "type": "auto",
-      "default": "",
+      "type": "list[str]",
+      "default": "[]",
       "description": "Ordered list of types (as strings) this functor accepts.",
       "no_save": true,
       "inherited_from": "Functor"

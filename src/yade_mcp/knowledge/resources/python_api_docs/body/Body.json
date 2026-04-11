@@ -27,7 +27,7 @@
     {
       "name": "material",
       "type": "Material",
-      "default": "",
+      "default": "None",
       "description": "Material instance associated with this body."
     },
     {
@@ -39,13 +39,13 @@
     {
       "name": "shape",
       "type": "Shape",
-      "default": "",
+      "default": "None",
       "description": "Geometrical"
     },
     {
       "name": "bound",
       "type": "Bound",
-      "default": "",
+      "default": "None",
       "description": "Bound, approximating volume for the purposes of collision detection."
     },
     {

@@ -200,22 +200,22 @@
     },
     {
       "name": "clusterInts",
-      "type": "vector<shared_ptr<Interaction>>",
-      "default": "",
+      "type": "list[Interaction]",
+      "default": "[]",
       "description": "vector of pointers to the broken interactions nearby constituting a cluster",
       "read_only": true
     },
     {
       "name": "originalEvent",
       "type": "Interaction",
-      "default": "",
+      "default": "None",
       "description": "pointer to the original interaction of a cluster",
       "read_only": true
     },
     {
       "name": "nearbyInts",
-      "type": "vector<shared_ptr<Interaction>>",
-      "default": "",
+      "type": "list[Interaction]",
+      "default": "[]",
       "description": "vector of pointers to the nearby ints used for moment calc",
       "read_only": true
     },

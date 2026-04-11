@@ -7,35 +7,35 @@
     {
       "name": "tc",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining contact time",
       "inherited_from": "Ip2_ViscElMat_ViscElMat_ViscElPhys"
     },
     {
       "name": "en",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining restitution coefficient in normal direction",
       "inherited_from": "Ip2_ViscElMat_ViscElMat_ViscElPhys"
     },
     {
       "name": "et",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining restitution coefficient in tangential direction",
       "inherited_from": "Ip2_ViscElMat_ViscElMat_ViscElPhys"
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used.",
       "inherited_from": "Ip2_ViscElMat_ViscElMat_ViscElPhys"
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

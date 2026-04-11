@@ -61,14 +61,14 @@
     },
     {
       "name": "posIds",
-      "type": "vector<Body::id_t>",
-      "default": "",
+      "type": "list[Body::id_t]",
+      "default": "[]",
       "description": "Bodies on which strain will be applied (on the positive end along the axis)"
     },
     {
       "name": "negIds",
-      "type": "vector<Body::id_t>",
-      "default": "",
+      "type": "list[Body::id_t]",
+      "default": "[]",
       "description": "Bodies on which strain will be applied (on the negative end along the axis)"
     },
     {
@@ -150,7 +150,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

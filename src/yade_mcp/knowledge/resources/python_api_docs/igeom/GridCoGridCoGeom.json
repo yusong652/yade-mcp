@@ -39,7 +39,7 @@
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)",
       "read_only": true,
       "inherited_from": "GenericSpheresContact"
@@ -47,21 +47,21 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "some reference point for the interaction (usually in the middle). |ycomp|",
       "inherited_from": "GenericSpheresContact"
     },
     {
       "name": "refR1",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Reference radius of particle #1. |ycomp|",
       "inherited_from": "GenericSpheresContact"
     },
     {
       "name": "refR2",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Reference radius of particle #2. |ycomp|",
       "inherited_from": "GenericSpheresContact"
     },

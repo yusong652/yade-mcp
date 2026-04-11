@@ -43,7 +43,7 @@
     {
       "name": "realtime",
       "type": "float",
-      "default": "1393.471",
+      "default": "2636.249",
       "description": "Return clock (human world) time the simulation has been running."
     },
     {

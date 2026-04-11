@@ -7,7 +7,7 @@
     {
       "name": "extents",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Half-size of the cuboid"
     },
     {

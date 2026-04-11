@@ -31,31 +31,31 @@
     {
       "name": "en",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Normal coefficient of restitution $e_n$."
     },
     {
       "name": "es",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Shear coefficient of restitution $e_s$."
     },
     {
       "name": "betan",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Normal viscous damping ratio $ beta_n$."
     },
     {
       "name": "betas",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Shear viscous damping ratio $ beta_s$."
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

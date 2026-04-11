@@ -7,25 +7,25 @@
     {
       "name": "kn",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's normal contact stiffnesses. If this value is not given the elastic properties (i.e. young) of the two colliding materials are used to calculate the stiffness."
     },
     {
       "name": "kRatio",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's shear contact stiffnesses. If this value is not given the elastic properties (i.e. poisson) of the two colliding materials are used to calculate the stiffness."
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used."
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

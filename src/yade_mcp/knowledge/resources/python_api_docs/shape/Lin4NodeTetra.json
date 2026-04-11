@@ -7,14 +7,14 @@
     {
       "name": "localmap",
       "type": "NodeMap",
-      "default": "",
+      "default": "None",
       "description": "Ids and relative positions+orientations of members of the deformable element (should not be accessed directly)",
       "inherited_from": "DeformableElement"
     },
     {
       "name": "elementframe",
-      "type": "auto",
-      "default": "",
+      "type": "Matrix3",
+      "default": "Matrix3.Zero",
       "description": "",
       "inherited_from": "DeformableElement"
     },
@@ -48,7 +48,7 @@
     },
     {
       "name": "dispIndex",
-      "type": "auto",
+      "type": "int",
       "default": "",
       "description": "Return class index of this instance.",
       "inherited_from": "Shape"

@@ -6,20 +6,20 @@
   "attributes": [
     {
       "name": "disPath",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "Loading path, where each Vector3 contains desired normal displacement and two components of the shear displacement (in local coordinate system, which is being tracked automatically. If shorter than"
     },
     {
       "name": "rotPath",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "Rotational components of the loading path, where each item contains torsion and two bending rotations in local coordinates. If shorter than"
     },
     {
       "name": "hooks",
-      "type": "vector<string>",
-      "default": "",
+      "type": "list[str]",
+      "default": "[]",
       "description": "Python commands to be run when the corresponding point in path is reached, before doing other things in that particular step. See also"
     },
     {
@@ -42,14 +42,14 @@
     },
     {
       "name": "pathSteps",
-      "type": "vector<int>",
+      "type": "list[int]",
       "default": "((void)\"(constant step)\",vector<int>(1,1))",
       "description": "Step number for corresponding values in path; if shorter than path, distance between last 2 values is used for the rest."
     },
     {
       "name": "trsf",
       "type": "Matrix3",
-      "default": "",
+      "default": "Matrix3.Zero",
       "description": "Transformation matrix for the local coordinate system. (auto-updated)",
       "read_only": true,
       "no_save": true
@@ -70,7 +70,7 @@
     {
       "name": "doneHook",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Python command (as string) to run when end of the path is achieved. If empty, the engine will be set"
     },
     {
@@ -129,7 +129,7 @@
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -150,7 +150,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

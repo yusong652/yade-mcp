@@ -121,7 +121,7 @@
     {
       "name": "mobilizedShear",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Percentage of mobilized shear force as the ratio of the current shear force to the current frictional limit. Represents a quantified measure of the isSliding parameter"
     },
     {

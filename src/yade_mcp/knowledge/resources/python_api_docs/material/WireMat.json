@@ -18,14 +18,14 @@
     },
     {
       "name": "strainStressValues",
-      "type": "vector<Vector2r>",
-      "default": "",
+      "type": "list[Vector2]",
+      "default": "[]",
       "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for one single wire. Tension only is considered and the point (0,0) is not needed! NOTE: Vector needs to be initialized!"
     },
     {
       "name": "strainStressValuesDT",
-      "type": "vector<Vector2r>",
-      "default": "",
+      "type": "list[Vector2]",
+      "default": "[]",
       "description": "Piecewise linear definition of the stress-strain curve by set of points (strain[-]>0,stress[Pa]>0) for the double twist. Tension only is considered and the point (0,0) is not needed! If this value is given the calculation will be based on two different stress-strain curves without considering the parameter introduced by (Bertrand2008) (see (Thoeni2013))."
     },
     {
@@ -103,7 +103,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
       "inherited_from": "Material"
     },

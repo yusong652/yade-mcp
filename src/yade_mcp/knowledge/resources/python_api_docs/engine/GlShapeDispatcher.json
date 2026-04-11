@@ -6,7 +6,7 @@
   "attributes": [
     {
       "name": "functors",
-      "type": "vector<shared_ptr<GlShapeFunctor> >",
+      "type": "list[GlShapeFunctor]",
       "default": "[]",
       "description": "Functors associated with this dispatcher."
     },
@@ -27,7 +27,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

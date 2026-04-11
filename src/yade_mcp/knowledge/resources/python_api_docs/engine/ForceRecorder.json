@@ -7,7 +7,7 @@
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "List of bodies whose state will be measured"
     },
     {
@@ -19,7 +19,7 @@
     {
       "name": "file",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Name of file to save to; must not be empty.",
       "inherited_from": "Recorder"
     },
@@ -128,7 +128,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

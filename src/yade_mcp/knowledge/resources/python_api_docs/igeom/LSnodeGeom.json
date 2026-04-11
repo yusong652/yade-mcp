@@ -7,13 +7,13 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(6.942926339543290624e-310,6.942926427200812762e-310,6.942926429218181607",
+      "default": "(0, 0, 0)",
       "description": "some reference point for the interaction (usually in the middle). |ycomp|"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(6.942907781812343346e-310,6.942926429186561406e-310,6.942926429189723426",
+      "default": "(0, 0, 0)",
       "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)"
     },
     {

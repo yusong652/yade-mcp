@@ -7,7 +7,7 @@
     {
       "name": "tester",
       "type": "LawTester",
-      "default": "",
+      "default": "None",
       "description": "Associated LawTester object."
     },
     {

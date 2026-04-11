@@ -6,21 +6,21 @@
   "attributes": [
     {
       "name": "known",
-      "type": "vector<Vector3i>",
-      "default": "",
+      "type": "list[Vector3i]",
+      "default": "[]",
       "description": "Gridpoints (indices) with distance known for good: they have been at some point the shortest gp to the surface while executing the FMM.",
       "read_only": true
     },
     {
       "name": "phiIni",
-      "type": "vector<vector<vector<Real>>>",
-      "default": "",
+      "type": "list[list[list[float]]]",
+      "default": "[]",
       "description": "Initial discrete field defined on the grid that will serve as a boundary condition for the FMM. Field values have to be - inf (resp. inf) for points being far inside (resp. outside) and correct (finite) on each side of the interface. Built-in functions *distIniSE* (for superellipsoids), *phiIniCppPy* (for a Python user function, through a mixed C++-Py internal implementation) or *phiIniPy* (for a Python user function through a pure Py internal implementation) may be used for such a purpose."
     },
     {
       "name": "grid",
       "type": "RegularGrid",
-      "default": "",
+      "default": "None",
       "description": "The underlying"
     },
     {

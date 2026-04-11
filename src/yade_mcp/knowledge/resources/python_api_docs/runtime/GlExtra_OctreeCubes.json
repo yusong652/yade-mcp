@@ -7,7 +7,7 @@
     {
       "name": "boxesFile",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "File to read boxes from; ascii files with x0 y0 z0 x1 y1 z1 c records, where c is an integer specifying fill (0 for wire, 1 for filled)."
     },
     {

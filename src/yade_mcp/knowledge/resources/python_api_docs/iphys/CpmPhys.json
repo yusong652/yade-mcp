@@ -173,7 +173,7 @@
     {
       "name": "sigmaN",
       "type": "float",
-      "default": "6.01334685393676e-154",
+      "default": "",
       "description": "Current normal stress (auto-updated)",
       "read_only": true,
       "no_save": true
@@ -181,7 +181,7 @@
     {
       "name": "sigmaT",
       "type": "Vector3",
-      "default": "Vector3(1.949205534805384445e-153,6.013470016991685e-154,6.013469535893356342...",
+      "default": "(0, 0, 0)",
       "description": "Current shear stress (auto-updated)",
       "read_only": true,
       "no_save": true
@@ -213,7 +213,7 @@
     {
       "name": "relResidualStrength",
       "type": "float",
-      "default": "1.4367904943797766e+161",
+      "default": "",
       "description": "Relative residual strength (auto-updated)",
       "read_only": true,
       "no_save": true

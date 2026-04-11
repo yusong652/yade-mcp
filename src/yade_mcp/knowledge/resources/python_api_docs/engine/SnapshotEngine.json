@@ -31,8 +31,8 @@
     },
     {
       "name": "snapshots",
-      "type": "vector<string>",
-      "default": "",
+      "type": "list[str]",
+      "default": "[]",
       "description": "Files that have been created so far"
     },
     {
@@ -50,7 +50,7 @@
     {
       "name": "plot",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Name of field in yade.plot.imgData to which taken snapshots will be appended automatically."
     },
     {
@@ -144,7 +144,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

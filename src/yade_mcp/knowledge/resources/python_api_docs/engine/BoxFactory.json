@@ -95,8 +95,8 @@
     },
     {
       "name": "ids",
-      "type": "vector<int>",
-      "default": "",
+      "type": "list[int]",
+      "default": "[]",
       "description": "ids of created bodies",
       "inherited_from": "SpheresFactory"
     },
@@ -169,15 +169,15 @@
     },
     {
       "name": "PSDsizes",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "PSD-dispersion, sizes of cells, Diameter [m]",
       "inherited_from": "SpheresFactory"
     },
     {
       "name": "PSDcum",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "PSD-dispersion, cumulative procent meanings [-]",
       "inherited_from": "SpheresFactory"
     },
@@ -219,7 +219,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

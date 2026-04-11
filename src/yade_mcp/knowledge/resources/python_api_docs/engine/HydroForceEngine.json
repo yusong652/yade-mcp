@@ -18,8 +18,8 @@
     },
     {
       "name": "radiusParts",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Variables containing the number of different radius of particles in the simulation. Allow to perform class averaging by particle size."
     },
     {
@@ -43,19 +43,19 @@
     {
       "name": "deltaZ",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Height of the discretization cell."
     },
     {
       "name": "vCell",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Volume of averaging cell"
     },
     {
       "name": "vxFluid",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized streamwise fluid velocity depth profile at t"
     },
     {
@@ -84,8 +84,8 @@
     },
     {
       "name": "turbulentViscosity",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Fluid Resolution: turbulent viscocity as a function of the depth"
     },
     {
@@ -180,14 +180,14 @@
     },
     {
       "name": "convAcc",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Convective acceleration, depth dependent"
     },
     {
       "name": "taufsi",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Fluid Resolution: Create Taufsi/rhof = dragTerm/(rhof(vf-vxp)) to transmit to the fluid code"
     },
     {
@@ -210,14 +210,14 @@
     },
     {
       "name": "phiPart",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid volume fraction depth profile. Can be taken as input parameter or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
       "name": "vPart",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "Discretized streamwise solid velocity depth profile, in x, y and z direction. Only the x direction measurement is taken into account in the 1D fluid coupling resolution. The two other can be used as output parameters. The x component can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
@@ -240,26 +240,26 @@
     },
     {
       "name": "multiVxPart",
-      "type": "vector<vector<Real>>",
-      "default": "",
+      "type": "list[list[float]]",
+      "default": "[]",
       "description": "Spatial-averaged velocity in x direction for each class of particle."
     },
     {
       "name": "multiVyPart",
-      "type": "vector<vector<Real>>",
-      "default": "",
+      "type": "list[list[float]]",
+      "default": "[]",
       "description": "Spatial-averaged velocity in y direction for each class of particle."
     },
     {
       "name": "multiVzPart",
-      "type": "vector<vector<Real>>",
-      "default": "",
+      "type": "list[list[float]]",
+      "default": "[]",
       "description": "Spatial-averaged velocity in z direction for each class of particle."
     },
     {
       "name": "multiPhiPart",
-      "type": "vector<vector<Real>>",
-      "default": "",
+      "type": "list[list[float]]",
+      "default": "[]",
       "description": "Spatial-averaged solid volume fraction for each class of particle."
     },
     {
@@ -270,26 +270,26 @@
     },
     {
       "name": "vFluctX",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Vector associating a streamwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
     },
     {
       "name": "vFluctY",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Vector associating a spanwise fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
     },
     {
       "name": "vFluctZ",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Vector associating a normal fluid velocity fluctuation to each particle. Fluctuation calculated in the C++ code from the discrete random walk model"
     },
     {
       "name": "ReynoldStresses",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Vector of size equal to nCell containing the Reynolds stresses as a function of the depth. ReynoldStresses(z) $= rho^f <u_x'u_z'>(z)^2$"
     },
     {
@@ -300,14 +300,14 @@
     },
     {
       "name": "fluctTime",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Vector containing the time of life of the fluctuations associated to each particles."
     },
     {
       "name": "dtFluct",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Execution time step of the turbulent fluctuation model."
     },
     {
@@ -336,98 +336,98 @@
     },
     {
       "name": "phiPart1",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid volume fraction depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "phiPart2",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid volume fraction depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "averageDrag1",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized average drag depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "averageDrag2",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized average drag depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "vxPart1",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid streamwise velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vxPart2",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid streamwise velocity depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "vyPart1",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid spanwise velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vyPart2",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid spanwise velocity depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "vzPart1",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid wall-normal velocity depth profile of particles of type 1. Evaluated when"
     },
     {
       "name": "vzPart2",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized solid wall-normal velocity depth profile of particles of type 2. Evaluated when"
     },
     {
       "name": "vxPart",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized streamwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
       "name": "vyPart",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized spanwise solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
       "name": "vzPart",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized wall-normal solid velocity depth profile. Can be taken as input parameter, or evaluated directly inside the engine, calling from python the averageProfile() function"
     },
     {
       "name": "averageDrag",
-      "type": "vector<Real>",
-      "default": "",
+      "type": "list[float]",
+      "default": "[]",
       "description": "Discretized average drag depth profile. No role in the engine, output parameter. For practical reason, it can be evaluated directly inside the engine, calling from python the averageProfile() method of the engine"
     },
     {
       "name": "multiDragPart",
-      "type": "vector< vector<Real> >",
-      "default": "",
+      "type": "list[list[float]]",
+      "default": "[]",
       "description": "Spatial-averaged mean drag force for each class of particle. Un-used ? Or just for debug."
     },
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -448,7 +448,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

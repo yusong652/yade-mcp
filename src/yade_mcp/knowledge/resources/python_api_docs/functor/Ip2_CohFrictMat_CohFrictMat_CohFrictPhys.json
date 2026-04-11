@@ -19,25 +19,25 @@
     {
       "name": "normalCohesion",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining tensile strength"
     },
     {
       "name": "shearCohesion",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining cohesive part of the shear strength (a frictional term might be added depending on cohesionDisablesFriction)"
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used."
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

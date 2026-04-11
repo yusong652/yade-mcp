@@ -13,7 +13,7 @@
     {
       "name": "temoin_save",
       "type": "list[float]",
-      "default": "",
+      "default": "[]",
       "description": "vector (same length as 'gamma_save' for ex), with 0 or 1 depending whether the save for the corresponding value of gamma has been done (1) or not (0)."
     },
     {
@@ -111,7 +111,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

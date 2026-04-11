@@ -42,7 +42,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
       "inherited_from": "Material"
     },

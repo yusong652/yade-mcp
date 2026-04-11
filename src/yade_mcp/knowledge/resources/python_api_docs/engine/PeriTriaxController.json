@@ -61,7 +61,7 @@
     {
       "name": "doneHook",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "python command to be run when the desired state is reached"
     },
     {
@@ -145,7 +145,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

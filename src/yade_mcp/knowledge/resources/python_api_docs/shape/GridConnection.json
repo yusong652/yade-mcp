@@ -7,13 +7,13 @@
     {
       "name": "node1",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "First Body the GridConnection is connected to."
     },
     {
       "name": "node2",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "Second Body the GridConnection is connected to."
     },
     {

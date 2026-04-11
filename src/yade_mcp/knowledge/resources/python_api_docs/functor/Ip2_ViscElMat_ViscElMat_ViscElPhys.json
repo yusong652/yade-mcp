@@ -7,31 +7,31 @@
     {
       "name": "tc",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining contact time"
     },
     {
       "name": "en",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining restitution coefficient in normal direction"
     },
     {
       "name": "et",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining restitution coefficient in tangential direction"
     },
     {
       "name": "frictAngle",
       "type": "MatchMaker",
-      "default": "",
+      "default": "None",
       "description": "Instance of MatchMaker determining how to compute interaction's friction angle. If None, minimum value is used."
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

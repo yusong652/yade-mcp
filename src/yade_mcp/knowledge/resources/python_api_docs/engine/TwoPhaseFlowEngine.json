@@ -60,7 +60,7 @@
     },
     {
       "name": "bndCondIsWaterReservoir",
-      "type": "vector<bool>",
+      "type": "list[bool]",
       "default": "vector<bool>(6,false)",
       "description": "Boundary conditions, if bndCondIsPressure[] = True, is it air or water boundary condition? True is water reservoir"
     },
@@ -258,7 +258,7 @@
     },
     {
       "name": "setFractionParticles",
-      "type": "vector<Real>",
+      "type": "list[float]",
       "default": "vector<Real>(scene->bodies->size(),0.0)",
       "description": "Correction fraction for swelling of particles by mismatch of surface area of particles with those from actual surface area in pore units"
     },
@@ -636,35 +636,35 @@
     },
     {
       "name": "bndCondIsPressure",
-      "type": "vector<bool>",
+      "type": "list[bool]",
       "default": "vector<bool>(6,false)",
       "description": "defines the type of boundary condition for each side. True if pressure is imposed, False for no-flux. Indexes can be retrieved with",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "bndCondIsTemperature",
-      "type": "vector<bool>",
+      "type": "list[bool]",
       "default": "vector<bool>(6,false)",
       "description": "defines the type of boundary condition for each side of triangulation (used with ThermalEngine only). True if temperature is imposed, False for no heat-flux. Indexes can be retrieved with xmin and friends.",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "bndCondValue",
-      "type": "vector<Real>",
+      "type": "list[float]",
       "default": "vector<Real>(6,0)",
       "description": "Imposed value of a boundary condition. Only applies if the boundary condition is imposed pressure, else the imposed flux is always zero presently (may be generalized to non-zero imposed fluxes in the future).",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "thermalBndCondValue",
-      "type": "vector<Real>",
+      "type": "list[float]",
       "default": "vector<Real>(6,0)",
       "description": "Imposed temperature boundary condition value for the cells in the triangulation (used with",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "boundaryVelocity",
-      "type": "vector<Vector3r>",
+      "type": "list[Vector3]",
       "default": "vector<Vector3r>(6,(0, 0, 0))",
       "description": "velocity on top boundary, only change it using",
       "inherited_from": "TwoPhaseFlowEngineT"
@@ -685,14 +685,14 @@
     },
     {
       "name": "wallIds",
-      "type": "vector<int>",
+      "type": "list[int]",
       "default": "vector<int>(6)",
       "description": "body ids of the boundaries (default values are ok only if aabbWalls are appended before spheres, i.e. numbered 0,...,5)",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "boundaryUseMaxMin",
-      "type": "vector<bool>",
+      "type": "list[bool]",
       "default": "vector<bool>(6,true)",
       "description": "If true (default value) bounding sphere is added as function of max/min sphere coord, if false as function of yade wall position",
       "inherited_from": "TwoPhaseFlowEngineT"
@@ -797,14 +797,14 @@
     },
     {
       "name": "boundaryPressure",
-      "type": "vector<Real>",
+      "type": "list[float]",
       "default": "vector<Real>()",
       "description": "values defining pressure along x-axis for the top surface. See also",
       "inherited_from": "TwoPhaseFlowEngineT"
     },
     {
       "name": "boundaryXPos",
-      "type": "vector<Real>",
+      "type": "list[float]",
       "default": "vector<Real>()",
       "description": "values of the x-coordinate for which pressure is defined. See also",
       "inherited_from": "TwoPhaseFlowEngineT"
@@ -933,7 +933,7 @@
     {
       "name": "ids",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Ids list of bodies affected by this PartialEngine.",
       "inherited_from": "PartialEngine"
     },
@@ -954,7 +954,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },
@@ -977,7 +977,7 @@
     {
       "name": "timingDeltas",
       "type": "TimingDeltas",
-      "default": "",
+      "default": "None",
       "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
       "no_save": true,
       "inherited_from": "Engine"

@@ -27,13 +27,13 @@
     {
       "name": "geom",
       "type": "IGeom",
-      "default": "",
+      "default": "None",
       "description": "Geometry part of the interaction."
     },
     {
       "name": "phys",
       "type": "IPhys",
-      "default": "",
+      "default": "None",
       "description": "Physical (material) part of the interaction."
     },
     {

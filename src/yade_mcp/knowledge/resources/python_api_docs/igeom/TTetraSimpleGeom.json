@@ -13,13 +13,13 @@
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Contact point (global coords)"
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "",
+      "default": "(0, 0, 0)",
       "description": "Normal of the interaction TODO"
     },
     {

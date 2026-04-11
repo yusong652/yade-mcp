@@ -6,22 +6,22 @@
   "attributes": [
     {
       "name": "distField",
-      "type": "vector< vector< vector<Real> > >",
-      "default": "",
+      "type": "list[list[list[float]]]",
+      "default": "[]",
       "description": "The signed (< 0 when inside) distance-to-surface function as a discrete scalar field on lsGrid, with distField[i][j][k] corresponding to lsGrid.gridPoint(i,j,k). From Python, slice this multi-dimensional list with care: while distField[i][:][:] corresponds to values on a x-cst plane, distField[:][:][k] is not at z-constant (use [[distField[i][j][k] for j in ..] for i in ..] instead)",
       "read_only": true
     },
     {
       "name": "corners",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "The 8 corners of an axis-aligned bounding box, in local axes. It is computed once for all by",
       "read_only": true
     },
     {
       "name": "surfNodes",
-      "type": "vector<Vector3r>",
-      "default": "",
+      "type": "list[Vector3]",
+      "default": "[]",
       "description": "Surface discretization nodes (the list of) used for exact contact treatment in Ig2_LevelSet_LevelSet_ScGeom, previously coined boundNodes in (Duriez2021b). Expressed in local frame. Getting them back after a save/load cycle requires to launch one iteration or to first ask for shape.center.",
       "read_only": true
     },

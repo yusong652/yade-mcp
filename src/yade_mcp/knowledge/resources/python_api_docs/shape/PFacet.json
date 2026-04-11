@@ -7,37 +7,37 @@
     {
       "name": "node1",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "First Body the Pfacet is connected to."
     },
     {
       "name": "node2",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "Second Body the Pfacet is connected to."
     },
     {
       "name": "node3",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "third Body the Pfacet is connected to."
     },
     {
       "name": "conn1",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "First Body the Pfacet is connected to."
     },
     {
       "name": "conn2",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "Second Body the Pfacet is connected to."
     },
     {
       "name": "conn3",
       "type": "Body",
-      "default": "",
+      "default": "None",
       "description": "third Body the Pfacet is connected to."
     },
     {

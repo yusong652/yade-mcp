@@ -6,14 +6,14 @@
   "attributes": [
     {
       "name": "factoryFacets",
-      "type": "vector<Body::id_t>",
-      "default": "",
+      "type": "list[Body::id_t]",
+      "default": "[]",
       "description": "The geometry of the section where spheres will be placed; they will be placed on facets or in volume between them depending on *volumeSection* flag."
     },
     {
       "name": "subscribedBodies",
       "type": "list[int]",
-      "default": "",
+      "default": "[]",
       "description": "Affected bodies."
     },
     {
@@ -155,7 +155,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

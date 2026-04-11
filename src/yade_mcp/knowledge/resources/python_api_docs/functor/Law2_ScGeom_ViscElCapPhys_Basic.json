@@ -7,21 +7,21 @@
     {
       "name": "VLiqBridg",
       "type": "OpenMPAccumulator<Real>",
-      "default": "",
+      "default": "0.0",
       "description": "The total volume of liquid bridges",
       "no_save": true
     },
     {
       "name": "NLiqBridg",
       "type": "OpenMPAccumulator<int>",
-      "default": "",
+      "default": "0",
       "description": "The total number of liquid bridges",
       "no_save": true
     },
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Functor"
     },

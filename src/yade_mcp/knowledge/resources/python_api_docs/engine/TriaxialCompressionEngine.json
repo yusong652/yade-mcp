@@ -456,7 +456,7 @@
     {
       "name": "particlesVolume",
       "type": "float",
-      "default": "1.39066084072214e-309",
+      "default": "",
       "description": "Total volume of particles (clumps and dynamic spheres). |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
@@ -464,7 +464,7 @@
     {
       "name": "spheresVolume",
       "type": "float",
-      "default": "1.39066084072214e-309",
+      "default": "",
       "description": "Shorthand for particlesVolume",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
@@ -472,7 +472,7 @@
     {
       "name": "max_vel1",
       "type": "float",
-      "default": "1.39066084070949e-309",
+      "default": "",
       "description": "see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
@@ -480,7 +480,7 @@
     {
       "name": "max_vel2",
       "type": "float",
-      "default": "1.390660840723404e-309",
+      "default": "",
       "description": "see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
@@ -488,7 +488,7 @@
     {
       "name": "max_vel3",
       "type": "float",
-      "default": "1.39066243098807e-309",
+      "default": "",
       "description": "see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
@@ -510,7 +510,7 @@
     {
       "name": "label",
       "type": "str",
-      "default": "",
+      "default": "''",
       "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
       "inherited_from": "Engine"
     },

@@ -85,8 +85,8 @@
     },
     {
       "name": "tags",
-      "type": "vector<string>",
-      "default": "",
+      "type": "list[str]",
+      "default": "['author=root~(root@34cbb5a47fb3)', 'isoTime=20260411T103803', 'id=20260411T1...",
       "description": "Arbitrary key=value associations (tags like mp3 tags: author, date, version, description etc.)"
     }
   ],

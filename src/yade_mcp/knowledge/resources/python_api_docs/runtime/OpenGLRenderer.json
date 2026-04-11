@@ -138,20 +138,20 @@
     },
     {
       "name": "clipPlaneSe3",
-      "type": "vector<Se3r>",
+      "type": "list[Se3r]",
       "default": "vector<Se3r>(numClipPlanes,Se3r((0, 0, 0),Quaternion.Identity))",
       "description": "Position and orientation of clipping planes"
     },
     {
       "name": "clipPlaneActive",
-      "type": "vector<bool>",
+      "type": "list[bool]",
       "default": "vector<bool>(numClipPlanes,false)",
       "description": "Activate/deactivate respective clipping planes"
     },
     {
       "name": "extraDrawers",
-      "type": "vector<shared_ptr<GlExtraDrawer> >",
-      "default": "",
+      "type": "list[GlExtraDrawer]",
+      "default": "[]",
       "description": "Additional rendering components ("
     },
     {

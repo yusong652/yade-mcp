@@ -43,7 +43,7 @@
     {
       "name": "sigmaN",
       "type": "float",
-      "default": "1.39066083972136e-309",
+      "default": "",
       "description": "Current normal stress (auto-updated)",
       "read_only": true,
       "no_save": true
@@ -51,7 +51,7 @@
     {
       "name": "sigmaT",
       "type": "Vector3",
-      "default": "Vector3(1.390660839722624814e-309,3.211426697968102537e-322,1.390659888465072...",
+      "default": "(0, 0, 0)",
       "description": "Current shear stress (auto-updated)",
       "read_only": true,
       "no_save": true
