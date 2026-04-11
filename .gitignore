@@ -15,6 +15,7 @@ venv/
 *.so
 .mcp.json
 .gemini/
+.codex/
 .claude/settings.local.json
 .yade-mcp/
 yade-mcp-bridge/uv.lock
