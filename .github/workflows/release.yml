@@ -43,9 +43,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${{ github.ref_name }}"
-          NOTES="$(git tag -l --format='%(contents)' "$TAG")"
-          if [ -z "$NOTES" ]; then
-            gh release create "$TAG" --generate-notes
+          if [ -n "$(git tag -l --format='%(contents)' "$TAG")" ]; then
+            gh release create "$TAG" --title "$TAG" --notes-from-tag
           else
-            gh release create "$TAG" --notes "$NOTES"
+            gh release create "$TAG" --generate-notes
           fi
