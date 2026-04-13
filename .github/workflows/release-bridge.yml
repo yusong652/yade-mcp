@@ -11,18 +11,6 @@ jobs:
     environment: pypi-bridge
     permissions:
       id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
-      - run: cd yade-mcp-bridge && uv build
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: yade-mcp-bridge/dist/
-
-  github-release:
-    needs: publish
-    runs-on: ubuntu-latest
-    permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
@@ -30,13 +18,15 @@ jobs:
           fetch-depth: 0
       - name: Fetch annotated tags
         run: git fetch --tags --force
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="${{ github.ref_name }}"
-          if [ -n "$(git tag -l --format='%(contents)' "$TAG")" ]; then
-            gh release create "$TAG" --title "$TAG" --notes-from-tag
-          else
-            gh release create "$TAG" --generate-notes
-          fi
+      - uses: astral-sh/setup-uv@v6
+      - run: cd yade-mcp-bridge && uv build
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: yade-mcp-bridge/dist/
+      - name: Extract tag annotation body
+        run: git tag -l --format='%(contents)' "${{ github.ref_name }}" > tag_body.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: tag_body.txt
+          generate_release_notes: true
+          files: yade-mcp-bridge/dist/*
