@@ -1,27 +1,44 @@
 # YADE + yade-mcp-bridge development image
 #
 # Build:  docker build -f docker/Dockerfile.dev -t yade-dev .
-# Run:    docker run -it -p 9002:9002 yade-dev
+# Run:    docker run -it -p 9002:9002 -p 6080:6080 yade-dev
 #
-# The bridge WebSocket will be available at ws://localhost:9002
+# Endpoints:
+#   ws://localhost:9002          yade-mcp-bridge
+#   http://localhost:6080/vnc.html  noVNC view of YADE's Qt GUI
 
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# ── Install YADE from apt (pre-compiled, no build needed) ───────
+# ── Install YADE + Qt GUI stack ────────────────────────────────
+# xvfb/x11vnc/novnc/websockify/fluxbox power the in-container X
+# stack that exposes YADE's Qt/OpenGL window over a browser.
+# mesa-utils + libgl1-mesa-dri enable llvmpipe software rendering
+# (no GPU passthrough on Docker-on-Mac).
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         yade \
         python3-yade \
         python3-pip \
+        xvfb \
+        x11vnc \
+        novnc \
+        websockify \
+        fluxbox \
+        x11-utils \
+        mesa-utils \
+        libgl1-mesa-dri \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Install yade-mcp-bridge ─────────────────────────────────────
 COPY yade-mcp-bridge/ /yade-mcp-bridge/
 RUN pip3 install /yade-mcp-bridge/
 
-WORKDIR /workspace
-EXPOSE 9002
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-CMD ["yade"]
+WORKDIR /workspace
+EXPOSE 9002 6080
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

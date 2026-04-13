@@ -9,14 +9,19 @@
 #   3. workspace → /workspace (scratch dir for local script development;
 #      edit on host, %run /workspace/xxx.py inside YADE; gitignored)
 
-# Clean up: stop any running yade-dev container and remove exited ones
-docker rm -f $(docker ps -aq --filter ancestor=yade-dev) 2>/dev/null
+# Clean up: stop any container holding our ports (9002 bridge, 6080 noVNC).
+# Filter by published port instead of ancestor — image-ID changes across
+# rebuilds leave orphan containers that ancestor= won't match.
+for port in 9002 6080; do
+    ids=$(docker ps -q --filter "publish=${port}")
+    [ -n "$ids" ] && docker rm -f $ids
+done 2>/dev/null
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 mkdir -p "${REPO_ROOT}/workspace"
 
-docker run -it --rm -p 9002:9002 \
+docker run -it --rm -p 9002:9002 -p 6080:6080 \
     -v "${REPO_ROOT}/yade-mcp-bridge/src/yade_mcp_bridge:/usr/local/lib/python3.10/dist-packages/yade_mcp_bridge" \
     -v "${REPO_ROOT}/src/yade_mcp/knowledge/resources/python_api_docs:/docs_output" \
     -v "${REPO_ROOT}/workspace:/workspace" \
