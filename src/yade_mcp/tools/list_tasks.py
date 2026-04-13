@@ -5,6 +5,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from yade_mcp.bridge import get_bridge_client
+from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
 from yade_mcp.formatting import build_bridge_error, build_operation_error, format_unix_timestamp, normalize_status
 from yade_mcp.utils import SkipNewestTasks, TaskListLimit
@@ -14,6 +15,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_list_tasks tool."""
 
     @mcp.tool()
+    @with_context
     async def yade_list_tasks(
         skip_newest: SkipNewestTasks = 0,
         limit: TaskListLimit = 32,
@@ -57,7 +59,7 @@ def register(mcp: FastMCP) -> None:
             }
             normalized_tasks.append(normalized_task)
 
-        return await build_ok(
+        return build_ok(
             {
                 "total_count": total_count,
                 "displayed_count": displayed_count,

@@ -187,6 +187,7 @@ class TaskManager:
             "entry_script": task.entry_script,
             "log_path": task.log_path,
             "error": task.error,
+            "error_details": getattr(task, "error_details", None),
         }
 
     @staticmethod

@@ -5,6 +5,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from yade_mcp.bridge import get_bridge_client
+from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
 from yade_mcp.formatting import (
     build_bridge_error,
@@ -19,6 +20,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_check_task_status tool."""
 
     @mcp.tool()
+    @with_context
     async def yade_check_task_status(
         task_id: TaskId,
         skip_newest: SkipNewestLines = 0,
@@ -94,5 +96,13 @@ def register(mcp: FastMCP) -> None:
             result["result"] = data["result"]
         if data.get("error"):
             result["error"] = data["error"]
+        # Structured traceback / exception type / overflow log pointer
+        # for failed tasks. Surfaced as a sibling of `error` (not inside
+        # it) because check_task_status returns an ok envelope — the
+        # tool call itself succeeded; the *task* failed. Nests under a
+        # separate key so the prod-mode details strip (on tool errors)
+        # never touches it.
+        if data.get("error_details"):
+            result["error_details"] = data["error_details"]
 
-        return await build_ok(result)
+        return build_ok(result)

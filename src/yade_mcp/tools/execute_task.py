@@ -6,6 +6,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from yade_mcp.bridge import get_bridge_client
+from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
 from yade_mcp.formatting import build_bridge_error, build_operation_error
 from yade_mcp.utils import ScriptPath, TaskDescription
@@ -15,6 +16,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_execute_task tool."""
 
     @mcp.tool()
+    @with_context
     async def yade_execute_task(
         entry_script: ScriptPath,
         description: TaskDescription,
@@ -60,7 +62,7 @@ def register(mcp: FastMCP) -> None:
                 action="Check script path and bridge logs, then retry",
             )
 
-        return await build_ok(
+        return build_ok(
             {
                 "task_id": task_id,
                 "entry_script": entry_script,

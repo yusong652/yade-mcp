@@ -5,6 +5,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from yade_mcp.bridge import get_bridge_client
+from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
 from yade_mcp.formatting import build_bridge_error, build_operation_error, is_bridge_connectivity_error
 from yade_mcp.utils import ConsoleCode, ConsoleTimeoutSeconds
@@ -14,6 +15,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_execute_code tool."""
 
     @mcp.tool()
+    @with_context
     async def yade_execute_code(
         code: ConsoleCode,
         timeout: ConsoleTimeoutSeconds = 10,
@@ -74,10 +76,17 @@ def register(mcp: FastMCP) -> None:
 
         if status == "error":
             error = response.get("error") or {}
+            bridge_data = response.get("data") or {}
+            bridge_details = error.get("details") or {}
+            partial_output = bridge_data.get("output")
             return build_operation_error(
                 error.get("code", "execute_code_error"),
                 error.get("message", message),
-                reason=message,
+                data={"output": partial_output} if partial_output else None,
+                exception_type=bridge_details.get("exception_type"),
+                traceback=bridge_details.get("traceback"),
+                traceback_truncated=bridge_details.get("traceback_truncated"),
+                log_file=bridge_details.get("log_file"),
             )
 
         data = response.get("data") or {}
@@ -87,4 +96,4 @@ def register(mcp: FastMCP) -> None:
         if data.get("result") is not None:
             result_data["result"] = data["result"]
 
-        return await build_ok(result_data)
+        return build_ok(result_data)

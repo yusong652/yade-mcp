@@ -39,4 +39,4 @@ def register(mcp: FastMCP) -> None:
             summary={"count": len(matches), "query": query},
         )
 
-        return await build_ok(payload, inject_context=False)
+        return build_ok(payload)

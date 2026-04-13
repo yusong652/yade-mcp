@@ -177,30 +177,16 @@ def _enforce_size(envelope: dict[str, Any], max_chars: int = MAX_RESPONSE_CHARS)
     return envelope
 
 
-async def build_ok(data: Any, *, inject_context: bool = True) -> dict[str, Any]:
+def build_ok(data: Any) -> dict[str, Any]:
     """Build, validate, and size-enforce a success envelope.
 
-    Args:
-        data: Tool-specific payload.
-        inject_context: Whether to inject bridge context (console history, etc.).
-            Documentation tools should pass False — they don't depend on bridge.
+    Pure contract constructor — shapes the ``{ok, data}`` payload and
+    enforces size limits. Runtime context (``_context``) is injected
+    outside this module by the tool-layer ``with_context`` decorator;
+    keeping that concern external lets contracts stay sync and I/O-free.
     """
     envelope = ToolEnvelope(ok=True, data=data).model_dump(exclude_none=True)
-    envelope = _enforce_size(envelope)
-
-    if inject_context:
-        try:
-            from yade_mcp.bridge.context import fetch_bridge_context
-
-            context = await fetch_bridge_context()
-            if context:
-                envelope["_context"] = context
-        except Exception:
-            import logging
-
-            logging.getLogger("yade-mcp.contracts").debug("Context injection skipped", exc_info=True)
-
-    return envelope
+    return _enforce_size(envelope)
 
 
 def build_error(

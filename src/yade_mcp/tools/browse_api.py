@@ -76,7 +76,7 @@ async def _browse_root() -> dict[str, Any]:
     """List every top-level category."""
     categories = APILoader.list_categories()
     entries = [{"entry_type": "category", **cat} for cat in categories]
-    return await build_ok(
+    return build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
@@ -85,8 +85,7 @@ async def _browse_root() -> dict[str, Any]:
                 "count": len(entries),
                 "hint": "Browse a category (e.g. 'engine') to drill into its tree",
             },
-        ),
-        inject_context=False,
+        )
     )
 
 
@@ -148,7 +147,7 @@ async def _browse_tree_node(category: str, tree_path: list[str]) -> dict[str, An
             entry["descendant_count"] = cls["descendant_count"]
         entries.append(entry)
 
-    return await build_ok(
+    return build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
@@ -162,8 +161,7 @@ async def _browse_tree_node(category: str, tree_path: list[str]) -> dict[str, An
                 "leaf_count": leaf_count,
                 "hint": "Drill into a tree_node to see its subtree, or into a class for full docs",
             },
-        ),
-        inject_context=False,
+        )
     )
 
 
@@ -183,7 +181,7 @@ async def _browse_class(category: str, tree_path: list[str], class_name: str) ->
 
     display_path = category + ("." + ".".join(tree_path) if tree_path else "")
     display_path = f"{display_path}.{class_name}"
-    return await build_ok(
+    return build_ok(
         build_docs_data(
             source="python_api",
             action="browse",
@@ -195,6 +193,5 @@ async def _browse_class(category: str, tree_path: list[str], class_name: str) ->
                 }
             ],
             summary={"count": 1, "class": class_name, "display_path": display_path},
-        ),
-        inject_context=False,
+        )
     )

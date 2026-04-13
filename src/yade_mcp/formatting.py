@@ -104,8 +104,23 @@ def build_operation_error(
     reason: str | None = None,
     task_id: str | None = None,
     action: str | None = None,
+    data: Any | None = None,
+    **extras: Any,
 ) -> dict[str, Any]:
-    """Build a unified error envelope for operation failures."""
+    """Build a unified error envelope for operation failures.
+
+    ``**extras`` go straight into ``details`` as-is. Use this for
+    diagnostic fields that don't warrant a first-class parameter —
+    ``exception_type``, ``traceback``, ``log_file``, etc. Values of
+    ``None`` are dropped so callers can forward dict lookups without
+    guarding each one.
+
+    ``data`` surfaces execution artefacts even on failure — e.g. the
+    stdout captured before a crash. It lives at the envelope's top
+    level alongside ``error`` (not inside ``details``) so it survives
+    the prod-mode details strip: captured output is an execution
+    product, not debug metadata.
+    """
     details: dict[str, Any] = {}
     if reason:
         details["reason"] = reason
@@ -113,4 +128,7 @@ def build_operation_error(
         details["task_id"] = task_id
     if action:
         details["action"] = action
-    return build_error(code, message, details or None)
+    for key, value in extras.items():
+        if value is not None:
+            details[key] = value
+    return build_error(code, message, details or None, data=data)

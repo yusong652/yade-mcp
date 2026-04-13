@@ -5,6 +5,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from yade_mcp.bridge import get_bridge_client
+from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
 from yade_mcp.formatting import build_bridge_error, build_operation_error
 from yade_mcp.utils import TaskId
@@ -14,6 +15,7 @@ def register(mcp: FastMCP) -> None:
     """Register yade_interrupt_task tool."""
 
     @mcp.tool()
+    @with_context
     async def yade_interrupt_task(task_id: TaskId) -> dict[str, Any]:
         """Request graceful interruption of a running YADE task."""
         try:
@@ -26,7 +28,7 @@ def register(mcp: FastMCP) -> None:
         message = response.get("message", "")
 
         if status == "success":
-            return await build_ok(
+            return build_ok(
                 {
                     "task_id": task_id,
                     "interrupt_requested": True,

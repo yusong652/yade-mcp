@@ -5,9 +5,12 @@ Handles synchronous code snippet execution via main thread queue.
 
 import asyncio
 import logging
+import os
 import sys
+import time
 from io import StringIO
 
+from ..execution.errors import format_execution_error
 from ..utils import TeeBuffer
 from .helpers import require_field
 
@@ -61,11 +64,34 @@ async def handle_execute_code(ctx, data):
                 }
             except Exception as e:
                 output_text = output_buffer.getvalue()
-                return {
-                    "status": "error",
-                    "output": output_text,
-                    "message": f"{type(e).__name__}: {str(e)}",
-                }
+                # Suppress chained-exception noise. The handler tries
+                # compile(..., "eval") first and falls back to exec on
+                # SyntaxError; that fallback leaves a "During handling
+                # of the above exception..." preamble in format_exc
+                # that's pure plumbing, not user-relevant.
+                e.__suppress_context__ = True
+
+                def _overflow_writer(full_tb: str) -> str:
+                    # Only called when the excerpt is truncated. Fresh
+                    # timestamped file per error — execute_code is
+                    # synchronous REPL, overwriting a single rolling file
+                    # would race if another call lands between error and
+                    # agent read.
+                    log_dir = os.path.join(".yade-mcp", "logs")
+                    os.makedirs(log_dir, exist_ok=True)
+                    path = os.path.join(log_dir, f"exec_code_error_{int(time.time() * 1000)}.log")
+                    with open(path, "w", encoding="utf-8") as f:
+                        f.write(full_tb)
+                    return os.path.abspath(path)
+
+                return format_execution_error(
+                    e,
+                    output_text,
+                    is_user_frame=lambda fn: fn == "<execute_code>",
+                    display_path="<execute_code>",
+                    message_prefix="Code execution failed",
+                    overflow_writer=_overflow_writer,
+                )
             finally:
                 sys.stdout = old_stdout
 
@@ -80,6 +106,10 @@ async def handle_execute_code(ctx, data):
 
         status = result.get("status", "unknown")
         if status == "error":
+            details: dict = {}
+            for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):
+                if key in result:
+                    details[key] = result[key]
             return {
                 "type": "execute_code_result",
                 "request_id": request_id,
@@ -88,6 +118,7 @@ async def handle_execute_code(ctx, data):
                 "error": {
                     "code": "execute_code_error",
                     "message": result.get("message", ""),
+                    "details": details or None,
                 },
                 "data": {
                     "output": result.get("output", ""),

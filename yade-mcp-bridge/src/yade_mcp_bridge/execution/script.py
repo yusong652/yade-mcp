@@ -8,10 +8,10 @@ import logging
 import os
 import sys
 import time
-import traceback
 
 from ..signals import clear_current_task, clear_interrupt, set_current_task
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, build_response, path_to_llm_format
+from .errors import format_execution_error
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -89,6 +89,11 @@ class ScriptRunner:
 
         except BaseException as e:
             output_text = output_buffer.getvalue()
+            # Mirror execute_code: suppress the compile(eval)->compile(exec)
+            # fallback chain that otherwise prepends a misleading
+            # "SyntaxError / During handling of the above" preamble to
+            # the raw traceback.
+            e.__suppress_context__ = True
 
             # Detect InterruptedError wrapped by YADE's PyRunner as RuntimeError
             error_str = str(e)
@@ -101,39 +106,41 @@ class ScriptRunner:
                     "output": output_text,
                 }
 
-            full_traceback = traceback.format_exc()
-            logger.error(f"Script execution failed with traceback:\n{full_traceback}")
-
-            # Extract user script frames only
-            tb = sys.exc_info()[2]
-            user_frames = []
             normalized_script_path = os.path.normpath(script_path)
 
-            while tb is not None:
-                frame = tb.tb_frame
-                filename = frame.f_code.co_filename
-                normalized_filename = os.path.normpath(filename)
-                if normalized_filename == normalized_script_path or filename == "<string>":
-                    user_frames.append((filename, tb.tb_lineno, frame.f_code.co_name))
-                tb = tb.tb_next
+            def _is_user_frame(filename: str) -> bool:
+                return os.path.normpath(filename) == normalized_script_path or filename == "<string>"
 
-            display_path = path_to_llm_format(script_path)
+            task_log_path = output_buffer.get_path() if hasattr(output_buffer, "get_path") else None
 
-            if user_frames:
-                error_parts = ["Script execution failed:\n"]
-                for _filename, lineno, name in user_frames:
-                    error_parts.append(f'  File "{display_path}", line {lineno}, in {name}\n')
-                error_parts.append(f"{type(e).__name__}: {str(e)}")
-                error_message = "".join(error_parts)
-            else:
-                error_message = f"Script execution failed: {type(e).__name__}: {str(e)}"
+            def _overflow_writer(full_tb: str) -> str:
+                # Append the full traceback to the task's own log so the
+                # LLM can retrieve it via check_task_status pagination or
+                # direct file read. Returns the abs path so the response
+                # can point the agent at it.
+                if task_log_path and os.path.isfile(task_log_path):
+                    with open(task_log_path, "a", encoding="utf-8") as f:
+                        f.write("\n--- traceback ---\n")
+                        f.write(full_tb)
+                    return os.path.abspath(task_log_path)
+                # Fallback: dedicated task error log next to the task log.
+                fallback = os.path.join(".yade-mcp", "logs", f"task_{task_id}_error.log")
+                os.makedirs(os.path.dirname(fallback), exist_ok=True)
+                with open(fallback, "w", encoding="utf-8") as f:
+                    f.write(full_tb)
+                return os.path.abspath(fallback)
 
-            return {
-                "status": "error",
-                "message": error_message,
-                "result": None,
-                "output": output_text,
-            }
+            payload = format_execution_error(
+                e,
+                output_text,
+                is_user_frame=_is_user_frame,
+                display_path=path_to_llm_format(script_path),
+                message_prefix="Script execution failed",
+                overflow_writer=_overflow_writer,
+            )
+            logger.error(f"Script execution failed:\n{payload['message']}")
+            payload["result"] = None
+            return payload
 
         finally:
             sys.stdout = old_stdout

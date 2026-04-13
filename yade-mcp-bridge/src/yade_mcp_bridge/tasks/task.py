@@ -36,6 +36,11 @@ class ScriptTask:
         self._status = "pending"
         self.on_status_change = on_status_change
         self.error = None
+        # Structured error details captured from the executor (user-frame
+        # traceback, exception type, overflow log path). Promoted into
+        # check_task_status responses so the LLM has full debugging context
+        # without chasing log files.
+        self.error_details: dict | None = None
 
         self.log_path = None
         if output_buffer and hasattr(output_buffer, "get_path"):
@@ -58,6 +63,7 @@ class ScriptTask:
         task.end_time = task_data.get("end_time")
         task.log_path = task_data.get("log_path")
         task.error = task_data.get("error")
+        task.error_details = task_data.get("error_details")
         task.future = None
         task.output_buffer = None
         task.on_status_change = None
@@ -81,6 +87,12 @@ class ScriptTask:
                 if result_status == "error":
                     self.status = "failed"
                     self.error = result.get("message", "Task execution failed")
+                    diag = {
+                        k: result[k]
+                        for k in ("exception_type", "traceback", "traceback_truncated", "log_file")
+                        if k in result
+                    }
+                    self.error_details = diag or None
                 elif result_status == "interrupted":
                     self.status = "interrupted"
                 else:
@@ -194,7 +206,10 @@ class ScriptTask:
         error_msg = self.error or "Task execution failed"
         builder.with_error(error_msg)
         message = f"Script failed: {self.description}\nElapsed time: {elapsed_time:.2f}s\nError: {error_msg}"
-        return build_response("failed", message, builder.build())
+        data = builder.build()
+        if self.error_details:
+            data["error_details"] = self.error_details
+        return build_response("failed", message, data)
 
     def get_task_info(self):
         info = {
