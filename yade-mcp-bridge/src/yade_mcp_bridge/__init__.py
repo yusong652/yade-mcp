@@ -12,7 +12,7 @@ Usage (batch/console mode):
     yade_mcp_bridge.start(mode="console")
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 # Keep global references to avoid Qt timer garbage collection.
 _qt_task_timer = None
@@ -116,7 +116,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
             logger.warning("PyRunner not available, interrupt checking during simulation disabled")
             return False
 
-    import __main__
+    import sys as _sys
 
     from .signals import is_interrupt_requested
 
@@ -138,7 +138,18 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
             except Exception:
                 pass
 
-    __main__._mcp_pyrunner_tick = _mcp_pyrunner_tick
+    def _ensure_tick_in_main():
+        # YADE's PyRunner evaluates its command via boost::python::exec with
+        # globals = sys.modules['__main__'].__dict__, re-resolved each call.
+        # IPython's %run (and similar) temporarily replaces __main__ with the
+        # script's module, hiding _mcp_pyrunner_tick and causing
+        # "name '_mcp_pyrunner_tick' is not defined" once PyRunner fires.
+        # Idempotently re-inject into whichever module is currently __main__.
+        main_mod = _sys.modules.get("__main__")
+        if main_mod is not None and getattr(main_mod, "_mcp_pyrunner_tick", None) is not _mcp_pyrunner_tick:
+            main_mod._mcp_pyrunner_tick = _mcp_pyrunner_tick
+
+    _ensure_tick_in_main()
 
     # Store config for re-injection
     _pyrunner_config = {
@@ -147,18 +158,25 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
         "O": O,
     }
 
+    # Identify our PyRunner by its command string, not by engine label.
+    # YADE's labeled-entity auto-injection runs `__builtins__.<label>=...`
+    # on every `O.engines=[...]` assignment, which crashes with
+    # "AttributeError: 'dict' object has no attribute '<label>'" in any
+    # non-__main__ namespace (e.g. inside `%run script.py`) because
+    # __builtins__ is the dict there, not the module.
+    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()"
+
     def _make_pyrunner():
         """Create a fresh PyRunner instance."""
         return _pyrunner_config["PyRunner"](
-            command="_mcp_pyrunner_tick()",
+            command=_PYRUNNER_COMMAND,
             iterPeriod=_pyrunner_config["period"],
-            label="_mcp_bridge_runner",
             dead=False,
         )
 
     def _has_our_pyrunner():
         """Check if our PyRunner is in O.engines."""
-        return any(hasattr(e, "label") and e.label == "_mcp_bridge_runner" for e in O.engines)
+        return any(getattr(e, "command", None) == _PYRUNNER_COMMAND for e in O.engines)
 
     # Hook O.run() to auto-inject PyRunner before each simulation run.
     # This handles O.reset() clearing engines — our PyRunner gets
@@ -168,6 +186,9 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
+            # Defend against __main__ replacement (e.g. IPython %run) between
+            # bridge start and this O.run() call.
+            _ensure_tick_in_main()
             if not _has_our_pyrunner():
                 try:
                     O.engines = list(O.engines) + [_make_pyrunner()]
