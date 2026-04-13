@@ -11,8 +11,8 @@ services:
     volumes:
       # Mount bridge source for live development (no rebuild needed)
       - ../yade-mcp-bridge/src/yade_mcp_bridge:/usr/local/lib/python3.10/dist-packages/yade_mcp_bridge
-      # Mount workspace for simulation scripts
-      - ./workspace:/workspace
+      # Mount workspace for simulation scripts (host edit, %run inside YADE)
+      - ../workspace:/workspace
       # Mount doc output target so scraper scripts running inside YADE can
       # regenerate the JSON knowledge base directly onto the host source tree
       - ../src/yade_mcp/knowledge/resources/python_api_docs:/docs_output

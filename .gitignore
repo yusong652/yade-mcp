@@ -20,4 +20,4 @@ venv/
 .yade-mcp/
 yade-mcp-bridge/uv.lock
 .coverage
-docker/workspace/
+workspace/
