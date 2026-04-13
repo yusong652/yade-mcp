@@ -69,11 +69,7 @@ def with_context(func: Callable[..., Awaitable[dict[str, Any]]]) -> Callable[...
         # leaves the MCP boundary. `details` is our diagnostic tier
         # (traceback, exception type, internal paths) — useful during
         # development, noise/risk in deployed setups.
-        if (
-            not is_debug_mode()
-            and isinstance(envelope, dict)
-            and envelope.get("ok") is False
-        ):
+        if not is_debug_mode() and isinstance(envelope, dict) and envelope.get("ok") is False:
             error = envelope.get("error")
             if isinstance(error, dict):
                 error.pop("details", None)

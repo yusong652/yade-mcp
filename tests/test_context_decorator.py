@@ -113,8 +113,9 @@ async def test_prod_mode_strips_error_details():
             {"traceback": "<40 lines>", "exception_type": "NameError"},
         )
 
-    with patch.object(ctx_module, "is_debug_mode", return_value=False), patch.object(
-        ctx_module, "fetch_bridge_context", return_value=None
+    with (
+        patch.object(ctx_module, "is_debug_mode", return_value=False),
+        patch.object(ctx_module, "fetch_bridge_context", return_value=None),
     ):
         result = await tool()
 
@@ -133,8 +134,9 @@ async def test_debug_mode_keeps_error_details():
     async def tool():
         return build_error("boom", "failed", {"traceback": "<40 lines>"})
 
-    with patch.object(ctx_module, "is_debug_mode", return_value=True), patch.object(
-        ctx_module, "fetch_bridge_context", return_value=None
+    with (
+        patch.object(ctx_module, "is_debug_mode", return_value=True),
+        patch.object(ctx_module, "fetch_bridge_context", return_value=None),
     ):
         result = await tool()
 
@@ -151,8 +153,9 @@ async def test_prod_mode_does_not_touch_ok_envelopes():
     async def tool():
         return build_ok({"details": "this is user data, not error metadata"})
 
-    with patch.object(ctx_module, "is_debug_mode", return_value=False), patch.object(
-        ctx_module, "fetch_bridge_context", return_value=None
+    with (
+        patch.object(ctx_module, "is_debug_mode", return_value=False),
+        patch.object(ctx_module, "fetch_bridge_context", return_value=None),
     ):
         result = await tool()
 

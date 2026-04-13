@@ -7,8 +7,6 @@ the excerpt is truncated. Both execute_code and execute_task depend on
 it, so the behaviour gets exercised independently here.
 """
 
-
-
 from yade_mcp_bridge.execution.errors import (
     TRACEBACK_MAX_LINES,
     format_execution_error,
@@ -22,7 +20,9 @@ def _raise_at(depth: int, filename: str = "<user>") -> BaseException:
     co_filename matches) so we can verify frame filtering and truncation.
     """
     src = "\n".join(
-        [f"def f{i}(): return f{i+1}()" for i in range(depth - 1)] + [f"def f{depth-1}(): return missing"] + ["f0()"]
+        [f"def f{i}(): return f{i + 1}()" for i in range(depth - 1)]
+        + [f"def f{depth - 1}(): return missing"]
+        + ["f0()"]
     )
     code = compile(src, filename, "exec")
     ns: dict = {}

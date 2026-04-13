@@ -117,9 +117,7 @@ class TestSizeEnforcement:
 
         returned = result["data"]["entries"]
         assert len(returned) == n, "all entries must be preserved"
-        assert all("description" not in e for e in returned), (
-            "description should be stripped first when over cap"
-        )
+        assert all("description" not in e for e in returned), "description should be stripped first when over cap"
         assert all(e.get("name", "").startswith("Class") for e in returned)
         assert all(e.get("path", "").startswith("engines.") for e in returned)
 
@@ -163,8 +161,7 @@ class TestSizeEnforcement:
             "task_status": "running",
             "elapsed_time": 42.0,
             "output": "A" * (MAX_RESPONSE_CHARS * 3),
-            "pagination": {"total_lines": 1, "line_range": "1-1",
-                           "has_older": False, "has_newer": False},
+            "pagination": {"total_lines": 1, "line_range": "1-1", "has_older": False, "has_newer": False},
         }
         result = build_ok(payload)
         output = result["data"]["output"]
@@ -185,9 +182,7 @@ class TestSizeEnforcement:
                 "has_docs": True,
             }
         ]
-        result = build_ok(
-            build_docs_data(source="python_api", action="browse", entries=entries)
-        )
+        result = build_ok(build_docs_data(source="python_api", action="browse", entries=entries))
         returned = result["data"]["entries"]
         assert len(returned) == 1
         assert returned[0]["description"] == "A spherical body shape"
