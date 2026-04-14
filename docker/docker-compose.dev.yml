@@ -8,6 +8,7 @@ services:
     image: yade-dev
     ports:
       - "9002:9002"
+      - "6080:6080"
     volumes:
       # Mount bridge source for live development (no rebuild needed)
       - ../yade-mcp-bridge/src/yade_mcp_bridge:/usr/local/lib/python3.10/dist-packages/yade_mcp_bridge
