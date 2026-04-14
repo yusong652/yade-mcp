@@ -164,7 +164,10 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
     # "AttributeError: 'dict' object has no attribute '<label>'" in any
     # non-__main__ namespace (e.g. inside `%run script.py`) because
     # __builtins__ is the dict there, not the module.
-    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()"
+    #
+    # The inline marker comment makes the engine self-identifying when users
+    # print(O.engines) — hopefully discouraging them from mutating it.
+    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()  # yade-mcp-bridge: DO NOT MODIFY"
 
     def _make_pyrunner():
         """Create a fresh PyRunner instance."""
@@ -174,9 +177,61 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
             dead=False,
         )
 
-    def _has_our_pyrunner():
-        """Check if our PyRunner is in O.engines."""
-        return any(getattr(e, "command", None) == _PYRUNNER_COMMAND for e in O.engines)
+    def _find_our_pyrunner():
+        """Return our PyRunner engine if present, else None."""
+        for e in O.engines:
+            if getattr(e, "command", None) == _PYRUNNER_COMMAND:
+                return e
+        return None
+
+    def _normalize_pyrunner():
+        """Ensure our PyRunner is present at O.engines[0] and has the
+        canonical config. Self-heals against user scripts that (a) reassigned
+        O.engines (wiping us), (b) mutated our iterPeriod/dead (e.g. via
+        O.engines[-1].iterPeriod = ...), or (c) left us somewhere in the
+        middle. Warns on tamper so the cause of any interrupt-latency bug is
+        visible in the log."""
+        expected_period = _pyrunner_config["period"]
+        existing = _find_our_pyrunner()
+
+        if existing is None:
+            try:
+                O.engines = [_make_pyrunner()] + list(O.engines)
+                logger.info("PyRunner auto-injected at O.engines[0] before O.run()")
+            except Exception as e:
+                logger.warning(f"PyRunner auto-injection failed: {e}")
+            return
+
+        # Detect tamper before restoring so the user sees why their
+        # interrupt might have been delayed on the previous run.
+        actual_period = getattr(existing, "iterPeriod", expected_period)
+        actual_dead = getattr(existing, "dead", False)
+        if actual_period != expected_period or actual_dead:
+            logger.warning(
+                "MCP PyRunner was tampered with (iterPeriod=%r, dead=%r); "
+                "restoring to iterPeriod=%d, dead=False. "
+                "Likely cause: user script modified O.engines[-1] or similar — "
+                "our PyRunner sits at O.engines[0], prefer naming or positive "
+                "indices for your own engines.",
+                actual_period,
+                actual_dead,
+                expected_period,
+            )
+
+        try:
+            existing.iterPeriod = expected_period
+            existing.dead = False
+        except Exception as e:
+            logger.warning(f"Failed to normalize PyRunner config: {e}")
+
+        # If we're not at index 0, move there. Negative indexing from user
+        # scripts is the common failure mode we're defending against.
+        try:
+            if O.engines[0] is not existing:
+                new_engines = [existing] + [e for e in O.engines if e is not existing]
+                O.engines = new_engines
+        except Exception as e:
+            logger.warning(f"Failed to move PyRunner to front: {e}")
 
     # Hook O.run() to auto-inject PyRunner before each simulation run.
     # This handles O.reset() clearing engines — our PyRunner gets
@@ -189,12 +244,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
             # Defend against __main__ replacement (e.g. IPython %run) between
             # bridge start and this O.run() call.
             _ensure_tick_in_main()
-            if not _has_our_pyrunner():
-                try:
-                    O.engines = list(O.engines) + [_make_pyrunner()]
-                    logger.info("PyRunner auto-injected before O.run()")
-                except Exception as e:
-                    logger.warning(f"PyRunner auto-injection failed: {e}")
+            _normalize_pyrunner()
             _interrupt_triggered["value"] = False
             result = _original_run(*args, **kwargs)
             # After O.run() returns (possibly due to O.pause() from interrupt),
@@ -209,9 +259,9 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
         O.run = _hooked_run
 
     try:
-        O.engines = list(O.engines) + [_make_pyrunner()]
+        O.engines = [_make_pyrunner()] + list(O.engines)
         logger.info(
-            f"PyRunner installed (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing"
+            f"PyRunner installed at O.engines[0] (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing"
         )
         return True
     except Exception as e:
