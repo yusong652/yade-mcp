@@ -16,5 +16,8 @@ services:
       # Mount doc output target so scraper scripts running inside YADE can
       # regenerate the JSON knowledge base directly onto the host source tree
       - ../src/yade_mcp/knowledge/resources/python_api_docs:/docs_output
+      # Optional external project dir. Set PROJ_MOUNT_SRC in .env to override;
+      # defaults to ../workspace (harmless duplicate of /workspace) when unset.
+      - ${PROJ_MOUNT_SRC:-../workspace}:/proj
     stdin_open: true
     tty: true
