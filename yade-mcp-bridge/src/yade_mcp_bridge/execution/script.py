@@ -9,7 +9,7 @@ import os
 import sys
 import time
 
-from ..signals import clear_current_task, clear_interrupt, set_current_task
+from ..signals import clear_current_task, clear_interrupt, is_interrupt_requested, set_current_task
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, build_response, path_to_llm_format
 from .errors import format_execution_error
 
@@ -57,6 +57,24 @@ class ScriptRunner:
                 code_obj = compile(script_content, script_path, "exec")
                 exec(code_obj, exec_globals, exec_globals)
                 result = exec_globals.get("result", None)
+
+            # Drain any fire-and-forget cycling (O.run wait=False) before
+            # reporting task success. Aligns task lifetime with cycling
+            # lifetime, matching PFC's synchronous SDK semantics. Without
+            # this, a wait=False O.run creates an orphan cycling session
+            # that outlives the task, hiding errors and evading interrupts.
+            try:
+                from yade import O as _O
+
+                # Give sim thread a beat to pick up just-dispatched cycling.
+                time.sleep(0.05)
+                if _O.running:
+                    _O.wait()  # blocks; re-raises cycling errors as RuntimeError
+
+                if is_interrupt_requested(task_id):
+                    raise InterruptedError("Interrupted by MCP bridge")
+            except ImportError:
+                pass
 
             output_text = output_buffer.getvalue()
             serialized_result = self._serialize_result(result)

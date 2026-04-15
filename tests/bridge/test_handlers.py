@@ -140,19 +140,32 @@ class TestHandleInterruptTask:
         assert "terminal state" in resp["message"].lower()
 
     async def test_interrupt_running_task(self):
+        from yade_mcp_bridge.signals import clear_interrupt, is_interrupt_requested
+
         task = MagicMock()
         task.status = "running"
         ctx = _make_ctx(tasks={"t1": task})
+        clear_interrupt("t1")
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
-        assert resp["status"] == "success"
-        assert resp["data"]["interrupt_requested"] is True
+        try:
+            assert resp["status"] == "success"
+            assert resp["data"]["interrupt_requested"] is True
+            assert is_interrupt_requested("t1") is True
+        finally:
+            clear_interrupt("t1")
 
     async def test_interrupt_pending_task(self):
+        from yade_mcp_bridge.signals import clear_interrupt
+
         task = MagicMock()
         task.status = "pending"
         ctx = _make_ctx(tasks={"t1": task})
+        clear_interrupt("t1")
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
-        assert resp["status"] == "success"
+        try:
+            assert resp["status"] == "success"
+        finally:
+            clear_interrupt("t1")
 
 
 # =========================================================================

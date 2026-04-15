@@ -1,6 +1,10 @@
 """Task-related message handlers for YADE bridge."""
 
+import logging
+
 from .helpers import require_field, truncate_message
+
+logger = logging.getLogger("YADE-Bridge")
 
 
 async def handle_yade_task(ctx, data):
@@ -92,10 +96,15 @@ async def handle_interrupt_task(ctx, data):
         }
 
     request_interrupt(task_id)
+    logger.info("Interrupt flag set for task: %s", task_id)
+
     return {
         "type": "result",
         "request_id": request_id,
         "status": "success",
         "message": f"Interrupt requested for task: {task_id}",
-        "data": {"task_id": task_id, "interrupt_requested": True},
+        "data": {
+            "task_id": task_id,
+            "interrupt_requested": True,
+        },
     }
