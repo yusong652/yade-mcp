@@ -67,7 +67,7 @@ async def handle_list_tasks(ctx, data):
 
 async def handle_interrupt_task(ctx, data):
     """Handle interrupt_task message."""
-    from ..signals import request_interrupt
+    from ..signals import clear_interrupt, request_interrupt
 
     request_id = data.get("request_id", "unknown")
 
@@ -97,6 +97,12 @@ async def handle_interrupt_task(ctx, data):
 
     request_interrupt(task_id)
     logger.info("Interrupt flag set for task: %s", task_id)
+
+    # Defend against TOCTOU: task may have finished between the status check
+    # above and request_interrupt. script.py's finally clears the flag on exit,
+    # but if we add it after that runs, the flag would leak. Re-check and clean.
+    if task.status not in ("pending", "running"):
+        clear_interrupt(task_id)
 
     return {
         "type": "result",
