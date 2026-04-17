@@ -44,9 +44,22 @@ def register(mcp: FastMCP) -> None:
         response contains the full output. It is NOT tracked by
         yade_list_tasks and cannot be interrupted or polled.
 
-        WARNING: Avoid long-running calls (O.run with many iterations,
-        heavy loops). They block until completion or timeout and cannot
-        be cancelled. Use yade_execute_task for long simulations.
+        Timeout behaviour: on timeout the bridge attempts to abort the
+        running code via an async exception injection. Two outcomes:
+
+        - ``status="terminated"`` — abort succeeded; the pump thread is
+          free, but YADE state may be partially modified by the code
+          that ran before the abort fired. Inspect state before
+          retrying.
+        - ``status="timeout"`` — abort failed (code stuck in a C
+          extension, or nested inside a running task's PyRunner tick);
+          the bridge may still be blocked. Restart if unresponsive.
+
+        WARNING: For anything expected to take more than a few seconds,
+        use yade_execute_task instead — it has proper cancellation via
+        yade_interrupt_task and does not leave state drift on timeout.
+        Also, do NOT write ``except BaseException:`` in your code; it
+        defeats bridge-initiated cancellation.
         """
         try:
             client = await get_bridge_client()
@@ -65,23 +78,49 @@ def register(mcp: FastMCP) -> None:
 
         status = response.get("status", "unknown")
         message = response.get("message", "")
+        bridge_data = response.get("data") or {}
+        bridge_error = response.get("error") or {}
+        bridge_details = bridge_error.get("details") or {}
+
+        if status == "terminated":
+            # Bridge successfully aborted the code. Surface the
+            # partial stdout and the termination method so the agent
+            # knows state may be partially modified.
+            partial_output = bridge_data.get("output")
+            return build_operation_error(
+                "terminated",
+                "Execution timed out and was aborted",
+                reason=message,
+                action=(
+                    "YADE state may be partially modified by the "
+                    "aborted code. Inspect via yade_execute_code "
+                    "before retrying; prefer yade_execute_task for "
+                    "long operations."
+                ),
+                data={"output": partial_output} if partial_output else None,
+                method=bridge_details.get("method"),
+            )
 
         if status == "timeout":
+            # Abort failed — pump may still be blocked.
             return build_operation_error(
                 "timeout",
-                "Execution timed out",
+                "Execution timed out and abort failed",
                 reason=message,
-                action="Reduce code complexity or increase timeout",
+                action=(
+                    "The code may still be running (stuck in C "
+                    "extension or nested callback). Restart the "
+                    "bridge if subsequent execute_code calls hang."
+                ),
+                method=bridge_details.get("method"),
+                stuck_reason=bridge_details.get("reason"),
             )
 
         if status == "error":
-            error = response.get("error") or {}
-            bridge_data = response.get("data") or {}
-            bridge_details = error.get("details") or {}
             partial_output = bridge_data.get("output")
             return build_operation_error(
-                error.get("code", "execute_code_error"),
-                error.get("message", message),
+                bridge_error.get("code", "execute_code_error"),
+                bridge_error.get("message", message),
                 data={"output": partial_output} if partial_output else None,
                 exception_type=bridge_details.get("exception_type"),
                 traceback=bridge_details.get("traceback"),
