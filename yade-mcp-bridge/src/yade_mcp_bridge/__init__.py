@@ -12,7 +12,7 @@ Usage (batch/console mode):
     yade_mcp_bridge.start(mode="console")
 """
 
-__version__ = "0.2.4"
+__version__ = "0.3.0"
 
 # Keep global references to avoid Qt timer garbage collection.
 _qt_task_timer = None
@@ -91,16 +91,31 @@ def _run_background_pump(main_executor, interval_ms, max_tasks_per_tick, logger)
 
 
 def _install_pyrunner(main_executor, interrupt_check_period, logger):
-    """Install a YADE PyRunner engine for interrupt checking and task queue
-    processing during simulation.
+    """Install a YADE PyRunner engine for interrupt checking during
+    simulation.
 
-    This enables two critical features while O.run() is blocking the main thread:
-    1. Interrupt checking — allows cancelling a running task
-    2. Task queue processing — allows execute_code requests to be handled
-       in between simulation steps
+    While ``O.run()`` is live, YADE's C++ sim loop calls this tick on a
+    ``Dummy-N`` (boost::python) thread every ``interrupt_check_period``
+    iterations. The tick's only job is to observe the interrupt flag
+    and call ``O.pause()`` — the Python side then raises
+    ``InterruptedError`` after ``O.run()`` returns.
+
+    The tick deliberately does NOT pump ``main_executor`` tasks. Older
+    versions did, to minimize ``execute_code`` latency during sim. But
+    that makes user-supplied code execute on ``Dummy-N``, which
+    ``is_safe_to_async_raise`` refuses to inject into (boost::python
+    stack → C++ FATAL on exception). A misbehaving REPL ``while True``
+    on ``Dummy-N`` would then freeze the sim, block the task's
+    ``O.wait()``, and be unrecoverable because the script thread sits
+    in released-GIL C code where the queued ``TaskInterrupt`` never
+    fires. Confining ``execute_code`` execution to the pump thread —
+    which ``is_safe_to_async_raise`` accepts — keeps async abort
+    viable at the cost of ~20ms (``pump_interval``) extra REPL latency.
 
     Args:
-        main_executor: MainThreadExecutor instance for queue processing.
+        main_executor: MainThreadExecutor instance. Not used for
+            queue pumping here (see note above); kept in signature for
+            API stability.
         interrupt_check_period: Check every N iterations. Set to 1 for every step.
 
     Returns:
@@ -124,9 +139,8 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
     _interrupt_triggered = {"value": False}
 
     def _mcp_pyrunner_tick():
-        # Process pending tasks in queue (e.g. execute_code requests)
-        main_executor.process_tasks(max_tasks=1)
-        # Check interrupt flag for current task.
+        # Interrupt flag check only — do NOT process the main_executor
+        # queue here. See _install_pyrunner docstring for why.
         # Instead of raising an exception inside PyRunner (which causes
         # YADE's C++ layer to log a FATAL ERROR), we just pause the
         # simulation. The hooked O.run() will check the flag after

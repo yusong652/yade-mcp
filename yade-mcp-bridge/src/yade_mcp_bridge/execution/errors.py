@@ -29,6 +29,40 @@ import sys
 import traceback
 from typing import Any, Callable
 
+
+class BridgeTimeout(BaseException):
+    """Injected via PyThreadState_SetAsyncExc to terminate a timed-out
+    execute_code body.
+
+    Inherits ``BaseException`` (not ``Exception``) so user-code handlers
+    of the form ``except Exception:`` cannot swallow it. The handler's
+    ``_execute_code`` closure catches it explicitly and returns a
+    ``status="terminated"`` marker — this exception must never escape
+    ``_execute_code``, or ``MainThreadExecutor.process_tasks``'s
+    ``except Exception`` (which does NOT catch BaseException) will let
+    it kill the pump thread permanently.
+    """
+
+
+class TaskInterrupt(BaseException):
+    """Injected via PyThreadState_SetAsyncExc to force-terminate a
+    script task that the flag-based interrupt path cannot reach —
+    e.g. a pure-Python ``while True`` loop with no ``O.run`` on the
+    stack, so no PyRunner tick ever fires to observe the flag.
+
+    Inherits ``BaseException`` (not ``Exception``) so ``except
+    Exception:`` in user code will NOT swallow it. ``ScriptRunner._execute``
+    catches it explicitly and returns ``status="interrupted"`` with a
+    sim-state cleanup (``O.pause`` + ``O.wait``) so the next task
+    inherits a clean YADE state.
+
+    Must never escape ``_execute`` — the script thread is a
+    ``threading.Thread`` with no default ``except BaseException``
+    barrier, so a leak would terminate the thread and leave the
+    task future in an exception state instead of ``interrupted``.
+    """
+
+
 # Cap the inline traceback excerpt. 80 lines comfortably covers most
 # user-code stacks (incl. YADE's boost-Python wrappers, which
 # occasionally produce 30-50 frame chains). Anything longer is

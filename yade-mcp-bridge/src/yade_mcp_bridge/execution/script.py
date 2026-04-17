@@ -7,11 +7,20 @@ and interrupt support.
 import logging
 import os
 import sys
+import threading
 import time
+from concurrent.futures import Future
 
-from ..signals import clear_current_task, clear_interrupt, is_interrupt_requested, set_current_task
+from ..signals import (
+    clear_current_task,
+    clear_interrupt,
+    is_interrupt_requested,
+    register_exec_thread,
+    set_current_task,
+    unregister_exec_thread,
+)
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, build_response, path_to_llm_format
-from .errors import format_execution_error
+from .errors import TaskInterrupt, format_execution_error
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -38,6 +47,9 @@ class ScriptRunner:
         sys.stdout = TeeBuffer(terminal, output_buffer)
 
         set_current_task(task_id)
+        # Advertise this thread to handle_interrupt_task so it can
+        # async-inject TaskInterrupt for the pure-Python deadloop case.
+        register_exec_thread(task_id, threading.get_ident())
 
         try:
             # Use __main__ namespace so YADE modules are available
@@ -98,6 +110,37 @@ class ScriptRunner:
             return {
                 "status": "interrupted",
                 "message": f"Script interrupted by user: {str(e)}",
+                "result": None,
+                "output": output_text,
+            }
+
+        except TaskInterrupt:
+            # Async-injected by handle_interrupt_task as a last-resort
+            # abort for pure-Python deadloops that never hit a PyRunner
+            # tick. The handler already ``unregister_exec_thread(task_id)``
+            # before injecting, so any re-injection attempt is a no-op —
+            # this cleanup path runs without risk of being re-interrupted.
+            output_text = output_buffer.getvalue()
+            logger.info(f"Script force-interrupted (async_exc): {script_path}")
+            # Best-effort sim cleanup: if the interrupt fired while the
+            # user code had started an O.run, make sure the sim thread is
+            # paused and fully drained before returning. Without this,
+            # ``O.running`` may stay True and the NEXT task's ``_O.wait()``
+            # drain (see below) will block on a zombie cycling session,
+            # preventing recovery.
+            try:
+                from yade import O as _O
+
+                if _O.running:
+                    _O.pause()
+                    _O.wait()
+            except ImportError:
+                pass
+            except Exception as cleanup_exc:  # noqa: BLE001
+                logger.warning("Sim cleanup after TaskInterrupt failed: %s", cleanup_exc)
+            return {
+                "status": "interrupted",
+                "message": "Task force-interrupted by user (async abort)",
                 "result": None,
                 "output": output_text,
             }
@@ -164,6 +207,9 @@ class ScriptRunner:
             sys.stdout = old_stdout
             clear_current_task()
             clear_interrupt(task_id)
+            # Idempotent — handler may have already unregistered to
+            # guard against double-injection.
+            unregister_exec_thread(task_id)
 
     async def run(self, script_path, description, task_id=None):
         """Submit script to main thread queue and return immediately."""
@@ -185,7 +231,36 @@ class ScriptRunner:
             log_path = os.path.join(log_dir, f"task_{task_id}.log")
             output_buffer = FileBuffer(log_path)
 
-            future = self.main_executor.submit(self._execute, script_path, script_content, output_buffer, task_id)
+            # Run in a dedicated daemon thread instead of on the
+            # main_executor pump. The script's ``O.run(wait=True)`` would
+            # otherwise block the pump for the task's entire lifetime,
+            # starving ``execute_code`` requests — which then have to
+            # fall back to PyRunner-tick pumping on a boost::python
+            # ``Dummy-N`` thread. If a user REPL call goes stuck there,
+            # ``is_safe_to_async_raise`` correctly refuses to inject
+            # (C++ FATAL risk), but the pump that *could* have recovered
+            # the bridge is itself wedged behind the task's ``O.run``.
+            # Net effect before this change: a single misbehaving
+            # REPL-while-task would hard-lock the bridge. Running the
+            # script on its own thread leaves the pump free to service
+            # and async-abort subsequent ``execute_code`` requests.
+            future: Future = Future()
+
+            def _script_runner():
+                if not future.set_running_or_notify_cancel():
+                    return
+                try:
+                    result = self._execute(script_path, script_content, output_buffer, task_id)
+                    future.set_result(result)
+                except BaseException as exc:  # noqa: BLE001 — surface every failure to the future
+                    future.set_exception(exc)
+
+            script_thread = threading.Thread(
+                target=_script_runner,
+                name=f"script-{task_id}",
+                daemon=True,
+            )
+            script_thread.start()
 
             submit_time = time.time()
             self.task_manager.create_script_task(future, script_name, script_path, output_buffer, description, task_id)

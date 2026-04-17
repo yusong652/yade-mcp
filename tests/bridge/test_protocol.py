@@ -2,6 +2,8 @@
 
 import asyncio
 import json
+import threading
+import time
 from concurrent.futures import Future
 
 import pytest
@@ -346,3 +348,195 @@ class TestConnectionManagement:
         results = await asyncio.gather(ping("c1"), ping("c2"), ping("c3"))
         ids = {r["request_id"] for r in results}
         assert ids == {"c1", "c2", "c3"}
+
+
+# =========================================================================
+# execute_code timeout termination (end-to-end)
+# =========================================================================
+
+
+@pytest.fixture()
+async def bridge_server_with_pump():
+    """Bridge server paired with a real background pump thread, so the
+    SetAsyncExc termination path can actually run user code on a
+    non-main thread (just like Mode 1 in production)."""
+    executor = MainThreadExecutor()
+    server = create_server(
+        main_executor=executor,
+        host="127.0.0.1",
+        port=0,
+        ping_interval=None,
+        ping_timeout=None,
+        runtime_mode="test",
+    )
+    await server.start()
+    port = server.server.sockets[0].getsockname()[1]
+    url = f"ws://127.0.0.1:{port}"
+
+    stop_pump = threading.Event()
+
+    def pump_loop():
+        while not stop_pump.is_set():
+            executor.process_tasks(max_tasks=1)
+            time.sleep(0.005)
+
+    pump_thread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
+    pump_thread.start()
+
+    yield url, executor
+
+    stop_pump.set()
+    pump_thread.join(timeout=1.0)
+    server.server.close()
+    await server.server.wait_closed()
+
+
+class TestExecuteCodeTimeoutTermination:
+    async def test_tight_loop_times_out_and_terminates_cleanly(self, bridge_server_with_pump):
+        """Pure-Python infinite loop hits short timeout → SetAsyncExc
+        aborts it → status="terminated"."""
+        url, _ = bridge_server_with_pump
+        msg = {
+            "type": "execute_code",
+            "request_id": "term-tight",
+            "code": "while True:\n    pass",
+            "timeout_ms": 500,
+        }
+        async with websockets.connect(url) as ws:
+            await ws.send(json.dumps(msg))
+            raw = await asyncio.wait_for(ws.recv(), timeout=10.0)
+            resp = json.loads(raw)
+
+        assert resp["type"] == "execute_code_result"
+        assert resp["request_id"] == "term-tight"
+        assert resp["status"] == "terminated", f"expected terminated, got {resp}"
+        details = resp["error"].get("details") or {}
+        assert details.get("method") == "async_exc"
+
+    async def test_pump_recovers_after_termination(self, bridge_server_with_pump):
+        """After a timed-out/aborted execute_code, the pump thread must
+        be free to run subsequent requests. This is the load-bearing
+        guarantee — without SetAsyncExc the pump would be locked
+        forever."""
+        url, _ = bridge_server_with_pump
+
+        async with websockets.connect(url) as ws:
+            # Kill a long loop.
+            await ws.send(json.dumps({
+                "type": "execute_code",
+                "request_id": "pre",
+                "code": "while True:\n    pass",
+                "timeout_ms": 500,
+            }))
+            first = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
+            assert first["status"] == "terminated"
+
+            # Now a quick call on the SAME pump: must succeed fast.
+            t0 = time.time()
+            await ws.send(json.dumps({
+                "type": "execute_code",
+                "request_id": "post",
+                "code": "1 + 1",
+                "timeout_ms": 1000,
+            }))
+            second = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
+            elapsed = time.time() - t0
+
+        assert second["status"] == "success", f"pump didn't recover: {second}"
+        assert second["data"]["result"] == 2
+        assert elapsed < 2.0, f"pump was slow after recovery: {elapsed:.2f}s"
+
+    async def test_base_exception_swallow_reports_timeout(self, bridge_server_with_pump):
+        """User code that catches BaseException defeats SetAsyncExc by
+        design. The injection fires but is caught; the loop continues
+        until the bridge's grace period expires → status='timeout'
+        with method='stuck_in_c' (the grace period times out)."""
+        url, _ = bridge_server_with_pump
+        # Catch BaseException AND re-enter the loop. Use a bounded
+        # counter so the test thread eventually terminates (the pump
+        # thread will come back after ~1s of swallowing).
+        code = (
+            "import time\n"
+            "start = time.time()\n"
+            "while time.time() - start < 1.5:\n"
+            "    try:\n"
+            "        pass\n"
+            "    except BaseException:\n"
+            "        pass\n"
+        )
+        msg = {
+            "type": "execute_code",
+            "request_id": "swallow",
+            "code": code,
+            "timeout_ms": 300,
+        }
+        async with websockets.connect(url) as ws:
+            await ws.send(json.dumps(msg))
+            raw = await asyncio.wait_for(ws.recv(), timeout=10.0)
+            resp = json.loads(raw)
+
+        # Either "terminated" (if injection happens OUTSIDE the try,
+        # e.g., in the while-condition evaluation) or "timeout"
+        # (stuck_in_c — pump didn't resolve within grace). Both are
+        # acceptable — the point is that the pump does eventually
+        # recover. Accept either outcome.
+        assert resp["status"] in ("terminated", "timeout")
+        # In either case, confirm pump recovers with a follow-up ping.
+        # Wait for the bridge's 1.5s self-termination in the stuck
+        # case.
+        await asyncio.sleep(2.0)
+        async with websockets.connect(url) as ws:
+            await ws.send(json.dumps({
+                "type": "execute_code",
+                "request_id": "after",
+                "code": "42",
+                "timeout_ms": 2000,
+            }))
+            follow = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
+        assert follow["status"] == "success"
+
+    async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
+        """Regression: _execute_code must NOT set_current_task(request_id).
+
+        If it did, a subsequent REPL timeout's request_interrupt() would
+        set a flag that PyRunner's no-arg is_interrupt_requested() reads
+        via _current_task_id → O.pause() fires → _hooked_run raises
+        InterruptedError → the enclosing script task gets spuriously
+        marked ``interrupted``. The fix: leave _current_task_id alone.
+        """
+        url, _ = bridge_server_with_pump
+        from yade_mcp_bridge.signals import clear_current_task, peek_current_task, set_current_task
+
+        # Simulate a running task by setting the sentinel outer task.
+        clear_current_task()
+        set_current_task("outer-task")
+        try:
+            async with websockets.connect(url) as ws:
+                # Normal, successful execute_code.
+                await ws.send(json.dumps({
+                    "type": "execute_code",
+                    "request_id": "nested-ok",
+                    "code": "1 + 1",
+                    "timeout_ms": 2000,
+                }))
+                ok = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
+                assert ok["status"] == "success"
+                # After execute_code completes, the outer task must still
+                # be the current one — not None, not request_id.
+                assert peek_current_task() == "outer-task"
+
+                # Timed-out execute_code: the termination path calls
+                # request_interrupt(request_id) on the REPL's own id.
+                # That flag must not leak into any PyRunner tick reading
+                # _current_task_id.
+                await ws.send(json.dumps({
+                    "type": "execute_code",
+                    "request_id": "nested-timeout",
+                    "code": "while True:\n    pass",
+                    "timeout_ms": 500,
+                }))
+                terminated = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
+                assert terminated["status"] == "terminated"
+                assert peek_current_task() == "outer-task"
+        finally:
+            clear_current_task()
