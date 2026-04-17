@@ -140,9 +140,7 @@ async def handle_interrupt_task(ctx, data):
         else:
             method = "flag_only"
             reason = safe_reason
-            logger.info(
-                "Task %s async_exc refused (%s); flag-only path in effect", task_id, safe_reason
-            )
+            logger.info("Task %s async_exc refused (%s); flag-only path in effect", task_id, safe_reason)
 
     # Defend against TOCTOU: task may have finished between the status check
     # above and request_interrupt. script.py's finally clears the flag on exit,

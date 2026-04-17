@@ -84,9 +84,7 @@ async def _terminate_stuck_execution(request_id: str, future) -> dict:
     fire_async_exception(tid, BridgeTimeout)
 
     try:
-        result = await asyncio.wait_for(
-            asyncio.wrap_future(future), timeout=_TERMINATION_GRACE_S
-        )
+        result = await asyncio.wait_for(asyncio.wrap_future(future), timeout=_TERMINATION_GRACE_S)
         return {"resolved": True, "method": "async_exc", "result": result}
     except (asyncio.TimeoutError, TimeoutError):
         return {"resolved": False, "method": "stuck_in_c", "result": None}
