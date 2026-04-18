@@ -17,13 +17,53 @@
 
 **yade-mcp** 通过 [Model Context Protocol](https://modelcontextprotocol.io/) 将 AI 智能体连接到 [YADE](https://yade-dem.org/) —— 开源离散元方法引擎。通过自然语言对话即可浏览 API 文档、运行仿真和执行代码。
 
+它不只是调用 YADE 的工具 —— agent 会坐在你的 console 前、自己接管长仿真、和你做的一切保持同步。
+
 ![yade-mcp 演示](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
+
+## 功能特性
+
+### agent 来敲，YADE 来跑
+
+*由 `yade_execute_code` 驱动*
+
+用大白话告诉它你想做什么，agent 就把命令敲进你的 YADE 控制台 —— 查颗粒、调参数、走引擎、看结果。敲完命令看返回，不断调试、迭代，和你自己用 YADE 时一样的感觉。
+
+### 撒手让它跑，agent 自己盯
+
+*由 `yade_execute_task` + `yade_check_task_status` + `yade_interrupt_task` 驱动*
+
+把一份完整的 YADE 脚本作为后台任务跑起来 —— 就像你平时敲 `yade script.py` 一样，但你不用守着。agent 会自己盯：拉实时输出、抓异常、发现不对就优雅停掉、改脚本、再交一次 —— 直到仿真真正跑完。
+
+### 新会话，不冷启动
+
+*由 `yade_list_tasks` + `yade_check_task_status` 驱动*
+
+每一个交过的任务 —— 脚本、实时输出、最终状态 —— 都留了底。哪怕上下文窗口爆了、或者你第二天才回来，新开的 agent 也能直接走进一个"自己记得自己"的项目：列出之前跑过什么、读出每个任务产出了什么 —— 接着干，不用你从头讲。
+
+### 仿真跑着，shell 就在
+
+*由 `yade_execute_code` 驱动*
+
+任务跑的时候，agent 手里就有一把直通仿真的实时 shell —— 查任意变量、抓任意对象的状态、按需画一张新图，全程不动脚本、不停仿真。
+
+### 你来敲，agent 来跟
+
+除了提交过的任务，你在 YADE console 里随手敲的每一行 —— 顺手查的变量、试过的参数、走到一半放弃的方向 —— 都会自动汇入 agent 的上下文。等你转头跟它聊天，它已经掌握了你这一路尝试的痕迹。想让它点评你刚敲的几行？卡在某个意外的报错上？直接问就行 —— 你敲了什么、YADE 怎么回的，agent 都跟得清楚。
 
 ## 工具 (7)
 
-**2 个文档工具** —— 浏览和搜索 YADE Python API，支持 BM25 关键词搜索。无需 bridge。
+两个文档工具（无需 bridge）+ 五个执行工具（需要 bridge）：
 
-**5 个执行工具** —— 同步 REPL、异步任务提交、进度监控、中断和任务历史。需要 bridge。
+| 工具 | 用途 | Bridge |
+| --- | --- | --- |
+| `yade_browse_api` | 浏览 YADE Python 类树 | 否 |
+| `yade_query_api` | 跨 API 文档的 BM25 关键词搜索 | 否 |
+| `yade_execute_code` | 在运行中的 YADE 进程中同步执行 Python | 是 |
+| `yade_execute_task` | 把脚本作为长时后台任务提交 | 是 |
+| `yade_check_task_status` | 查询运行中或已完成任务（输出、状态） | 是 |
+| `yade_interrupt_task` | 优雅中断运行中的任务 | 是 |
+| `yade_list_tasks` | 列出已提交任务及元数据 | 是 |
 
 ## 快速开始
 
@@ -72,13 +112,6 @@ yade_mcp_bridge.start()
 ### 验证
 
 重启你的 AI 智能体（Claude Code、Codex CLI、Gemini CLI 等），让它调用 `yade_execute_code` 来验证连接。
-
-## 功能特性
-
-- **API 文档与搜索** —— 浏览和搜索完整 YADE Python API，支持排序结果、真实类型和默认值
-- **实时代码执行** —— 在 YADE 进程中执行代码并即时返回结果，或提交长时间运行的仿真，支持进度监控和中断
-- **用户意图感知** —— 智能体自动感知用户在 YADE 控制台的操作，无需用户主动说明即可提供上下文相关的帮助
-- **多客户端兼容** —— 支持 Claude Code、Codex CLI、Gemini CLI、OpenCode 等 MCP 客户端
 
 ## 贡献
 

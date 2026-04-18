@@ -19,13 +19,53 @@
 
 **yade-mcp** connects AI agents to [YADE](https://yade-dem.org/) — the open-source discrete element method engine — through the [Model Context Protocol](https://modelcontextprotocol.io/). Browse API docs, run simulations, and execute code, all through natural conversation.
 
+Your agent doesn't just call tools — it sits at your YADE console, runs long simulations on its own, and stays in sync with what you're doing.
+
 ![yade-mcp demo](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
+
+## Features
+
+### Your agent types, YADE runs
+
+*Powered by `yade_execute_code`*
+
+Describe what you want in plain language. The agent types commands into your YADE console — inspecting particles, tweaking parameters, stepping the engine, analyzing results. It reads each output, debugs, and iterates, the same way you do at the console yourself.
+
+### Set it running, walk away
+
+*Powered by `yade_execute_task` + `yade_check_task_status` + `yade_interrupt_task`*
+
+Run a full YADE script as a background task — just like firing off `yade script.py`, except you don't have to babysit it. The agent watches on its own: tailing the live output, catching errors as they appear, stopping the run gracefully when something looks off, fixing the script, and resubmitting — until the simulation actually finishes.
+
+### New session, no cold start
+
+*Powered by `yade_list_tasks` + `yade_check_task_status`*
+
+Every task you've submitted — the script, the live output, the final state — stays on record. When the context window fills up or you come back the next day, a fresh agent walks into a project that already remembers itself: it lists what's been run, reads what each task produced, and picks up without you re-explaining anything.
+
+### A live shell into the running simulation
+
+*Powered by `yade_execute_code`*
+
+While a task runs, the agent has a live shell into the simulation — ask it to inspect any variable, dump any object's state, or render a fresh plot on demand, without editing the script or stopping the run.
+
+### You type, the agent's in sync
+
+Beyond submitted tasks, every line you type into the YADE console — the variables you peeked at, the parameters you tested, the dead ends you walked away from — flows into the agent's context too. When you turn to chat, it already has the trail of what you've been trying. Learning YADE and want feedback on what you just typed? Stuck on an unexpected error? Just ask — the agent saw what you typed and how YADE answered.
 
 ## Tools (7)
 
-**2 documentation tools** — browse and search the YADE Python API with BM25 keyword search. No bridge required.
+Two documentation tools (no bridge) and five execution tools (bridge required):
 
-**5 execution tools** — synchronous REPL, async task submission, progress monitoring, interruption, and task history. Requires bridge.
+| Tool | Purpose | Bridge |
+| --- | --- | --- |
+| `yade_browse_api` | Walk the YADE Python class tree | No |
+| `yade_query_api` | BM25 keyword search across the API | No |
+| `yade_execute_code` | Run Python in the live YADE process; returns synchronously | Yes |
+| `yade_execute_task` | Submit a script as a long-running background task | Yes |
+| `yade_check_task_status` | Inspect a running or finished task (output, status) | Yes |
+| `yade_interrupt_task` | Gracefully stop a running task | Yes |
+| `yade_list_tasks` | List submitted tasks with metadata | Yes |
 
 ## Quick Start
 
@@ -74,13 +114,6 @@ yade_mcp_bridge.start()
 ### Verify
 
 Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to call `yade_execute_code` to verify the connection.
-
-## Features
-
-- **API documentation & search** — browse and search the full YADE Python API with ranked results, real types, and defaults
-- **Live code execution** — run code in the YADE process and get results back instantly, or submit long-running simulations with progress monitoring and interruption
-- **User intent awareness** — agents automatically see what the user is doing in the YADE console, enabling contextual assistance without explicit instructions
-- **Multi-client compatible** — works with Claude Code, Codex CLI, Gemini CLI, OpenCode, and other MCP clients
 
 ## Contributing
 
