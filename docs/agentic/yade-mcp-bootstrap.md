@@ -29,6 +29,7 @@ Use the client-specific Step 1 profile:
 - Gemini CLI: https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap-gemini.md
 - GitHub Copilot CLI: https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap-copilot.md
 - OpenCode: https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap-opencode.md
+- toyoura-nagisa: https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mcp-bootstrap-toyoura-nagisa.md
 
 If raw URL fetch is unavailable, use repository-relative paths:
 
@@ -37,6 +38,7 @@ If raw URL fetch is unavailable, use repository-relative paths:
 - `docs/agentic/yade-mcp-bootstrap-gemini.md`
 - `docs/agentic/yade-mcp-bootstrap-copilot.md`
 - `docs/agentic/yade-mcp-bootstrap-opencode.md`
+- `docs/agentic/yade-mcp-bootstrap-toyoura-nagisa.md`
 
 Apply this MCP launch contract in your client's native config format:
 

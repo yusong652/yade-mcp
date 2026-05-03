@@ -21,6 +21,8 @@
 
 ![yade-mcp 演示](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
 
+*兼容任何 MCP 客户端 —— 已验证：Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、OpenCode、toyoura-nagisa。*
+
 ## 功能特性
 
 ### agent 来敲，YADE 来跑

@@ -23,6 +23,8 @@ Your agent doesn't just call tools — it sits at your YADE console, runs long s
 
 ![yade-mcp demo](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
 
+*Works with any MCP client — verified with Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, OpenCode, and toyoura-nagisa.*
+
 ## Features
 
 ### Your agent types, YADE runs
