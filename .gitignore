@@ -21,3 +21,4 @@ venv/
 yade-mcp-bridge/uv.lock
 .coverage
 workspace/
+.DS_Store
