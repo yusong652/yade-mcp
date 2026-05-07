@@ -102,13 +102,17 @@ https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mc
 
 **2. Start the bridge inside YADE:**
 
-The bridge must be importable from YADE's embedded Python. Match its version (check via `head -1 $(which yade)`, e.g. `python3.10`) and install into your user site:
+In a YADE Python console, install the bridge using YADE's own interpreter:
 
-```bash
-python3.10 -m pip install --user yade-mcp-bridge
+```python
+import sys, subprocess
+subprocess.check_call([
+    sys.executable, "-m", "pip", "install", "--user",
+    "--break-system-packages", "yade-mcp-bridge",
+])
 ```
 
-Then in a YADE Python console:
+Restart YADE, then in the Python console:
 
 ```python
 import yade_mcp_bridge

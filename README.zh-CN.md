@@ -100,13 +100,17 @@ https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mc
 
 **2. 在 YADE 中启动 bridge：**
 
-bridge 必须能被 YADE 嵌入的 Python 解释器 import。先确认其版本（用 `head -1 $(which yade)` 查看，例如 `python3.10`），再装入用户级 site-packages：
+在 YADE Python 控制台中，用 YADE 自身的解释器安装 bridge：
 
-```bash
-python3.10 -m pip install --user yade-mcp-bridge
+```python
+import sys, subprocess
+subprocess.check_call([
+    sys.executable, "-m", "pip", "install", "--user",
+    "--break-system-packages", "yade-mcp-bridge",
+])
 ```
 
-然后在 YADE Python 控制台中：
+重启 YADE，然后在 Python 控制台中：
 
 ```python
 import yade_mcp_bridge
