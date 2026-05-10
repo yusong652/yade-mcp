@@ -17,6 +17,7 @@ venv/
 .gemini/
 .codex/
 .claude/settings.local.json
+.claude/todos/
 .yade-mcp/
 yade-mcp-bridge/uv.lock
 .coverage
