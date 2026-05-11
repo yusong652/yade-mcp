@@ -25,17 +25,13 @@ yade_mcp_bridge.start()
 
 The bridge auto-detects the runtime: Qt timer in GUI mode, blocking poll in console mode.
 
-Expected output:
+Expected output (one line):
 
 ```text
-============================================================
-YADE MCP Bridge Server
-============================================================
-  URL:         ws://localhost:9002
-  Log:         /your-working-dir/.yade-mcp/bridge.log
-  PyRunner:    installed (period=1)
-============================================================
+YADE MCP Bridge on ws://localhost:9002, log: /your-working-dir/.yade-mcp/bridge.log
 ```
+
+Detailed initialization logs go to `bridge.log` only (stdout shows warnings and errors).
 
 ## Options
 

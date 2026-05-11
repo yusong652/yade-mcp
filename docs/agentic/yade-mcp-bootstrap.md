@@ -92,10 +92,9 @@ import yade_mcp_bridge
 yade_mcp_bridge.start()
 ```
 
-Expected output includes:
+Expected output (one line):
 
-- `YADE MCP Bridge Server`
-- `ws://localhost:9002`
+- `YADE MCP Bridge on ws://localhost:9002, log: <cwd>/.yade-mcp/bridge.log`
 
 After the bridge is started, restart the client session before Step 4.
 

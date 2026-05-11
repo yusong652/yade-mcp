@@ -338,9 +338,15 @@ def start(
     root_logger.handlers.clear()
 
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
-    for handler in [logging.StreamHandler(sys.stdout), logging.FileHandler(log_file, mode="w", encoding="utf-8")]:
-        handler.setFormatter(formatter)
-        root_logger.addHandler(handler)
+    # stdout shows WARNING+ only (keeps the interactive prompt clean);
+    # file handler keeps everything for post-mortem debugging.
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.WARNING)
+    stdout_handler.setFormatter(formatter)
+    file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(stdout_handler)
+    root_logger.addHandler(file_handler)
     logger = logging.getLogger("YADE-Bridge")
 
     # Server components
@@ -349,8 +355,9 @@ def start(
 
     main_executor = MainThreadExecutor()
 
-    # Install PyRunner for interrupt checking + task queue processing during simulation
-    pyrunner_ok = _install_pyrunner(main_executor, interrupt_check_period, logger)
+    # Install PyRunner for interrupt checking + task queue processing during simulation.
+    # _install_pyrunner logs its own failure warning; ignore return value here.
+    _install_pyrunner(main_executor, interrupt_check_period, logger)
 
     # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -377,7 +384,7 @@ def start(
     from .console import ConsoleCapture
 
     console_capture = ConsoleCapture(yade_server.console_history)
-    capture_ok = console_capture.install()
+    console_capture.install()
 
     def run_server_background():
         loop = asyncio.new_event_loop()
@@ -427,15 +434,7 @@ def start(
     signal.signal(signal.SIGTERM, _signal_handler)
     signal.signal(signal.SIGINT, _signal_handler)
 
-    # Status display
-    print("\n" + "=" * 60)
-    print("YADE MCP Bridge Server")
-    print("=" * 60)
-    print(f"  URL:         ws://{host}:{port}")
-    print(f"  Log:         {log_file}")
-    print(f"  PyRunner:    {f'installed (period={interrupt_check_period})' if pyrunner_ok else 'not available'}")
-    print(f"  Console:     {'capture active' if capture_ok else 'capture not available'}")
-    print("=" * 60 + "\n")
+    print(f"YADE MCP Bridge on ws://{host}:{port}, log: {log_file}")
 
     # Main-thread task pump
     use_qt = mode in ("auto", "gui")
@@ -443,8 +442,9 @@ def start(
 
     if use_qt and _start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
         yade_server.set_runtime_mode("gui")
-        print(f"Task loop running via Qt timer (interval={interval_ms}ms, max_tasks_per_tick={max_tasks_per_tick})")
-        print("Bridge started in non-blocking mode (GUI remains responsive).")
+        logger.info(
+            "Task pump running via Qt timer (interval=%dms, max_tasks_per_tick=%d)", interval_ms, max_tasks_per_tick
+        )
         return
 
     if mode == "gui":
@@ -459,11 +459,4 @@ def start(
             name="mcp-task-pump",
         )
         pump_thread.start()
-        # Remove stdout handler so background log messages don't
-        # interfere with the interactive console prompt.
-        # Logs are still written to bridge.log.
-        for h in root_logger.handlers[:]:
-            if isinstance(h, logging.StreamHandler) and not isinstance(h, logging.FileHandler):
-                root_logger.removeHandler(h)
-        print(f"Task loop running via background thread (interval={interval_ms}ms)")
-        print(f"Bridge started. Console is available. Logs: {log_file}\n")
+        logger.info("Task pump running via background thread (interval=%dms)", interval_ms)
