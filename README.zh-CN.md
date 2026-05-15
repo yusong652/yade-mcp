@@ -104,11 +104,10 @@ https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mc
 
 ```python
 import sys, subprocess
-subprocess.check_call([
-    sys.executable, "-m", "pip", "install", "--user",
-    "--break-system-packages", "yade-mcp-bridge",
-])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", "yade-mcp-bridge"])
 ```
+
+若环境为 PEP 668 externally-managed（pip 拒绝 `--user`），见 [bootstrap 指南](docs/agentic/yade-mcp-bootstrap.md) 获取可移植写法。
 
 重启 YADE，然后在 Python 控制台中：
 

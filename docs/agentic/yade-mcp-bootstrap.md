@@ -77,6 +77,17 @@ python3.8 -m pip install --user yade-mcp-bridge
 
 If you cannot determine YADE's Python version, `pip3 install --user yade-mcp-bridge` is a reasonable default.
 
+On PEP 668 externally-managed environments the `EXTERNALLY-MANAGED` marker is present and plain `--user` is refused; `--break-system-packages` is then required (pip >= 23.0.1). Run from the YADE Python console, this form is portable across pip versions — it adds the flag only when the marker is present, so older pip without the marker does not choke on an unknown option:
+
+```python
+import sys, subprocess, sysconfig, os
+
+cmd = [sys.executable, "-m", "pip", "install", "--user", "yade-mcp-bridge"]
+if os.path.exists(os.path.join(sysconfig.get_path("stdlib"), "EXTERNALLY-MANAGED")):
+    cmd.insert(-1, "--break-system-packages")
+subprocess.check_call(cmd)
+```
+
 3. Verify:
 
 ```bash

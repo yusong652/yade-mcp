@@ -10,11 +10,10 @@ In a YADE Python console, install the bridge using YADE's own interpreter:
 
 ```python
 import sys, subprocess
-subprocess.check_call([
-    sys.executable, "-m", "pip", "install", "--user",
-    "--break-system-packages", "yade-mcp-bridge",
-])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", "yade-mcp-bridge"])
 ```
+
+On PEP 668 externally-managed environments (pip refuses `--user`), see the [bootstrap guide](https://github.com/yusong652/yade-mcp/blob/master/docs/agentic/yade-mcp-bootstrap.md) for a portable form.
 
 Restart YADE, then in the Python console:
 
