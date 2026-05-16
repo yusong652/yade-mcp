@@ -2,8 +2,8 @@
 
 These scripts were **written by an AI agent driving YADE through
 [yade-mcp](../../)** during the demo video. They are the agent's output, not
-hand-written API examples — kept here verbatim so the result shown in the
-video can be inspected and reproduced.
+hand-written API examples. The DEM logic is exactly the agent's run; the only
+edit is de-containerizing the file paths (see Running) so it runs anywhere.
 
 > Demo video: <https://www.youtube.com/watch?v=3VMOU-FUY4M>
 
@@ -14,7 +14,7 @@ A classic soil-mechanics drained triaxial test on a dry sphere assembly:
 1. **`triaxial_consolidation.py`** — Stage 1. Generates 3000 spheres
    (r ∈ [0.5, 2.0] mm) in a 50 mm cube, then isotropically consolidates to
    100 kPa with low compaction friction (φ = 1°). Saves the consolidated
-   state to `/workspace/triax_consolidated_100kPa.yade.bz2`.
+   state to `triax_consolidated_100kPa.yade.bz2` in the working directory.
 
 2. **`triaxial_drained_shear.py`** — Stage 2. Loads the consolidated state,
    restores friction to φ = 30°, switches the `TriaxialStressController` to
@@ -32,12 +32,12 @@ A classic soil-mechanics drained triaxial test on a dry sphere assembly:
 
 ## Running
 
-The scripts use absolute paths under `/workspace/...` — the mount root inside
-the YADE container the agent was driving. To reproduce:
+Run with YADE in any working directory — every file is read from and written
+to the current directory. Order: Stage 1 → Stage 2; run
+`triaxial_reequilibrate.py` only if particles escape the box during Stage 1.
 
-- Run them inside that container (where `/workspace` exists), in order:
-  Stage 1 → Stage 2. `triaxial_reequilibrate.py` only if particles escape.
-- Or adjust the hardcoded `/workspace/...` paths to a local directory.
+    yade triaxial_consolidation.py
+    yade triaxial_drained_shear.py
 
 Sign convention: `TriaxialStressController` uses continuum-mechanics signs
 (tension positive), so compressive targets are negative in the code; console

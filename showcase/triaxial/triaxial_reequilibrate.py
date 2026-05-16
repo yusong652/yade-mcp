@@ -40,6 +40,6 @@ print(
     f"[done] iter={O.iter}  s_mean={s_final:.2f} kPa  n={n_final:.4f}  e={e_final:.4f}"
 )
 
-save_path = "/workspace/triax_consolidated_100kPa.yade.bz2"
+save_path = "triax_consolidated_100kPa.yade.bz2"
 O.save(save_path)
 print(f"[save] state overwritten at {save_path}")

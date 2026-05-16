@@ -118,6 +118,6 @@ print(
     f"box=({triax.width:.4f},{triax.height:.4f},{triax.depth:.4f}) m"
 )
 
-save_path = "/workspace/triax_consolidated_100kPa.yade.bz2"
+save_path = "triax_consolidated_100kPa.yade.bz2"
 O.save(save_path)
 print(f"[save] state written to {save_path}")

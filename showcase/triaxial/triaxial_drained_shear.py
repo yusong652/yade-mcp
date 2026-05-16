@@ -11,7 +11,7 @@ from math import radians, tan
 from yade import plot
 
 # ---------- load consolidated state ----------
-O.load("/workspace/triax_consolidated_100kPa.yade.bz2")
+O.load("triax_consolidated_100kPa.yade.bz2")
 triax = [e for e in O.engines if getattr(e, "label", "") == "triax"][0]
 print(f"[load] iter={O.iter} σ_mean={-triax.meanStress/1e3:.2f} kPa  "
       f"box=({triax.width:.4f}, {triax.height:.4f}, {triax.depth:.4f}) m")
@@ -125,8 +125,8 @@ print(
 
 # ---------- save state + raw curves ----------
 import pickle
-state_path = "/workspace/triax_sheared_eps15.yade.bz2"
-data_path = "/workspace/triax_drained_shear_data.pkl"
+state_path = "triax_sheared_eps15.yade.bz2"
+data_path = "triax_drained_shear_data.pkl"
 O.save(state_path)
 with open(data_path, "wb") as fh:
     pickle.dump(plot.data, fh)
@@ -181,6 +181,6 @@ fig.suptitle(
 )
 fig.tight_layout(rect=(0, 0, 1, 0.96))
 
-plot_path = "/workspace/triax_drained_shear_curves.png"
+plot_path = "triax_drained_shear_curves.png"
 fig.savefig(plot_path, dpi=140)
 print(f"[save] plot → {plot_path}")
