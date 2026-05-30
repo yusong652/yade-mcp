@@ -1,65 +1,19 @@
 """Tests for bridge client: connection lifecycle, error handling, retries.
 
-Uses a real bridge WebSocket server (no YADE runtime needed).
+Uses the in-process ``bridge_server`` fixture (see ``conftest.py``), so
+no YADE runtime or ``yade_mcp_bridge`` package is needed.
 """
 
 import asyncio
-import json
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
 from yade_mcp.bridge.client import (
-    BridgeResponseTooLargeError,
     YADEBridgeClient,
     close_bridge_client,
     get_bridge_client,
 )
-from yade_mcp_bridge.execution.main_thread import MainThreadExecutor
-from yade_mcp_bridge.server import create_server
-
-
-# =========================================================================
-# Fixtures
-# =========================================================================
-
-
-@pytest.fixture()
-async def bridge_server():
-    """Start a real bridge WebSocket server + background task processor."""
-    executor = MainThreadExecutor()
-    server = create_server(
-        main_executor=executor,
-        host="127.0.0.1",
-        port=0,
-        ping_interval=None,
-        ping_timeout=None,
-        runtime_mode="test",
-    )
-    await server.start()
-    port = server.server.sockets[0].getsockname()[1]
-    url = f"ws://127.0.0.1:{port}"
-
-    # Background task to process executor queue (simulates main thread pump)
-    stop = asyncio.Event()
-
-    async def pump():
-        while not stop.is_set():
-            executor.process_tasks()
-            await asyncio.sleep(0.01)
-
-    pump_task = asyncio.create_task(pump())
-
-    yield url
-
-    stop.set()
-    pump_task.cancel()
-    try:
-        await pump_task
-    except asyncio.CancelledError:
-        pass
-    server.server.close()
-    await server.server.wait_closed()
 
 
 def _make_client(url="ws://localhost:9002", **overrides):
@@ -176,7 +130,7 @@ class TestTimeoutAndRetry:
 
         client._send_request = flaky_send
         # max_retries=2 means 3 total attempts, the 3rd should succeed
-        result = await client.execute_code("print('recovered')")
+        await client.execute_code("print('recovered')")
         assert call_count == 3
         await client.disconnect()
 
@@ -239,6 +193,7 @@ class TestGlobalClient:
 
         # Reset global state
         import yade_mcp.bridge.client as client_mod
+
         monkeypatch.setattr(client_mod, "_client", None)
 
         client = await get_bridge_client()

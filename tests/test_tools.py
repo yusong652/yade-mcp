@@ -1,0 +1,206 @@
+"""Tests for execution tools: response envelopes and error branches.
+
+The bridge client is mocked, so these run with no YADE runtime and no
+``yade_mcp_bridge`` package. They cover what each tool does with a
+bridge reply — envelope shape, status mapping, error handling — not
+wire transport (that's ``test_bridge_client.py``) nor the real bridge
+protocol (that's the bridge's own ``tests/bridge`` suite).
+
+Each tool is invoked via its registered ``FunctionTool.fn`` — the real
+``with_context``-wrapped coroutine — so the envelope path runs exactly
+as in production, without the MCP transport or argument-schema layers
+in the way.
+"""
+
+from contextlib import ExitStack
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
+
+from yade_mcp.server import mcp
+
+TOOL_MODULES = (
+    "yade_mcp.tools.execute_code",
+    "yade_mcp.tools.execute_task",
+    "yade_mcp.tools.check_task_status",
+    "yade_mcp.tools.list_tasks",
+    "yade_mcp.tools.interrupt_task",
+)
+
+
+@pytest.fixture
+def bridge():
+    """Yield an AsyncMock bridge client wired into every tool module.
+
+    ``get_bridge_client`` is patched in each tool's namespace to return
+    this mock, and context injection is stubbed so envelopes carry no
+    ``_context``. Configure replies per test, e.g.
+    ``bridge.execute_code.return_value = {...}``.
+    """
+    client = AsyncMock()
+    # These are synchronous on the real client; keep them sync here so
+    # the check_task_status listener calls don't leave unawaited coroutines.
+    client.listen_for_task = MagicMock()
+    client.unlisten_task = MagicMock()
+
+    async def _get_client():
+        return client
+
+    with ExitStack() as stack:
+        for module in TOOL_MODULES:
+            stack.enter_context(patch(f"{module}.get_bridge_client", _get_client))
+        stack.enter_context(patch("yade_mcp.bridge.context.fetch_bridge_context", AsyncMock(return_value=None)))
+        yield client
+
+
+async def _call(tool_name, **kwargs):
+    """Invoke a registered tool's underlying coroutine."""
+    tool = await mcp.get_tool(tool_name)
+    return await tool.fn(**kwargs)
+
+
+# =========================================================================
+# execute_code
+# =========================================================================
+
+
+class TestExecuteCode:
+    async def test_success_returns_output(self, bridge):
+        bridge.execute_code.return_value = {"status": "success", "data": {"output": "hello\n"}}
+        data = await _call("yade_execute_code", code="print('hello')")
+        assert data["ok"] is True
+        assert data["data"]["output"] == "hello\n"
+
+    async def test_success_includes_eval_result(self, bridge):
+        bridge.execute_code.return_value = {"status": "success", "data": {"output": "", "result": 3}}
+        data = await _call("yade_execute_code", code="1 + 2")
+        assert data["ok"] is True
+        assert data["data"]["result"] == 3
+
+    async def test_error_status_maps_to_error_envelope(self, bridge):
+        bridge.execute_code.return_value = {
+            "status": "error",
+            "message": "boom",
+            "error": {"code": "execute_code_error", "message": "boom"},
+        }
+        data = await _call("yade_execute_code", code="1/0")
+        assert data["ok"] is False
+
+    async def test_connectivity_error_is_handled(self, bridge):
+        bridge.execute_code.side_effect = ConnectionError("connection refused")
+        data = await _call("yade_execute_code", code="print('x')")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "bridge_unavailable"
+
+
+# =========================================================================
+# execute_task
+# =========================================================================
+
+
+class TestExecuteTask:
+    async def test_pending_returns_task_id(self, bridge):
+        bridge.execute_task.return_value = {"status": "pending", "message": "submitted"}
+        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="drained triaxial")
+        assert data["ok"] is True
+        # task_id is generated tool-side (uuid), not echoed from the bridge.
+        assert isinstance(data["data"]["task_id"], str) and data["data"]["task_id"]
+        assert data["data"]["task_status"] == "pending"
+        assert data["data"]["entry_script"] == "/tmp/sim.py"
+
+    async def test_non_pending_status_maps_to_error(self, bridge):
+        bridge.execute_task.return_value = {"status": "error", "message": "no such file"}
+        data = await _call("yade_execute_task", entry_script="/tmp/missing.py", description="x")
+        assert data["ok"] is False
+
+    async def test_connectivity_error_is_handled(self, bridge):
+        bridge.execute_task.side_effect = ConnectionError("connection refused")
+        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "bridge_unavailable"
+
+
+# =========================================================================
+# check_task_status
+# =========================================================================
+
+
+class TestCheckTaskStatus:
+    async def test_not_found_maps_to_error(self, bridge):
+        bridge.check_task_status.return_value = {"status": "not_found"}
+        data = await _call("yade_check_task_status", task_id="nope", wait_seconds=0)
+        assert data["ok"] is False
+        assert data["error"]["code"] == "not_found"
+
+    async def test_running_returns_output_and_pagination(self, bridge):
+        bridge.check_task_status.return_value = {
+            "status": "running",
+            "data": {
+                "output": "line 1\nline 2\n",
+                "pagination": {"total_lines": 2, "has_older": False, "has_newer": False},
+            },
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "running"
+        assert data["data"]["output"] == "line 1\nline 2\n"
+        assert data["data"]["pagination"]["total_lines"] == 2
+
+    async def test_legacy_success_status_is_normalized(self, bridge):
+        bridge.check_task_status.return_value = {"status": "success", "data": {"output": "done\n"}}
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["ok"] is True
+        # bridge "success" → normalized "completed"
+        assert data["data"]["task_status"] == "completed"
+
+
+# =========================================================================
+# list_tasks
+# =========================================================================
+
+
+class TestListTasks:
+    async def test_empty_list(self, bridge):
+        bridge.list_tasks.return_value = {"status": "success", "data": []}
+        data = await _call("yade_list_tasks")
+        assert data["ok"] is True
+        assert data["data"]["tasks"] == []
+        assert data["data"]["total_count"] == 0
+
+    async def test_normalizes_task_status(self, bridge):
+        bridge.list_tasks.return_value = {
+            "status": "success",
+            "data": [
+                {"task_id": "t1", "status": "success", "source": "agent", "entry_script": "a.py"},
+            ],
+            "pagination": {"total_count": 1, "displayed_count": 1, "has_more": False},
+        }
+        data = await _call("yade_list_tasks")
+        assert data["ok"] is True
+        task = data["data"]["tasks"][0]
+        assert task["task_id"] == "t1"
+        # legacy bridge "success" → normalized "completed"
+        assert task["status"] == "completed"
+
+    async def test_non_success_status_maps_to_error(self, bridge):
+        bridge.list_tasks.return_value = {"status": "error", "message": "bad"}
+        data = await _call("yade_list_tasks")
+        assert data["ok"] is False
+
+
+# =========================================================================
+# interrupt_task
+# =========================================================================
+
+
+class TestInterruptTask:
+    async def test_success_sets_interrupt_requested(self, bridge):
+        bridge.interrupt_task.return_value = {"status": "success", "message": "ok"}
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is True
+        assert data["data"]["interrupt_requested"] is True
+
+    async def test_failure_maps_to_error(self, bridge):
+        bridge.interrupt_task.return_value = {"status": "error", "message": "not running"}
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is False
