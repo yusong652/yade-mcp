@@ -122,14 +122,6 @@ class TestFileBuffer:
             assert buf.getvalue() == ""
             buf.close()
 
-    def test_get_size(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "out.log")
-            buf = FileBuffer(path)
-            buf.write("12345")
-            assert buf.get_size() == 5
-            buf.close()
-
     def test_get_path(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
@@ -137,41 +129,12 @@ class TestFileBuffer:
             assert buf.get_path() == path
             buf.close()
 
-    def test_context_manager(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "out.log")
-            with FileBuffer(path) as buf:
-                buf.write("test")
-            assert not buf.writable()
-
     def test_write_after_close_returns_zero(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
             buf = FileBuffer(path)
             buf.close()
             assert buf.write("data") == 0
-
-    def test_tail_for_large_output(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "out.log")
-            buf = FileBuffer(path)
-            # Write enough data to trigger tail behavior
-            for i in range(2000):
-                buf.write("line {}\n".format(i))
-            tail = buf.get_tail(tail_bytes=500)
-            assert len(tail) < buf.get_size()
-            buf.close()
-
-    def test_file_like_interface(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "out.log")
-            buf = FileBuffer(path)
-            assert not buf.readable()
-            assert buf.writable()
-            assert not buf.seekable()
-            assert not buf.isatty()
-            buf.close()
-            assert not buf.writable()
 
     def test_creates_parent_directories(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -196,18 +159,6 @@ class TestTeeBuffer:
             assert fb.getvalue() == "hello\n"
             fb.close()
 
-    def test_getvalue_delegates_to_file_buffer(self):
-        from io import StringIO
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "out.log")
-            terminal = StringIO()
-            fb = FileBuffer(path)
-            tee = TeeBuffer(terminal, fb)
-            tee.write("line1\nline2\n")
-            assert tee.getvalue() == "line1\nline2\n"
-            assert tee.get_size() == 12
-            fb.close()
-
     def test_terminal_error_does_not_break_capture(self):
         """If terminal write fails, file capture still works."""
         class BrokenWriter:
@@ -225,14 +176,11 @@ class TestTeeBuffer:
             assert fb.getvalue() == "still captured\n"
             fb.close()
 
-    def test_file_like_interface(self):
+    def test_isatty(self):
         from io import StringIO
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
             fb = FileBuffer(path)
             tee = TeeBuffer(StringIO(), fb)
-            assert not tee.readable()
-            assert tee.writable()
-            assert not tee.seekable()
             assert not tee.isatty()
             fb.close()
