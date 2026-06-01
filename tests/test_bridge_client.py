@@ -81,7 +81,8 @@ class TestRequests:
         client = _make_client(bridge_server)
         await client.connect()
         result = await client.check_task_status("nonexistent-id")
-        assert result.get("status") == "not_found"
+        assert result["ok"] is False
+        assert result["error"]["code"] == "not_found"
         await client.disconnect()
 
     async def test_list_tasks(self, bridge_server):
@@ -95,7 +96,8 @@ class TestRequests:
         client = _make_client(bridge_server)
         await client.connect()
         result = await client.interrupt_task("nonexistent-id")
-        assert "status" in result
+        assert result["ok"] is False
+        assert result["error"]["code"] == "not_found"
         await client.disconnect()
 
 

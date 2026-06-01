@@ -123,8 +123,10 @@ class TestExecuteCodeProtocol:
     async def test_missing_code_field(self, bridge_server):
         url, _ = bridge_server
         resp = await _send_recv(url, {"type": "execute_code", "request_id": "e3"})
-        assert resp["status"] == "error"
-        assert "code required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert resp["error"]["details"]["field"] == "code"
+        assert "code required" in resp["error"]["message"]
 
     async def test_eval_result_returned(self, bridge_server):
         url, executor = bridge_server
@@ -153,12 +155,13 @@ class TestTaskProtocol:
             "request_id": "t1",
             "task_id": "nonexistent",
         })
-        assert resp["status"] == "not_found"
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "not_found"
 
     async def test_list_tasks_empty(self, bridge_server):
         url, _ = bridge_server
         resp = await _send_recv(url, {"type": "list_tasks", "request_id": "l1"})
-        assert resp["status"] == "success"
+        assert resp["ok"] is True
         assert isinstance(resp["data"], list)
 
     async def test_interrupt_nonexistent_task(self, bridge_server):
@@ -168,13 +171,15 @@ class TestTaskProtocol:
             "request_id": "i1",
             "task_id": "nonexistent",
         })
-        assert resp["status"] == "error"
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "not_found"
 
     async def test_missing_task_id_returns_error(self, bridge_server):
         url, _ = bridge_server
         resp = await _send_recv(url, {"type": "check_task_status", "request_id": "t2"})
-        assert resp["status"] == "error"
-        assert "task_id required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert "task_id required" in resp["error"]["message"]
 
 
 # =========================================================================

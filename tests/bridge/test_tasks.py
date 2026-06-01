@@ -152,24 +152,29 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="pending task")
         resp = task.get_status_response()
+        assert resp["ok"] is True
         assert resp["status"] == "pending"
-        assert "queued" in resp["message"]
+        # No cosmetic top-level message anymore.
+        assert "message" not in resp
 
     def test_get_status_response_completed(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="done task")
         f.set_result({"status": "success", "result": 99})
         resp = task.get_status_response()
+        assert resp["ok"] is True
         assert resp["status"] == "completed"
-        assert "completed" in resp["message"]
+        assert resp["data"]["result"] == 99
 
     def test_get_status_response_failed(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="bad task")
         f.set_result({"status": "error", "message": "kaboom"})
         resp = task.get_status_response()
+        # A failed task is still a successful request.
+        assert resp["ok"] is True
         assert resp["status"] == "failed"
-        assert "kaboom" in resp["message"]
+        assert "kaboom" in resp["data"]["error"]
 
     def _make_task_with_log(self, tmp_path, lines):
         """Helper: create a task backed by a real log file containing given lines."""
@@ -287,7 +292,8 @@ class TestTaskManager:
     def test_get_task_status_not_found(self):
         tm = TaskManager()
         result = tm.get_task_status("nonexistent")
-        assert result["status"] == "not_found"
+        assert result["ok"] is False
+        assert result["error"]["code"] == "not_found"
 
     def test_list_all_tasks(self):
         tm = TaskManager()
@@ -295,7 +301,7 @@ class TestTaskManager:
             f = Future()
             tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i))
         result = tm.list_all_tasks()
-        assert result["status"] == "success"
+        assert result["ok"] is True
         assert len(result["data"]) == 3
 
     def test_list_tasks_pagination(self):

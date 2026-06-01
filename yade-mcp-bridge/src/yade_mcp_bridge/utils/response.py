@@ -4,11 +4,13 @@
 class TaskDataBuilder:
     """Builder for task response data dictionaries."""
 
-    def __init__(self, task_id, task_type, script_name, entry_script, description):
+    def __init__(self, task_id, task_type, entry_script, description):
+        # ``entry_script`` is the single source of truth for the script path;
+        # the basename (formerly a ``script_name`` wire field) is bridge-derived
+        # and redundant on the wire, so it is no longer emitted here.
         self._data = {
             "task_id": task_id,
             "task_type": task_type,
-            "script_name": script_name,
             "entry_script": entry_script,
             "description": description,
         }
@@ -32,7 +34,8 @@ class TaskDataBuilder:
         return self
 
     def with_result(self, result):
-        self._data["result"] = result
+        if result is not None:
+            self._data["result"] = result
         return self
 
     def with_error(self, error):
@@ -44,43 +47,72 @@ class TaskDataBuilder:
         return self._data.copy()
 
 
-def build_response(status, message, data):
-    return {
-        "status": status,
-        "message": message,
-        "data": data,
-    }
+def task_body(status, data):
+    """Success body for an async task: ``{ok: True, status, data}``.
 
-
-def ok_result(response_type, request_id, data=None):
-    """Build a success wire envelope: ``{type, request_id, ok: True, data?}``.
-
-    Mirrors the MCP server's ``ToolEnvelope`` (contracts.py) on the wire so
-    the server stops re-deriving success/failure from a free-form ``status``
-    string. Coherent by construction: a success envelope never carries an
-    ``error`` object.
+    Unlike the synchronous ``execute_code`` path — where a ``status`` string
+    only mirrored ``ok`` and was therefore dropped — a task's ``status`` is
+    genuine lifecycle state (pending / running / completed / failed /
+    interrupted) and rides alongside the request-level ``ok``. A *failed task*
+    is still a *successful request* (``ok: True``): the failure is task data
+    (``data.error``), not a request-level error. The cosmetic human ``message``
+    the old ``build_response`` carried is gone — it only duplicated fields
+    already in ``data`` and no consumer read it.
     """
-    resp = {"type": response_type, "request_id": request_id, "ok": True}
+    return {"ok": True, "status": status, "data": data}
+
+
+def ok_body(data=None):
+    """Build the business half of a success envelope: ``{ok: True, data?}``.
+
+    Mirrors the MCP server's ``ToolEnvelope`` (contracts.py). Use this when a
+    handler builds its business payload separately from the transport header
+    (``type``/``request_id``) — e.g. ``TaskManager`` returns a business dict
+    that the message handler spreads into ``{type, request_id, **body}``.
+    Coherent by construction: a success body never carries an ``error``.
+    """
+    body = {"ok": True}
     if data is not None:
-        resp["data"] = data
-    return resp
+        body["data"] = data
+    return body
 
 
-def error_result(response_type, request_id, code, message, *, details=None, data=None):
-    """Build a failure wire envelope.
+def error_body(code, message, *, details=None, data=None):
+    """Build the business half of a failure envelope.
 
-    ``{type, request_id, ok: False, error: {code, message, details?}, data?}``
+    ``{ok: False, error: {code, message, details?}, data?}``
 
     The nested ``error`` is already in the MCP ``ToolError`` shape, so the
     server lifts it through verbatim. Coherent by construction: a failure
-    envelope always carries an ``error``. The error *kind* lives in
+    body always carries an ``error``. The error *kind* lives in
     machine-readable ``code`` (not a parallel ``status`` string); free-form
     diagnostics go in ``details``.
     """
     error = {"code": code, "message": message}
     if details:
         error["details"] = details
-    resp = {"type": response_type, "request_id": request_id, "ok": False, "error": error}
+    body = {"ok": False, "error": error}
     if data is not None:
-        resp["data"] = data
-    return resp
+        body["data"] = data
+    return body
+
+
+def ok_response(response_type, request_id, data=None):
+    """Full success wire message: ``{type, request_id, ok: True, data?}``.
+
+    A *response* = transport header (``type`` + ``request_id``) wrapping an
+    ``ok_body`` — same relationship as an HTTP response wrapping its body. Use
+    this when a handler builds the whole message in one place (e.g.
+    ``execute_code``); use bare ``ok_body`` when the handler returns just the
+    body for a caller to frame (e.g. ``TaskManager`` → message handler).
+    """
+    return {"type": response_type, "request_id": request_id, **ok_body(data=data)}
+
+
+def error_response(response_type, request_id, code, message, *, details=None, data=None):
+    """Full failure wire message: transport header wrapping an ``error_body``."""
+    return {
+        "type": response_type,
+        "request_id": request_id,
+        **error_body(code, message, details=details, data=data),
+    }

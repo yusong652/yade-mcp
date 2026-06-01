@@ -46,31 +46,37 @@ def register(mcp: FastMCP) -> None:
         except Exception as exc:
             return build_bridge_error(exc, task_id=task_id)
 
-        status = response.get("status", "unknown")
-        message = response.get("message", "")
+        bridge_error = response.get("error") or {}
         bridge_data = response.get("data") or {}
+        ok = response.get("ok")
+        if ok is None:
+            # Legacy bridge: interrupt success was signalled by status:"success".
+            ok = response.get("status") == "success"
 
-        if status == "success":
-            payload: dict[str, Any] = {
-                "task_id": task_id,
-                "interrupt_requested": True,
-                "message": message or "signal sent",
-                "next_action": f'call yade_check_task_status(task_id="{task_id}")',
-            }
-            # Surface the bridge's cancellation metadata to the agent.
-            for key in (
-                "method",
-                "async_exc_skipped_reason",
-                "namespace_preserved",
-                "continuation_hint",
-            ):
-                if key in bridge_data:
-                    payload[key] = bridge_data[key]
-            return build_ok(payload)
+        # Request-level failure: not_found / already_terminal arrive as a
+        # structured error{}; lift its machine-readable code. (Older bridges
+        # signalled the same conditions with a bare status:"error".)
+        if bridge_error or not ok:
+            return build_operation_error(
+                bridge_error.get("code") or response.get("status") or "interrupt_failed",
+                bridge_error.get("message") or response.get("message") or "Interrupt request failed",
+                task_id=task_id,
+                action="Check task status and bridge logs",
+            )
 
-        return build_operation_error(
-            status or "interrupt_failed",
-            message or "Interrupt request failed",
-            task_id=task_id,
-            action="Check task status and bridge logs",
-        )
+        payload: dict[str, Any] = {
+            "task_id": task_id,
+            "interrupt_requested": True,
+            "message": "signal sent",
+            "next_action": f'call yade_check_task_status(task_id="{task_id}")',
+        }
+        # Surface the bridge's cancellation metadata to the agent.
+        for key in (
+            "method",
+            "async_exc_skipped_reason",
+            "namespace_preserved",
+            "continuation_hint",
+        ):
+            if key in bridge_data:
+                payload[key] = bridge_data[key]
+        return build_ok(payload)

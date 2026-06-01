@@ -120,8 +120,8 @@ class TestExecuteCode:
 
 
 class TestExecuteTask:
-    async def test_pending_returns_task_id(self, bridge):
-        bridge.execute_task.return_value = {"status": "pending", "message": "submitted"}
+    async def test_pending_new_envelope(self, bridge):
+        bridge.execute_task.return_value = {"ok": True, "status": "pending", "data": {"task_id": "x"}}
         data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="drained triaxial")
         assert data["ok"] is True
         # task_id is generated tool-side (uuid), not echoed from the bridge.
@@ -129,10 +129,38 @@ class TestExecuteTask:
         assert data["data"]["task_status"] == "pending"
         assert data["data"]["entry_script"] == "/tmp/sim.py"
 
-    async def test_non_pending_status_maps_to_error(self, bridge):
+    async def test_pending_legacy_status_envelope(self, bridge):
+        # Legacy bridge: submit success signalled by a bare status:"pending".
+        bridge.execute_task.return_value = {"status": "pending", "message": "submitted"}
+        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "pending"
+
+    async def test_submit_error_maps_to_error(self, bridge):
+        # script.py SUBMIT errors now emit a structured error{} (point #3):
+        # script_not_found / script_read_error / submit_failed.
+        bridge.execute_task.return_value = {
+            "ok": False,
+            "error": {"code": "script_not_found", "message": "Script file not found: /tmp/missing.py"},
+        }
+        data = await _call("yade_execute_task", entry_script="/tmp/missing.py", description="x")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "script_not_found"
+
+    async def test_submit_error_legacy_status_maps_to_error(self, bridge):
+        # Legacy bridge: submit failure was a bare status:"error".
         bridge.execute_task.return_value = {"status": "error", "message": "no such file"}
         data = await _call("yade_execute_task", entry_script="/tmp/missing.py", description="x")
         assert data["ok"] is False
+
+    async def test_missing_field_error_is_lifted(self, bridge):
+        bridge.execute_task.return_value = {
+            "ok": False,
+            "error": {"code": "missing_field", "message": "task_id required", "details": {"field": "task_id"}},
+        }
+        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "missing_field"
 
     async def test_connectivity_error_is_handled(self, bridge):
         bridge.execute_task.side_effect = ConnectionError("connection refused")
@@ -148,13 +176,24 @@ class TestExecuteTask:
 
 class TestCheckTaskStatus:
     async def test_not_found_maps_to_error(self, bridge):
+        bridge.check_task_status.return_value = {
+            "ok": False,
+            "error": {"code": "not_found", "message": "Task ID not found: nope"},
+        }
+        data = await _call("yade_check_task_status", task_id="nope", wait_seconds=0)
+        assert data["ok"] is False
+        assert data["error"]["code"] == "not_found"
+
+    async def test_legacy_not_found_status_still_handled(self, bridge):
         bridge.check_task_status.return_value = {"status": "not_found"}
         data = await _call("yade_check_task_status", task_id="nope", wait_seconds=0)
         assert data["ok"] is False
         assert data["error"]["code"] == "not_found"
 
-    async def test_running_returns_output_and_pagination(self, bridge):
+    async def test_running_new_envelope(self, bridge):
+        # New wire: lifecycle carries ok:true alongside the real status.
         bridge.check_task_status.return_value = {
+            "ok": True,
             "status": "running",
             "data": {
                 "output": "line 1\nline 2\n",
@@ -166,6 +205,32 @@ class TestCheckTaskStatus:
         assert data["data"]["task_status"] == "running"
         assert data["data"]["output"] == "line 1\nline 2\n"
         assert data["data"]["pagination"]["total_lines"] == 2
+
+    async def test_failed_task_is_ok_envelope_with_error(self, bridge):
+        # A failed *task* is a successful *request*: ok:true, task_status:failed,
+        # the script error surfaced as task data (not a request-level error{}).
+        bridge.check_task_status.return_value = {
+            "ok": True,
+            "status": "failed",
+            "data": {"output": "boom\n", "error": "RuntimeError: boom"},
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "failed"
+        assert "boom" in data["data"]["error"]
+
+    async def test_running_legacy_status_envelope(self, bridge):
+        # Legacy bridge: lifecycle without ok, just the status string.
+        bridge.check_task_status.return_value = {
+            "status": "running",
+            "data": {
+                "output": "line 1\nline 2\n",
+                "pagination": {"total_lines": 2, "has_older": False, "has_newer": False},
+            },
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "running"
 
     async def test_legacy_success_status_is_normalized(self, bridge):
         bridge.check_task_status.return_value = {"status": "success", "data": {"output": "done\n"}}
@@ -181,14 +246,36 @@ class TestCheckTaskStatus:
 
 
 class TestListTasks:
-    async def test_empty_list(self, bridge):
-        bridge.list_tasks.return_value = {"status": "success", "data": []}
+    async def test_empty_list_new_envelope(self, bridge):
+        bridge.list_tasks.return_value = {"ok": True, "data": []}
         data = await _call("yade_list_tasks")
         assert data["ok"] is True
         assert data["data"]["tasks"] == []
         assert data["data"]["total_count"] == 0
 
+    async def test_empty_list_legacy_envelope(self, bridge):
+        bridge.list_tasks.return_value = {"status": "success", "data": []}
+        data = await _call("yade_list_tasks")
+        assert data["ok"] is True
+        assert data["data"]["tasks"] == []
+
     async def test_normalizes_task_status(self, bridge):
+        bridge.list_tasks.return_value = {
+            "ok": True,
+            "data": [
+                {"task_id": "t1", "status": "completed", "source": "agent", "entry_script": "a.py"},
+            ],
+            "pagination": {"total_count": 1, "displayed_count": 1, "has_more": False},
+        }
+        data = await _call("yade_list_tasks")
+        assert data["ok"] is True
+        task = data["data"]["tasks"][0]
+        assert task["task_id"] == "t1"
+        assert task["status"] == "completed"
+        assert task["entry_script"] == "a.py"
+
+    async def test_legacy_status_is_normalized(self, bridge):
+        # Legacy bridge task entry with status:"success" → normalized "completed".
         bridge.list_tasks.return_value = {
             "status": "success",
             "data": [
@@ -198,12 +285,9 @@ class TestListTasks:
         }
         data = await _call("yade_list_tasks")
         assert data["ok"] is True
-        task = data["data"]["tasks"][0]
-        assert task["task_id"] == "t1"
-        # legacy bridge "success" → normalized "completed"
-        assert task["status"] == "completed"
+        assert data["data"]["tasks"][0]["status"] == "completed"
 
-    async def test_non_success_status_maps_to_error(self, bridge):
+    async def test_failure_maps_to_error(self, bridge):
         bridge.list_tasks.return_value = {"status": "error", "message": "bad"}
         data = await _call("yade_list_tasks")
         assert data["ok"] is False
@@ -215,13 +299,36 @@ class TestListTasks:
 
 
 class TestInterruptTask:
-    async def test_success_sets_interrupt_requested(self, bridge):
+    async def test_success_new_envelope(self, bridge):
+        bridge.interrupt_task.return_value = {
+            "ok": True,
+            "data": {"task_id": "t1", "interrupt_requested": True, "method": "flag_only"},
+        }
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is True
+        assert data["data"]["interrupt_requested"] is True
+        assert data["data"]["method"] == "flag_only"
+
+    async def test_success_legacy_status_envelope(self, bridge):
         bridge.interrupt_task.return_value = {"status": "success", "message": "ok"}
         data = await _call("yade_interrupt_task", task_id="t1")
         assert data["ok"] is True
         assert data["data"]["interrupt_requested"] is True
 
-    async def test_failure_maps_to_error(self, bridge):
-        bridge.interrupt_task.return_value = {"status": "error", "message": "not running"}
+    async def test_not_found_maps_to_error(self, bridge):
+        bridge.interrupt_task.return_value = {
+            "ok": False,
+            "error": {"code": "not_found", "message": "Task not found: t1"},
+        }
         data = await _call("yade_interrupt_task", task_id="t1")
         assert data["ok"] is False
+        assert data["error"]["code"] == "not_found"
+
+    async def test_already_terminal_maps_to_error(self, bridge):
+        bridge.interrupt_task.return_value = {
+            "ok": False,
+            "error": {"code": "already_terminal", "message": "Task already in terminal state: t1 (status: completed)"},
+        }
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "already_terminal"

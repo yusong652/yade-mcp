@@ -30,11 +30,15 @@ def register(mcp: FastMCP) -> None:
         except Exception as exc:
             return build_bridge_error(exc)
 
-        status = response.get("status", "unknown")
-        if status != "success":
+        ok = response.get("ok")
+        if ok is None:
+            # Legacy bridge: success was signalled by status:"success".
+            ok = response.get("status") == "success"
+        if not ok:
+            bridge_error = response.get("error") or {}
             return build_operation_error(
-                status or "list_failed",
-                response.get("message", "Failed to list tasks"),
+                bridge_error.get("code") or response.get("status") or "list_failed",
+                bridge_error.get("message") or response.get("message") or "Failed to list tasks",
                 action="Check bridge state and retry",
             )
 
@@ -54,7 +58,7 @@ def register(mcp: FastMCP) -> None:
                 "start_time": format_unix_timestamp(task.get("start_time")),
                 "end_time": format_unix_timestamp(task.get("end_time")),
                 "elapsed_time": task.get("elapsed_time"),
-                "entry_script": task.get("entry_script") or task.get("name"),
+                "entry_script": task.get("entry_script"),
                 "description": task.get("description"),
             }
             normalized_tasks.append(normalized_task)

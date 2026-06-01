@@ -44,9 +44,14 @@ def register(mcp: FastMCP) -> None:
                 limit=limit,
                 filter_text=filter,
             )
-            status = normalize_status(response.get("status", "unknown"))
+            # A request-level error (e.g. not_found) is terminal — never poll.
+            # Detect it via the structured error, falling back to the legacy
+            # not_found status string for older bridges.
+            is_terminal = (
+                bool(response.get("error")) or normalize_status(response.get("status", "unknown")) in terminal_states
+            )
 
-            if status not in terminal_states and wait_seconds > 0:
+            if not is_terminal and wait_seconds > 0:
                 await client.wait_for_task(task_id, timeout=wait_seconds)
                 response = await client.check_task_status(
                     task_id,
@@ -59,17 +64,22 @@ def register(mcp: FastMCP) -> None:
         except Exception as exc:
             return build_bridge_error(exc, task_id=task_id)
 
-        status = response.get("status", "unknown")
-        if status == "not_found":
+        # Request-level failure: bridge sends a structured error{}. Lift its
+        # machine-readable code; keep the MCP-composed remediation action.
+        # (Legacy bridges sent status:"not_found" with no error object.)
+        bridge_error = response.get("error") or {}
+        if bridge_error or response.get("status") == "not_found":
             return build_operation_error(
-                "not_found",
+                bridge_error.get("code", "not_found"),
                 "Task not found",
                 task_id=task_id,
                 action="Verify task_id or submit a new task",
             )
 
+        # Lifecycle path (running / completed / failed / interrupted): the
+        # task's status is genuine domain info and stays a top-level field.
         data = response.get("data") or {}
-        normalized_status = normalize_status(status)
+        normalized_status = normalize_status(response.get("status", "unknown"))
 
         bridge_output = data.get("output") or ""
         output_text = bridge_output if bridge_output else "(no output)"

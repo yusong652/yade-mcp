@@ -12,8 +12,10 @@ class TestRequireField:
     def test_missing_field(self):
         value, err = require_field({}, "code", "req-1")
         assert value is None
-        assert err["status"] == "error"
-        assert "code required" in err["message"]
+        assert err["ok"] is False
+        assert err["error"]["code"] == "missing_field"
+        assert err["error"]["details"]["field"] == "code"
+        assert "code required" in err["error"]["message"]
         assert err["request_id"] == "req-1"
 
     def test_empty_string_field(self):

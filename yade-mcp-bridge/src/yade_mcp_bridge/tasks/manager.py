@@ -6,6 +6,7 @@ import os
 import time
 import uuid
 
+from ..utils import error_body, ok_body
 from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
 logger = logging.getLogger("YADE-Bridge")
@@ -61,7 +62,7 @@ class TaskManager:
     def get_task_status(self, task_id, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
         task = self.tasks.get(task_id)
         if not task:
-            return {"status": "not_found", "message": f"Task ID not found: {task_id}", "data": None}
+            return error_body("not_found", f"Task ID not found: {task_id}")
         self._refresh_runtime_status(task)
         return task.get_status_response(skip_newest=skip_newest, limit=limit, filter_text=filter_text)
 
@@ -77,9 +78,7 @@ class TaskManager:
         tasks_info = [task.get_task_info() for task in paginated_tasks]
 
         return {
-            "status": "success",
-            "message": f"Found {total_count} tracked task(s)",
-            "data": tasks_info,
+            **ok_body(data=tasks_info),
             "pagination": {
                 "total_count": total_count,
                 "displayed_count": len(tasks_info),

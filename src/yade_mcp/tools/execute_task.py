@@ -51,13 +51,20 @@ def register(mcp: FastMCP) -> None:
             # Connected but request failed — task may or may not exist on bridge
             return build_bridge_error(exc, task_id=task_id)
 
-        status = response.get("status", "unknown")
-        message = response.get("message", "")
+        bridge_error = response.get("error") or {}
+        ok = response.get("ok")
+        if ok is None:
+            # Legacy bridge: submit success was signalled by status:"pending"
+            # (and submit failures by a bare status:"error").
+            ok = response.get("status") == "pending"
 
-        if status != "pending":
+        # Request-level failure: a structured error{} (missing_field,
+        # script_not_found, script_read_error, submit_failed) — or a legacy
+        # bridge's bare status:"error". Lift the machine-readable code.
+        if bridge_error or not ok:
             return build_operation_error(
-                status or "submission_failed",
-                message or "Task submission rejected by bridge",
+                bridge_error.get("code") or response.get("status") or "submission_failed",
+                bridge_error.get("message") or response.get("message") or "Task submission rejected by bridge",
                 task_id=task_id,
                 action="Check script path and bridge logs, then retry",
             )
@@ -68,6 +75,6 @@ def register(mcp: FastMCP) -> None:
                 "entry_script": entry_script,
                 "description": description,
                 "task_status": "pending",
-                "message": message or "submitted",
+                "message": "submitted",
             }
         )

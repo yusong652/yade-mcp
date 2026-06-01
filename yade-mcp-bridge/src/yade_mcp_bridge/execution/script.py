@@ -19,7 +19,7 @@ from ..signals import (
     set_current_task,
     unregister_exec_thread,
 )
-from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, build_response, path_to_llm_format
+from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, path_to_llm_format, task_body
 from .errors import TaskInterrupt, format_execution_error
 
 logger = logging.getLogger("YADE-Bridge")
@@ -214,7 +214,9 @@ class ScriptRunner:
     async def run(self, script_path, description, task_id=None):
         """Submit script to main thread queue and return immediately."""
         if not task_id:
-            return {"status": "error", "message": "task_id is required", "data": None}
+            # Mirrors require_field's missing_field shape; the handler already
+            # guarantees task_id, so this is a defensive duplicate.
+            return error_body("missing_field", "task_id required", details={"field": "task_id"})
 
         script_name = os.path.basename(script_path)
 
@@ -222,9 +224,9 @@ class ScriptRunner:
             with open(script_path, encoding="utf-8") as f:
                 script_content = f.read()
         except FileNotFoundError:
-            return {"status": "error", "message": f"Script file not found: {script_path}", "data": None}
+            return error_body("script_not_found", f"Script file not found: {script_path}")
         except OSError as e:
-            return {"status": "error", "message": f"Failed to read script file: {str(e)}", "data": None}
+            return error_body("script_read_error", f"Failed to read script file: {str(e)}")
 
         try:
             log_dir = os.path.join(".yade-mcp", "logs")
@@ -275,22 +277,12 @@ class ScriptRunner:
                 except RuntimeError:
                     pass
 
-            data = (
-                TaskDataBuilder(task_id, "script", script_name, script_path, description)
-                .with_timing(submit_time)
-                .build()
-            )
-            return build_response("pending", f"Script submitted: {script_name}", data)
+            data = TaskDataBuilder(task_id, "script", script_path, description).with_timing(submit_time).build()
+            return task_body("pending", data)
 
         except Exception as e:
             logger.error(f"Script execution failed: {e}")
-            error_message = f"Script execution failed: {str(e)}"
-            data = (
-                TaskDataBuilder(task_id, "script", script_name, script_path, description)
-                .with_error(error_message)
-                .build()
-            )
-            return build_response("error", error_message, data)
+            return error_body("submit_failed", f"Script execution failed: {str(e)}")
 
     def _serialize_result(self, result):
         if result is None:

@@ -66,25 +66,28 @@ class TestHandleCheckTaskStatus:
     async def test_missing_task_id(self):
         ctx = _make_ctx()
         resp = await handle_check_task_status(ctx, {"request_id": "r1"})
-        assert resp["status"] == "error"
-        assert "task_id required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert "task_id required" in resp["error"]["message"]
 
     async def test_delegates_to_task_manager(self):
         ctx = _make_ctx()
         ctx.task_manager.get_task_status.return_value = {
-            "status": "success",
-            "message": "Task completed",
+            "ok": True,
+            "status": "completed",
+            "data": {},
         }
         resp = await handle_check_task_status(ctx, {"request_id": "r1", "task_id": "t1"})
         ctx.task_manager.get_task_status.assert_called_once_with(
             "t1", skip_newest=0, limit=64, filter_text=None,
         )
-        assert resp["status"] == "success"
+        assert resp["ok"] is True
+        assert resp["status"] == "completed"
         assert resp["request_id"] == "r1"
 
     async def test_forwards_pagination_params(self):
         ctx = _make_ctx()
-        ctx.task_manager.get_task_status.return_value = {"status": "success", "message": "ok"}
+        ctx.task_manager.get_task_status.return_value = {"ok": True, "status": "running", "data": {}}
         await handle_check_task_status(ctx, {
             "request_id": "r1",
             "task_id": "t1",
@@ -106,17 +109,16 @@ class TestHandleListTasks:
     async def test_delegates_to_task_manager(self):
         ctx = _make_ctx()
         ctx.task_manager.list_all_tasks.return_value = {
-            "status": "success",
-            "message": "Found 0 tracked task(s)",
+            "ok": True,
             "data": [],
         }
         resp = await handle_list_tasks(ctx, {"request_id": "r1"})
         ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=None)
-        assert resp["status"] == "success"
+        assert resp["ok"] is True
 
     async def test_passes_pagination(self):
         ctx = _make_ctx()
-        ctx.task_manager.list_all_tasks.return_value = {"status": "success", "data": []}
+        ctx.task_manager.list_all_tasks.return_value = {"ok": True, "data": []}
         await handle_list_tasks(ctx, {"request_id": "r1", "offset": 5, "limit": 10})
         ctx.task_manager.list_all_tasks.assert_called_once_with(offset=5, limit=10)
 
@@ -130,22 +132,25 @@ class TestHandleInterruptTask:
     async def test_missing_task_id(self):
         ctx = _make_ctx()
         resp = await handle_interrupt_task(ctx, {"request_id": "r1"})
-        assert resp["status"] == "error"
-        assert "task_id required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert "task_id required" in resp["error"]["message"]
 
     async def test_task_not_found(self):
         ctx = _make_ctx(tasks={})
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "nope"})
-        assert resp["status"] == "error"
-        assert "not found" in resp["message"].lower()
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "not_found"
+        assert "not found" in resp["error"]["message"].lower()
 
     async def test_task_already_completed(self):
         task = MagicMock()
         task.status = "completed"
         ctx = _make_ctx(tasks={"t1": task})
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
-        assert resp["status"] == "error"
-        assert "terminal state" in resp["message"].lower()
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "already_terminal"
+        assert "terminal state" in resp["error"]["message"].lower()
 
     async def test_interrupt_running_task(self):
         from yade_mcp_bridge.signals import clear_interrupt, is_interrupt_requested
@@ -156,7 +161,7 @@ class TestHandleInterruptTask:
         clear_interrupt("t1")
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
         try:
-            assert resp["status"] == "success"
+            assert resp["ok"] is True
             assert resp["data"]["interrupt_requested"] is True
             assert is_interrupt_requested("t1") is True
             # No thread registered for "t1" → async-exc path must skip,
@@ -216,7 +221,7 @@ class TestHandleInterruptTask:
             resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t2"})
             t.join(timeout=2.0)
 
-            assert resp["status"] == "success"
+            assert resp["ok"] is True
             assert resp["data"]["method"] == "flag_and_async_exc"
             assert not t.is_alive()
             assert len(got_exception) == 1
@@ -248,7 +253,7 @@ class TestHandleInterruptTask:
         unregister_exec_thread("t3")
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t3"})
         try:
-            assert resp["status"] == "success"
+            assert resp["ok"] is True
             assert resp["data"]["method"] == "flag_only"
             assert resp["data"].get("async_exc_skipped_reason") is None
         finally:
@@ -281,7 +286,7 @@ class TestHandleInterruptTask:
         ):
             resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t4"})
         try:
-            assert resp["status"] == "success"
+            assert resp["ok"] is True
             assert resp["data"]["method"] == "flag_only"
             assert resp["data"]["async_exc_skipped_reason"] == "nested_boost_python_callback"
         finally:
@@ -297,7 +302,7 @@ class TestHandleInterruptTask:
         clear_interrupt("t1")
         resp = await handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
         try:
-            assert resp["status"] == "success"
+            assert resp["ok"] is True
         finally:
             clear_interrupt("t1")
 
@@ -311,19 +316,21 @@ class TestHandleYadeTask:
     async def test_missing_script_path(self):
         ctx = _make_ctx()
         resp = await handle_yade_task(ctx, {"request_id": "r1", "task_id": "t1"})
-        assert resp["status"] == "error"
-        assert "script_path required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert "script_path required" in resp["error"]["message"]
 
     async def test_missing_task_id(self):
         ctx = _make_ctx()
         resp = await handle_yade_task(ctx, {"request_id": "r1", "script_path": "/s.py"})
-        assert resp["status"] == "error"
-        assert "task_id required" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+        assert "task_id required" in resp["error"]["message"]
 
     async def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
         ctx.script_runner.run = AsyncMock(
-            return_value={"status": "pending", "message": "Script submitted"}
+            return_value={"ok": True, "status": "pending", "data": {}}
         )
         resp = await handle_yade_task(ctx, {
             "request_id": "r1",

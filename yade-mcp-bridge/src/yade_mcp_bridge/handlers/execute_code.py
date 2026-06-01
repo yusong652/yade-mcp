@@ -20,7 +20,7 @@ from ..signals import (
     request_interrupt,
     unregister_exec_thread,
 )
-from ..utils import TeeBuffer, error_result, ok_result
+from ..utils import TeeBuffer, error_response, ok_response
 from .helpers import require_field
 
 logger = logging.getLogger("YADE-Bridge")
@@ -139,7 +139,7 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
     if "reason" in termination:
         details["reason"] = termination["reason"]
 
-    return error_result(
+    return error_response(
         "execute_code_result",
         request_id,
         error_code,
@@ -281,7 +281,7 @@ async def handle_execute_code(ctx, data):
             for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):
                 if key in result:
                     details[key] = result[key]
-            return error_result(
+            return error_response(
                 "execute_code_result",
                 request_id,
                 "execute_code_error",
@@ -290,7 +290,7 @@ async def handle_execute_code(ctx, data):
                 data={"output": result.get("output", "")},
             )
 
-        return ok_result(
+        return ok_response(
             "execute_code_result",
             request_id,
             data={
@@ -305,7 +305,7 @@ async def handle_execute_code(ctx, data):
 
     except Exception as e:
         logger.error(f"Code execution failed: {e}")
-        return error_result(
+        return error_response(
             "execute_code_result",
             request_id,
             "execute_code_failed",

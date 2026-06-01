@@ -2,7 +2,8 @@
 
 import logging
 
-from .helpers import require_field, truncate_message
+from ..utils import error_response, ok_response
+from .helpers import require_field
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -22,9 +23,6 @@ async def handle_yade_task(ctx, data):
     description = data.get("description", "")
 
     result = await ctx.script_runner.run(script_path, description, task_id=task_id)
-
-    if "message" in result:
-        result["message"] = truncate_message(result["message"])
 
     return {"type": "result", "request_id": request_id, **result}
 
@@ -47,9 +45,6 @@ async def handle_check_task_status(ctx, data):
         limit=limit,
         filter_text=filter_text,
     )
-
-    if "message" in result:
-        result["message"] = truncate_message(result["message"])
 
     return {"type": "result", "request_id": request_id, **result}
 
@@ -103,23 +98,23 @@ async def handle_interrupt_task(ctx, data):
 
     task = ctx.task_manager.tasks.get(task_id)
     if not task:
-        return {
-            "type": "result",
-            "request_id": request_id,
-            "status": "error",
-            "message": f"Task not found: {task_id}",
-            "data": {"task_id": task_id, "interrupt_requested": False},
-        }
+        return error_response(
+            "result",
+            request_id,
+            "not_found",
+            f"Task not found: {task_id}",
+            data={"task_id": task_id, "interrupt_requested": False},
+        )
 
     task_status = task.status
     if task_status not in ("pending", "running"):
-        return {
-            "type": "result",
-            "request_id": request_id,
-            "status": "error",
-            "message": f"Task already in terminal state: {task_id} (status: {task_status})",
-            "data": {"task_id": task_id, "status": task_status, "interrupt_requested": False},
-        }
+        return error_response(
+            "result",
+            request_id,
+            "already_terminal",
+            f"Task already in terminal state: {task_id} (status: {task_status})",
+            data={"task_id": task_id, "status": task_status, "interrupt_requested": False},
+        )
 
     request_interrupt(task_id)
     logger.info("Interrupt flag set for task: %s", task_id)
@@ -169,10 +164,4 @@ async def handle_interrupt_task(ctx, data):
     if reason is not None:
         data_payload["async_exc_skipped_reason"] = reason
 
-    return {
-        "type": "result",
-        "request_id": request_id,
-        "status": "success",
-        "message": f"Interrupt requested for task: {task_id}",
-        "data": data_payload,
-    }
+    return ok_response("result", request_id, data=data_payload)

@@ -2,14 +2,16 @@
 
 from .file_buffer import FileBuffer, TeeBuffer
 from .path_utils import path_to_llm_format
-from .response import TaskDataBuilder, build_response, error_result, ok_result
+from .response import TaskDataBuilder, error_body, error_response, ok_body, ok_response, task_body
 
 __all__ = [
     "path_to_llm_format",
     "FileBuffer",
     "TeeBuffer",
     "TaskDataBuilder",
-    "build_response",
-    "ok_result",
-    "error_result",
+    "task_body",
+    "ok_body",
+    "error_body",
+    "ok_response",
+    "error_response",
 ]

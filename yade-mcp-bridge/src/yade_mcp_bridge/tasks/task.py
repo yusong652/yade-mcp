@@ -4,7 +4,7 @@ import logging
 import os
 import time
 
-from ..utils import TaskDataBuilder, build_response
+from ..utils import TaskDataBuilder, task_body
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -161,7 +161,7 @@ class ScriptTask:
         return text, pagination
 
     def _create_data_builder(self):
-        return TaskDataBuilder(self.task_id, "script", self.script_name, self.entry_script, self.description)
+        return TaskDataBuilder(self.task_id, "script", self.entry_script, self.description)
 
     def get_status_response(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
         current_status = self.status
@@ -176,9 +176,7 @@ class ScriptTask:
             builder.with_timing(self.start_time, elapsed_time=elapsed_time)
             builder.with_output(output_text)
             builder.with_pagination(pagination)
-            phase = "queued" if current_status == "pending" else "executing"
-            message = f"Script {phase}: {self.description}\nElapsed time: {elapsed_time:.2f}s"
-            return build_response(current_status, message, builder.build())
+            return task_body(current_status, builder.build())
 
         # completed / failed / interrupted
         builder.with_timing(self.start_time, self.end_time, elapsed_time)
@@ -195,21 +193,19 @@ class ScriptTask:
                 except Exception:
                     pass
             builder.with_result(self._serialize_result(result_data))
-            message = f"Script completed: {self.description}\nElapsed time: {elapsed_time:.2f}s"
-            return build_response("completed", message, builder.build())
+            return task_body("completed", builder.build())
 
         if current_status == "interrupted":
-            message = f"Script interrupted: {self.description}\nElapsed time: {elapsed_time:.2f}s"
-            return build_response("interrupted", message, builder.build())
+            return task_body("interrupted", builder.build())
 
-        # failed
+        # failed — the task failed, but the *request* succeeded (ok: True).
+        # The error lives in task data, not as a request-level error{}.
         error_msg = self.error or "Task execution failed"
         builder.with_error(error_msg)
-        message = f"Script failed: {self.description}\nElapsed time: {elapsed_time:.2f}s\nError: {error_msg}"
         data = builder.build()
         if self.error_details:
             data["error_details"] = self.error_details
-        return build_response("failed", message, data)
+        return task_body("failed", data)
 
     def get_task_info(self):
         info = {
@@ -219,7 +215,6 @@ class ScriptTask:
             "status": self.status,
             "elapsed_time": self.get_elapsed_time(),
             "start_time": self.start_time,
-            "name": self.script_name,
             "entry_script": self.entry_script,
         }
         if self.status in ["completed", "failed", "interrupted"] and self.end_time is not None:

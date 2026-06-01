@@ -13,6 +13,21 @@ import pytest
 import websockets
 
 
+def _err(response_type, request_id, code, message, *, details=None, data=None):
+    """Failure wire message mirroring the bridge's ``error_response``.
+
+    Local copy (the stub must not import ``yade_mcp_bridge``); kept pinned to
+    the bridge's shape by ``tests/bridge/test_protocol.py``.
+    """
+    error = {"code": code, "message": message}
+    if details:
+        error["details"] = details
+    resp = {"type": response_type, "request_id": request_id, "ok": False, "error": error}
+    if data is not None:
+        resp["data"] = data
+    return resp
+
+
 def _build_response(request):
     """Map a request message to the bridge's response shape.
 
@@ -33,16 +48,13 @@ def _build_response(request):
 
     if msg_type == "execute_code":
         if not request.get("code"):
-            # Request-level error: still legacy-shaped (status string, no
-            # error object). Mirrors the real ``require_field`` guard, which
-            # point #1 deliberately left for a later cleanup.
-            return {
-                "type": "execute_code_result",
-                "request_id": request_id,
-                "status": "error",
-                "message": "code required",
-                "data": None,
-            }
+            return _err(
+                "execute_code_result",
+                request_id,
+                "missing_field",
+                "code required",
+                details={"field": "code"},
+            )
         # Success: ok-envelope (no top-level status/message), matching the
         # tightened execute_code wire.
         return {
@@ -54,46 +66,39 @@ def _build_response(request):
 
     if msg_type == "check_task_status":
         if not request.get("task_id"):
-            return {
-                "type": "result",
-                "request_id": request_id,
-                "status": "error",
-                "message": "task_id required",
-                "data": None,
-            }
-        return {
-            "type": "result",
-            "request_id": request_id,
-            "status": "not_found",
-            "message": "Task not found: {}".format(request["task_id"]),
-            "data": None,
-        }
+            return _err("result", request_id, "missing_field", "task_id required", details={"field": "task_id"})
+        return _err(
+            "result",
+            request_id,
+            "not_found",
+            "Task ID not found: {}".format(request["task_id"]),
+        )
 
     if msg_type == "list_tasks":
         return {
             "type": "result",
             "request_id": request_id,
-            "status": "success",
-            "message": "",
+            "ok": True,
             "data": [],
+            "pagination": {
+                "total_count": 0,
+                "displayed_count": 0,
+                "offset": 0,
+                "limit": None,
+                "has_more": False,
+            },
         }
 
     if msg_type == "interrupt_task":
         if not request.get("task_id"):
-            return {
-                "type": "result",
-                "request_id": request_id,
-                "status": "error",
-                "message": "task_id required",
-                "data": None,
-            }
-        return {
-            "type": "result",
-            "request_id": request_id,
-            "status": "error",
-            "message": "Task not found: {}".format(request["task_id"]),
-            "data": None,
-        }
+            return _err("result", request_id, "missing_field", "task_id required", details={"field": "task_id"})
+        return _err(
+            "result",
+            request_id,
+            "not_found",
+            "Task not found: {}".format(request["task_id"]),
+            data={"task_id": request["task_id"], "interrupt_requested": False},
+        )
 
     if msg_type == "console_history":
         return {
