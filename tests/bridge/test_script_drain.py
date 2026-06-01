@@ -101,6 +101,17 @@ class TestDrain:
 
         assert result["status"] == "success"
 
+    def test_closes_output_buffer_when_done(self, fake_yade, runner, scratch_script):
+        """Once execution is terminal, the log handle is released (fd leak
+        fix). Writes become no-ops, but reads still work via re-open by path."""
+        fake_yade.running = False
+        script_path, buffer = scratch_script("print('hi')\n")
+
+        runner._execute(script_path, "print('hi')\n", buffer, task_id="t6")
+
+        assert buffer.write("more") == 0  # closed -> writes are no-ops
+        assert buffer.getvalue() == "hi\n"  # reads still re-open by path
+
     def test_script_error_before_drain_still_surfaces(self, fake_yade, runner, scratch_script):
         """Normal script-raised errors should still be caught (drain doesn't swallow them)."""
         fake_yade.running = True

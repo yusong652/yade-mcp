@@ -210,6 +210,12 @@ class ScriptRunner:
             # Idempotent — handler may have already unregistered to
             # guard against double-injection.
             unregister_exec_thread(task_id)
+            # Release the log file handle now that execution is terminal
+            # and stdout is restored (no more writes land here). Later
+            # check_task_status reads re-open the log by path, so closing
+            # frees the fd without losing readability. Last in finally so
+            # a close error can't skip the signal cleanup above.
+            output_buffer.close()
 
     async def run(self, script_path, description, task_id=None):
         """Submit script to main thread queue and return immediately."""
