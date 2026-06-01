@@ -4,7 +4,7 @@ import os
 import tempfile
 
 from yade_mcp_bridge.utils.path_utils import path_to_llm_format
-from yade_mcp_bridge.utils.response import TaskDataBuilder, task_body
+from yade_mcp_bridge.utils.response import TaskDataBuilder
 from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
 
 
@@ -19,24 +19,6 @@ class TestPathToLlmFormat:
         assert path_to_llm_format("C:\\Users/project\\main.py") == "C:/Users/project/main.py"
 
 
-class TestTaskBody:
-    def test_basic_body(self):
-        body = task_body("running", {"task_id": "t1"})
-        assert body == {
-            "ok": True,
-            "status": "running",
-            "data": {"task_id": "t1"},
-        }
-
-    def test_failed_task_is_ok_request(self):
-        # A failed *task* is still a successful *request*: ok stays True and
-        # the failure rides in the lifecycle status + data.
-        body = task_body("failed", {"task_id": "t1", "error": "boom"})
-        assert body["ok"] is True
-        assert body["status"] == "failed"
-        assert body["data"]["error"] == "boom"
-
-
 class TestTaskDataBuilder:
     def test_basic_build(self):
         data = TaskDataBuilder("t1", "script", "/tmp/test.py", "desc").build()
@@ -46,6 +28,12 @@ class TestTaskDataBuilder:
         assert data["description"] == "desc"
         # script_name is no longer emitted on the wire (redundant basename).
         assert "script_name" not in data
+
+    def test_with_status(self):
+        # Lifecycle status rides inside the task data, not at the envelope
+        # top level — the bridge wire is the bare ToolEnvelope {ok, data}.
+        data = TaskDataBuilder("t1", "script", "/s", "d").with_status("failed").build()
+        assert data["status"] == "failed"
 
     def test_with_timing(self):
         data = (

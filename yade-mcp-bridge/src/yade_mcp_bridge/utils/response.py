@@ -15,6 +15,16 @@ class TaskDataBuilder:
             "description": description,
         }
 
+    def with_status(self, status):
+        # Task lifecycle state (pending / running / completed / failed /
+        # interrupted) lives *in* the task data, not at the envelope level:
+        # it describes the task (the subject of the request), so it rides in
+        # ``data`` alongside ``task_id`` rather than parallel to the
+        # request-level ``ok``. Mirrors the MCP server, which already nests it
+        # as ``data.task_status``.
+        self._data["status"] = status
+        return self
+
     def with_timing(self, start_time, end_time=None, elapsed_time=None):
         self._data["start_time"] = start_time
         if end_time is not None:
@@ -45,21 +55,6 @@ class TaskDataBuilder:
 
     def build(self):
         return self._data.copy()
-
-
-def task_body(status, data):
-    """Success body for an async task: ``{ok: True, status, data}``.
-
-    Unlike the synchronous ``execute_code`` path — where a ``status`` string
-    only mirrored ``ok`` and was therefore dropped — a task's ``status`` is
-    genuine lifecycle state (pending / running / completed / failed /
-    interrupted) and rides alongside the request-level ``ok``. A *failed task*
-    is still a *successful request* (``ok: True``): the failure is task data
-    (``data.error``), not a request-level error. The cosmetic human ``message``
-    the old ``build_response`` carried is gone — it only duplicated fields
-    already in ``data`` and no consumer read it.
-    """
-    return {"ok": True, "status": status, "data": data}
 
 
 def ok_body(data=None):

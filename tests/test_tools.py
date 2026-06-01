@@ -121,7 +121,7 @@ class TestExecuteCode:
 
 class TestExecuteTask:
     async def test_pending_new_envelope(self, bridge):
-        bridge.execute_task.return_value = {"ok": True, "status": "pending", "data": {"task_id": "x"}}
+        bridge.execute_task.return_value = {"ok": True, "data": {"status": "pending", "task_id": "x"}}
         data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="drained triaxial")
         assert data["ok"] is True
         # task_id is generated tool-side (uuid), not echoed from the bridge.
@@ -191,11 +191,12 @@ class TestCheckTaskStatus:
         assert data["error"]["code"] == "not_found"
 
     async def test_running_new_envelope(self, bridge):
-        # New wire: lifecycle carries ok:true alongside the real status.
+        # New wire: bare ToolEnvelope (ok:true) with the lifecycle status
+        # nested in data.status, not at the top level.
         bridge.check_task_status.return_value = {
             "ok": True,
-            "status": "running",
             "data": {
+                "status": "running",
                 "output": "line 1\nline 2\n",
                 "pagination": {"total_lines": 2, "has_older": False, "has_newer": False},
             },
@@ -211,8 +212,7 @@ class TestCheckTaskStatus:
         # the script error surfaced as task data (not a request-level error{}).
         bridge.check_task_status.return_value = {
             "ok": True,
-            "status": "failed",
-            "data": {"output": "boom\n", "error": "RuntimeError: boom"},
+            "data": {"status": "failed", "output": "boom\n", "error": "RuntimeError: boom"},
         }
         data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
         assert data["ok"] is True

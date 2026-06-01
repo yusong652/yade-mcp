@@ -153,7 +153,9 @@ class TestScriptTask:
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="pending task")
         resp = task.get_status_response()
         assert resp["ok"] is True
-        assert resp["status"] == "pending"
+        # Lifecycle status rides inside data, not at the envelope top level.
+        assert resp["data"]["status"] == "pending"
+        assert "status" not in resp
         # No cosmetic top-level message anymore.
         assert "message" not in resp
 
@@ -163,7 +165,7 @@ class TestScriptTask:
         f.set_result({"status": "success", "result": 99})
         resp = task.get_status_response()
         assert resp["ok"] is True
-        assert resp["status"] == "completed"
+        assert resp["data"]["status"] == "completed"
         assert resp["data"]["result"] == 99
 
     def test_get_status_response_failed(self):
@@ -171,9 +173,10 @@ class TestScriptTask:
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="bad task")
         f.set_result({"status": "error", "message": "kaboom"})
         resp = task.get_status_response()
-        # A failed task is still a successful request.
+        # A failed task is still a successful request: ok stays True and the
+        # failure rides in data (data.status == "failed", data.error).
         assert resp["ok"] is True
-        assert resp["status"] == "failed"
+        assert resp["data"]["status"] == "failed"
         assert "kaboom" in resp["data"]["error"]
 
     def _make_task_with_log(self, tmp_path, lines):
@@ -287,7 +290,8 @@ class TestTaskManager:
         f = Future()
         tid = tm.create_script_task(f, "test.py", "/test.py", description="desc")
         result = tm.get_task_status(tid)
-        assert result["status"] in ("pending", "running")
+        assert result["ok"] is True
+        assert result["data"]["status"] in ("pending", "running")
 
     def test_get_task_status_not_found(self):
         tm = TaskManager()

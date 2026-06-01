@@ -16,6 +16,19 @@ from yade_mcp.formatting import (
 from yade_mcp.utils import FilterText, OutputLimit, SkipNewestLines, TaskId, WaitSeconds
 
 
+def _lifecycle_status(response: dict[str, Any]) -> str:
+    """Read a task's lifecycle status from a bridge response.
+
+    Canonical location is ``data.status`` (the status describes the task, so
+    the bridge nests it in the task data). Older bridges put it at the
+    envelope top level, so fall back there for cross-version compatibility —
+    that fallback is transitional and can be dropped once the in-tree wire
+    floor moves past top-level status.
+    """
+    data = response.get("data") or {}
+    return str(data.get("status") or response.get("status") or "unknown")
+
+
 def register(mcp: FastMCP) -> None:
     """Register yade_check_task_status tool."""
 
@@ -48,7 +61,7 @@ def register(mcp: FastMCP) -> None:
             # Detect it via the structured error, falling back to the legacy
             # not_found status string for older bridges.
             is_terminal = (
-                bool(response.get("error")) or normalize_status(response.get("status", "unknown")) in terminal_states
+                bool(response.get("error")) or normalize_status(_lifecycle_status(response)) in terminal_states
             )
 
             if not is_terminal and wait_seconds > 0:
@@ -77,9 +90,10 @@ def register(mcp: FastMCP) -> None:
             )
 
         # Lifecycle path (running / completed / failed / interrupted): the
-        # task's status is genuine domain info and stays a top-level field.
+        # task's status is genuine domain info, read from data.status (bridge
+        # nests it; older bridges put it top-level — see _lifecycle_status).
         data = response.get("data") or {}
-        normalized_status = normalize_status(response.get("status", "unknown"))
+        normalized_status = normalize_status(_lifecycle_status(response))
 
         bridge_output = data.get("output") or ""
         output_text = bridge_output if bridge_output else "(no output)"

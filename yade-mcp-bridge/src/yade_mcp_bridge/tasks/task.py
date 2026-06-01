@@ -4,7 +4,7 @@ import logging
 import os
 import time
 
-from ..utils import TaskDataBuilder, task_body
+from ..utils import TaskDataBuilder, ok_body
 
 logger = logging.getLogger("YADE-Bridge")
 
@@ -170,13 +170,13 @@ class ScriptTask:
             skip_newest=skip_newest, limit=limit, filter_text=filter_text
         )
 
-        builder = self._create_data_builder()
+        builder = self._create_data_builder().with_status(current_status)
 
         if current_status in ("pending", "running"):
             builder.with_timing(self.start_time, elapsed_time=elapsed_time)
             builder.with_output(output_text)
             builder.with_pagination(pagination)
-            return task_body(current_status, builder.build())
+            return ok_body(data=builder.build())
 
         # completed / failed / interrupted
         builder.with_timing(self.start_time, self.end_time, elapsed_time)
@@ -193,19 +193,20 @@ class ScriptTask:
                 except Exception:
                     pass
             builder.with_result(self._serialize_result(result_data))
-            return task_body("completed", builder.build())
+            return ok_body(data=builder.build())
 
         if current_status == "interrupted":
-            return task_body("interrupted", builder.build())
+            return ok_body(data=builder.build())
 
         # failed — the task failed, but the *request* succeeded (ok: True).
-        # The error lives in task data, not as a request-level error{}.
+        # The error and lifecycle status both live in task data (data.status ==
+        # "failed", data.error), never as a request-level error{}.
         error_msg = self.error or "Task execution failed"
         builder.with_error(error_msg)
         data = builder.build()
         if self.error_details:
             data["error_details"] = self.error_details
-        return task_body("failed", data)
+        return ok_body(data=data)
 
     def get_task_info(self):
         info = {

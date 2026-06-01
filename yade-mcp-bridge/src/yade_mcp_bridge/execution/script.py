@@ -19,7 +19,7 @@ from ..signals import (
     set_current_task,
     unregister_exec_thread,
 )
-from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, path_to_llm_format, task_body
+from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
 from .errors import TaskInterrupt, format_execution_error
 
 logger = logging.getLogger("YADE-Bridge")
@@ -277,8 +277,13 @@ class ScriptRunner:
                 except RuntimeError:
                     pass
 
-            data = TaskDataBuilder(task_id, "script", script_path, description).with_timing(submit_time).build()
-            return task_body("pending", data)
+            data = (
+                TaskDataBuilder(task_id, "script", script_path, description)
+                .with_status("pending")
+                .with_timing(submit_time)
+                .build()
+            )
+            return ok_body(data=data)
 
         except Exception as e:
             logger.error(f"Script execution failed: {e}")

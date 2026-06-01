@@ -74,20 +74,19 @@ class TestHandleCheckTaskStatus:
         ctx = _make_ctx()
         ctx.task_manager.get_task_status.return_value = {
             "ok": True,
-            "status": "completed",
-            "data": {},
+            "data": {"status": "completed"},
         }
         resp = await handle_check_task_status(ctx, {"request_id": "r1", "task_id": "t1"})
         ctx.task_manager.get_task_status.assert_called_once_with(
             "t1", skip_newest=0, limit=64, filter_text=None,
         )
         assert resp["ok"] is True
-        assert resp["status"] == "completed"
+        assert resp["data"]["status"] == "completed"
         assert resp["request_id"] == "r1"
 
     async def test_forwards_pagination_params(self):
         ctx = _make_ctx()
-        ctx.task_manager.get_task_status.return_value = {"ok": True, "status": "running", "data": {}}
+        ctx.task_manager.get_task_status.return_value = {"ok": True, "data": {"status": "running"}}
         await handle_check_task_status(ctx, {
             "request_id": "r1",
             "task_id": "t1",
@@ -330,7 +329,7 @@ class TestHandleYadeTask:
     async def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
         ctx.script_runner.run = AsyncMock(
-            return_value={"ok": True, "status": "pending", "data": {}}
+            return_value={"ok": True, "data": {"status": "pending"}}
         )
         resp = await handle_yade_task(ctx, {
             "request_id": "r1",

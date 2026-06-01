@@ -224,8 +224,8 @@ class TestCheckTaskStatusPagination:
             "task_id": "tail1",
         })
 
-        assert resp["status"] == "completed"
         data = resp["data"]
+        assert data["status"] == "completed"
         assert data["pagination"]["total_lines"] == 200
         assert data["pagination"]["has_older"] is True
         assert data["pagination"]["has_newer"] is False
