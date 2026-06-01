@@ -140,7 +140,6 @@ class TestScriptTask:
             "end_time": 1010.0,
             "log_path": None,
             "error": None,
-            "output": "some output",
         }
         task = ScriptTask.from_persisted(data)
         assert task.task_id == "t1"

@@ -67,7 +67,6 @@ class ScriptTask:
         task.future = None
         task.output_buffer = None
         task.on_status_change = None
-        task._output_snapshot = task_data.get("output", "")
         return task
 
     @property
@@ -137,9 +136,6 @@ class ScriptTask:
                     full = f.read()
             except OSError as e:
                 logger.warning(f"Failed to read log file: {e}")
-
-        if not full:
-            full = getattr(self, "_output_snapshot", "") or ""
 
         lines = full.splitlines()
         if filter_text:
