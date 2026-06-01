@@ -33,6 +33,9 @@ def _build_response(request):
 
     if msg_type == "execute_code":
         if not request.get("code"):
+            # Request-level error: still legacy-shaped (status string, no
+            # error object). Mirrors the real ``require_field`` guard, which
+            # point #1 deliberately left for a later cleanup.
             return {
                 "type": "execute_code_result",
                 "request_id": request_id,
@@ -40,11 +43,12 @@ def _build_response(request):
                 "message": "code required",
                 "data": None,
             }
+        # Success: ok-envelope (no top-level status/message), matching the
+        # tightened execute_code wire.
         return {
             "type": "execute_code_result",
             "request_id": request_id,
-            "status": "success",
-            "message": "",
+            "ok": True,
             "data": {"output": "(ok)"},
         }
 

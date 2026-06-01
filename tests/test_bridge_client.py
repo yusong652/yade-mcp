@@ -74,7 +74,7 @@ class TestRequests:
         client = _make_client(bridge_server)
         await client.connect()
         result = await client.execute_code("print('test')")
-        assert result.get("status") in ("ok", "success")
+        assert result.get("ok") is True
         await client.disconnect()
 
     async def test_check_task_status_not_found(self, bridge_server):

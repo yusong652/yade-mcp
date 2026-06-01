@@ -146,7 +146,12 @@ class YADEWebSocketServer:
                 response = await handler(self._context, data)
                 elapsed_ms = (time.time() - t0) * 1000
 
-                status = response.get("status", "?")
+                # Task/console handlers still carry a lifecycle ``status``;
+                # the execute_code path now signals via ``ok``. Derive a log
+                # token from whichever the response uses.
+                status = response.get("status")
+                if status is None:
+                    status = "ok" if response.get("ok") else "error"
                 logger.info("[%s] << %s status=%s (%.0fms)", request_id[:8], msg_type, status, elapsed_ms)
 
                 await self._send_response(websocket, response, request_id)

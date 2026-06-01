@@ -45,15 +45,15 @@ def register(mcp: FastMCP) -> None:
         yade_list_tasks and cannot be interrupted or polled.
 
         Timeout behaviour: on timeout the bridge attempts to abort the
-        running code via an async exception injection. Two outcomes:
+        running code via an async exception injection. The response is an
+        error envelope (``ok=false``) whose ``error.code`` is one of:
 
-        - ``status="terminated"`` — abort succeeded; the pump thread is
-          free, but YADE state may be partially modified by the code
-          that ran before the abort fired. Inspect state before
-          retrying.
-        - ``status="timeout"`` — abort failed (code stuck in a C
-          extension, or nested inside a running task's PyRunner tick);
-          the bridge may still be blocked. Restart if unresponsive.
+        - ``terminated`` — abort succeeded; the pump thread is free, but
+          YADE state may be partially modified by the code that ran before
+          the abort fired. Inspect state before retrying.
+        - ``timeout`` — abort failed (code stuck in a C extension, or
+          nested inside a running task's PyRunner tick); the bridge may
+          still be blocked. Restart if unresponsive.
 
         WARNING: For anything expected to take more than a few seconds,
         use yade_execute_task instead — it has proper cancellation via
@@ -76,13 +76,34 @@ def register(mcp: FastMCP) -> None:
                 reason=str(exc),
             )
 
-        status = response.get("status", "unknown")
-        message = response.get("message", "")
         bridge_data = response.get("data") or {}
         bridge_error = response.get("error") or {}
         bridge_details = bridge_error.get("details") or {}
 
-        if status == "terminated":
+        # Success/failure axis: the bridge now signals via ``ok`` (bool).
+        # Fall back to the legacy ``status`` string for bridges that predate
+        # the ok envelope (cross-version compat, same rationale as
+        # ``normalize_status`` — see project_semver).
+        ok = response.get("ok")
+        if ok is None:
+            ok = response.get("status") == "success"
+
+        if ok:
+            result_data: dict[str, Any] = {
+                "output": bridge_data.get("output") or "(no output)",
+            }
+            if bridge_data.get("result") is not None:
+                result_data["result"] = bridge_data["result"]
+            return build_ok(result_data)
+
+        # Failure: branch on the machine-readable ``error.code``. The human
+        # message lives in ``error.message``; fall back to a legacy top-level
+        # ``message`` for responses that don't yet carry a structured error
+        # (e.g. the missing-field request error — pending its own cleanup).
+        code = bridge_error.get("code", "execute_code_error")
+        message = bridge_error.get("message") or response.get("message", "")
+
+        if code == "terminated":
             # Bridge successfully aborted the code. Surface the
             # partial stdout and the termination method so the agent
             # knows state may be partially modified.
@@ -101,7 +122,7 @@ def register(mcp: FastMCP) -> None:
                 method=bridge_details.get("method"),
             )
 
-        if status == "timeout":
+        if code == "timeout":
             # Abort failed — pump may still be blocked.
             return build_operation_error(
                 "timeout",
@@ -116,23 +137,13 @@ def register(mcp: FastMCP) -> None:
                 stuck_reason=bridge_details.get("reason"),
             )
 
-        if status == "error":
-            partial_output = bridge_data.get("output")
-            return build_operation_error(
-                bridge_error.get("code", "execute_code_error"),
-                bridge_error.get("message", message),
-                data={"output": partial_output} if partial_output else None,
-                exception_type=bridge_details.get("exception_type"),
-                traceback=bridge_details.get("traceback"),
-                traceback_truncated=bridge_details.get("traceback_truncated"),
-                log_file=bridge_details.get("log_file"),
-            )
-
-        data = response.get("data") or {}
-        result_data: dict[str, Any] = {
-            "output": data.get("output") or "(no output)",
-        }
-        if data.get("result") is not None:
-            result_data["result"] = data["result"]
-
-        return build_ok(result_data)
+        partial_output = bridge_data.get("output")
+        return build_operation_error(
+            code,
+            message,
+            data={"output": partial_output} if partial_output else None,
+            exception_type=bridge_details.get("exception_type"),
+            traceback=bridge_details.get("traceback"),
+            traceback_truncated=bridge_details.get("traceback_truncated"),
+            log_file=bridge_details.get("log_file"),
+        )

@@ -460,10 +460,11 @@ class TestTimeoutResponse:
             "result": {"status": "terminated", "output": "hello"},
         }
         resp = _timeout_response("req-1", 3000, termination)
-        assert resp["status"] == "terminated"
+        assert resp["ok"] is False
+        assert "status" not in resp
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "req-1"
-        assert "aborted" in resp["message"].lower()
+        assert "aborted" in resp["error"]["message"].lower()
         assert resp["data"]["output"] == "hello"
         assert resp["error"]["code"] == "terminated"
         assert resp["error"]["details"]["method"] == "async_exc"
@@ -476,8 +477,9 @@ class TestTimeoutResponse:
             "result": None,
         }
         resp = _timeout_response("req-2", 3000, termination)
-        assert resp["status"] == "timeout"
-        assert "nested_boost_python_callback" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "timeout"
+        assert "nested_boost_python_callback" in resp["error"]["message"]
         assert resp["error"]["details"]["method"] == "flag_only"
         assert resp["error"]["details"]["reason"] == "nested_boost_python_callback"
 
@@ -488,6 +490,7 @@ class TestTimeoutResponse:
             "result": None,
         }
         resp = _timeout_response("req-3", 3000, termination)
-        assert resp["status"] == "timeout"
-        assert "C extension" in resp["message"]
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "timeout"
+        assert "C extension" in resp["error"]["message"]
         assert resp["data"]["output"] == ""

@@ -20,7 +20,7 @@ from ..signals import (
     request_interrupt,
     unregister_exec_thread,
 )
-from ..utils import TeeBuffer
+from ..utils import TeeBuffer, error_result, ok_result
 from .helpers import require_field
 
 logger = logging.getLogger("YADE-Bridge")
@@ -110,15 +110,14 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
         output = result.get("output", "") or ""
 
     if resolved:
-        status = "terminated"
+        error_code = "terminated"
         message = (
             f"Execution timed out after {timeout_ms}ms and was aborted. "
             "YADE state may be partially modified by the aborted code; "
             "inspect via yade_execute_code before retrying."
         )
-        error_code = "terminated"
     else:
-        status = "timeout"
+        error_code = "timeout"
         if method == "flag_only":
             message = (
                 f"Execution timed out after {timeout_ms}ms. Full abort "
@@ -135,24 +134,19 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
         else:
             # self / self_untracked without resolved — defensive.
             message = f"Execution timed out after {timeout_ms}ms."
-        error_code = "timeout"
 
     details = {"method": method}
     if "reason" in termination:
         details["reason"] = termination["reason"]
 
-    return {
-        "type": "execute_code_result",
-        "request_id": request_id,
-        "status": status,
-        "message": message,
-        "error": {
-            "code": error_code,
-            "message": message,
-            "details": details,
-        },
-        "data": {"output": output},
-    }
+    return error_result(
+        "execute_code_result",
+        request_id,
+        error_code,
+        message,
+        details=details,
+        data={"output": output},
+    )
 
 
 async def handle_execute_code(ctx, data):
@@ -279,37 +273,31 @@ async def handle_execute_code(ctx, data):
             timeout=timeout_s + 2.0,
         )
 
-        status = result.get("status", "unknown")
-        if status == "error":
+        # ``result["status"]`` here is the INTERNAL future-result marker
+        # from ``_execute_code`` (success / error), not a wire field — the
+        # wire envelope is success/failure via ``ok`` + ``error.code``.
+        if result.get("status") == "error":
             details: dict = {}
             for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):
                 if key in result:
                     details[key] = result[key]
-            return {
-                "type": "execute_code_result",
-                "request_id": request_id,
-                "status": "error",
-                "message": result.get("message", ""),
-                "error": {
-                    "code": "execute_code_error",
-                    "message": result.get("message", ""),
-                    "details": details or None,
-                },
-                "data": {
-                    "output": result.get("output", ""),
-                },
-            }
+            return error_result(
+                "execute_code_result",
+                request_id,
+                "execute_code_error",
+                result.get("message", ""),
+                details=details or None,
+                data={"output": result.get("output", "")},
+            )
 
-        return {
-            "type": "execute_code_result",
-            "request_id": request_id,
-            "status": "success",
-            "message": "Code executed successfully",
-            "data": {
+        return ok_result(
+            "execute_code_result",
+            request_id,
+            data={
                 "output": result.get("output", ""),
                 "result": result.get("result"),
             },
-        }
+        )
 
     except (asyncio.TimeoutError, TimeoutError):
         termination = await _terminate_stuck_execution(request_id, future)
@@ -317,14 +305,9 @@ async def handle_execute_code(ctx, data):
 
     except Exception as e:
         logger.error(f"Code execution failed: {e}")
-        return {
-            "type": "execute_code_result",
-            "request_id": request_id,
-            "status": "error",
-            "message": str(e),
-            "error": {
-                "code": "execute_code_failed",
-                "message": str(e),
-            },
-            "data": None,
-        }
+        return error_result(
+            "execute_code_result",
+            request_id,
+            "execute_code_failed",
+            str(e),
+        )

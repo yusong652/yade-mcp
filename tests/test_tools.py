@@ -66,25 +66,46 @@ async def _call(tool_name, **kwargs):
 
 class TestExecuteCode:
     async def test_success_returns_output(self, bridge):
-        bridge.execute_code.return_value = {"status": "success", "data": {"output": "hello\n"}}
+        bridge.execute_code.return_value = {"ok": True, "data": {"output": "hello\n"}}
         data = await _call("yade_execute_code", code="print('hello')")
         assert data["ok"] is True
         assert data["data"]["output"] == "hello\n"
 
     async def test_success_includes_eval_result(self, bridge):
-        bridge.execute_code.return_value = {"status": "success", "data": {"output": "", "result": 3}}
+        bridge.execute_code.return_value = {"ok": True, "data": {"output": "", "result": 3}}
         data = await _call("yade_execute_code", code="1 + 2")
         assert data["ok"] is True
         assert data["data"]["result"] == 3
 
-    async def test_error_status_maps_to_error_envelope(self, bridge):
+    async def test_error_maps_to_error_envelope(self, bridge):
         bridge.execute_code.return_value = {
-            "status": "error",
-            "message": "boom",
+            "ok": False,
             "error": {"code": "execute_code_error", "message": "boom"},
         }
         data = await _call("yade_execute_code", code="1/0")
         assert data["ok"] is False
+        assert data["error"]["code"] == "execute_code_error"
+
+    async def test_terminated_maps_to_error_code(self, bridge):
+        bridge.execute_code.return_value = {
+            "ok": False,
+            "error": {"code": "terminated", "message": "aborted after 1000ms", "details": {"method": "async_exc"}},
+            "data": {"output": "partial"},
+        }
+        data = await _call("yade_execute_code", code="while True: pass")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "terminated"
+        # the bridge's long message is preserved as the reason
+        assert "aborted" in data["error"]["details"]["reason"]
+        assert data["data"]["output"] == "partial"
+
+    async def test_legacy_status_envelope_still_handled(self, bridge):
+        # Backward-compat: a bridge that predates the ok envelope sends a
+        # bare ``status`` string. The tool must still classify it correctly.
+        bridge.execute_code.return_value = {"status": "success", "data": {"output": "ok\n"}}
+        data = await _call("yade_execute_code", code="print('ok')")
+        assert data["ok"] is True
+        assert data["data"]["output"] == "ok\n"
 
     async def test_connectivity_error_is_handled(self, bridge):
         bridge.execute_code.side_effect = ConnectionError("connection refused")

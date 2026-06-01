@@ -103,7 +103,8 @@ class TestExecuteCodeProtocol:
 
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "e1"
-        assert resp["status"] == "success"
+        assert resp["ok"] is True
+        assert "status" not in resp
         assert "hello" in resp["data"]["output"]
 
     async def test_syntax_error(self, bridge_server):
@@ -116,8 +117,8 @@ class TestExecuteCodeProtocol:
             raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
             resp = json.loads(raw)
 
-        assert resp["status"] == "error"
-        assert "SyntaxError" in resp.get("message", "") or "SyntaxError" in resp.get("error", {}).get("message", "")
+        assert resp["ok"] is False
+        assert "SyntaxError" in resp["error"]["message"]
 
     async def test_missing_code_field(self, bridge_server):
         url, _ = bridge_server
@@ -135,7 +136,7 @@ class TestExecuteCodeProtocol:
             raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
             resp = json.loads(raw)
 
-        assert resp["status"] == "success"
+        assert resp["ok"] is True
         assert resp["data"]["result"] == 3
 
 
@@ -409,7 +410,8 @@ class TestExecuteCodeTimeoutTermination:
 
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "term-tight"
-        assert resp["status"] == "terminated", f"expected terminated, got {resp}"
+        assert resp["ok"] is False, f"expected failure, got {resp}"
+        assert resp["error"]["code"] == "terminated", f"expected terminated, got {resp}"
         details = resp["error"].get("details") or {}
         assert details.get("method") == "async_exc"
 
@@ -429,7 +431,7 @@ class TestExecuteCodeTimeoutTermination:
                 "timeout_ms": 500,
             }))
             first = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
-            assert first["status"] == "terminated"
+            assert first["error"]["code"] == "terminated"
 
             # Now a quick call on the SAME pump: must succeed fast.
             t0 = time.time()
@@ -442,7 +444,7 @@ class TestExecuteCodeTimeoutTermination:
             second = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
             elapsed = time.time() - t0
 
-        assert second["status"] == "success", f"pump didn't recover: {second}"
+        assert second["ok"] is True, f"pump didn't recover: {second}"
         assert second["data"]["result"] == 2
         assert elapsed < 2.0, f"pump was slow after recovery: {elapsed:.2f}s"
 
@@ -480,7 +482,8 @@ class TestExecuteCodeTimeoutTermination:
         # (stuck_in_c — pump didn't resolve within grace). Both are
         # acceptable — the point is that the pump does eventually
         # recover. Accept either outcome.
-        assert resp["status"] in ("terminated", "timeout")
+        assert resp["ok"] is False
+        assert resp["error"]["code"] in ("terminated", "timeout")
         # In either case, confirm pump recovers with a follow-up ping.
         # Wait for the bridge's 1.5s self-termination in the stuck
         # case.
@@ -493,7 +496,7 @@ class TestExecuteCodeTimeoutTermination:
                 "timeout_ms": 2000,
             }))
             follow = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
-        assert follow["status"] == "success"
+        assert follow["ok"] is True
 
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
         """Regression: _execute_code must NOT set_current_task(request_id).
@@ -520,7 +523,7 @@ class TestExecuteCodeTimeoutTermination:
                     "timeout_ms": 2000,
                 }))
                 ok = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
-                assert ok["status"] == "success"
+                assert ok["ok"] is True
                 # After execute_code completes, the outer task must still
                 # be the current one — not None, not request_id.
                 assert peek_current_task() == "outer-task"
@@ -536,7 +539,7 @@ class TestExecuteCodeTimeoutTermination:
                     "timeout_ms": 500,
                 }))
                 terminated = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
-                assert terminated["status"] == "terminated"
+                assert terminated["error"]["code"] == "terminated"
                 assert peek_current_task() == "outer-task"
         finally:
             clear_current_task()

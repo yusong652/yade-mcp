@@ -50,3 +50,37 @@ def build_response(status, message, data):
         "message": message,
         "data": data,
     }
+
+
+def ok_result(response_type, request_id, data=None):
+    """Build a success wire envelope: ``{type, request_id, ok: True, data?}``.
+
+    Mirrors the MCP server's ``ToolEnvelope`` (contracts.py) on the wire so
+    the server stops re-deriving success/failure from a free-form ``status``
+    string. Coherent by construction: a success envelope never carries an
+    ``error`` object.
+    """
+    resp = {"type": response_type, "request_id": request_id, "ok": True}
+    if data is not None:
+        resp["data"] = data
+    return resp
+
+
+def error_result(response_type, request_id, code, message, *, details=None, data=None):
+    """Build a failure wire envelope.
+
+    ``{type, request_id, ok: False, error: {code, message, details?}, data?}``
+
+    The nested ``error`` is already in the MCP ``ToolError`` shape, so the
+    server lifts it through verbatim. Coherent by construction: a failure
+    envelope always carries an ``error``. The error *kind* lives in
+    machine-readable ``code`` (not a parallel ``status`` string); free-form
+    diagnostics go in ``details``.
+    """
+    error = {"code": code, "message": message}
+    if details:
+        error["details"] = details
+    resp = {"type": response_type, "request_id": request_id, "ok": False, "error": error}
+    if data is not None:
+        resp["data"] = data
+    return resp
