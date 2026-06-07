@@ -217,7 +217,7 @@ class ScriptRunner:
             # a close error can't skip the signal cleanup above.
             output_buffer.close()
 
-    async def run(self, script_path, description, task_id=None):
+    def run(self, script_path, description, task_id=None):
         """Submit script to main thread queue and return immediately."""
         if not task_id:
             # Mirrors require_field's missing_field shape; the handler already

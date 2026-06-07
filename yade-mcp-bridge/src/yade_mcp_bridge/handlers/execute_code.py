@@ -3,7 +3,7 @@
 Handles synchronous code snippet execution via main thread queue.
 """
 
-import asyncio
+import concurrent.futures
 import logging
 import os
 import sys
@@ -33,7 +33,7 @@ logger = logging.getLogger("YADE-Bridge")
 _TERMINATION_GRACE_S = 0.5
 
 
-async def _terminate_stuck_execution(request_id: str, future) -> dict:
+def _terminate_stuck_execution(request_id: str, future) -> dict:
     """Best-effort cancellation of an ``execute_code`` submission that
     blew its timeout.
 
@@ -84,9 +84,9 @@ async def _terminate_stuck_execution(request_id: str, future) -> dict:
     fire_async_exception(tid, BridgeTimeout)
 
     try:
-        result = await asyncio.wait_for(asyncio.wrap_future(future), timeout=_TERMINATION_GRACE_S)
+        result = future.result(timeout=_TERMINATION_GRACE_S)
         return {"resolved": True, "method": "async_exc", "result": result}
-    except (asyncio.TimeoutError, TimeoutError):
+    except concurrent.futures.TimeoutError:
         return {"resolved": False, "method": "stuck_in_c", "result": None}
 
 
@@ -149,7 +149,7 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
     )
 
 
-async def handle_execute_code(ctx, data):
+def handle_execute_code(ctx, data):
     """Handle execute_code message - run code synchronously in YADE."""
 
     request_id = data.get("request_id", "unknown")
@@ -264,14 +264,13 @@ async def handle_execute_code(ctx, data):
                 clear_interrupt(request_id)
                 unregister_exec_thread(request_id)
 
-        # Submit to main thread and wait
+        # Submit to the main thread and block THIS request thread until it
+        # resolves or the timeout fires. ThreadingHTTPServer serves each
+        # request on its own thread, so blocking here never stalls other
+        # requests; ``future.result`` parks on a Condition that releases the
+        # GIL while it waits.
         future = ctx.main_executor.submit(_execute_code, code)
-
-        loop = asyncio.get_event_loop()
-        result = await asyncio.wait_for(
-            loop.run_in_executor(None, future.result, timeout_s),
-            timeout=timeout_s + 2.0,
-        )
+        result = future.result(timeout=timeout_s)
 
         # ``result["status"]`` here is the INTERNAL future-result marker
         # from ``_execute_code`` (success / error), not a wire field — the
@@ -299,8 +298,8 @@ async def handle_execute_code(ctx, data):
             },
         )
 
-    except (asyncio.TimeoutError, TimeoutError):
-        termination = await _terminate_stuck_execution(request_id, future)
+    except concurrent.futures.TimeoutError:
+        termination = _terminate_stuck_execution(request_id, future)
         return _timeout_response(request_id, timeout_ms, termination)
 
     except Exception as e:

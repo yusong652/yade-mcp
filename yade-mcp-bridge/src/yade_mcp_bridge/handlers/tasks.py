@@ -8,7 +8,7 @@ from .helpers import require_field
 logger = logging.getLogger("YADE-Bridge")
 
 
-async def handle_yade_task(ctx, data):
+def handle_yade_task(ctx, data):
     """Handle yade_task message - execute Python script from file path."""
     request_id = data.get("request_id", "unknown")
 
@@ -22,12 +22,12 @@ async def handle_yade_task(ctx, data):
 
     description = data.get("description", "")
 
-    result = await ctx.script_runner.run(script_path, description, task_id=task_id)
+    result = ctx.script_runner.run(script_path, description, task_id=task_id)
 
     return {"type": "result", "request_id": request_id, **result}
 
 
-async def handle_check_task_status(ctx, data):
+def handle_check_task_status(ctx, data):
     """Handle check_task_status message with bridge-side output pagination."""
     request_id = data.get("request_id", "unknown")
 
@@ -49,7 +49,7 @@ async def handle_check_task_status(ctx, data):
     return {"type": "result", "request_id": request_id, **result}
 
 
-async def handle_list_tasks(ctx, data):
+def handle_list_tasks(ctx, data):
     """Handle list_tasks message."""
     request_id = data.get("request_id", "unknown")
     offset = data.get("offset", 0)
@@ -60,7 +60,7 @@ async def handle_list_tasks(ctx, data):
     return {"type": "result", "request_id": request_id, **result}
 
 
-async def handle_interrupt_task(ctx, data):
+def handle_interrupt_task(ctx, data):
     """Handle interrupt_task message.
 
     Two cancellation paths, applied together:

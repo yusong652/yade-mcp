@@ -1,4 +1,4 @@
-"""YADE WebSocket Server Message Handlers."""
+"""YADE bridge message handlers."""
 
 from .console import handle_console_history
 from .context import ServerContext

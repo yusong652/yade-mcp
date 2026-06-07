@@ -1,7 +1,7 @@
 """Utility message handlers for YADE bridge."""
 
 
-async def handle_ping(ctx, data):
+def handle_ping(ctx, data):
     """Handle ping message for connection health check."""
     request_id = data.get("request_id", "unknown")
     return {
