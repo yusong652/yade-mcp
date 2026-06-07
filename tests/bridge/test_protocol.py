@@ -1,69 +1,86 @@
-"""Protocol tests - spin up real WebSocket server, test message format and routing."""
+"""Protocol tests - spin up a real bridge HTTP + SSE server, test message format and routing."""
 
 import asyncio
-import json
 import threading
 import time
 from concurrent.futures import Future
 
+import httpx
 import pytest
-import websockets
 from yade_mcp_bridge.execution.main_thread import MainThreadExecutor
 from yade_mcp_bridge.server import create_server
 from yade_mcp_bridge.tasks.task import ScriptTask
 
 
-@pytest.fixture()
-async def bridge_server():
-    """Start a real bridge WebSocket server on an ephemeral port."""
+def _start_bridge():
+    """Create a bridge server on an ephemeral port, serving in a background
+    thread with a real task pump.
+
+    The pump matters for HTTP: ``handle_execute_code`` blocks the request
+    thread on the main-thread future, so a background pump must run the
+    submitted code (just like Mode 1 in production) for the POST to resolve.
+    """
     executor = MainThreadExecutor()
-    server = create_server(
-        main_executor=executor,
-        host="127.0.0.1",
-        port=0,  # OS picks a free port
-        ping_interval=None,
-        ping_timeout=None,
-        runtime_mode="test",
-    )
-    await server.start()
-    # Extract the actual port assigned by the OS
-    port = server.server.sockets[0].getsockname()[1]
-    url = "ws://127.0.0.1:{}".format(port)
+    server = create_server(main_executor=executor, host="127.0.0.1", port=0, runtime_mode="test")
+    url = "http://127.0.0.1:{}".format(server._httpd.server_address[1])
 
-    yield url, executor
+    serve_thread = threading.Thread(target=server.serve_forever, daemon=True)
+    serve_thread.start()
 
-    server.server.close()
-    await server.server.wait_closed()
+    stop_pump = threading.Event()
+
+    def pump_loop():
+        while not stop_pump.is_set():
+            executor.process_tasks(max_tasks=1)
+            time.sleep(0.005)
+
+    pump_thread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
+    pump_thread.start()
+
+    def stop():
+        stop_pump.set()
+        pump_thread.join(timeout=1.0)
+        server.shutdown()
+
+    return server, executor, url, stop
 
 
 @pytest.fixture()
-async def bridge_server_with_tasks(tmp_path):
-    """Bridge server fixture that exposes the task_manager for direct task injection."""
-    executor = MainThreadExecutor()
-    server = create_server(
-        main_executor=executor,
-        host="127.0.0.1",
-        port=0,
-        ping_interval=None,
-        ping_timeout=None,
-        runtime_mode="test",
-    )
-    await server.start()
-    port = server.server.sockets[0].getsockname()[1]
-    url = f"ws://127.0.0.1:{port}"
-
-    yield url, server._context.task_manager, tmp_path
-
-    server.server.close()
-    await server.server.wait_closed()
+def bridge_server():
+    """A real bridge server (HTTP + SSE) with a background task pump."""
+    server, executor, url, stop = _start_bridge()
+    try:
+        yield url, executor
+    finally:
+        stop()
 
 
-async def _send_recv(url, message):
-    """Send a JSON message and return the parsed response."""
-    async with websockets.connect(url) as ws:
-        await ws.send(json.dumps(message))
-        raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-        return json.loads(raw)
+@pytest.fixture()
+def bridge_server_with_tasks(tmp_path):
+    """Bridge server that exposes the task_manager for direct task injection."""
+    server, executor, url, stop = _start_bridge()
+    try:
+        yield url, server.context.task_manager, tmp_path
+    finally:
+        stop()
+
+
+@pytest.fixture()
+def bridge_server_with_pump():
+    """Alias of ``bridge_server`` for the termination tests: a real pump on a
+    non-main thread is required for the SetAsyncExc path to abort live code."""
+    server, executor, url, stop = _start_bridge()
+    try:
+        yield url, executor
+    finally:
+        stop()
+
+
+async def _send_recv(url, message, timeout=10.0):
+    """POST a command (``/<type>``) and return the parsed JSON response."""
+    async with httpx.AsyncClient(base_url=url) as client:
+        resp = await client.post("/{}".format(message["type"]), json=message, timeout=timeout)
+        return resp.json()
 
 
 # =========================================================================
@@ -89,17 +106,8 @@ class TestPingProtocol:
 
 class TestExecuteCodeProtocol:
     async def test_success(self, bridge_server):
-        url, executor = bridge_server
-        msg = {"type": "execute_code", "request_id": "e1", "code": "print('hello')"}
-        # Send the message
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps(msg))
-            # Process the task on the main thread
-            # Give server time to queue the task
-            await asyncio.sleep(0.05)
-            executor.process_tasks()
-            raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-            resp = json.loads(raw)
+        url, _ = bridge_server
+        resp = await _send_recv(url, {"type": "execute_code", "request_id": "e1", "code": "print('hello')"})
 
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "e1"
@@ -108,14 +116,8 @@ class TestExecuteCodeProtocol:
         assert "hello" in resp["data"]["output"]
 
     async def test_syntax_error(self, bridge_server):
-        url, executor = bridge_server
-        msg = {"type": "execute_code", "request_id": "e2", "code": "def ("}
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps(msg))
-            await asyncio.sleep(0.05)
-            executor.process_tasks()
-            raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-            resp = json.loads(raw)
+        url, _ = bridge_server
+        resp = await _send_recv(url, {"type": "execute_code", "request_id": "e2", "code": "def ("})
 
         assert resp["ok"] is False
         assert "SyntaxError" in resp["error"]["message"]
@@ -129,14 +131,8 @@ class TestExecuteCodeProtocol:
         assert "code required" in resp["error"]["message"]
 
     async def test_eval_result_returned(self, bridge_server):
-        url, executor = bridge_server
-        msg = {"type": "execute_code", "request_id": "e4", "code": "1 + 2"}
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps(msg))
-            await asyncio.sleep(0.05)
-            executor.process_tasks()
-            raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-            resp = json.loads(raw)
+        url, _ = bridge_server
+        resp = await _send_recv(url, {"type": "execute_code", "request_id": "e4", "code": "1 + 2"})
 
         assert resp["ok"] is True
         assert resp["data"]["result"] == 3
@@ -188,7 +184,7 @@ class TestTaskProtocol:
 
 
 class TestCheckTaskStatusPagination:
-    """End-to-end websocket tests for bridge-side pagination of task output.
+    """End-to-end tests for bridge-side pagination of task output.
 
     Injects a ScriptTask backed by a real log file into the task_manager,
     then issues check_task_status messages with various skip_newest/limit/
@@ -309,21 +305,21 @@ class TestCheckTaskStatusPagination:
 class TestErrorHandling:
     async def test_invalid_json(self, bridge_server):
         url, _ = bridge_server
-        async with websockets.connect(url) as ws:
-            await ws.send("not json{{{")
-            raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-            resp = json.loads(raw)
-        assert resp["type"] == "error"
-        assert "Invalid JSON" in resp["message"]
+        # POST a malformed body to a valid command path -> 400 invalid_json.
+        async with httpx.AsyncClient(base_url=url) as client:
+            resp = await client.post("/ping", content=b"not json{{{")
+        assert resp.status_code == 400
+        body = resp.json()
+        assert body["type"] == "error"
+        assert body["error"]["code"] == "invalid_json"
+        assert "Invalid JSON" in body["error"]["message"]
 
-    async def test_unknown_message_type(self, bridge_server):
-        """Unknown message types are silently ignored (no response)."""
+    async def test_unknown_command_returns_404(self, bridge_server):
         url, _ = bridge_server
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps({"type": "unknown_type", "request_id": "u1"}))
-            # Server logs a warning but sends no response
-            with pytest.raises(asyncio.TimeoutError):
-                await asyncio.wait_for(ws.recv(), timeout=0.5)
+        async with httpx.AsyncClient(base_url=url) as client:
+            resp = await client.post("/unknown_type", json={"type": "unknown_type", "request_id": "u1"})
+        assert resp.status_code == 404
+        assert resp.json()["error"]["code"] == "unknown_command"
 
 
 # =========================================================================
@@ -332,24 +328,22 @@ class TestErrorHandling:
 
 
 class TestConnectionManagement:
-    async def test_multiple_messages_on_same_connection(self, bridge_server):
+    async def test_multiple_requests_on_same_connection(self, bridge_server):
         url, _ = bridge_server
-        async with websockets.connect(url) as ws:
+        async with httpx.AsyncClient(base_url=url) as client:
             for i in range(3):
-                await ws.send(json.dumps({"type": "ping", "request_id": "m{}".format(i)}))
-                raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-                resp = json.loads(raw)
-                assert resp["request_id"] == "m{}".format(i)
-                assert resp["status"] == "success"
+                resp = await client.post("/ping", json={"type": "ping", "request_id": "m{}".format(i)})
+                body = resp.json()
+                assert body["request_id"] == "m{}".format(i)
+                assert body["status"] == "success"
 
     async def test_concurrent_connections(self, bridge_server):
         url, _ = bridge_server
 
         async def ping(client_id):
-            async with websockets.connect(url) as ws:
-                await ws.send(json.dumps({"type": "ping", "request_id": client_id}))
-                raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
-                return json.loads(raw)
+            async with httpx.AsyncClient(base_url=url) as client:
+                resp = await client.post("/ping", json={"type": "ping", "request_id": client_id})
+                return resp.json()
 
         results = await asyncio.gather(ping("c1"), ping("c2"), ping("c3"))
         ids = {r["request_id"] for r in results}
@@ -361,57 +355,17 @@ class TestConnectionManagement:
 # =========================================================================
 
 
-@pytest.fixture()
-async def bridge_server_with_pump():
-    """Bridge server paired with a real background pump thread, so the
-    SetAsyncExc termination path can actually run user code on a
-    non-main thread (just like Mode 1 in production)."""
-    executor = MainThreadExecutor()
-    server = create_server(
-        main_executor=executor,
-        host="127.0.0.1",
-        port=0,
-        ping_interval=None,
-        ping_timeout=None,
-        runtime_mode="test",
-    )
-    await server.start()
-    port = server.server.sockets[0].getsockname()[1]
-    url = f"ws://127.0.0.1:{port}"
-
-    stop_pump = threading.Event()
-
-    def pump_loop():
-        while not stop_pump.is_set():
-            executor.process_tasks(max_tasks=1)
-            time.sleep(0.005)
-
-    pump_thread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
-    pump_thread.start()
-
-    yield url, executor
-
-    stop_pump.set()
-    pump_thread.join(timeout=1.0)
-    server.server.close()
-    await server.server.wait_closed()
-
-
 class TestExecuteCodeTimeoutTermination:
     async def test_tight_loop_times_out_and_terminates_cleanly(self, bridge_server_with_pump):
         """Pure-Python infinite loop hits short timeout → SetAsyncExc
         aborts it → status="terminated"."""
         url, _ = bridge_server_with_pump
-        msg = {
+        resp = await _send_recv(url, {
             "type": "execute_code",
             "request_id": "term-tight",
             "code": "while True:\n    pass",
             "timeout_ms": 500,
-        }
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps(msg))
-            raw = await asyncio.wait_for(ws.recv(), timeout=10.0)
-            resp = json.loads(raw)
+        })
 
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "term-tight"
@@ -427,27 +381,23 @@ class TestExecuteCodeTimeoutTermination:
         forever."""
         url, _ = bridge_server_with_pump
 
-        async with websockets.connect(url) as ws:
-            # Kill a long loop.
-            await ws.send(json.dumps({
-                "type": "execute_code",
-                "request_id": "pre",
-                "code": "while True:\n    pass",
-                "timeout_ms": 500,
-            }))
-            first = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
-            assert first["error"]["code"] == "terminated"
+        first = await _send_recv(url, {
+            "type": "execute_code",
+            "request_id": "pre",
+            "code": "while True:\n    pass",
+            "timeout_ms": 500,
+        })
+        assert first["error"]["code"] == "terminated"
 
-            # Now a quick call on the SAME pump: must succeed fast.
-            t0 = time.time()
-            await ws.send(json.dumps({
-                "type": "execute_code",
-                "request_id": "post",
-                "code": "1 + 1",
-                "timeout_ms": 1000,
-            }))
-            second = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
-            elapsed = time.time() - t0
+        # Now a quick call on the SAME pump: must succeed fast.
+        t0 = time.time()
+        second = await _send_recv(url, {
+            "type": "execute_code",
+            "request_id": "post",
+            "code": "1 + 1",
+            "timeout_ms": 1000,
+        })
+        elapsed = time.time() - t0
 
         assert second["ok"] is True, f"pump didn't recover: {second}"
         assert second["data"]["result"] == 2
@@ -471,16 +421,12 @@ class TestExecuteCodeTimeoutTermination:
             "    except BaseException:\n"
             "        pass\n"
         )
-        msg = {
+        resp = await _send_recv(url, {
             "type": "execute_code",
             "request_id": "swallow",
             "code": code,
             "timeout_ms": 300,
-        }
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps(msg))
-            raw = await asyncio.wait_for(ws.recv(), timeout=10.0)
-            resp = json.loads(raw)
+        })
 
         # Either "terminated" (if injection happens OUTSIDE the try,
         # e.g., in the while-condition evaluation) or "timeout"
@@ -489,18 +435,15 @@ class TestExecuteCodeTimeoutTermination:
         # recover. Accept either outcome.
         assert resp["ok"] is False
         assert resp["error"]["code"] in ("terminated", "timeout")
-        # In either case, confirm pump recovers with a follow-up ping.
-        # Wait for the bridge's 1.5s self-termination in the stuck
-        # case.
+        # In either case, confirm pump recovers with a follow-up call.
+        # Wait for the bridge's 1.5s self-termination in the stuck case.
         await asyncio.sleep(2.0)
-        async with websockets.connect(url) as ws:
-            await ws.send(json.dumps({
-                "type": "execute_code",
-                "request_id": "after",
-                "code": "42",
-                "timeout_ms": 2000,
-            }))
-            follow = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
+        follow = await _send_recv(url, {
+            "type": "execute_code",
+            "request_id": "after",
+            "code": "42",
+            "timeout_ms": 2000,
+        })
         assert follow["ok"] is True
 
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
@@ -519,32 +462,29 @@ class TestExecuteCodeTimeoutTermination:
         clear_current_task()
         set_current_task("outer-task")
         try:
-            async with websockets.connect(url) as ws:
-                # Normal, successful execute_code.
-                await ws.send(json.dumps({
-                    "type": "execute_code",
-                    "request_id": "nested-ok",
-                    "code": "1 + 1",
-                    "timeout_ms": 2000,
-                }))
-                ok = json.loads(await asyncio.wait_for(ws.recv(), timeout=5.0))
-                assert ok["ok"] is True
-                # After execute_code completes, the outer task must still
-                # be the current one — not None, not request_id.
-                assert peek_current_task() == "outer-task"
+            # Normal, successful execute_code.
+            ok = await _send_recv(url, {
+                "type": "execute_code",
+                "request_id": "nested-ok",
+                "code": "1 + 1",
+                "timeout_ms": 2000,
+            })
+            assert ok["ok"] is True
+            # After execute_code completes, the outer task must still
+            # be the current one — not None, not request_id.
+            assert peek_current_task() == "outer-task"
 
-                # Timed-out execute_code: the termination path calls
-                # request_interrupt(request_id) on the REPL's own id.
-                # That flag must not leak into any PyRunner tick reading
-                # _current_task_id.
-                await ws.send(json.dumps({
-                    "type": "execute_code",
-                    "request_id": "nested-timeout",
-                    "code": "while True:\n    pass",
-                    "timeout_ms": 500,
-                }))
-                terminated = json.loads(await asyncio.wait_for(ws.recv(), timeout=10.0))
-                assert terminated["error"]["code"] == "terminated"
-                assert peek_current_task() == "outer-task"
+            # Timed-out execute_code: the termination path calls
+            # request_interrupt(request_id) on the REPL's own id.
+            # That flag must not leak into any PyRunner tick reading
+            # _current_task_id.
+            terminated = await _send_recv(url, {
+                "type": "execute_code",
+                "request_id": "nested-timeout",
+                "code": "while True:\n    pass",
+                "timeout_ms": 500,
+            })
+            assert terminated["error"]["code"] == "terminated"
+            assert peek_current_task() == "outer-task"
         finally:
             clear_current_task()

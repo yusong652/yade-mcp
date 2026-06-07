@@ -8,17 +8,17 @@ from yade_mcp.config import get_bridge_config
 class TestBridgeConfig:
     def test_defaults(self):
         cfg = get_bridge_config()
-        assert cfg.url == "ws://localhost:9002"
+        assert cfg.url == "http://localhost:9002"
         assert cfg.max_retries == 2
         assert cfg.auto_reconnect is True
         assert cfg.request_timeout_s >= 1.0
 
     def test_env_override(self, monkeypatch):
-        monkeypatch.setenv("YADE_MCP_BRIDGE_URL", "ws://custom:9999")
+        monkeypatch.setenv("YADE_MCP_BRIDGE_URL", "http://custom:9999")
         monkeypatch.setenv("YADE_MCP_MAX_RETRIES", "5")
         monkeypatch.setenv("YADE_MCP_AUTO_RECONNECT", "false")
         cfg = get_bridge_config()
-        assert cfg.url == "ws://custom:9999"
+        assert cfg.url == "http://custom:9999"
         assert cfg.max_retries == 5
         assert cfg.auto_reconnect is False
 
