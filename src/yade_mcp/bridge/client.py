@@ -1,4 +1,10 @@
-"""WebSocket client for communicating with the YADE bridge server."""
+"""HTTP + SSE client for communicating with the YADE bridge.
+
+Commands are plain ``POST /<command>`` request/response. Server->client
+doorbells arrive on a single long-lived ``GET /events`` Server-Sent Events
+stream consumed in the background. The bridge speaks stdlib HTTP (no
+WebSocket, no third-party dependency on the engine side).
+"""
 
 import asyncio
 import json
@@ -6,7 +12,7 @@ import logging
 from typing import Any
 from uuid import uuid4
 
-import websockets
+import httpx
 
 from yade_mcp.config import get_bridge_config
 
@@ -14,11 +20,16 @@ logger = logging.getLogger("yade-mcp.bridge")
 
 
 class BridgeResponseTooLargeError(ConnectionError):
-    """Raised when a bridge response exceeds the WebSocket size limit."""
+    """Raised when a bridge response exceeds the transport size limit.
+
+    Retained for API/error-formatting stability. The bridge now truncates
+    output to a 40 MB safety net before sending, so in practice the client
+    no longer hits this; it stays defined for ``formatting.build_bridge_error``.
+    """
 
 
 class YADEBridgeClient:
-    """Async request/response client for yade-mcp-bridge WebSocket protocol."""
+    """Async request/response client for the yade-mcp-bridge HTTP + SSE protocol."""
 
     def __init__(
         self,
@@ -34,116 +45,111 @@ class YADEBridgeClient:
         self.request_timeout_s = request_timeout_s
         self.auto_reconnect = auto_reconnect
 
-        self._websocket: Any | None = None
-        self._receiver_task: asyncio.Task[Any] | None = None
-        self._pending_requests: dict[str, asyncio.Future[dict[str, Any]]] = {}
+        self._client: httpx.AsyncClient | None = None
+        self._sse_task: asyncio.Task[Any] | None = None
         self._task_events: dict[str, asyncio.Event] = {}
         self._lock = asyncio.Lock()
 
     @property
     def connected(self) -> bool:
-        return self._websocket is not None
+        return self._client is not None
 
     async def connect(self) -> None:
         async with self._lock:
-            if self._websocket is not None:
+            if self._client is not None:
                 return
-            self._websocket = await websockets.connect(self.url, compression=None, max_size=50 * 2**20)
-            self._receiver_task = asyncio.create_task(self._receive_loop())
+            # Per-request timeouts are set on each POST; the SSE stream needs
+            # an unbounded read timeout because it stays open between doorbells.
+            self._client = httpx.AsyncClient(base_url=self.url)
+            self._sse_task = asyncio.create_task(self._sse_loop())
             logger.info("Connected to yade-mcp-bridge at %s", self.url)
 
     async def disconnect(self) -> None:
         async with self._lock:
-            receiver_task = self._receiver_task
-            websocket = self._websocket
-            self._receiver_task = None
-            self._websocket = None
+            sse_task = self._sse_task
+            client = self._client
+            self._sse_task = None
+            self._client = None
 
-        if receiver_task is not None:
-            receiver_task.cancel()
+        if sse_task is not None:
+            sse_task.cancel()
             try:
-                await receiver_task
+                await sse_task
             except asyncio.CancelledError:
                 pass
 
-        if websocket is not None:
+        if client is not None:
             try:
-                await websocket.close()
+                await client.aclose()
             except Exception:
                 pass
-
-        self._fail_pending(ConnectionError("Connection closed"))
 
     async def _ensure_connected(self) -> None:
         if self.connected:
             return
         await self.connect()
 
-    def _fail_pending(self, exc: Exception) -> None:
-        pending = list(self._pending_requests.values())
-        self._pending_requests.clear()
-        for future in pending:
-            if not future.done():
-                future.set_exception(exc)
+    async def _sse_loop(self) -> None:
+        """Consume the server's SSE doorbell stream.
 
-    async def _receive_loop(self) -> None:
-        assert self._websocket is not None
-        error: Exception = ConnectionError("Bridge connection lost")
-        try:
-            async for raw_message in self._websocket:
-                payload = json.loads(raw_message)
-                msg_type = payload.get("type")
+        Replaces the WebSocket receive loop. The only load-bearing event is
+        ``task_status_changed`` -> wake any waiter registered via
+        ``listen_for_task``. ``console_entry`` is currently ignored (console
+        history is pulled via request/response). SSE is best-effort: a missed
+        doorbell is covered by the caller's mandatory status re-poll, so the
+        stream simply reconnects on drop.
+        """
+        sse_timeout = httpx.Timeout(self.request_timeout_s, read=None)
+        while True:
+            client = self._client
+            if client is None:
+                return
+            try:
+                async with client.stream("GET", "/events", timeout=sse_timeout) as response:
+                    async for line in response.aiter_lines():
+                        # SSE frames: "data: {json}" lines; ":" comment lines
+                        # are keepalives; blank lines separate events.
+                        if not line.startswith("data:"):
+                            continue
+                        raw = line[5:].strip()
+                        if not raw:
+                            continue
+                        try:
+                            payload = json.loads(raw)
+                        except json.JSONDecodeError:
+                            continue
+                        if payload.get("type") == "task_status_changed":
+                            event = self._task_events.get(payload.get("task_id", ""))
+                            if event is not None:
+                                event.set()
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:
+                logger.warning("Bridge SSE stream dropped: %s", exc)
 
-                if msg_type == "task_status_changed":
-                    task_id = payload.get("task_id", "")
-                    event = self._task_events.get(task_id)
-                    if event:
-                        event.set()
-                    continue
-
-                if msg_type not in {"result", "execute_code_result", "console_history_result"}:
-                    continue
-                request_id = payload.get("request_id")
-                if not request_id:
-                    continue
-                future = self._pending_requests.pop(request_id, None)
-                if future and not future.done():
-                    future.set_result(payload)
-        except asyncio.CancelledError:
-            raise
-        except websockets.exceptions.PayloadTooBig as exc:
-            logger.warning("Bridge response exceeded WebSocket size limit: %s", exc)
-            error = BridgeResponseTooLargeError(
-                "Task output exceeds WebSocket size limit. Consider writing output to file instead of printing."
-            )
-        except Exception as exc:
-            logger.warning("Bridge receive loop stopped: %s", exc)
-            error = ConnectionError("Bridge connection lost")
-        else:
-            error = ConnectionError("Bridge connection lost")
-        finally:
-            async with self._lock:
-                self._websocket = None
-                self._receiver_task = None
-            self._fail_pending(error)
+            if self._client is None:
+                return
+            await asyncio.sleep(self.reconnect_interval_s)
 
     async def _send_request(self, message: dict[str, Any], timeout_s: float) -> dict[str, Any]:
         await self._ensure_connected()
-        assert self._websocket is not None
+        assert self._client is not None
 
         request_id = message.get("request_id") or str(uuid4())
         message["request_id"] = request_id
-
-        loop = asyncio.get_event_loop()
-        future: asyncio.Future[dict[str, Any]] = loop.create_future()
-        self._pending_requests[request_id] = future
+        command = message["type"]
 
         try:
-            await self._websocket.send(json.dumps(message))
-            return await asyncio.wait_for(future, timeout=timeout_s)
-        except asyncio.TimeoutError as exc:
-            self._pending_requests.pop(request_id, None)
+            response = await self._client.post(f"/{command}", json=message, timeout=timeout_s)
+        except httpx.TimeoutException as exc:
             raise TimeoutError(f"Bridge request timed out after {timeout_s:.1f}s") from exc
+
+        # The bridge returns 200 for every envelope, including ok:false
+        # application errors. A non-2xx is a transport/protocol fault
+        # (malformed request, unknown command, internal crash).
+        response.raise_for_status()
+        payload: dict[str, Any] = response.json()
+        return payload
 
     async def _request_with_retry(
         self,
@@ -160,7 +166,6 @@ class YADEBridgeClient:
                 return await self._send_request(message, timeout)
             except Exception as exc:
                 last_error = exc
-                await self.disconnect()
                 if not self.auto_reconnect or attempt >= attempts:
                     break
                 await asyncio.sleep(self.reconnect_interval_s)

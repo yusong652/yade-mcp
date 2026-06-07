@@ -43,7 +43,7 @@ class BridgeConfig:
 def get_bridge_config() -> BridgeConfig:
     """Load bridge config from environment variables."""
     return BridgeConfig(
-        url=os.getenv("YADE_MCP_BRIDGE_URL", "ws://localhost:9002"),
+        url=os.getenv("YADE_MCP_BRIDGE_URL", "http://localhost:9002"),
         reconnect_interval_s=_env_float("YADE_MCP_RECONNECT_INTERVAL_S", 0.5),
         max_retries=max(0, _env_int("YADE_MCP_MAX_RETRIES", 2)),
         request_timeout_s=max(1.0, _env_float("YADE_MCP_REQUEST_TIMEOUT_S", 10.0)),
