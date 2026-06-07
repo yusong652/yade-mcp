@@ -5,7 +5,7 @@
 yade-mcp is an MCP server that connects AI agents to YADE (open-source DEM engine). Two packages live in this monorepo:
 
 - `yade-mcp` (src/yade_mcp/) — MCP server with 7 tools (2 doc + 5 execution)
-- `yade-mcp-bridge` (yade-mcp-bridge/) — WebSocket bridge running inside YADE process
+- `yade-mcp-bridge` (yade-mcp-bridge/) — HTTP + SSE bridge running inside YADE process (zero runtime deps)
 
 ## Build and test
 
@@ -38,7 +38,7 @@ Both use trusted publishing (PyPI OIDC). Version is defined in `__init__.py` of 
 
 - Ruff for linting and formatting (N818: exception names must end with `Error`)
 - Bridge has its own ruff config in `yade-mcp-bridge/pyproject.toml` (targets py38, ignores UP032/SIM115)
-- Async-first: bridge client uses websockets with asyncio
+- Transport: bridge is stdlib HTTP + SSE (sync, thread-per-request, zero deps); MCP client is async (httpx) — POST per command, one long-lived SSE stream for task-status doorbells
 - Response envelope: all tools return via `build_ok()` / `build_error()` from contracts.py
 
 ## Test structure
@@ -47,7 +47,7 @@ Both use trusted publishing (PyPI OIDC). Version is defined in `__init__.py` of 
 - `tests/bridge/` — Bridge unit + protocol tests (no YADE runtime needed)
   - `test_helpers.py`, `test_signals.py`, `test_utils.py`, `test_execution.py`, `test_tasks.py` — unit tests
   - `test_handlers.py` — handler tests with mock context
-  - `test_protocol.py` — real WebSocket server, tests message format and routing
+  - `test_protocol.py` — real HTTP server, tests message format and routing
 - `tests/test_bridge_client.py` — MCP bridge client (needs running bridge)
 - `tests/test_tools_integration.py` — end-to-end MCP tools (needs YADE + bridge)
 

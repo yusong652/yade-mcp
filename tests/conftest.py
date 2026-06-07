@@ -2,15 +2,18 @@
 
 Provides an in-process bridge server fixture so the MCP client can be
 tested without a YADE runtime or the ``yade_mcp_bridge`` package. It
-speaks the same JSON-over-WebSocket protocol as the real bridge; the
-response shapes mirror ``yade_mcp_bridge/handlers`` and are pinned
-against the live server in the bridge's own ``tests/bridge/test_protocol.py``.
+speaks the same JSON-over-HTTP protocol as the real bridge (``POST
+/<command>`` for request/response plus a ``GET /events`` SSE stream); the
+response shapes mirror ``yade_mcp_bridge/handlers`` and are pinned against
+the live server in the bridge's own ``tests/bridge/test_protocol.py``.
 """
 
+import http.server
 import json
+import socketserver
+import threading
 
 import pytest
-import websockets
 
 
 def _err(response_type, request_id, code, message, *, details=None, data=None):
@@ -112,34 +115,99 @@ def _build_response(request):
     return None
 
 
-@pytest.fixture()
-async def bridge_server():
-    """Start an in-process bridge server on an ephemeral port.
+class _ThreadingHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
 
-    Yields the ``ws://`` URL the client should connect to.
+
+class _FakeBridgeHandler(http.server.BaseHTTPRequestHandler):
+    """Stdlib HTTP handler mirroring the real bridge's transport.
+
+    ``POST /<command>`` routes through ``_build_response``; ``GET /events``
+    holds an SSE connection open so the client's background consumer (started
+    on ``connect()``) stays connected.
     """
 
-    async def handler(websocket):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, *args):
+        pass
+
+    def _send_json(self, status, obj):
+        body = json.dumps(obj).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
         try:
-            async for raw in websocket:
-                try:
-                    request = json.loads(raw)
-                except json.JSONDecodeError as exc:
-                    await websocket.send(
-                        json.dumps({"type": "error", "message": "Invalid JSON format", "error": str(exc)})
-                    )
-                    continue
-                response = _build_response(request)
-                if response is not None:
-                    await websocket.send(json.dumps(response))
-        except websockets.exceptions.ConnectionClosed:
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):
             pass
 
-    server = await websockets.serve(handler, "127.0.0.1", 0)
-    port = server.sockets[0].getsockname()[1]
-    url = f"ws://127.0.0.1:{port}"
+    def do_POST(self):
+        command = self.path.split("?", 1)[0].strip("/")
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+        except (TypeError, ValueError):
+            length = 0
+        raw = self.rfile.read(length) if length > 0 else b""
 
-    yield url
+        try:
+            request = json.loads(raw.decode("utf-8")) if raw else {}
+        except (ValueError, UnicodeDecodeError):
+            self._send_json(
+                400,
+                {"type": "error", "ok": False, "error": {"code": "invalid_json", "message": "Invalid JSON format"}},
+            )
+            return
 
-    server.close()
-    await server.wait_closed()
+        request.setdefault("type", command)
+        response = _build_response(request)
+        if response is None:
+            self._send_json(
+                404,
+                {"type": "error", "ok": False, "error": {"code": "unknown_command", "message": command}},
+            )
+            return
+        self._send_json(200, response)
+
+    def do_GET(self):
+        if self.path.split("?", 1)[0] != "/events":
+            self._send_json(404, {"ok": False, "error": {"code": "not_found", "message": "Not found"}})
+            return
+        stop = self.server.stop_event
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+        try:
+            self.wfile.write(b": connected\n\n")
+            self.wfile.flush()
+            while not stop.is_set():
+                if stop.wait(0.5):
+                    break
+                self.wfile.write(b": keepalive\n\n")
+                self.wfile.flush()
+        except (BrokenPipeError, ConnectionResetError, ValueError):
+            pass
+
+
+@pytest.fixture()
+def bridge_server():
+    """Start an in-process bridge server on an ephemeral port.
+
+    Yields the ``http://`` base URL the client should connect to.
+    """
+    httpd = _ThreadingHTTPServer(("127.0.0.1", 0), _FakeBridgeHandler)
+    httpd.stop_event = threading.Event()
+    port = httpd.server_address[1]
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    try:
+        yield f"http://127.0.0.1:{port}"
+    finally:
+        httpd.stop_event.set()
+        httpd.shutdown()
+        httpd.server_close()
+        thread.join(timeout=2.0)

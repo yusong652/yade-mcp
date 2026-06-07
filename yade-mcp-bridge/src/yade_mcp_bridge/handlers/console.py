@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger("YADE-Bridge")
 
 
-async def handle_console_history(ctx, data):
+def handle_console_history(ctx, data):
     """Handle console_history message.
 
     Two modes:

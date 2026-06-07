@@ -5,13 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "yade-mcp-bridge"
 dynamic = ["version"]
-description = "WebSocket bridge for YADE MCP server - runs inside YADE Python environment"
+description = "HTTP + SSE bridge for YADE MCP server - runs inside YADE Python environment"
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [{ name= "Yusong Han", email = "yusong.han.652@gmail.com" }]
-dependencies = [
-    "websockets>=9.1,<13",
-]
+# Zero runtime dependencies: the transport is stdlib http.server + SSE.
+dependencies = []
 readme = "README.md"
 
 [project.scripts]

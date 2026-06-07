@@ -26,11 +26,11 @@ mcp = FastMCP(
         "YADE (Yet Another Dynamic Engine) MCP server. "
         "Provides tools for browsing YADE Python API documentation "
         "and for executing DEM simulations and managing long-running tasks "
-        "through a yade-mcp-bridge WebSocket service running inside a YADE process.\n\n"
+        "through a yade-mcp-bridge HTTP service running inside a YADE process.\n\n"
         "Architecture: this MCP server and the YADE process are separate. "
         "Documentation tools query a local knowledge base and work independently. "
         "Execution tools communicate with a live YADE process through "
-        "yade-mcp-bridge — a WebSocket service the user starts inside YADE. "
+        "yade-mcp-bridge — an HTTP service the user starts inside YADE. "
         "When execution tools return a bridge connectivity error, "
         "the user needs to start the bridge, not retry.\n\n"
         "Execution tool responses may include a _context field — "
@@ -81,7 +81,7 @@ def main() -> None:
     parser.add_argument(
         "--bridge-url",
         default=None,
-        help="Bridge WebSocket URL (default: ws://localhost:9002, or YADE_MCP_BRIDGE_URL env)",
+        help="Bridge HTTP URL (default: http://localhost:9002, or YADE_MCP_BRIDGE_URL env)",
     )
     parser.add_argument(
         "--log-level",

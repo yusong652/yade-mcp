@@ -1,7 +1,7 @@
 """YADE Main Thread Executor - Thread-safe task queue for main thread execution.
 
 Provides task queue mechanism to execute YADE operations in the main thread
-while WebSocket server runs in background thread.
+while the HTTP server runs in background threads.
 """
 
 import logging
@@ -15,8 +15,8 @@ logger = logging.getLogger("YADE-Bridge")
 class MainThreadExecutor:
     """Execute tasks in YADE main thread via queue.
 
-    WebSocket server (background thread) submits tasks via submit(),
-    main thread processes tasks via process_tasks().
+    HTTP request threads submit tasks via submit(), and the main thread
+    processes them via process_tasks().
     """
 
     def __init__(self):

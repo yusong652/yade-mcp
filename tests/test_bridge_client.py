@@ -4,9 +4,9 @@ Uses the in-process ``bridge_server`` fixture (see ``conftest.py``), so
 no YADE runtime or ``yade_mcp_bridge`` package is needed.
 """
 
-import asyncio
 from unittest.mock import AsyncMock
 
+import httpx
 import pytest
 
 from yade_mcp.bridge.client import (
@@ -16,7 +16,7 @@ from yade_mcp.bridge.client import (
 )
 
 
-def _make_client(url="ws://localhost:9002", **overrides):
+def _make_client(url="http://localhost:9002", **overrides):
     defaults = dict(
         url=url,
         reconnect_interval_s=0.1,
@@ -47,9 +47,9 @@ class TestConnectionLifecycle:
     async def test_double_connect_is_noop(self, bridge_server):
         client = _make_client(bridge_server)
         await client.connect()
-        ws1 = client._websocket
+        http1 = client._client
         await client.connect()  # should not reconnect
-        assert client._websocket is ws1
+        assert client._client is http1
         await client.disconnect()
 
     async def test_disconnect_when_not_connected(self, bridge_server):
@@ -108,14 +108,16 @@ class TestRequests:
 
 class TestTimeoutAndRetry:
     async def test_timeout_raises(self, bridge_server):
-        client = _make_client(bridge_server, request_timeout_s=0.001, auto_reconnect=False, max_retries=0)
+        client = _make_client(bridge_server, auto_reconnect=False, max_retries=0)
         await client.connect()
 
-        # Patch send to not actually send (so no response comes back -> timeout)
-        client._websocket.send = AsyncMock()
+        # Force the POST to time out; the client converts httpx timeouts to a
+        # TimeoutError, which _request_with_retry surfaces as ConnectionError.
+        client._client.post = AsyncMock(side_effect=httpx.ReadTimeout("simulated"))
 
         with pytest.raises(ConnectionError, match="failed"):
             await client.execute_code("print('slow')", timeout_ms=1)
+        await client.disconnect()
 
     async def test_retry_on_failure(self, bridge_server):
         client = _make_client(bridge_server, max_retries=2, reconnect_interval_s=0.01, auto_reconnect=True)
@@ -145,42 +147,6 @@ class TestTimeoutAndRetry:
         client._send_request = always_fail
         with pytest.raises(ConnectionError, match="failed"):
             await client.execute_code("print('fail')")
-
-
-# =========================================================================
-# Fail pending
-# =========================================================================
-
-
-class TestFailPending:
-    async def test_fail_pending_sets_exceptions(self):
-        client = _make_client()
-        loop = asyncio.get_event_loop()
-
-        f1 = loop.create_future()
-        f2 = loop.create_future()
-        client._pending_requests["a"] = f1
-        client._pending_requests["b"] = f2
-
-        client._fail_pending(ConnectionError("test"))
-
-        assert len(client._pending_requests) == 0
-        with pytest.raises(ConnectionError):
-            f1.result()
-        with pytest.raises(ConnectionError):
-            f2.result()
-
-    async def test_fail_pending_skips_done_futures(self):
-        client = _make_client()
-        loop = asyncio.get_event_loop()
-
-        f = loop.create_future()
-        f.set_result({"ok": True})
-        client._pending_requests["a"] = f
-
-        client._fail_pending(ConnectionError("test"))
-        # Should not raise, future was already done
-        assert f.result() == {"ok": True}
 
 
 # =========================================================================

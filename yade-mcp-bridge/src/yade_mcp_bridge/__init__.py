@@ -1,7 +1,8 @@
-"""YADE MCP Bridge - WebSocket bridge for YADE DEM simulation.
+"""YADE MCP Bridge - HTTP + SSE bridge for YADE DEM simulation.
 
 Runs inside YADE's Python environment and exposes simulation control
-as a remote WebSocket API for MCP clients.
+as a remote HTTP API (request/response over POST, server push over a
+Server-Sent Events stream) for MCP clients.
 
 Usage (inside YADE Python console):
     import yade_mcp_bridge
@@ -12,7 +13,7 @@ Usage (batch/console mode):
     yade_mcp_bridge.start(mode="console")
 """
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 
 # Keep global references to avoid Qt timer garbage collection.
 _qt_task_timer = None
@@ -286,8 +287,6 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 def start(
     host="localhost",
     port=9002,
-    ping_interval=20,
-    ping_timeout=40,
     timer_interval_ms=DEFAULT_TIMER_INTERVAL_MS,
     max_tasks_per_tick=DEFAULT_MAX_TASKS_PER_TICK,
     interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
@@ -296,14 +295,12 @@ def start(
 ):
     """Start the YADE Bridge server.
 
-    Starts a WebSocket server in a background thread, then starts the
+    Starts an HTTP + SSE server in a background thread, then starts the
     main-thread task pump.
 
     Args:
         host: Server host address.
         port: Server port number.
-        ping_interval: Seconds between WebSocket ping frames.
-        ping_timeout: Seconds to wait for pong before disconnect.
         timer_interval_ms: Timer/poll interval in milliseconds.
         max_tasks_per_tick: Max queued tasks handled per tick.
         interrupt_check_period: PyRunner checks interrupt every N iterations.
@@ -313,7 +310,6 @@ def start(
         mode: Task pump mode - "auto" (try Qt, fall back to blocking),
             "gui" (Qt only), or "console" (blocking only).
     """
-    import asyncio
     import atexit
     import logging
     import os
@@ -369,13 +365,12 @@ def start(
     finally:
         sock.close()
 
-    # Start WebSocket server in background thread
+    # Create the HTTP + SSE server (binds the socket eagerly, so a port
+    # conflict raises here on the main thread before the serving thread starts)
     yade_server = create_server(
         main_executor=main_executor,
         host=host,
         port=port,
-        ping_interval=ping_interval,
-        ping_timeout=ping_timeout,
         runtime_mode=mode,
         max_tasks=max_tasks,
     )
@@ -387,18 +382,13 @@ def start(
     console_capture.install()
 
     def run_server_background():
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
         try:
-            loop.run_until_complete(yade_server.start())
-            loop.run_forever()
+            yade_server.serve_forever()
         except Exception as e:
             logger.error(f"Server error: {e}")
             import traceback
 
             traceback.print_exc()
-        finally:
-            loop.close()
 
     server_thread = threading.Thread(target=run_server_background, daemon=True)
     server_thread.start()
@@ -434,7 +424,7 @@ def start(
     signal.signal(signal.SIGTERM, _signal_handler)
     signal.signal(signal.SIGINT, _signal_handler)
 
-    print(f"YADE MCP Bridge on ws://{host}:{port}, log: {log_file}")
+    print(f"YADE MCP Bridge on http://{host}:{port}, log: {log_file}")
 
     # Main-thread task pump
     use_qt = mode in ("auto", "gui")
