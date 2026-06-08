@@ -45,12 +45,18 @@ def register(mcp: FastMCP) -> None:
         yade_list_tasks and cannot be interrupted or polled.
 
         Timeout behaviour: on timeout the bridge attempts to abort the
-        running code via an async exception injection. The response is an
-        error envelope (``ok=false``) whose ``error.code`` is one of:
+        running code. The response is an error envelope (``ok=false``)
+        whose ``error.code`` is one of:
 
-        - ``terminated`` — abort succeeded; the pump thread is free, but
-          YADE state may be partially modified by the code that ran before
-          the abort fired. Inspect state before retrying.
+        - ``interrupted`` — the code was running a simulation cycle
+          (``O.run``) and was paused cleanly at an iteration boundary.
+          For long simulations or solving to equilibrium, switch to
+          yade_execute_task — it tracks progress and stops cleanly via
+          yade_interrupt_task.
+        - ``terminated`` — a non-cycle abort succeeded (async exception
+          injection); the pump thread is free, but YADE state may be
+          partially modified by the code that ran before the abort fired.
+          Inspect state before retrying.
         - ``timeout`` — abort failed (code stuck in a C extension, or
           nested inside a running task's PyRunner tick); the bridge may
           still be blocked. Restart if unresponsive.
@@ -102,6 +108,27 @@ def register(mcp: FastMCP) -> None:
         # (e.g. the missing-field request error — pending its own cleanup).
         code = bridge_error.get("code", "execute_code_error")
         message = bridge_error.get("message") or response.get("message", "")
+
+        if code == "interrupted":
+            # Bridge cleanly paused a standalone O.run cycle that blew the
+            # timeout. Pull the agent back to the task tool, which is built
+            # for long-running simulations.
+            partial_output = bridge_data.get("output")
+            return build_operation_error(
+                "interrupted",
+                "Simulation cycle interrupted on timeout",
+                reason=message,
+                action=(
+                    "execute_code ran an O.run simulation cycle that "
+                    "exceeded the timeout; the bridge paused it at an "
+                    "iteration boundary. For long simulations or solving "
+                    "to equilibrium use yade_execute_task — it tracks "
+                    "progress and can be cleanly stopped via "
+                    "yade_interrupt_task."
+                ),
+                data={"output": partial_output} if partial_output else None,
+                method=bridge_details.get("method"),
+            )
 
         if code == "terminated":
             # Bridge successfully aborted the code. Surface the
