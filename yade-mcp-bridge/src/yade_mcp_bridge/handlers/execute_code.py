@@ -21,6 +21,7 @@ from ..signals import (
     register_exec_thread,
     request_interrupt,
     set_current_task,
+    sim_paused_window,
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
@@ -299,13 +300,29 @@ def handle_execute_code(ctx, data):
                 exec_globals = __main__.__dict__
                 exec_globals.pop("result", None)
 
-                try:
-                    code_obj = compile(code_str, "<execute_code>", "eval")
-                    result = eval(code_obj, exec_globals, exec_globals)
-                except SyntaxError:
-                    code_obj = compile(code_str, "<execute_code>", "exec")
-                    exec(code_obj, exec_globals, exec_globals)
-                    result = exec_globals.get("result", None)
+                def _do_exec():
+                    # eval first (so a bare expression returns a value);
+                    # fall back to exec for statements.
+                    try:
+                        code_obj = compile(code_str, "<execute_code>", "eval")
+                        return eval(code_obj, exec_globals, exec_globals)
+                    except SyntaxError:
+                        code_obj = compile(code_str, "<execute_code>", "exec")
+                        exec(code_obj, exec_globals, exec_globals)
+                        return exec_globals.get("result", None)
+
+                if _sim_running():
+                    # A task owns the live cycle. Freeze it at an engine
+                    # boundary for the duration of this snippet so the read
+                    # is a consistent snapshot and any mutation does not race
+                    # the cycle. The snippet still runs here on the pump
+                    # thread, so a timeout can still async-abort it. Always
+                    # resumes on exit (sim_paused_window's finally), even if
+                    # the snippet raises.
+                    with sim_paused_window():
+                        result = _do_exec()
+                else:
+                    result = _do_exec()
 
                 output_text = output_buffer.getvalue()
                 return {
