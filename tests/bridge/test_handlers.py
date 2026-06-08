@@ -19,7 +19,9 @@ from yade_mcp_bridge.signals import (
     _exec_thread_ids,
     _interrupt_requested,
     clear_current_task,
+    peek_current_task,
     register_exec_thread,
+    set_current_task,
 )
 
 
@@ -457,6 +459,81 @@ class TestTerminateStuckExecution:
         assert result["resolved"] is False
         assert result["method"] == "stuck_in_c"
 
+    # --- cycle-interrupt path (standalone O.run inside execute_code) ---
+
+    def test_cycle_interrupt_when_sim_running_and_no_task(self):
+        """No task owns the sim + O.running → arm the flag, future
+        resolves with status=interrupted → method='cycle_interrupt'."""
+        future = Future()
+        future.set_result({"status": "interrupted", "output": "paused"})
+
+        # No task owns the sim (setup cleared _current_task_id).
+        with patch(
+            "yade_mcp_bridge.handlers.execute_code._sim_running",
+            return_value=True,
+        ):
+            result = _terminate_stuck_execution("cyc-1", future)
+
+        assert result["resolved"] is True
+        assert result["method"] == "cycle_interrupt"
+        assert result["result"]["output"] == "paused"
+        # CAS-cleared on the way out; interrupt flag cleared too.
+        assert peek_current_task() is None
+        assert _interrupt_requested.get("cyc-1") is None
+
+    def test_cycle_stuck_when_future_never_resolves(self):
+        """Sim running, no task, but O.pause doesn't free O.run within
+        grace → method='cycle_stuck', unresolved; state still cleaned."""
+        future = Future()  # never resolved
+
+        with patch(
+            "yade_mcp_bridge.handlers.execute_code._sim_running",
+            return_value=True,
+        ), patch(
+            "yade_mcp_bridge.handlers.execute_code._CYCLE_INTERRUPT_GRACE_S",
+            0.05,  # short grace to keep test fast
+        ):
+            result = _terminate_stuck_execution("cyc-2", future)
+
+        assert result["resolved"] is False
+        assert result["method"] == "cycle_stuck"
+        assert peek_current_task() is None
+        assert _interrupt_requested.get("cyc-2") is None
+
+    def test_cycle_gate_skipped_when_task_owns_sim(self):
+        """A task owns the sim (peek != None) → cycle gate skipped, the
+        task's _current_task_id is never touched, async/self path runs."""
+        future = Future()
+        future.set_result({"status": "success", "output": "hi"})
+        set_current_task("owner-task")
+
+        with patch(
+            "yade_mcp_bridge.handlers.execute_code._sim_running",
+            return_value=True,
+        ):
+            result = _terminate_stuck_execution("cyc-3", future)
+
+        # Falls through to the non-cycle path; no exec thread registered
+        # → 'self'. The task's slot is untouched.
+        assert result["method"] == "self"
+        assert peek_current_task() == "owner-task"
+
+    def test_cycle_gate_skipped_when_sim_not_running(self):
+        """O not running (e.g. no YADE / pure-Python stuck) → cycle gate
+        skipped, existing behavior preserved."""
+        future = Future()
+        future.set_result({"status": "terminated", "output": ""})
+
+        # _sim_running defaults to False without YADE; assert explicitly.
+        with patch(
+            "yade_mcp_bridge.handlers.execute_code._sim_running",
+            return_value=False,
+        ):
+            result = _terminate_stuck_execution("cyc-4", future)
+
+        assert result["method"] == "self"
+        assert result["resolved"] is True
+
 
 class TestTimeoutResponse:
     def test_resolved_returns_terminated(self):
@@ -500,3 +577,29 @@ class TestTimeoutResponse:
         assert resp["error"]["code"] == "timeout"
         assert "C extension" in resp["error"]["message"]
         assert resp["data"]["output"] == ""
+
+    def test_cycle_interrupt_returns_interrupted_with_pullback(self):
+        termination = {
+            "resolved": True,
+            "method": "cycle_interrupt",
+            "result": {"status": "interrupted", "output": "iter=500"},
+        }
+        resp = _timeout_response("req-5", 3000, termination)
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "interrupted"
+        # Pull-back to the task tool is the whole point of this path.
+        assert "yade_execute_task" in resp["error"]["message"]
+        assert resp["data"]["output"] == "iter=500"
+        assert resp["error"]["details"]["method"] == "cycle_interrupt"
+
+    def test_cycle_stuck_returns_timeout(self):
+        termination = {
+            "resolved": False,
+            "method": "cycle_stuck",
+            "result": None,
+        }
+        resp = _timeout_response("req-6", 3000, termination)
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "timeout"
+        assert "O.run" in resp["error"]["message"]
+        assert resp["error"]["details"]["method"] == "cycle_stuck"
