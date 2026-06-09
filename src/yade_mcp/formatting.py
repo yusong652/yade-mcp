@@ -37,6 +37,21 @@ def format_unix_timestamp(value: Any) -> str:
         return str(value)
 
 
+def round_elapsed_seconds(value: Any) -> float | None:
+    """Round an elapsed-seconds value to 2 decimals for agent-facing output.
+
+    The bridge reports full ``time.time()``-delta precision (16 digits);
+    the agent only needs centisecond resolution, so the MCP layer trims
+    the noise tail. Missing or non-numeric values pass through as None.
+    """
+    if value is None:
+        return None
+    try:
+        return round(float(value), 2)
+    except (TypeError, ValueError):
+        return None
+
+
 # =============================================================================
 # Bridge error formatting
 # =============================================================================

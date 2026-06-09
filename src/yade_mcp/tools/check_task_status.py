@@ -12,6 +12,7 @@ from yade_mcp.formatting import (
     build_operation_error,
     format_unix_timestamp,
     normalize_status,
+    round_elapsed_seconds,
 )
 from yade_mcp.utils import FilterText, OutputLimit, SkipNewestLines, TaskId, WaitSeconds
 
@@ -107,7 +108,7 @@ def register(mcp: FastMCP) -> None:
             "task_status": normalized_status,
             "start_time": format_unix_timestamp(data.get("start_time")),
             "end_time": format_unix_timestamp(data.get("end_time")),
-            "elapsed_time": data.get("elapsed_time"),
+            "elapsed_time": round_elapsed_seconds(data.get("elapsed_time")),
             "entry_script": data.get("entry_script") or data.get("script_path"),
             "description": data.get("description"),
             "output": output_text,
