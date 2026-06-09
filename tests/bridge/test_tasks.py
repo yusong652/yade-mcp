@@ -194,15 +194,13 @@ class TestScriptTask:
         assert text == ""
         assert pag["total_lines"] == 0
         assert pag["line_range"] == "0-0"
-        assert pag["has_older"] is False
-        assert pag["has_newer"] is False
 
     def test_paginated_output_tail_window(self, tmp_path):
         task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
         text, pag = task.get_paginated_output(skip_newest=0, limit=5)
         assert pag["total_lines"] == 20
-        assert pag["has_older"] is True
-        assert pag["has_newer"] is False
+        # window is the last 5 lines (16-20 of 20): older lines exist, none newer
+        assert pag["line_range"] == "16-20"
         assert "line 19" in text
         assert "line 15" in text
         assert "line 14" not in text
@@ -210,7 +208,8 @@ class TestScriptTask:
     def test_paginated_output_skip_newest(self, tmp_path):
         task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
         text, pag = task.get_paginated_output(skip_newest=5, limit=5)
-        assert pag["has_newer"] is True
+        # skipping 5 newest leaves a mid-log window (11-15 of 20): newer lines exist
+        assert pag["line_range"] == "11-15"
         assert "line 19" not in text
         assert "line 14" in text
 
@@ -229,7 +228,8 @@ class TestScriptTask:
         task = self._make_task_with_log(tmp_path, ["a", "b"])
         text, pag = task.get_paginated_output(limit=100)
         assert pag["total_lines"] == 2
-        assert pag["has_older"] is False
+        # whole log fits in one window: no older lines
+        assert pag["line_range"] == "1-2"
         assert "a" in text and "b" in text
 
     def test_paginated_output_handles_bad_bytes(self, tmp_path):
@@ -315,7 +315,9 @@ class TestTaskManager:
         result = tm.list_all_tasks(offset=1, limit=2)
         assert len(result["data"]) == 2
         assert result["pagination"]["total_count"] == 5
-        assert result["pagination"]["has_more"] is True
+        # 2-of-5 slice → more tasks exist beyond this page
+        pag = result["pagination"]
+        assert pag["offset"] + len(result["data"]) < pag["total_count"]
 
     def test_has_running_tasks(self):
         tm = TaskManager()

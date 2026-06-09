@@ -100,8 +100,6 @@ def register(mcp: FastMCP) -> None:
         pagination = data.get("pagination") or {
             "total_lines": 0,
             "line_range": "0-0",
-            "has_older": False,
-            "has_newer": False,
         }
 
         result: dict[str, Any] = {

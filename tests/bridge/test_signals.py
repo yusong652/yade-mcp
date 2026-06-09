@@ -1,7 +1,9 @@
 """Tests for bridge interrupt signal mechanism."""
 
 import threading
+import time
 
+import pytest
 from yade_mcp_bridge.signals import (
     clear_current_task,
     clear_interrupt,
@@ -28,10 +30,12 @@ class TestSignals:
     def test_set_and_clear_current_task(self):
         set_current_task("task-1")
         from yade_mcp_bridge.signals import _current_task_id
+
         assert _current_task_id == "task-1"
 
         clear_current_task()
         from yade_mcp_bridge.signals import _current_task_id
+
         assert _current_task_id is None
 
     def test_request_and_check_interrupt_by_id(self):
@@ -136,3 +140,106 @@ class TestExecThreadRegistry:
         assert get_exec_thread("stale-req") is None  # scrubbed
         assert get_exec_thread("live-req") == live_ident  # preserved
         assert get_exec_thread("new-req") == live_ident  # just added
+
+
+class TestSimPauseRendezvous:
+    """The execute_code consistent-snapshot window: a handshake between the
+    REPL (pump thread) and the PyRunner tick (sim thread). Exercised here
+    with a fake cycle thread — no YADE needed."""
+
+    def setup_method(self):
+        from yade_mcp_bridge.signals import (
+            _cycle_parked,
+            _pause_wanted,
+            _repl_released,
+            _window_local,
+        )
+
+        _pause_wanted.clear()
+        _cycle_parked.clear()
+        _repl_released.clear()
+        if getattr(_window_local, "active", False):
+            _window_local.active = False
+
+    def _spawn_cycle(self):
+        """Fake sim-cycle thread: bumps ``state['count']`` each iteration
+        and calls the cooperative brake ``park_if_pause_wanted``."""
+        from yade_mcp_bridge.signals import park_if_pause_wanted
+
+        state = {"count": 0, "stop": False}
+
+        def _cycle():
+            while not state["stop"]:
+                state["count"] += 1
+                park_if_pause_wanted()
+                time.sleep(0.001)
+
+        t = threading.Thread(target=_cycle, name="fake-cycle", daemon=True)
+        t.start()
+        return state, t
+
+    def _stop_cycle(self, state, t):
+        state["stop"] = True
+        t.join(timeout=2.0)
+
+    def test_window_freezes_cycle_then_resumes(self):
+        from yade_mcp_bridge.signals import sim_paused_window
+
+        state, t = self._spawn_cycle()
+        try:
+            time.sleep(0.05)  # let the cycle advance
+            with sim_paused_window() as parked:
+                assert parked is True
+                c1 = state["count"]
+                time.sleep(0.05)  # cycle is parked → count must NOT advance
+                c2 = state["count"]
+                assert c1 == c2, f"cycle advanced while parked: {c1} -> {c2}"
+            time.sleep(0.05)  # released → cycle advances again
+            assert state["count"] > c2
+        finally:
+            self._stop_cycle(state, t)
+
+    def test_repl_holds_sim_only_inside_window(self):
+        from yade_mcp_bridge.signals import repl_holds_sim, sim_paused_window
+
+        assert repl_holds_sim() is False
+        # No cycle thread → won't park; short acquire timeout keeps it fast.
+        with sim_paused_window(acquire_timeout_s=0.05) as parked:
+            assert parked is False  # nothing to park
+            assert repl_holds_sim() is True
+        assert repl_holds_sim() is False
+
+    def test_window_releases_cycle_on_exception(self):
+        from yade_mcp_bridge.signals import sim_paused_window
+
+        state, t = self._spawn_cycle()
+        try:
+            time.sleep(0.05)
+            with pytest.raises(ValueError), sim_paused_window() as parked:
+                assert parked is True
+                raise ValueError("boom")
+            # the window's finally must have resumed the cycle
+            time.sleep(0.05)
+            c = state["count"]
+            time.sleep(0.05)
+            assert state["count"] > c
+        finally:
+            self._stop_cycle(state, t)
+
+    def test_park_max_hold_returns_without_release(self):
+        """If the REPL never releases, the brake still returns after
+        ``max_hold_s`` so a hung REPL cannot freeze the sim forever."""
+        from yade_mcp_bridge.signals import _pause_wanted, park_if_pause_wanted
+
+        _pause_wanted.set()
+        done = threading.Event()
+
+        def _park():
+            park_if_pause_wanted(max_hold_s=0.05)
+            done.set()
+
+        t = threading.Thread(target=_park, name="park-maxhold", daemon=True)
+        t.start()
+        assert done.wait(timeout=2.0) is True  # returned despite no release
+        _pause_wanted.clear()
+        t.join(timeout=1.0)

@@ -45,8 +45,6 @@ def register(mcp: FastMCP) -> None:
         tasks = response.get("data") or []
         pagination = response.get("pagination") or {}
         total_count = pagination.get("total_count", len(tasks))
-        displayed_count = pagination.get("displayed_count", len(tasks))
-        has_more = pagination.get("has_more", False)
 
         normalized_tasks: list[dict[str, Any]] = []
 
@@ -66,8 +64,6 @@ def register(mcp: FastMCP) -> None:
         return build_ok(
             {
                 "total_count": total_count,
-                "displayed_count": displayed_count,
-                "has_more": has_more,
                 "tasks": normalized_tasks,
             }
         )

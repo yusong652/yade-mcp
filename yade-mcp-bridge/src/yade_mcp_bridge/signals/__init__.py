@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import threading
 
@@ -97,3 +98,98 @@ def get_exec_thread(request_id: str) -> int | None:
     """Return the recorded thread id for ``request_id``, or None."""
     with _exec_thread_lock:
         return _exec_thread_ids.get(request_id)
+
+
+# ---------------------------------------------------------------------------
+# Sim-pause rendezvous: execute_code consistent-snapshot window.
+#
+# Lets an execute_code snippet (running on the pump thread) freeze YADE's
+# simulation cycle at a clean engine boundary, so it sees a CONSISTENT scene
+# (no torn/mid-step reads) and can mutate without racing the cycle, then
+# resume — while the snippet itself keeps running on the pump thread, so
+# async-abort on timeout still works (the alternative, running the snippet
+# ON the sim thread, is un-abortable: Dummy-N → boost::python → C++ FATAL).
+#
+# It is a two-way handshake between the REPL (pump thread) and the PyRunner
+# tick (YADE's C++ sim thread, a Dummy-N boost::python thread). The tick
+# NEVER receives an injected exception — it parks COOPERATIVELY on an Event
+# (GIL released), so the REPL can run while it waits:
+#
+#   REPL:  set _pause_wanted -> wait _cycle_parked -> <work> -> clear + set _repl_released
+#   tick:  see _pause_wanted -> set _cycle_parked -> wait _repl_released -> continue
+#
+# Events (not Conditions) are used deliberately: a set() persists, so there
+# is no lost-wakeup risk regardless of which side reaches its wait first.
+# ---------------------------------------------------------------------------
+
+_pause_lock = threading.Lock()  # serialize: at most one window at a time
+_pause_wanted = threading.Event()  # REPL -> cycle: please park
+_cycle_parked = threading.Event()  # cycle -> REPL: parked, scene is frozen
+_repl_released = threading.Event()  # REPL -> cycle: done, resume
+_window_local = threading.local()  # marks the thread currently holding a window
+
+# Max time the cycle will stay parked waiting for the REPL to finish. Bounds
+# the damage if the REPL hangs (e.g. stuck C-level I/O) while holding the
+# window: the sim resumes instead of freezing forever.
+_PAUSE_MAX_HOLD_S = 30.0
+
+
+def park_if_pause_wanted(max_hold_s: float = _PAUSE_MAX_HOLD_S) -> None:
+    """Cooperative brake, called by the PyRunner tick on YADE's sim thread.
+
+    If an execute_code snippet has requested a snapshot window, park here
+    (GIL released, so the REPL can run) until it releases — or until
+    ``max_hold_s`` elapses, after which we resume anyway so a hung REPL
+    can't freeze the sim indefinitely. The scene is quiescent at the
+    PyRunner's engine slot, so the REPL gets a consistent view.
+    """
+    if not _pause_wanted.is_set():
+        return
+    _repl_released.clear()
+    _cycle_parked.set()
+    if not _repl_released.wait(timeout=max_hold_s):
+        logger.warning(
+            "execute_code pause window exceeded %.0fs; resuming sim "
+            "(REPL may be stuck in a C call while holding the window)",
+            max_hold_s,
+        )
+    _cycle_parked.clear()
+
+
+def repl_holds_sim() -> bool:
+    """True if the CURRENT thread is inside a sim-pause window.
+
+    Read by the ``O.run`` hook to refuse driving the cycle from a snippet
+    that is holding the cycle frozen — that would deadlock: the snippet's
+    ``O.wait()`` would block on an iteration count the parked cycle can
+    never reach, and ``wait()`` sits in released-GIL C code where async
+    abort cannot fire. The task's own ``O.run`` runs on its companion
+    thread (never inside a window), so it is unaffected.
+    """
+    return bool(getattr(_window_local, "active", False))
+
+
+@contextlib.contextmanager
+def sim_paused_window(acquire_timeout_s: float = 2.0):
+    """REPL side: freeze the sim cycle for an exclusive snapshot window.
+
+    Yields ``True`` if the cycle actually parked (snapshot is consistent),
+    ``False`` if it did not park within ``acquire_timeout_s`` (a single
+    step longer than the timeout, or the cycle ended meanwhile) — in which
+    case the caller's reads are best-effort/concurrent, as before.
+
+    Always releases the cycle on exit, including on exception / async
+    abort, so the sim never stays frozen because a snippet raised.
+    """
+    with _pause_lock:
+        _cycle_parked.clear()
+        _repl_released.clear()
+        _pause_wanted.set()
+        _window_local.active = True
+        try:
+            parked = _cycle_parked.wait(timeout=acquire_timeout_s)
+            yield parked
+        finally:
+            _window_local.active = False
+            _pause_wanted.clear()
+            _repl_released.set()

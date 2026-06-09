@@ -77,14 +77,15 @@ class TaskManager:
         paginated_tasks = sorted_tasks[offset:end_idx]
         tasks_info = [task.get_task_info() for task in paginated_tasks]
 
+        # total_count + offset/limit are the primitives; a consumer derives
+        # displayed_count (len of data) and has_more (offset + len < total),
+        # so we don't emit those derived fields.
         return {
             **ok_body(data=tasks_info),
             "pagination": {
                 "total_count": total_count,
-                "displayed_count": len(tasks_info),
                 "offset": offset,
                 "limit": limit,
-                "has_more": end_idx < total_count,
             },
         }
 

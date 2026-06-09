@@ -85,10 +85,8 @@ def _build_response(request):
             "data": [],
             "pagination": {
                 "total_count": 0,
-                "displayed_count": 0,
                 "offset": 0,
                 "limit": None,
-                "has_more": False,
             },
         }
 

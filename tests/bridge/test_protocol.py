@@ -223,8 +223,8 @@ class TestCheckTaskStatusPagination:
         data = resp["data"]
         assert data["status"] == "completed"
         assert data["pagination"]["total_lines"] == 200
-        assert data["pagination"]["has_older"] is True
-        assert data["pagination"]["has_newer"] is False
+        # Default limit=64 → last 64 lines (137-200): older lines exist, none newer.
+        assert data["pagination"]["line_range"] == "137-200"
         # Default limit=64, so we should see the last 64 lines.
         assert "line 199" in data["output"]
         assert "line 136" in data["output"]
@@ -244,8 +244,8 @@ class TestCheckTaskStatusPagination:
 
         data = resp["data"]
         assert data["pagination"]["total_lines"] == 100
-        assert data["pagination"]["has_older"] is True
-        assert data["pagination"]["has_newer"] is True
+        # Mid-log window (86-90 of 100): older and newer lines both exist.
+        assert data["pagination"]["line_range"] == "86-90"
         # Skipping 10 from the end leaves lines 0..89; limit=5 picks lines 85..89.
         assert "line 89" in data["output"]
         assert "line 85" in data["output"]
@@ -293,8 +293,6 @@ class TestCheckTaskStatusPagination:
         data = resp["data"]
         assert data["pagination"]["total_lines"] == 0
         assert data["pagination"]["line_range"] == "0-0"
-        assert data["pagination"]["has_older"] is False
-        assert data["pagination"]["has_newer"] is False
 
 
 # =========================================================================

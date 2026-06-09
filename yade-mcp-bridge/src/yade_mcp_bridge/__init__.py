@@ -134,7 +134,7 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
 
     import sys as _sys
 
-    from .signals import is_interrupt_requested
+    from .signals import is_interrupt_requested, park_if_pause_wanted, repl_holds_sim
 
     # Flag checked after O.run() returns
     _interrupt_triggered = {"value": False}
@@ -152,6 +152,10 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
                 O.pause()
             except Exception:
                 pass
+        # Cooperative pause point. If an execute_code snippet has asked for
+        # a consistent-snapshot window, park here (GIL released) at this
+        # engine boundary until it releases — see signals.sim_paused_window.
+        park_if_pause_wanted()
 
     def _ensure_tick_in_main():
         # YADE's PyRunner evaluates its command via boost::python::exec with
@@ -256,6 +260,19 @@ def _install_pyrunner(main_executor, interrupt_check_period, logger):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
+            # Refuse driving the cycle from a snippet that is holding a
+            # sim-pause snapshot window: the cycle is frozen (parked in the
+            # PyRunner tick), so this O.run()'s O.wait() would block on an
+            # iteration the cycle can never reach → deadlock. The task's own
+            # O.run runs on its companion thread (never inside a window), so
+            # repl_holds_sim() is False there and the task is unaffected.
+            if repl_holds_sim():
+                raise RuntimeError(
+                    "O.run() refused: execute_code is holding a paused-snapshot "
+                    "window (the simulation cycle is frozen for a consistent "
+                    "read/edit). A snippet must not drive the cycle here. Use "
+                    "yade_execute_task for simulation runs."
+                )
             # Defend against __main__ replacement (e.g. IPython %run) between
             # bridge start and this O.run() call.
             _ensure_tick_in_main()
