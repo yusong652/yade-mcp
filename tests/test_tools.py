@@ -198,7 +198,7 @@ class TestCheckTaskStatus:
             "data": {
                 "status": "running",
                 "output": "line 1\nline 2\n",
-                "pagination": {"total_lines": 2, "has_older": False, "has_newer": False},
+                "pagination": {"total_lines": 2, "line_range": "1-2"},
             },
         }
         data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
@@ -225,7 +225,7 @@ class TestCheckTaskStatus:
             "status": "running",
             "data": {
                 "output": "line 1\nline 2\n",
-                "pagination": {"total_lines": 2, "has_older": False, "has_newer": False},
+                "pagination": {"total_lines": 2, "line_range": "1-2"},
             },
         }
         data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
@@ -265,7 +265,7 @@ class TestListTasks:
             "data": [
                 {"task_id": "t1", "status": "completed", "source": "agent", "entry_script": "a.py"},
             ],
-            "pagination": {"total_count": 1, "displayed_count": 1, "has_more": False},
+            "pagination": {"total_count": 1},
         }
         data = await _call("yade_list_tasks")
         assert data["ok"] is True
@@ -281,7 +281,7 @@ class TestListTasks:
             "data": [
                 {"task_id": "t1", "status": "success", "source": "agent", "entry_script": "a.py"},
             ],
-            "pagination": {"total_count": 1, "displayed_count": 1, "has_more": False},
+            "pagination": {"total_count": 1},
         }
         data = await _call("yade_list_tasks")
         assert data["ok"] is True

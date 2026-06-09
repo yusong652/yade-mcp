@@ -161,7 +161,7 @@ class TestSizeEnforcement:
             "task_status": "running",
             "elapsed_time": 42.0,
             "output": "A" * (MAX_RESPONSE_CHARS * 3),
-            "pagination": {"total_lines": 1, "line_range": "1-1", "has_older": False, "has_newer": False},
+            "pagination": {"total_lines": 1, "line_range": "1-1"},
         }
         result = build_ok(payload)
         output = result["data"]["output"]

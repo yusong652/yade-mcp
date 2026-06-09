@@ -59,7 +59,7 @@ class TestTaskDataBuilder:
         assert "output" not in data
 
     def test_with_pagination(self):
-        pagination = {"total_lines": 42, "line_range": "1-42", "has_older": False, "has_newer": False}
+        pagination = {"total_lines": 42, "line_range": "1-42"}
         data = TaskDataBuilder("t1", "script", "/s", "d").with_pagination(pagination).build()
         assert data["pagination"] == pagination
 

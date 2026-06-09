@@ -146,11 +146,12 @@ class ScriptTask:
         end_idx = max(0, total_lines - skip_newest)
         selected = lines[start_idx:end_idx]
 
+        # `line_range` against `total_lines` fully determines whether older
+        # (range start > 1) or newer (range end < total) lines exist, so we
+        # don't emit separate has_older/has_newer booleans.
         pagination = {
             "total_lines": total_lines,
             "line_range": f"{start_idx + 1}-{end_idx}" if selected else "0-0",
-            "has_older": start_idx > 0,
-            "has_newer": skip_newest > 0,
         }
 
         text = "\n".join(selected) if selected else ""
