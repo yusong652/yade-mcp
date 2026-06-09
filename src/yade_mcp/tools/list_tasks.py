@@ -7,7 +7,13 @@ from fastmcp import FastMCP
 from yade_mcp.bridge import get_bridge_client
 from yade_mcp.bridge.context import with_context
 from yade_mcp.contracts import build_ok
-from yade_mcp.formatting import build_bridge_error, build_operation_error, format_unix_timestamp, normalize_status
+from yade_mcp.formatting import (
+    build_bridge_error,
+    build_operation_error,
+    format_unix_timestamp,
+    normalize_status,
+    round_elapsed_seconds,
+)
 from yade_mcp.utils import SkipNewestTasks, TaskListLimit
 
 
@@ -55,7 +61,7 @@ def register(mcp: FastMCP) -> None:
                 "source": task.get("source", "agent"),
                 "start_time": format_unix_timestamp(task.get("start_time")),
                 "end_time": format_unix_timestamp(task.get("end_time")),
-                "elapsed_time": task.get("elapsed_time"),
+                "elapsed_time": round_elapsed_seconds(task.get("elapsed_time")),
                 "entry_script": task.get("entry_script"),
                 "description": task.get("description"),
             }

@@ -207,6 +207,15 @@ class TestCheckTaskStatus:
         assert data["data"]["output"] == "line 1\nline 2\n"
         assert data["data"]["pagination"]["total_lines"] == 2
 
+    async def test_elapsed_time_rounded_to_two_decimals(self, bridge):
+        # Bridge reports full time.time()-delta precision; MCP trims to 2dp.
+        bridge.check_task_status.return_value = {
+            "ok": True,
+            "data": {"status": "completed", "elapsed_time": 0.7067482471466064, "output": "done\n"},
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["data"]["elapsed_time"] == 0.71
+
     async def test_failed_task_is_ok_envelope_with_error(self, bridge):
         # A failed *task* is a successful *request*: ok:true, task_status:failed,
         # the script error surfaced as task data (not a request-level error{}).

@@ -6,6 +6,7 @@ from yade_mcp.formatting import (
     format_unix_timestamp,
     is_bridge_connectivity_error,
     normalize_status,
+    round_elapsed_seconds,
 )
 
 
@@ -39,6 +40,25 @@ class TestFormatUnixTimestamp:
     def test_float_timestamp(self):
         result = format_unix_timestamp(1700000000.0)
         assert "2023" in result
+
+
+class TestRoundElapsedSeconds:
+    def test_none_passthrough(self):
+        assert round_elapsed_seconds(None) is None
+
+    def test_rounds_to_two_decimals(self):
+        assert round_elapsed_seconds(0.7067482471466064) == 0.71
+        assert round_elapsed_seconds(101.19796872138977) == 101.2
+
+    def test_already_short_unchanged(self):
+        assert round_elapsed_seconds(10.0) == 10.0
+        assert round_elapsed_seconds(0) == 0.0
+
+    def test_string_numeric_coerced(self):
+        assert round_elapsed_seconds("3.14159") == 3.14
+
+    def test_non_numeric_returns_none(self):
+        assert round_elapsed_seconds("n/a") is None
 
 
 class TestIsBridgeConnectivityError:
