@@ -40,15 +40,6 @@ def _build_response(request):
     msg_type = request.get("type")
     request_id = request.get("request_id", "unknown")
 
-    if msg_type == "ping":
-        return {
-            "type": "result",
-            "request_id": request_id,
-            "status": "success",
-            "message": "pong",
-            "data": {"runtime_mode": "test"},
-        }
-
     if msg_type == "execute_code":
         if not request.get("code"):
             return _err(

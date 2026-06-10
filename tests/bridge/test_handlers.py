@@ -1,4 +1,4 @@
-"""Tests for bridge message handlers (ping, tasks, interrupt)."""
+"""Tests for bridge message handlers (tasks, interrupt)."""
 
 from concurrent.futures import Future
 from unittest.mock import MagicMock, patch
@@ -14,7 +14,6 @@ from yade_mcp_bridge.handlers.tasks import (
     handle_list_tasks,
     handle_yade_task,
 )
-from yade_mcp_bridge.handlers.utilities import handle_ping
 from yade_mcp_bridge.signals import (
     _exec_thread_ids,
     _interrupt_requested,
@@ -37,26 +36,6 @@ def _make_ctx(runtime_mode="console", tasks=None):
         main_executor=main_executor,
         runtime_mode=runtime_mode,
     )
-
-
-# =========================================================================
-# Ping
-# =========================================================================
-
-
-class TestHandlePing:
-    def test_ping_returns_pong(self):
-        ctx = _make_ctx(runtime_mode="gui")
-        resp = handle_ping(ctx, {"request_id": "r1"})
-        assert resp["status"] == "success"
-        assert resp["message"] == "pong"
-        assert resp["data"]["runtime_mode"] == "gui"
-        assert resp["request_id"] == "r1"
-
-    def test_ping_default_request_id(self):
-        ctx = _make_ctx()
-        resp = handle_ping(ctx, {})
-        assert resp["request_id"] == "unknown"
 
 
 # =========================================================================
