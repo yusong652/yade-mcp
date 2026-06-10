@@ -234,7 +234,6 @@ class YADEBridgeServer:
         runtime_mode="unknown",
         max_tasks=None,
     ):
-        self.main_executor = main_executor
         self.host = host
         self.port = port
 
@@ -248,17 +247,18 @@ class YADEBridgeServer:
         if max_tasks is not None:
             tm_kwargs["max_tasks"] = max_tasks
         task_manager = TaskManager(**tm_kwargs)
-        self.script_runner = ScriptRunner(main_executor, task_manager)
 
-        self.console_history = ConsoleHistory()
-        self.console_history.on_new_entry = self._broadcast_console_entry
+        console_history = ConsoleHistory()
+        console_history.on_new_entry = self._broadcast_console_entry
 
+        # Single home for handler dependencies; handlers and external callers
+        # reach them via ``self.context``, never as server attributes.
         self.context = ServerContext(
             task_manager=task_manager,
-            script_runner=self.script_runner,
-            main_executor=self.main_executor,
+            script_runner=ScriptRunner(main_executor, task_manager),
+            main_executor=main_executor,
             runtime_mode=runtime_mode,
-            console_history=self.console_history,
+            console_history=console_history,
         )
 
         self.handlers = {
