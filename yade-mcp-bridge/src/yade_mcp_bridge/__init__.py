@@ -395,7 +395,7 @@ def start(
     # Install IPython hooks for console history capture
     from .console import ConsoleCapture
 
-    console_capture = ConsoleCapture(yade_server.console_history)
+    console_capture = ConsoleCapture(yade_server.context.console_history)
     console_capture.install()
 
     def run_server_background():
