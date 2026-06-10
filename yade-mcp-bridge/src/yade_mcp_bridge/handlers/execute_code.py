@@ -408,10 +408,13 @@ def handle_execute_code(ctx, data):
             for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):
                 if key in result:
                     details[key] = result[key]
+            # The user's code raised: an execution error, not a bridge
+            # fault. details carries the exception identity/traceback,
+            # data the stdout produced before the raise.
             return error_response(
                 "execute_code_result",
                 request_id,
-                "execute_code_error",
+                "execution_error",
                 result.get("message", ""),
                 details=details or None,
                 data={"output": result.get("output", "")},
@@ -431,10 +434,13 @@ def handle_execute_code(ctx, data):
         return _timeout_response(request_id, timeout_ms, termination)
 
     except Exception as e:
+        # Bridge-side fault (executor submission, result plumbing) — the
+        # user's code never ran or its outcome was lost. Same code the
+        # transport layer uses for handler crashes.
         logger.error(f"Code execution failed: {e}")
         return error_response(
             "execute_code_result",
             request_id,
-            "execute_code_failed",
+            "internal_error",
             str(e),
         )

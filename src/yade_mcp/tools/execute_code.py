@@ -106,7 +106,7 @@ def register(mcp: FastMCP) -> None:
         # message lives in ``error.message``; fall back to a legacy top-level
         # ``message`` for responses that don't yet carry a structured error
         # (e.g. the missing-field request error — pending its own cleanup).
-        code = bridge_error.get("code", "execute_code_error")
+        code = bridge_error.get("code", "execution_error")
         message = bridge_error.get("message") or response.get("message", "")
 
         if code == "interrupted":

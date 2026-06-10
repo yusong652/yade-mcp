@@ -80,11 +80,11 @@ class TestExecuteCode:
     async def test_error_maps_to_error_envelope(self, bridge):
         bridge.execute_code.return_value = {
             "ok": False,
-            "error": {"code": "execute_code_error", "message": "boom"},
+            "error": {"code": "execution_error", "message": "boom"},
         }
         data = await _call("yade_execute_code", code="1/0")
         assert data["ok"] is False
-        assert data["error"]["code"] == "execute_code_error"
+        assert data["error"]["code"] == "execution_error"
 
     async def test_terminated_maps_to_error_code(self, bridge):
         bridge.execute_code.return_value = {
