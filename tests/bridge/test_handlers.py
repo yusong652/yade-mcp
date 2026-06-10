@@ -12,7 +12,7 @@ from yade_mcp_bridge.handlers.tasks import (
     handle_check_task_status,
     handle_interrupt_task,
     handle_list_tasks,
-    handle_yade_task,
+    handle_execute_task,
 )
 from yade_mcp_bridge.signals import (
     _exec_thread_ids,
@@ -93,8 +93,14 @@ class TestHandleListTasks:
             "data": [],
         }
         resp = handle_list_tasks(ctx, {"request_id": "r1"})
-        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=None)
+        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=64)
         assert resp["ok"] is True
+
+    def test_explicit_null_limit_uses_default(self):
+        ctx = _make_ctx()
+        ctx.task_manager.list_all_tasks.return_value = {"ok": True, "data": []}
+        handle_list_tasks(ctx, {"request_id": "r1", "limit": None})
+        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=64)
 
     def test_passes_pagination(self):
         ctx = _make_ctx()
@@ -288,21 +294,21 @@ class TestHandleInterruptTask:
 
 
 # =========================================================================
-# Yade task
+# Execute task
 # =========================================================================
 
 
-class TestHandleYadeTask:
+class TestHandleExecuteTask:
     def test_missing_script_path(self):
         ctx = _make_ctx()
-        resp = handle_yade_task(ctx, {"request_id": "r1", "task_id": "t1"})
+        resp = handle_execute_task(ctx, {"request_id": "r1", "task_id": "t1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert "script_path required" in resp["error"]["message"]
 
     def test_missing_task_id(self):
         ctx = _make_ctx()
-        resp = handle_yade_task(ctx, {"request_id": "r1", "script_path": "/s.py"})
+        resp = handle_execute_task(ctx, {"request_id": "r1", "script_path": "/s.py"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert "task_id required" in resp["error"]["message"]
@@ -312,7 +318,7 @@ class TestHandleYadeTask:
         ctx.script_runner.run = MagicMock(
             return_value={"ok": True, "data": {"status": "pending"}}
         )
-        resp = handle_yade_task(ctx, {
+        resp = handle_execute_task(ctx, {
             "request_id": "r1",
             "script_path": "/tmp/test.py",
             "task_id": "t1",

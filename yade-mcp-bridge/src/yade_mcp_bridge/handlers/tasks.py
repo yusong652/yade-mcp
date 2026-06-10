@@ -7,9 +7,14 @@ from .helpers import require_field
 
 logger = logging.getLogger("YADE-Bridge")
 
+# Default page size for the paginated reads (check_task_status output lines,
+# list_tasks entries). Callers that omit ``limit`` get a bounded page instead
+# of the full history; ``pagination.total_count`` tells them what remains.
+_DEFAULT_LIMIT = 64
 
-def handle_yade_task(ctx, data):
-    """Handle yade_task message - execute Python script from file path."""
+
+def handle_execute_task(ctx, data):
+    """Handle execute_task message - execute Python script from file path."""
     request_id = data.get("request_id", "unknown")
 
     script_path, err = require_field(data, "script_path", request_id)
@@ -36,7 +41,7 @@ def handle_check_task_status(ctx, data):
         return err
 
     skip_newest = data.get("skip_newest", 0)
-    limit = data.get("limit", 64)
+    limit = data.get("limit", _DEFAULT_LIMIT)
     filter_text = data.get("filter_text")
 
     result = ctx.task_manager.get_task_status(
@@ -53,7 +58,11 @@ def handle_list_tasks(ctx, data):
     """Handle list_tasks message."""
     request_id = data.get("request_id", "unknown")
     offset = data.get("offset", 0)
+    # An explicit null means "use the default" too; clients page through
+    # via offset + pagination.total_count when they want the full history.
     limit = data.get("limit")
+    if limit is None:
+        limit = _DEFAULT_LIMIT
 
     result = ctx.task_manager.list_all_tasks(offset=offset, limit=limit)
 

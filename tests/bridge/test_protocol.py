@@ -161,6 +161,19 @@ class TestTaskProtocol:
         assert resp["ok"] is True
         assert isinstance(resp["data"], list)
 
+    async def test_execute_task_routes(self, bridge_server):
+        # Missing script_path proves routing without running a script.
+        url, _ = bridge_server
+        resp = await _send_recv(url, {"type": "execute_task", "request_id": "x1"})
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+
+    async def test_yade_task_legacy_alias_routes(self, bridge_server):
+        url, _ = bridge_server
+        resp = await _send_recv(url, {"type": "yade_task", "request_id": "x2"})
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "missing_field"
+
     async def test_interrupt_nonexistent_task(self, bridge_server):
         url, _ = bridge_server
         resp = await _send_recv(url, {
