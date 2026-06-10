@@ -333,6 +333,17 @@ class TestErrorHandling:
         assert resp.status_code == 404
         assert resp.json()["error"]["code"] == "unknown_command"
 
+    async def test_unknown_command_lists_available_commands(self, bridge_server):
+        # Self-correction loop: a caller that guesses a wrong command gets
+        # the canonical command list back — legacy aliases excluded.
+        url, _ = bridge_server
+        async with httpx.AsyncClient(base_url=url) as client:
+            resp = await client.post("/run_script", json={"type": "run_script", "request_id": "u2"})
+        available = resp.json()["error"]["details"]["available_commands"]
+        assert "execute_code" in available
+        assert "execute_task" in available
+        assert "yade_task" not in available
+
 
 # =========================================================================
 # Connection management
