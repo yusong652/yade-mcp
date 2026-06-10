@@ -105,7 +105,7 @@ yade_mcp_bridge.start()
 
 Expected output (one line):
 
-- `YADE MCP Bridge on ws://localhost:9002, log: <cwd>/.yade-mcp/bridge.log`
+- `YADE MCP Bridge on http://localhost:9002, log: <cwd>/.yade-mcp/bridge.log`
 
 After the bridge is started, restart the client session before Step 4.
 
@@ -138,8 +138,6 @@ Success example (shape may vary by client):
   - Bridge not running in YADE, or port `9002` not available.
 - `No module named yade_mcp_bridge`:
   - Package not installed in system Python. Run `pip3 install --user yade-mcp-bridge`.
-- `No module named websockets`:
-  - Install websockets: `pip3 install --user websockets`.
 - `yade_*` tools missing in client after setup:
   - Client session was not fully restarted after Step 1. Close/reopen client session and retry Step 4.
 - Port conflict (another service on 9002):
