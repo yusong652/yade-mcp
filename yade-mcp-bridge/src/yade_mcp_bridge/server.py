@@ -107,7 +107,11 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
                     {
                         "type": "error",
                         "ok": False,
-                        "error": {"code": "unknown_command", "message": f"Unknown command: {command}"},
+                        "error": {
+                            "code": "unknown_command",
+                            "message": f"Unknown command: {command}",
+                            "details": {"available_commands": self._bridge.public_commands},
+                        },
                     }
                 ),
             )
@@ -263,13 +267,17 @@ class YADEBridgeServer:
 
         self.handlers = {
             "execute_task": handle_execute_task,
-            "yade_task": handle_execute_task,  # legacy wire name (pre-0.6 clients)
             "check_task_status": handle_check_task_status,
             "list_tasks": handle_list_tasks,
             "interrupt_task": handle_interrupt_task,
             "execute_code": handle_execute_code,
             "console_history": handle_console_history,
         }
+        # Canonical command names advertised to callers (unknown_command
+        # errors). Snapshot before aliases so legacy names aren't taught
+        # to new clients.
+        self.public_commands = sorted(self.handlers)
+        self.handlers["yade_task"] = handle_execute_task  # legacy wire name (pre-0.6 clients)
 
         # Bind eagerly so a port conflict surfaces on the calling (main)
         # thread, before the serving thread starts.
