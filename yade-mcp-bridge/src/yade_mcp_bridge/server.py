@@ -208,6 +208,11 @@ class YADEBridgeServer:
 
     _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB output safety net
 
+    # Tail of ``data["output"]`` kept when a response blows past the byte cap.
+    # ~10k chars is a few thousand LLM tokens: enough to show the most recent
+    # progress/error, small enough not to flood the agent's context.
+    _TRUNCATED_TAIL_CHARS = 10000
+
     def __init__(
         self,
         main_executor,
@@ -309,12 +314,12 @@ class YADEBridgeServer:
         payload = json.dumps(response)
         if len(payload) > self._MAX_RESPONSE_BYTES:
             logger.warning("[%s] Response too large (%d bytes), truncating output", str(request_id)[:8], len(payload))
-            response = self._truncate_response(response, self._MAX_RESPONSE_BYTES)
+            response = self._truncate_response(response)
             payload = json.dumps(response)
         return payload.encode("utf-8")
 
-    @staticmethod
-    def _truncate_response(response, max_bytes):
+    @classmethod
+    def _truncate_response(cls, response):
         """Truncate large response data to fit within transport limits.
 
         Keeps the TAIL of output (most recent content), since monitoring
@@ -325,8 +330,8 @@ class YADEBridgeServer:
         data = response.get("data", {})
         if isinstance(data, dict) and "output" in data:
             output = data["output"]
-            if isinstance(output, str) and len(output) > 10000:
-                tail = output[-10000:]
+            if isinstance(output, str) and len(output) > cls._TRUNCATED_TAIL_CHARS:
+                tail = output[-cls._TRUNCATED_TAIL_CHARS :]
                 nl = tail.find("\n")
                 if nl >= 0:
                     tail = tail[nl + 1 :]
