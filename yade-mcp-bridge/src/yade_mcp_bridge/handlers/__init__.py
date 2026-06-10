@@ -9,7 +9,6 @@ from .tasks import (
     handle_list_tasks,
     handle_yade_task,
 )
-from .utilities import handle_ping
 
 __all__ = [
     "ServerContext",
@@ -19,5 +18,4 @@ __all__ = [
     "handle_interrupt_task",
     "handle_execute_code",
     "handle_console_history",
-    "handle_ping",
 ]

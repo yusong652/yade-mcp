@@ -84,19 +84,20 @@ async def _send_recv(url, message, timeout=10.0):
 
 
 # =========================================================================
-# Ping
+# Health
 # =========================================================================
 
 
-class TestPingProtocol:
-    async def test_ping_response_shape(self, bridge_server):
+class TestHealthEndpoint:
+    async def test_health_response_shape(self, bridge_server):
         url, _ = bridge_server
-        resp = await _send_recv(url, {"type": "ping", "request_id": "p1"})
-        assert resp["type"] == "result"
-        assert resp["request_id"] == "p1"
-        assert resp["status"] == "success"
-        assert resp["message"] == "pong"
-        assert resp["data"]["runtime_mode"] == "test"
+        async with httpx.AsyncClient(base_url=url) as client:
+            resp = await client.get("/health")
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["ok"] is True
+        assert body["runtime_mode"] == "test"
+        assert body["version"]
 
 
 # =========================================================================
@@ -305,7 +306,7 @@ class TestErrorHandling:
         url, _ = bridge_server
         # POST a malformed body to a valid command path -> 400 invalid_json.
         async with httpx.AsyncClient(base_url=url) as client:
-            resp = await client.post("/ping", content=b"not json{{{")
+            resp = await client.post("/list_tasks", content=b"not json{{{")
         assert resp.status_code == 400
         body = resp.json()
         assert body["type"] == "error"
@@ -330,20 +331,20 @@ class TestConnectionManagement:
         url, _ = bridge_server
         async with httpx.AsyncClient(base_url=url) as client:
             for i in range(3):
-                resp = await client.post("/ping", json={"type": "ping", "request_id": "m{}".format(i)})
+                resp = await client.post("/list_tasks", json={"type": "list_tasks", "request_id": "m{}".format(i)})
                 body = resp.json()
                 assert body["request_id"] == "m{}".format(i)
-                assert body["status"] == "success"
+                assert body["type"] == "result"
 
     async def test_concurrent_connections(self, bridge_server):
         url, _ = bridge_server
 
-        async def ping(client_id):
+        async def list_tasks(client_id):
             async with httpx.AsyncClient(base_url=url) as client:
-                resp = await client.post("/ping", json={"type": "ping", "request_id": client_id})
+                resp = await client.post("/list_tasks", json={"type": "list_tasks", "request_id": client_id})
                 return resp.json()
 
-        results = await asyncio.gather(ping("c1"), ping("c2"), ping("c3"))
+        results = await asyncio.gather(list_tasks("c1"), list_tasks("c2"), list_tasks("c3"))
         ids = {r["request_id"] for r in results}
         assert ids == {"c1", "c2", "c3"}
 

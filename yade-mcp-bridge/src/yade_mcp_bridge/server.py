@@ -25,7 +25,6 @@ from .handlers import (
     handle_execute_code,
     handle_interrupt_task,
     handle_list_tasks,
-    handle_ping,
     handle_yade_task,
 )
 from .tasks import TaskManager
@@ -171,10 +170,24 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
         self._write_json(200, self._bridge.serialize_response(response, request_id))
 
     def do_GET(self):
-        if self.path.split("?", 1)[0] != "/events":
+        path = self.path.split("?", 1)[0]
+        if path == "/events":
+            self._serve_sse()
+        elif path == "/health":
+            self._serve_health()
+        else:
             self._write_json(404, _json_bytes({"ok": False, "error": {"code": "not_found", "message": "Not found"}}))
-            return
-        self._serve_sse()
+
+    def _serve_health(self):
+        """Liveness probe for curl / Docker HEALTHCHECK / pre-flight checks."""
+        from . import __version__  # lazy: the package __init__ imports this module
+
+        payload = {
+            "ok": True,
+            "version": __version__,
+            "runtime_mode": self._bridge.context.runtime_mode,
+        }
+        self._write_json(200, _json_bytes(payload))
 
     def _serve_sse(self):
         q = self._bridge.register_sse_client()
@@ -250,7 +263,6 @@ class YADEBridgeServer:
             "interrupt_task": handle_interrupt_task,
             "execute_code": handle_execute_code,
             "console_history": handle_console_history,
-            "ping": handle_ping,
         }
 
         # Bind eagerly so a port conflict surfaces on the calling (main)
