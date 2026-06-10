@@ -23,9 +23,9 @@ from .handlers import (
     handle_check_task_status,
     handle_console_history,
     handle_execute_code,
+    handle_execute_task,
     handle_interrupt_task,
     handle_list_tasks,
-    handle_yade_task,
 )
 from .tasks import TaskManager
 
@@ -262,7 +262,8 @@ class YADEBridgeServer:
         )
 
         self.handlers = {
-            "yade_task": handle_yade_task,
+            "execute_task": handle_execute_task,
+            "yade_task": handle_execute_task,  # legacy wire name (pre-0.6 clients)
             "check_task_status": handle_check_task_status,
             "list_tasks": handle_list_tasks,
             "interrupt_task": handle_interrupt_task,
@@ -364,7 +365,7 @@ class YADEBridgeServer:
             if len(code) > 80:
                 preview += "..."
             return f'code="{preview}"'
-        if command == "yade_task":
+        if command in ("execute_task", "yade_task"):
             return f'script="{data.get("script_path", "?")}" desc="{data.get("description", "")[:60]}"'
         if command in ("check_task_status", "interrupt_task"):
             return f"task_id={data.get('task_id', '?')}"
