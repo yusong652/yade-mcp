@@ -1,6 +1,6 @@
 """Entry point for running yade-mcp-bridge as a module."""
 
-from yade_mcp_bridge import start
+from . import start
 
 
 def main():

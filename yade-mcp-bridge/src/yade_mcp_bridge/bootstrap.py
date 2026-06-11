@@ -94,7 +94,7 @@ def start(
     try:
         sock.bind((host, port))
     except OSError as exc:
-        raise RuntimeError(f"Port {port} is already in use. Try: yade_mcp_bridge.start(port={port + 1})") from exc
+        raise RuntimeError(f"Port {port} is already in use. Try: {__package__}.start(port={port + 1})") from exc
     finally:
         sock.close()
 
