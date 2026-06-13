@@ -1,7 +1,7 @@
 """Integration tests for MCP tools with live bridge.
 
 Prerequisites:
-    - YADE bridge running (yade_mcp_bridge.start() in YADE console)
+    - MCP bridge running (yade_mcp_bridge.start() in YADE console)
     - Run with: uv run pytest tests/test_tools_integration.py -v
 """
 

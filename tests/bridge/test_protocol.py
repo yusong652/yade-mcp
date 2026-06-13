@@ -31,7 +31,7 @@ def _start_bridge():
 
     def pump_loop():
         while not stop_pump.is_set():
-            executor.process_tasks(max_tasks=1)
+            executor.process_task()
             time.sleep(0.005)
 
     pump_thread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)

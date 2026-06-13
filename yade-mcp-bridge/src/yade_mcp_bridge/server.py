@@ -1,4 +1,6 @@
-"""YADE bridge HTTP + SSE server - runs inside the YADE Python environment.
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""MCP bridge HTTP + SSE server - runs inside the YADE Python environment.
 
 The transport is stdlib only (``http.server`` + Server-Sent Events): no
 third-party dependency and no asyncio. Each request is served on its own

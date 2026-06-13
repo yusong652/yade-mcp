@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared error formatting for user-code execution paths.
 
 Both ``execute_code`` (synchronous REPL) and ``execute_task`` (async
@@ -38,7 +40,7 @@ class BridgeTimeout(BaseException):
     of the form ``except Exception:`` cannot swallow it. The handler's
     ``_execute_code`` closure catches it explicitly and returns a
     ``status="terminated"`` marker — this exception must never escape
-    ``_execute_code``, or ``MainThreadExecutor.process_tasks``'s
+    ``_execute_code``, or ``MainThreadExecutor.process_task``'s
     ``except Exception`` (which does NOT catch BaseException) will let
     it kill the pump thread permanently.
     """

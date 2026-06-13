@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Async exception injection for terminating stuck code execution.
 
 Used by ``handlers/execute_code.py`` when a timeout fires: we inject a
@@ -16,7 +18,7 @@ YADE's C++ FATAL handler.
 MainThread is intentionally ALLOWED. In Qt mode the bridge pump runs
 on MainThread via a ``QTimer`` tick, so a stuck ``execute_code`` body
 is always sitting on MainThread's Python stack (``QTimer →
-_process_tick → process_tasks → _execute_code → exec(user_code)``).
+_process_tick → process_task → _execute_code → exec(user_code)``).
 Refusing to inject there would strand the pump forever with no way to
 recover short of restarting the bridge. The injection is safe because:
 

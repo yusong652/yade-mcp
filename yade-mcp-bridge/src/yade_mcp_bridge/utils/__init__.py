@@ -1,4 +1,6 @@
-"""Utility modules for YADE bridge server."""
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""Utility modules for MCP bridge server."""
 
 from .file_buffer import FileBuffer, TeeBuffer
 from .path_utils import path_to_llm_format

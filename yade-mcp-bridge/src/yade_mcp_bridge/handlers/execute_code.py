@@ -1,4 +1,6 @@
-"""Execute code message handler for YADE bridge.
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""Execute code message handler for MCP bridge.
 
 Handles synchronous code snippet execution via main thread queue.
 """
@@ -270,7 +272,7 @@ def handle_execute_code(ctx, data):
             ``except BridgeTimeout`` branch here is LOAD-BEARING:
             ``BridgeTimeout`` inherits ``BaseException`` and must not
             escape ``_execute_code``. If it did, it would slip past
-            ``MainThreadExecutor.process_tasks``'s ``except Exception``
+            ``MainThreadExecutor.process_task``'s ``except Exception``
             (which doesn't catch BaseException) and kill the pump
             thread permanently.
 

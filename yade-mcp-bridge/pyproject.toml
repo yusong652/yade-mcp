@@ -32,6 +32,7 @@ ignore = [
     "B008",
     "B905",
     "SIM115", # FileBuffer manages its own file handle lifecycle
+    "UP009",  # keep the `# encoding: utf-8` header to match yade trunk's file convention
 ]
 
 [tool.hatch.version]

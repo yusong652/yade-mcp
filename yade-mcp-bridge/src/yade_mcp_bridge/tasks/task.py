@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Script Task - Lifecycle management for long-running YADE script execution."""
 
 import logging

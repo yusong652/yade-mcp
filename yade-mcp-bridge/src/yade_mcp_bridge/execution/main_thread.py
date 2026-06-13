@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE Main Thread Executor - Thread-safe task queue for main thread execution.
 
 Provides task queue mechanism to execute YADE operations in the main thread
@@ -16,7 +18,7 @@ class MainThreadExecutor:
     """Execute tasks in YADE main thread via queue.
 
     HTTP request threads submit tasks via submit(), and the main thread
-    processes them via process_tasks().
+    processes them one at a time via process_task().
     """
 
     def __init__(self):
@@ -28,77 +30,51 @@ class MainThreadExecutor:
         )
 
     def submit(self, func, *args, **kwargs):
-        """Submit task to main thread queue (called from background thread).
-
-        Returns:
-            Future: Future object to await result
+        """Submit a task to the main-thread queue, called from a background
+        thread. Returns a ``Future`` to await the result.
         """
         future = Future()
         self.task_queue.put((func, args, kwargs, future))
         logger.debug("Task submitted: %s (queue_size=%d)", func.__name__, self.task_queue.qsize())
         return future
 
-    def process_tasks(self, max_tasks=None):
-        """Process pending tasks in queue (called from main thread).
+    def process_task(self):
+        """Run the next queued task on the main thread, if any.
 
-        Args:
-            max_tasks: Optional maximum number of tasks to process.
-                None = process all pending tasks.
-
-        Returns:
-            int: Number of tasks processed
+        Returns True if a task was dequeued (ran, failed, or was already
+        cancelled), False if the queue was empty. The pump calls this once
+        per tick (see pump.py): handling a single task per tick hands
+        control back to the Qt event loop between tasks, keeping the GUI
+        responsive.
         """
-        task_limit = None
-        if max_tasks is not None:
-            try:
-                parsed = int(max_tasks)
-            except (TypeError, ValueError):
-                parsed = 1
-            if parsed > 0:
-                task_limit = parsed
-
         current_thread_id = threading.current_thread().ident
-        is_main_thread = current_thread_id == self.main_thread_id
-
-        if not is_main_thread:
-            # Expected when called from YADE's PyRunner during O.run() —
-            # C++ simulation thread invokes Python callback on a Dummy thread.
-            # Still safe due to Python GIL and thread-safe queue.
+        if current_thread_id != self.main_thread_id:
+            # In console mode the pump runs on a background daemon thread, so
+            # the task does not actually execute on the main thread. Safe due
+            # to the GIL and the thread-safe queue; logged for diagnostics.
             logger.debug(
-                "process_tasks() called from non-main thread: current=%s, expected=%s",
+                "process_task() called from non-main thread: current=%s, expected=%s",
                 threading.current_thread().name,
                 self.main_thread_name,
             )
 
-        processed_count = 0
+        try:
+            func, args, kwargs, future = self.task_queue.get_nowait()
+        except queue.Empty:
+            return False
 
-        while True:
-            if task_limit is not None and processed_count >= task_limit:
-                break
-            try:
-                func, args, kwargs, future = self.task_queue.get_nowait()
-                processed_count += 1
+        if not future.set_running_or_notify_cancel():
+            logger.debug("Task skipped (cancelled): %s", func.__name__)
+            return True
 
-                try:
-                    if not future.set_running_or_notify_cancel():
-                        logger.debug("Task skipped (cancelled): %s", func.__name__)
-                        continue
-
-                    result = func(*args, **kwargs)
-                    future.set_result(result)
-                    logger.debug("Task completed: %s", func.__name__)
-
-                except Exception as e:
-                    future.set_exception(e)
-                    logger.error("Task failed: %s - %s", func.__name__, e)
-
-            except queue.Empty:
-                break
-
-        if processed_count > 0:
-            logger.debug("Processed %d task(s)", processed_count)
-
-        return processed_count
+        try:
+            result = func(*args, **kwargs)
+            future.set_result(result)
+            logger.debug("Task completed: %s", func.__name__)
+        except Exception as e:
+            future.set_exception(e)
+            logger.error("Task failed: %s - %s", func.__name__, e)
+        return True
 
     def queue_size(self):
         return self.task_queue.qsize()

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE MCP Bridge - HTTP + SSE bridge for YADE DEM simulation.
 
 Runs inside YADE's Python environment and exposes simulation control

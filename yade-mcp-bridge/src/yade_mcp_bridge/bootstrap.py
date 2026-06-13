@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Bridge startup: logging, preflight checks, wiring and process lifecycle.
 
 ``start()`` is the package's single entry point. It configures logging,
@@ -22,9 +24,6 @@ from .pump import run_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 from .server import create_server
 
-DEFAULT_TIMER_INTERVAL_MS = 20
-DEFAULT_MAX_TASKS_PER_TICK = 1
-DEFAULT_INTERRUPT_CHECK_PERIOD = 1
 DEFAULT_MAX_TASKS = 1024
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
@@ -32,33 +31,22 @@ VALID_RUNTIME_MODES = ("auto", "gui", "console")
 def start(
     host="localhost",
     port=9002,
-    timer_interval_ms=DEFAULT_TIMER_INTERVAL_MS,
-    max_tasks_per_tick=DEFAULT_MAX_TASKS_PER_TICK,
-    interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
     max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
 ):
-    """Start the YADE Bridge server.
+    """Start the MCP bridge server.
 
-    Starts an HTTP + SSE server in a background thread, then starts the
-    main-thread task pump.
+    Brings up an HTTP + SSE server on a background thread (``host``:``port``,
+    default localhost:9002), then drives queued main-thread work via a task
+    pump. ``mode`` selects the pump: "auto" tries a Qt timer and falls back
+    to a blocking background thread, "gui" forces Qt, "console" forces
+    blocking.
 
-    Args:
-        host: Server host address.
-        port: Server port number.
-        timer_interval_ms: Timer/poll interval in milliseconds.
-        max_tasks_per_tick: Max queued tasks handled per tick.
-        interrupt_check_period: PyRunner checks interrupt every N iterations.
-            Set to 1 for every step (default).
-        max_tasks: Maximum number of tasks to retain. Oldest tasks (and
-            their log files) are pruned when this limit is exceeded.
-        mode: Task pump mode - "auto" (try Qt, fall back to blocking),
-            "gui" (Qt only), or "console" (blocking only).
+    ``max_tasks`` bounds task retention; the oldest tasks and their log
+    files are pruned past the limit.
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
-
-    interval_ms = max(1, int(timer_interval_ms))
 
     # Logging setup
     bridge_dir = os.path.join(os.getcwd(), ".yade-mcp")
@@ -86,7 +74,7 @@ def start(
 
     # Install PyRunner for interrupt checking during simulation.
     # install_pyrunner logs its own failure warning; ignore return value here.
-    install_pyrunner(main_executor, interrupt_check_period, logger)
+    install_pyrunner(main_executor, logger)
 
     # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -159,11 +147,9 @@ def start(
     use_qt = mode in ("auto", "gui")
     use_blocking = mode in ("auto", "console")
 
-    if use_qt and start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
+    if use_qt and start_qt_pump(main_executor, logger):
         yade_server.set_runtime_mode("gui")
-        logger.info(
-            "Task pump running via Qt timer (interval=%dms, max_tasks_per_tick=%d)", interval_ms, max_tasks_per_tick
-        )
+        logger.info("Task pump running via Qt timer")
         return
 
     if mode == "gui":
@@ -173,9 +159,9 @@ def start(
         yade_server.set_runtime_mode("console")
         pump_thread = threading.Thread(
             target=run_background_pump,
-            args=(main_executor, interval_ms, max_tasks_per_tick, logger),
+            args=(main_executor, logger),
             daemon=True,
             name="mcp-task-pump",
         )
         pump_thread.start()
-        logger.info("Task pump running via background thread (interval=%dms)", interval_ms)
+        logger.info("Task pump running via background thread")

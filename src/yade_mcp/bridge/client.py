@@ -1,4 +1,4 @@
-"""HTTP + SSE client for communicating with the YADE bridge.
+"""HTTP + SSE client for communicating with the bridge.
 
 Commands are plain ``POST /<command>`` request/response. Server->client
 doorbells arrive on a single long-lived ``GET /events`` Server-Sent Events

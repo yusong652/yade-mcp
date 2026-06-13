@@ -1,4 +1,6 @@
-"""YADE bridge message handlers."""
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""MCP bridge message handlers."""
 
 from .console import handle_console_history
 from .context import ServerContext
