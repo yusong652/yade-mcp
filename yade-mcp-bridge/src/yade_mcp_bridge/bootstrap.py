@@ -24,7 +24,6 @@ from .pump import run_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 from .server import create_server
 
-DEFAULT_TIMER_INTERVAL_MS = 20
 DEFAULT_INTERRUPT_CHECK_PERIOD = 1
 DEFAULT_MAX_TASKS = 1024
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
@@ -33,7 +32,6 @@ VALID_RUNTIME_MODES = ("auto", "gui", "console")
 def start(
     host="localhost",
     port=9002,
-    timer_interval_ms=DEFAULT_TIMER_INTERVAL_MS,
     interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
     max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
@@ -46,7 +44,6 @@ def start(
     to a blocking background thread, "gui" forces Qt, "console" forces
     blocking.
 
-    ``timer_interval_ms`` is the pump tick/poll interval.
     ``interrupt_check_period`` is how often, in simulation iterations, the
     PyRunner observes the interrupt flag during ``O.run()`` — 1 means every
     step. ``max_tasks`` bounds task retention; the oldest tasks and their
@@ -54,8 +51,6 @@ def start(
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
-
-    interval_ms = max(1, int(timer_interval_ms))
 
     # Logging setup
     bridge_dir = os.path.join(os.getcwd(), ".yade-mcp")
@@ -156,9 +151,9 @@ def start(
     use_qt = mode in ("auto", "gui")
     use_blocking = mode in ("auto", "console")
 
-    if use_qt and start_qt_pump(main_executor, interval_ms, logger):
+    if use_qt and start_qt_pump(main_executor, logger):
         yade_server.set_runtime_mode("gui")
-        logger.info("Task pump running via Qt timer (interval=%dms)", interval_ms)
+        logger.info("Task pump running via Qt timer")
         return
 
     if mode == "gui":
@@ -168,9 +163,9 @@ def start(
         yade_server.set_runtime_mode("console")
         pump_thread = threading.Thread(
             target=run_background_pump,
-            args=(main_executor, interval_ms, logger),
+            args=(main_executor, logger),
             daemon=True,
             name="mcp-task-pump",
         )
         pump_thread.start()
-        logger.info("Task pump running via background thread (interval=%dms)", interval_ms)
+        logger.info("Task pump running via background thread")

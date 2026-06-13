@@ -16,8 +16,13 @@ import time
 # Keep a global reference to avoid Qt timer garbage collection.
 _qt_task_timer = None
 
+# Pump tick cadence in milliseconds: how often process_task() is invoked.
+# 20ms balances execute_code responsiveness against polling overhead and is
+# the floor on REPL latency. A pump implementation detail, not a tunable.
+_TICK_INTERVAL_MS = 20
 
-def start_qt_pump(main_executor, interval_ms, logger):
+
+def start_qt_pump(main_executor, logger):
     """Try to attach task processing to Qt event loop. Returns True on success."""
     global _qt_task_timer
 
@@ -44,7 +49,7 @@ def start_qt_pump(main_executor, interval_ms, logger):
             logger.error(f"Task pump tick failed: {e}")
 
     timer = QtCore.QTimer()
-    timer.setInterval(interval_ms)
+    timer.setInterval(_TICK_INTERVAL_MS)
     timer.timeout.connect(_process_tick)
     timer.start()
 
@@ -52,9 +57,9 @@ def start_qt_pump(main_executor, interval_ms, logger):
     return True
 
 
-def run_background_pump(main_executor, interval_ms, logger):
+def run_background_pump(main_executor, logger):
     """Poll task queue in a loop. Runs in a background daemon thread."""
-    sleep_s = interval_ms / 1000.0
+    sleep_s = _TICK_INTERVAL_MS / 1000.0
     while True:
         try:
             main_executor.process_task()
