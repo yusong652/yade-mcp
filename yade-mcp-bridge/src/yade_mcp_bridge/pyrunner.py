@@ -35,14 +35,10 @@ def install_pyrunner(main_executor, interrupt_check_period, logger):
     which ``is_safe_to_async_raise`` accepts — keeps async abort
     viable at the cost of ~20ms (``pump_interval``) extra REPL latency.
 
-    Args:
-        main_executor: MainThreadExecutor instance. Not used for
-            queue pumping here (see note above); kept in signature for
-            API stability.
-        interrupt_check_period: Check every N iterations. Set to 1 for every step.
-
-    Returns:
-        True if PyRunner was installed successfully.
+    ``main_executor`` is accepted for API stability but is not pumped here
+    (see above). ``interrupt_check_period`` sets the check cadence in
+    iterations — 1 for every step. Returns True if the PyRunner was
+    installed successfully.
     """
     try:
         from yade import O

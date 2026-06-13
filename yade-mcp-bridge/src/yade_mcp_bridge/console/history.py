@@ -53,16 +53,11 @@ class ConsoleHistory:
         )
 
     def add(self, input_text, output="", result=None, success=True):
-        """Record a console entry.
+        """Record a console entry and return it.
 
-        Args:
-            input_text: The code the user typed.
-            output: Captured stdout during execution.
-            result: Expression result (if any).
-            success: Whether execution succeeded.
-
-        Returns:
-            The entry dict.
+        ``input_text`` is the code the user typed, ``output`` the captured
+        stdout, ``result`` the expression result (if any), and ``success``
+        whether execution succeeded.
         """
         entry = {
             "id": self._next_id,
@@ -88,14 +83,9 @@ class ConsoleHistory:
     def consume(self, limit=20):
         """Return undelivered entries and advance the cursor.
 
-        The MCP client is stateless — it just calls this and gets
-        whatever is new since the last call.
-
-        Args:
-            limit: Maximum number of entries to return.
-
-        Returns:
-            dict with entries list and metadata.
+        The MCP client is stateless — it just calls this and gets whatever
+        is new since the last call. At most ``limit`` entries are returned;
+        the result dict carries the entries list and cursor metadata.
         """
         entries = [e for e in self._entries if e["id"] > self._last_delivered_id]
 
@@ -113,14 +103,11 @@ class ConsoleHistory:
         }
 
     def query(self, since_id=0, limit=20):
-        """Return entries with id > since_id (read-only, does not advance cursor).
+        """Return entries with id > ``since_id``, read-only (does not advance
+        the cursor).
 
-        Args:
-            since_id: Return entries after this ID (0 = all).
-            limit: Maximum number of entries to return.
-
-        Returns:
-            dict with entries list and latest_id.
+        ``since_id`` of 0 returns all; at most ``limit`` entries come back.
+        The result dict carries the entries list and the latest id.
         """
         filtered = [e for e in self._entries if e["id"] > since_id]
         if len(filtered) > limit:

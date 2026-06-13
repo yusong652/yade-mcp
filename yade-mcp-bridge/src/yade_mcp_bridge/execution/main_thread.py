@@ -30,10 +30,8 @@ class MainThreadExecutor:
         )
 
     def submit(self, func, *args, **kwargs):
-        """Submit task to main thread queue (called from background thread).
-
-        Returns:
-            Future: Future object to await result
+        """Submit a task to the main-thread queue, called from a background
+        thread. Returns a ``Future`` to await the result.
         """
         future = Future()
         self.task_queue.put((func, args, kwargs, future))
@@ -41,14 +39,10 @@ class MainThreadExecutor:
         return future
 
     def process_tasks(self, max_tasks=None):
-        """Process pending tasks in queue (called from main thread).
+        """Process pending tasks in the queue, called from the main thread.
 
-        Args:
-            max_tasks: Optional maximum number of tasks to process.
-                None = process all pending tasks.
-
-        Returns:
-            int: Number of tasks processed
+        ``max_tasks`` caps how many are handled this call; None drains the
+        whole queue. Returns the number of tasks processed.
         """
         task_limit = None
         if max_tasks is not None:

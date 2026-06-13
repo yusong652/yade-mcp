@@ -42,20 +42,18 @@ def start(
 ):
     """Start the MCP bridge server.
 
-    Starts an HTTP + SSE server in a background thread, then starts the
-    main-thread task pump.
+    Brings up an HTTP + SSE server on a background thread (``host``:``port``,
+    default localhost:9002), then drives queued main-thread work via a task
+    pump. ``mode`` selects the pump: "auto" tries a Qt timer and falls back
+    to a blocking background thread, "gui" forces Qt, "console" forces
+    blocking.
 
-    Args:
-        host: Server host address.
-        port: Server port number.
-        timer_interval_ms: Timer/poll interval in milliseconds.
-        max_tasks_per_tick: Max queued tasks handled per tick.
-        interrupt_check_period: PyRunner checks interrupt every N iterations.
-            Set to 1 for every step (default).
-        max_tasks: Maximum number of tasks to retain. Oldest tasks (and
-            their log files) are pruned when this limit is exceeded.
-        mode: Task pump mode - "auto" (try Qt, fall back to blocking),
-            "gui" (Qt only), or "console" (blocking only).
+    ``timer_interval_ms`` is the pump tick/poll interval and
+    ``max_tasks_per_tick`` caps how many queued tasks run per tick.
+    ``interrupt_check_period`` is how often, in simulation iterations, the
+    PyRunner observes the interrupt flag during ``O.run()`` — 1 means every
+    step. ``max_tasks`` bounds task retention; the oldest tasks and their
+    log files are pruned past the limit.
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
