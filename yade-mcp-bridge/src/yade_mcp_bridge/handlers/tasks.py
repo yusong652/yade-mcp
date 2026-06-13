@@ -1,4 +1,6 @@
-"""Task-related message handlers for YADE bridge."""
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""Task-related message handlers for MCP bridge."""
 
 import logging
 

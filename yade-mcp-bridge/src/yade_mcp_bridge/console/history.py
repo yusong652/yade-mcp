@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Console history storage with JSONL persistence.
 
 Captures user IPython input/output and persists to a JSONL file

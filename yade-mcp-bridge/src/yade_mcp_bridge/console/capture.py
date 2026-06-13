@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """IPython event hooks for capturing user console input/output."""
 
 import gc

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """File Buffer - Disk-based output capture for task execution.
 
 Provides a file-like buffer that writes directly to disk, ensuring

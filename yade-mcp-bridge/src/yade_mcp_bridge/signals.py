@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE signal handling for task interruption."""
 
 from __future__ import annotations

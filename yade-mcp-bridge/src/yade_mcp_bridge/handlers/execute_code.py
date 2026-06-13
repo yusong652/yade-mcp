@@ -1,4 +1,6 @@
-"""Execute code message handler for YADE bridge.
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""Execute code message handler for MCP bridge.
 
 Handles synchronous code snippet execution via main thread queue.
 """

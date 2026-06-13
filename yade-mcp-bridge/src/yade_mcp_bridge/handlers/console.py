@@ -1,4 +1,6 @@
-"""Console history query handler for YADE bridge."""
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
+"""Console history query handler for MCP bridge."""
 
 import logging
 

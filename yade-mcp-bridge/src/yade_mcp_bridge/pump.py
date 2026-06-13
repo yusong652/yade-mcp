@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Task pump strategies - how queued main-thread work gets executed.
 
 Two interchangeable pumps drive ``MainThreadExecutor.process_tasks``:

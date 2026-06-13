@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared helper functions for message handlers."""
 
 from ..utils import error_response

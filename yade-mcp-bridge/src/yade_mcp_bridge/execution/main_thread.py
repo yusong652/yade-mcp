@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE Main Thread Executor - Thread-safe task queue for main thread execution.
 
 Provides task queue mechanism to execute YADE operations in the main thread

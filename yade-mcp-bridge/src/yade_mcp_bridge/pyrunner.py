@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE simulation-side integration: PyRunner injection and the O.run() hook.
 
 This is the bridge's only foothold inside the running simulation. A

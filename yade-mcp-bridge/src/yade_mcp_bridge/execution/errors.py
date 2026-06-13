@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared error formatting for user-code execution paths.
 
 Both ``execute_code`` (synchronous REPL) and ``execute_task`` (async

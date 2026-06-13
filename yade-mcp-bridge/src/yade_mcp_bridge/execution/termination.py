@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Async exception injection for terminating stuck code execution.
 
 Used by ``handlers/execute_code.py`` when a timeout fires: we inject a

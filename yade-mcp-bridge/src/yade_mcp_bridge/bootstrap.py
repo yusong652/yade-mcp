@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Bridge startup: logging, preflight checks, wiring and process lifecycle.
 
 ``start()`` is the package's single entry point. It configures logging,
@@ -38,7 +40,7 @@ def start(
     max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
 ):
-    """Start the YADE Bridge server.
+    """Start the MCP bridge server.
 
     Starts an HTTP + SSE server in a background thread, then starts the
     main-thread task pump.
