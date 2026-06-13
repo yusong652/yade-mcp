@@ -12,15 +12,22 @@ before every run, surviving ``O.reset()`` and user scripts that reassign
 ``O.engines``.
 """
 
+# PyRunner check cadence (iterPeriod): how many simulation iterations pass
+# between interrupt-flag checks. Fixed at 1 (every step), not a tunable — the
+# execute_code cycle-interrupt grace (_CYCLE_INTERRUPT_GRACE_S) assumes
+# O.pause() lands within ~one step, so a larger period would silently break
+# it. Per-step cost is one trivial flag check, negligible against a DEM step.
+_INTERRUPT_CHECK_PERIOD = 1
 
-def install_pyrunner(main_executor, interrupt_check_period, logger):
+
+def install_pyrunner(main_executor, logger):
     """Install a YADE PyRunner engine for interrupt checking during
     simulation.
 
     While ``O.run()`` is live, YADE's C++ sim loop calls this tick on a
-    ``Dummy-N`` (boost::python) thread every ``interrupt_check_period``
-    iterations. The tick's only job is to observe the interrupt flag
-    and call ``O.pause()`` — the Python side then raises
+    ``Dummy-N`` (boost::python) thread every simulation step
+    (``_INTERRUPT_CHECK_PERIOD``). The tick's only job is to observe the
+    interrupt flag and call ``O.pause()`` — the Python side then raises
     ``InterruptedError`` after ``O.run()`` returns.
 
     The tick deliberately does NOT pump ``main_executor`` tasks. Older
@@ -36,9 +43,7 @@ def install_pyrunner(main_executor, interrupt_check_period, logger):
     viable at the cost of ~20ms (``pump_interval``) extra REPL latency.
 
     ``main_executor`` is accepted for API stability but is not pumped here
-    (see above). ``interrupt_check_period`` sets the check cadence in
-    iterations — 1 for every step. Returns True if the PyRunner was
-    installed successfully.
+    (see above). Returns True if the PyRunner was installed successfully.
     """
     try:
         from yade import O
@@ -90,7 +95,7 @@ def install_pyrunner(main_executor, interrupt_check_period, logger):
 
     # Store config for re-injection
     _pyrunner_config = {
-        "period": int(interrupt_check_period),
+        "period": _INTERRUPT_CHECK_PERIOD,
         "PyRunner": PyRunner,
         "O": O,
     }
@@ -210,9 +215,7 @@ def install_pyrunner(main_executor, interrupt_check_period, logger):
 
     try:
         O.engines = [_make_pyrunner()] + list(O.engines)
-        logger.info(
-            f"PyRunner installed at O.engines[0] (iterPeriod={interrupt_check_period}) — interrupt check + task queue processing"
-        )
+        logger.info(f"PyRunner installed at O.engines[0] (iterPeriod={_INTERRUPT_CHECK_PERIOD}) — interrupt check")
         return True
     except Exception as e:
         logger.warning(f"Failed to install PyRunner: {e}")

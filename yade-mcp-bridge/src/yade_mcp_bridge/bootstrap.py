@@ -24,7 +24,6 @@ from .pump import run_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 from .server import create_server
 
-DEFAULT_INTERRUPT_CHECK_PERIOD = 1
 DEFAULT_MAX_TASKS = 1024
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
@@ -32,7 +31,6 @@ VALID_RUNTIME_MODES = ("auto", "gui", "console")
 def start(
     host="localhost",
     port=9002,
-    interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
     max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
 ):
@@ -44,10 +42,8 @@ def start(
     to a blocking background thread, "gui" forces Qt, "console" forces
     blocking.
 
-    ``interrupt_check_period`` is how often, in simulation iterations, the
-    PyRunner observes the interrupt flag during ``O.run()`` — 1 means every
-    step. ``max_tasks`` bounds task retention; the oldest tasks and their
-    log files are pruned past the limit.
+    ``max_tasks`` bounds task retention; the oldest tasks and their log
+    files are pruned past the limit.
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
@@ -78,7 +74,7 @@ def start(
 
     # Install PyRunner for interrupt checking during simulation.
     # install_pyrunner logs its own failure warning; ignore return value here.
-    install_pyrunner(main_executor, interrupt_check_period, logger)
+    install_pyrunner(main_executor, logger)
 
     # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
