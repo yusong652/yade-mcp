@@ -101,7 +101,7 @@ def build_bridge_error(exc: Exception, *, task_id: str | None = None) -> dict[st
         reason = _summarize_bridge_error(exc)
         action = "start yade-mcp-bridge in YADE process, then retry"
         code = "bridge_unavailable"
-        message = "YADE bridge unavailable"
+        message = "Bridge unavailable"
     details: dict[str, Any] = {
         "bridge_url": cfg.url,
         "reason": reason,
