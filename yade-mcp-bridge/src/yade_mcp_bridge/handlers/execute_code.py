@@ -272,7 +272,7 @@ def handle_execute_code(ctx, data):
             ``except BridgeTimeout`` branch here is LOAD-BEARING:
             ``BridgeTimeout`` inherits ``BaseException`` and must not
             escape ``_execute_code``. If it did, it would slip past
-            ``MainThreadExecutor.process_tasks``'s ``except Exception``
+            ``MainThreadExecutor.process_task``'s ``except Exception``
             (which doesn't catch BaseException) and kill the pump
             thread permanently.
 

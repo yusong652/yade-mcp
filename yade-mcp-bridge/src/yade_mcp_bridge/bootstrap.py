@@ -25,7 +25,6 @@ from .pyrunner import install_pyrunner
 from .server import create_server
 
 DEFAULT_TIMER_INTERVAL_MS = 20
-DEFAULT_MAX_TASKS_PER_TICK = 1
 DEFAULT_INTERRUPT_CHECK_PERIOD = 1
 DEFAULT_MAX_TASKS = 1024
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
@@ -35,7 +34,6 @@ def start(
     host="localhost",
     port=9002,
     timer_interval_ms=DEFAULT_TIMER_INTERVAL_MS,
-    max_tasks_per_tick=DEFAULT_MAX_TASKS_PER_TICK,
     interrupt_check_period=DEFAULT_INTERRUPT_CHECK_PERIOD,
     max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
@@ -48,8 +46,7 @@ def start(
     to a blocking background thread, "gui" forces Qt, "console" forces
     blocking.
 
-    ``timer_interval_ms`` is the pump tick/poll interval and
-    ``max_tasks_per_tick`` caps how many queued tasks run per tick.
+    ``timer_interval_ms`` is the pump tick/poll interval.
     ``interrupt_check_period`` is how often, in simulation iterations, the
     PyRunner observes the interrupt flag during ``O.run()`` — 1 means every
     step. ``max_tasks`` bounds task retention; the oldest tasks and their
@@ -159,11 +156,9 @@ def start(
     use_qt = mode in ("auto", "gui")
     use_blocking = mode in ("auto", "console")
 
-    if use_qt and start_qt_pump(main_executor, interval_ms, max_tasks_per_tick, logger):
+    if use_qt and start_qt_pump(main_executor, interval_ms, logger):
         yade_server.set_runtime_mode("gui")
-        logger.info(
-            "Task pump running via Qt timer (interval=%dms, max_tasks_per_tick=%d)", interval_ms, max_tasks_per_tick
-        )
+        logger.info("Task pump running via Qt timer (interval=%dms)", interval_ms)
         return
 
     if mode == "gui":
@@ -173,7 +168,7 @@ def start(
         yade_server.set_runtime_mode("console")
         pump_thread = threading.Thread(
             target=run_background_pump,
-            args=(main_executor, interval_ms, max_tasks_per_tick, logger),
+            args=(main_executor, interval_ms, logger),
             daemon=True,
             name="mcp-task-pump",
         )
