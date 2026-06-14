@@ -238,7 +238,6 @@ class YADEBridgeServer:
         host="localhost",
         port=9002,
         runtime_mode="unknown",
-        max_tasks=None,
     ):
         self.host = host
         self.port = port
@@ -249,10 +248,7 @@ class YADEBridgeServer:
         self.active_connections = set()
         self._conn_lock = threading.Lock()
 
-        tm_kwargs = {"on_task_terminal": self._broadcast_task_status}
-        if max_tasks is not None:
-            tm_kwargs["max_tasks"] = max_tasks
-        task_manager = TaskManager(**tm_kwargs)
+        task_manager = TaskManager(on_task_terminal=self._broadcast_task_status)
 
         console_history = ConsoleHistory()
         console_history.on_new_entry = self._broadcast_console_entry
@@ -416,12 +412,10 @@ def create_server(
     host="localhost",
     port=9002,
     runtime_mode="unknown",
-    max_tasks=None,
 ):
     return YADEBridgeServer(
         main_executor,
         host,
         port,
         runtime_mode=runtime_mode,
-        max_tasks=max_tasks,
     )

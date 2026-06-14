@@ -24,14 +24,12 @@ from .pump import run_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 from .server import create_server
 
-DEFAULT_MAX_TASKS = 1024
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
 
 def start(
     host="localhost",
     port=9002,
-    max_tasks=DEFAULT_MAX_TASKS,
     mode="auto",
 ):
     """Start the MCP bridge server.
@@ -41,9 +39,6 @@ def start(
     pump. ``mode`` selects the pump: "auto" tries a Qt timer and falls back
     to a blocking background thread, "gui" forces Qt, "console" forces
     blocking.
-
-    ``max_tasks`` bounds task retention; the oldest tasks and their log
-    files are pruned past the limit.
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
@@ -93,7 +88,6 @@ def start(
         host=host,
         port=port,
         runtime_mode=mode,
-        max_tasks=max_tasks,
     )
 
     # Install IPython hooks for console history capture
