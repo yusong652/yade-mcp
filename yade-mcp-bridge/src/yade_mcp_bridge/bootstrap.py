@@ -69,7 +69,7 @@ def start(
 
     # Install PyRunner for interrupt checking during simulation.
     # install_pyrunner logs its own failure warning; ignore return value here.
-    install_pyrunner(executor, logger)
+    install_pyrunner(logger)
 
     # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
