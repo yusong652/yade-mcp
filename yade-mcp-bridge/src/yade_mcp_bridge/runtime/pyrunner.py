@@ -20,7 +20,7 @@ before every run, surviving ``O.reset()`` and user scripts that reassign
 _INTERRUPT_CHECK_PERIOD = 1
 
 
-def install_pyrunner(executor, logger):
+def install_pyrunner(logger):
     """Install a YADE PyRunner engine for interrupt checking during
     simulation.
 
@@ -28,22 +28,12 @@ def install_pyrunner(executor, logger):
     ``Dummy-N`` (boost::python) thread every simulation step
     (``_INTERRUPT_CHECK_PERIOD``). The tick's only job is to observe the
     interrupt flag and call ``O.pause()`` — the Python side then raises
-    ``InterruptedError`` after ``O.run()`` returns.
+    ``InterruptedError`` after ``O.run()`` returns. It must do nothing
+    else: any other work would run on the ``Dummy-N`` thread, which
+    ``is_safe_to_async_raise`` cannot abort (boost::python stack → C++
+    FATAL on exception).
 
-    The tick deliberately does NOT pump the ``executor`` queue. Older
-    versions did, to minimize ``execute_code`` latency during sim. But
-    that makes user-supplied code execute on ``Dummy-N``, which
-    ``is_safe_to_async_raise`` refuses to inject into (boost::python
-    stack → C++ FATAL on exception). A misbehaving REPL ``while True``
-    on ``Dummy-N`` would then freeze the sim, block the task's
-    ``O.wait()``, and be unrecoverable because the script thread sits
-    in released-GIL C code where the queued ``TaskInterrupt`` never
-    fires. Confining ``execute_code`` execution to the pump thread —
-    which ``is_safe_to_async_raise`` accepts — keeps async abort
-    viable at the cost of ~20ms (``pump_interval``) extra REPL latency.
-
-    ``executor`` is accepted for API stability but is not pumped here
-    (see above). Returns True if the PyRunner was installed successfully.
+    Returns True if the PyRunner was installed successfully.
     """
     try:
         from yade import O
@@ -63,8 +53,8 @@ def install_pyrunner(executor, logger):
     _interrupt_triggered = {"value": False}
 
     def _mcp_pyrunner_tick():
-        # Interrupt flag check only — do NOT drain the executor queue
-        # here. See install_pyrunner docstring for why.
+        # Interrupt flag check only — do nothing else here (see
+        # install_pyrunner docstring: this runs on a Dummy-N thread).
         # Instead of raising an exception inside PyRunner (which causes
         # YADE's C++ layer to log a FATAL ERROR), we just pause the
         # simulation. The hooked O.run() will check the flag after
