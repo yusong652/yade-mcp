@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from yade_mcp_bridge.execution.script import ScriptRunner
-from yade_mcp_bridge.signals import clear_interrupt, request_interrupt
+from yade_mcp_bridge.runtime.signals import clear_interrupt, request_interrupt
 
 
 @pytest.fixture

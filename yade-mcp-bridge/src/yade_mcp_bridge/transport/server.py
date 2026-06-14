@@ -18,9 +18,9 @@ import socketserver
 import threading
 import time
 
-from .console import ConsoleHistory
-from .execution import ScriptRunner
-from .handlers import (
+from ..console import ConsoleHistory
+from ..execution import ScriptRunner
+from ..handlers import (
     ServerContext,
     handle_check_task_status,
     handle_console_history,
@@ -29,7 +29,7 @@ from .handlers import (
     handle_interrupt_task,
     handle_list_tasks,
 )
-from .tasks import TaskManager
+from ..tasks import TaskManager
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -186,7 +186,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 
     def _serve_health(self):
         """Liveness probe for curl / Docker HEALTHCHECK / pre-flight checks."""
-        from . import __version__  # lazy: the package __init__ imports this module
+        from .. import __version__  # lazy: the package __init__ imports this module
 
         payload = {
             "ok": True,

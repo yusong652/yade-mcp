@@ -13,7 +13,7 @@ import threading
 import time
 from concurrent.futures import Future
 
-from ..signals import (
+from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
     is_interrupt_requested,

@@ -1,6 +1,6 @@
 """Tests for bridge response truncation (``YADEBridgeServer._truncate_response``)."""
 
-from yade_mcp_bridge.server import YADEBridgeServer
+from yade_mcp_bridge.transport.server import YADEBridgeServer
 
 
 def _truncate(response):

@@ -8,7 +8,7 @@ from concurrent.futures import Future
 import httpx
 import pytest
 from yade_mcp_bridge.execution.serial import SerialExecutor
-from yade_mcp_bridge.server import create_server
+from yade_mcp_bridge.transport.server import create_server
 from yade_mcp_bridge.tasks.task import ScriptTask
 
 
@@ -479,7 +479,7 @@ class TestExecuteCodeTimeoutTermination:
         marked ``interrupted``. The fix: leave _current_task_id alone.
         """
         url, _ = bridge_server_with_pump
-        from yade_mcp_bridge.signals import clear_current_task, peek_current_task, set_current_task
+        from yade_mcp_bridge.runtime.signals import clear_current_task, peek_current_task, set_current_task
 
         # Simulate a running task by setting the sentinel outer task.
         clear_current_task()

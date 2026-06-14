@@ -20,9 +20,8 @@ import traceback
 
 from .console import ConsoleCapture
 from .execution import SerialExecutor
-from .pump import run_background_pump, start_qt_pump
-from .pyrunner import install_pyrunner
-from .server import create_server
+from .runtime import install_pyrunner, run_background_pump, start_qt_pump
+from .transport import create_server
 
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 

@@ -14,7 +14,7 @@ from yade_mcp_bridge.handlers.tasks import (
     handle_list_tasks,
     handle_execute_task,
 )
-from yade_mcp_bridge.signals import (
+from yade_mcp_bridge.runtime.signals import (
     _exec_thread_ids,
     _interrupt_requested,
     clear_current_task,
@@ -139,7 +139,7 @@ class TestHandleInterruptTask:
         assert "terminal state" in resp["error"]["message"].lower()
 
     def test_interrupt_running_task(self):
-        from yade_mcp_bridge.signals import clear_interrupt, is_interrupt_requested
+        from yade_mcp_bridge.runtime.signals import clear_interrupt, is_interrupt_requested
 
         task = MagicMock()
         task.status = "running"
@@ -168,7 +168,7 @@ class TestHandleInterruptTask:
         import threading
 
         from yade_mcp_bridge.execution.errors import TaskInterrupt
-        from yade_mcp_bridge.signals import (
+        from yade_mcp_bridge.runtime.signals import (
             clear_interrupt,
             get_exec_thread,
             register_exec_thread,
@@ -224,7 +224,7 @@ class TestHandleInterruptTask:
         """Re-entrancy guard: once handler unregisters the thread on
         first interrupt, a second handler call must NOT re-inject
         (which would interrupt the script's except-block cleanup)."""
-        from yade_mcp_bridge.signals import (
+        from yade_mcp_bridge.runtime.signals import (
             clear_interrupt,
             unregister_exec_thread,
         )
@@ -251,7 +251,7 @@ class TestHandleInterruptTask:
         refuse async-exc and report a reason."""
         from unittest.mock import patch
 
-        from yade_mcp_bridge.signals import clear_interrupt, register_exec_thread, unregister_exec_thread
+        from yade_mcp_bridge.runtime.signals import clear_interrupt, register_exec_thread, unregister_exec_thread
 
         task = MagicMock()
         task.status = "running"
@@ -280,7 +280,7 @@ class TestHandleInterruptTask:
             unregister_exec_thread("t4")
 
     def test_interrupt_pending_task(self):
-        from yade_mcp_bridge.signals import clear_interrupt
+        from yade_mcp_bridge.runtime.signals import clear_interrupt
 
         task = MagicMock()
         task.status = "pending"

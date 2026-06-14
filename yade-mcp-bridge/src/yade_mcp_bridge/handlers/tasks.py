@@ -94,7 +94,7 @@ def handle_interrupt_task(ctx, data):
     """
     from ..execution.errors import TaskInterrupt
     from ..execution.termination import fire_async_exception, is_safe_to_async_raise
-    from ..signals import (
+    from ..runtime.signals import (
         clear_interrupt,
         get_exec_thread,
         request_interrupt,
