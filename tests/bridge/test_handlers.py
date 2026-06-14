@@ -394,7 +394,7 @@ class TestTerminateStuckExecution:
         class _FakeSafe:
             def __init__(self):
                 self.ident = 77777
-                self.name = "mcp-task-pump"
+                self.name = "mcp-exec-pump"
 
             def is_alive(self):
                 return True
@@ -422,7 +422,7 @@ class TestTerminateStuckExecution:
 
         class _FakeSafe:
             ident = 88888
-            name = "mcp-task-pump"
+            name = "mcp-exec-pump"
 
             def is_alive(self):
                 return True

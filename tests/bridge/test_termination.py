@@ -80,7 +80,7 @@ class TestIsSafeToAsyncRaise:
             started.set()
             stop.wait()
 
-        t = threading.Thread(target=target, name="mcp-task-pump", daemon=True)
+        t = threading.Thread(target=target, name="mcp-exec-pump", daemon=True)
         t.start()
         started.wait(timeout=1.0)
         try:

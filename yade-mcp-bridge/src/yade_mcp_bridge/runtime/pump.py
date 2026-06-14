@@ -1,24 +1,24 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Task pump strategies - how queued serial-executor work gets executed.
+"""Pump strategies that drive the execute_code queue.
 
-Two interchangeable pumps drive ``SerialExecutor.run_next``:
+A pump ticks ``SerialExecutor.run_next`` to drain execute_code requests one
+at a time. Long-running tasks bypass it — they run on their own daemon
+thread (see execution/script.py) — so a task can't starve the pump.
 
-* Qt timer (gui mode): ticks on the Qt event loop, so callables run on the
-  main thread between GUI events without blocking it.
-* Background daemon thread (console mode): a plain polling loop.
+``bootstrap.start()`` picks one per runtime mode; both start non-blocking:
 
-Both expose a ``start_*`` entry point that kicks the pump off and returns
-immediately (the background pump spawns its own thread), so the caller's
-thread — the YADE console in console mode — stays free for user input.
-``bootstrap.start()`` picks one based on the runtime mode.
+* Qt timer (gui): ticks on the Qt event loop, so work runs on the main
+  thread between GUI events (mandatory for Qt thread affinity).
+* Background daemon thread (console): a polling loop that spawns its own
+  thread and returns, leaving the YADE prompt free for input.
 """
 
 import threading
 import time
 
 # Keep a global reference to avoid Qt timer garbage collection.
-_qt_task_timer = None
+_qt_pump_timer = None
 
 # Pump tick cadence in milliseconds: how often run_next() is invoked.
 # 20ms balances execute_code responsiveness against polling overhead and is
@@ -27,8 +27,8 @@ _TICK_INTERVAL_MS = 20
 
 
 def start_qt_pump(executor, logger):
-    """Try to attach task processing to Qt event loop. Returns True on success."""
-    global _qt_task_timer
+    """Drive the execute_code pump from the Qt event loop. Returns True on success."""
+    global _qt_pump_timer
 
     try:
         from PyQt5 import QtCore
@@ -40,24 +40,24 @@ def start_qt_pump(executor, logger):
         return False
 
     # Stop previous timer if start() is called multiple times.
-    if _qt_task_timer is not None:
+    if _qt_pump_timer is not None:
         try:
-            _qt_task_timer.stop()
+            _qt_pump_timer.stop()
         except RuntimeError:
             pass
 
-    def _process_tick():
+    def _pump_tick():
         try:
             executor.run_next()
-        except Exception as e:  # task pump must not crash event loop
-            logger.error(f"Task pump tick failed: {e}")
+        except Exception as e:  # pump must not crash the event loop
+            logger.error(f"execute_code pump tick failed: {e}")
 
     timer = QtCore.QTimer()
     timer.setInterval(_TICK_INTERVAL_MS)
-    timer.timeout.connect(_process_tick)
+    timer.timeout.connect(_pump_tick)
     timer.start()
 
-    _qt_task_timer = timer
+    _qt_pump_timer = timer
     return True
 
 
@@ -72,18 +72,18 @@ def start_background_pump(executor, logger):
         target=_background_pump_loop,
         args=(executor, logger),
         daemon=True,
-        name="mcp-task-pump",
+        name="mcp-exec-pump",
     )
     pump_thread.start()
     return True
 
 
 def _background_pump_loop(executor, logger):
-    """Poll the executor queue in a loop. Runs in a background daemon thread."""
+    """Poll the execute_code queue in a loop. Runs in a background daemon thread."""
     sleep_s = _TICK_INTERVAL_MS / 1000.0
     while True:
         try:
             executor.run_next()
-        except Exception as e:  # task pump must not crash
-            logger.error(f"Task pump tick failed: {e}")
+        except Exception as e:  # pump must not crash
+            logger.error(f"execute_code pump tick failed: {e}")
         time.sleep(sleep_s)
