@@ -13,6 +13,7 @@ import threading
 import time
 from concurrent.futures import Future
 
+from ..paths import LOGS_DIR
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
@@ -187,7 +188,7 @@ class ScriptRunner:
                         f.write(full_tb)
                     return os.path.abspath(task_log_path)
                 # Fallback: dedicated task error log next to the task log.
-                fallback = os.path.join(".yade-mcp", "logs", f"task_{task_id}_error.log")
+                fallback = os.path.join(LOGS_DIR, f"task_{task_id}_error.log")
                 os.makedirs(os.path.dirname(fallback), exist_ok=True)
                 with open(fallback, "w", encoding="utf-8") as f:
                     f.write(full_tb)
@@ -237,8 +238,7 @@ class ScriptRunner:
             return error_body("script_read_error", f"Failed to read script file: {str(e)}")
 
         try:
-            log_dir = os.path.join(".yade-mcp", "logs")
-            log_path = os.path.join(log_dir, f"task_{task_id}.log")
+            log_path = os.path.join(LOGS_DIR, f"task_{task_id}.log")
             output_buffer = FileBuffer(log_path)
 
             # Run in a dedicated daemon thread instead of on the

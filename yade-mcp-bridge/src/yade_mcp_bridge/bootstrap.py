@@ -20,6 +20,7 @@ import traceback
 
 from .console import ConsoleCapture
 from .execution import SerialExecutor
+from .paths import DATA_DIR
 from .runtime import install_pyrunner, start_background_pump, start_qt_pump
 from .transport import create_server
 
@@ -43,7 +44,7 @@ def start(
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
 
     # Logging setup
-    bridge_dir = os.path.join(os.getcwd(), ".yade-mcp")
+    bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
     if not os.path.exists(bridge_dir):
         os.makedirs(bridge_dir)
     log_file = os.path.join(bridge_dir, "bridge.log")
