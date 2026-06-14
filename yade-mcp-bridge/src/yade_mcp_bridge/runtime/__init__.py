@@ -3,10 +3,10 @@
 """YADE runtime coordination: the bridge's foothold inside the live process.
 
 These modules drive and observe YADE's main-thread / simulation loop —
-distinct from request handling. ``pump`` chooses the thread that runs queued
-executor work; ``pyrunner`` injects the interrupt/pause tick into ``O.run()``;
-``signals`` holds the cross-thread interrupt and paused-snapshot primitives
-they coordinate through.
+distinct from request handling. ``pump`` chooses the thread that drains the
+execute_code queue; ``pyrunner`` injects the interrupt/pause tick into
+``O.run()``; ``signals`` holds the cross-thread interrupt and paused-snapshot
+primitives they coordinate through.
 """
 
 from .pump import start_background_pump, start_qt_pump

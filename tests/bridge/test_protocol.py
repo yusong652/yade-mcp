@@ -14,7 +14,7 @@ from yade_mcp_bridge.tasks.task import ScriptTask
 
 def _start_bridge():
     """Create a bridge server on an ephemeral port, serving in a background
-    thread with a real task pump.
+    thread with a real execute_code pump.
 
     The pump matters for HTTP: ``handle_execute_code`` blocks the request
     thread on the main-thread future, so a background pump must run the
@@ -47,7 +47,7 @@ def _start_bridge():
 
 @pytest.fixture()
 def bridge_server():
-    """A real bridge server (HTTP + SSE) with a background task pump."""
+    """A real bridge server (HTTP + SSE) with a background execute_code pump."""
     server, executor, url, stop = _start_bridge()
     try:
         yield url, executor

@@ -5,8 +5,8 @@
 ``start()`` is the package's single entry point. It configures logging,
 installs the simulation-side PyRunner hook, creates the HTTP + SSE server
 on a background thread, wires console capture and graceful shutdown
-(atexit + signals), and finally starts the task pump that executes queued
-main-thread work (Qt timer in gui mode, daemon thread in console mode).
+(atexit + signals), and finally starts the execute_code pump that drains
+queued requests (Qt timer in gui mode, daemon thread in console mode).
 """
 
 import atexit
@@ -136,13 +136,13 @@ def start(
 
     print(f"YADE MCP Bridge on http://{host}:{port}, log: {log_file}")
 
-    # Main-thread task pump
+    # execute_code pump
     use_qt = mode in ("auto", "gui")
     use_blocking = mode in ("auto", "console")
 
     if use_qt and start_qt_pump(executor, logger):
         yade_server.set_runtime_mode("gui")
-        logger.info("Task pump running via Qt timer")
+        logger.info("execute_code pump running via Qt timer")
         return
 
     if mode == "gui":
@@ -150,4 +150,4 @@ def start(
 
     if use_blocking and start_background_pump(executor, logger):
         yade_server.set_runtime_mode("console")
-        logger.info("Task pump running via background thread")
+        logger.info("execute_code pump running via background thread")
