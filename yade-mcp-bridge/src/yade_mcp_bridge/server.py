@@ -235,9 +235,9 @@ class YADEBridgeServer:
     def __init__(
         self,
         executor,
+        runtime_mode,
         host="localhost",
         port=9002,
-        runtime_mode="unknown",
     ):
         self.host = host
         self.port = port
@@ -409,13 +409,13 @@ class YADEBridgeServer:
 
 def create_server(
     executor,
+    runtime_mode,
     host="localhost",
     port=9002,
-    runtime_mode="unknown",
 ):
     return YADEBridgeServer(
         executor,
-        host,
-        port,
-        runtime_mode=runtime_mode,
+        runtime_mode,
+        host=host,
+        port=port,
     )
