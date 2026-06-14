@@ -21,7 +21,6 @@ thread is a property of the pump, not of this class.
 
 import logging
 import queue
-import threading
 from concurrent.futures import Future
 
 logger = logging.getLogger("MCP-Bridge")
@@ -36,11 +35,7 @@ class SerialExecutor:
 
     def __init__(self):
         self._queue = queue.Queue()
-        # Records the constructing thread, used only for the diagnostic warning
-        # in run_next(). Not an enforced constraint.
-        self.owner_thread_id = threading.current_thread().ident
-        self.owner_thread_name = threading.current_thread().name
-        logger.info("SerialExecutor initialized (owner_thread=%s, id=%s)", self.owner_thread_name, self.owner_thread_id)
+        logger.info("SerialExecutor initialized")
 
     def submit(self, func, *args, **kwargs):
         """Submit a callable to the serial queue, called from a background
@@ -60,17 +55,6 @@ class SerialExecutor:
         control back to the Qt event loop between calls, keeping the GUI
         responsive.
         """
-        current_thread_id = threading.current_thread().ident
-        if current_thread_id != self.owner_thread_id:
-            # In console mode the pump runs on a background daemon thread, so
-            # the callable does not run on the constructing thread. Safe due
-            # to the GIL and the thread-safe queue; logged for diagnostics.
-            logger.debug(
-                "run_next() called from a different thread: current=%s, owner=%s",
-                threading.current_thread().name,
-                self.owner_thread_name,
-            )
-
         try:
             func, args, kwargs, future = self._queue.get_nowait()
         except queue.Empty:
