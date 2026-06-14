@@ -40,7 +40,7 @@ class BridgeTimeout(BaseException):
     of the form ``except Exception:`` cannot swallow it. The handler's
     ``_execute_code`` closure catches it explicitly and returns a
     ``status="terminated"`` marker — this exception must never escape
-    ``_execute_code``, or ``MainThreadExecutor.process_task``'s
+    ``_execute_code``, or ``SerialExecutor.run_next``'s
     ``except Exception`` (which does NOT catch BaseException) will let
     it kill the pump thread permanently.
     """

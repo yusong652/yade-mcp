@@ -24,14 +24,14 @@ from ..signals import (
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
 from .errors import TaskInterrupt, format_execution_error
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 
 class ScriptRunner:
     """Run Python scripts via YADE main thread queue."""
 
-    def __init__(self, main_executor, task_manager):
-        self.main_executor = main_executor
+    def __init__(self, executor, task_manager):
+        self.executor = executor
         self.task_manager = task_manager
 
     def _execute(self, script_path, script_content, output_buffer, task_id):
@@ -242,7 +242,7 @@ class ScriptRunner:
             output_buffer = FileBuffer(log_path)
 
             # Run in a dedicated daemon thread instead of on the
-            # main_executor pump. The script's ``O.run(wait=True)`` would
+            # executor pump. The script's ``O.run(wait=True)`` would
             # otherwise block the pump for the task's entire lifetime,
             # starving ``execute_code`` requests — which then have to
             # fall back to PyRunner-tick pumping on a boost::python

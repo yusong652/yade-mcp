@@ -31,7 +31,7 @@ from .handlers import (
 )
 from .tasks import TaskManager
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 # SSE keepalive: how long an idle /events stream waits before emitting a
 # comment line. Keeps the connection (and any intermediary proxy) alive and
@@ -234,7 +234,7 @@ class YADEBridgeServer:
 
     def __init__(
         self,
-        main_executor,
+        executor,
         host="localhost",
         port=9002,
         runtime_mode="unknown",
@@ -257,8 +257,8 @@ class YADEBridgeServer:
         # reach them via ``self.context``, never as server attributes.
         self.context = ServerContext(
             task_manager=task_manager,
-            script_runner=ScriptRunner(main_executor, task_manager),
-            main_executor=main_executor,
+            script_runner=ScriptRunner(executor, task_manager),
+            executor=executor,
             runtime_mode=runtime_mode,
             console_history=console_history,
         )
@@ -408,13 +408,13 @@ class YADEBridgeServer:
 
 
 def create_server(
-    main_executor,
+    executor,
     host="localhost",
     port=9002,
     runtime_mode="unknown",
 ):
     return YADEBridgeServer(
-        main_executor,
+        executor,
         host,
         port,
         runtime_mode=runtime_mode,

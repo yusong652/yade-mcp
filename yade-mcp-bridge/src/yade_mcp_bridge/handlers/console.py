@@ -4,7 +4,7 @@
 
 import logging
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 
 def handle_console_history(ctx, data):

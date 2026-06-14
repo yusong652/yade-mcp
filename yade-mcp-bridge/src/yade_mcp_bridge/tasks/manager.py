@@ -11,7 +11,7 @@ import uuid
 from ..utils import error_body, ok_body
 from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 DATA_DIR = ".yade-mcp"
 LOGS_DIR = os.path.join(DATA_DIR, "logs")

@@ -8,7 +8,7 @@ import time
 
 from ..utils import TaskDataBuilder, ok_body
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 DEFAULT_PAGINATION_LIMIT = 64
 

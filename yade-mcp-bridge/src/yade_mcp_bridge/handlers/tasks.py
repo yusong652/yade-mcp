@@ -7,7 +7,7 @@ import logging
 from ..utils import error_response, ok_response
 from .helpers import require_field
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 # Default page size for the paginated reads (check_task_status output lines,
 # list_tasks entries). Callers that omit ``limit`` get a bounded page instead

@@ -19,7 +19,7 @@ import threading
 import traceback
 
 from .console import ConsoleCapture
-from .execution import MainThreadExecutor
+from .execution import SerialExecutor
 from .pump import run_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 from .server import create_server
@@ -63,13 +63,13 @@ def start(
     file_handler.setFormatter(formatter)
     root_logger.addHandler(stdout_handler)
     root_logger.addHandler(file_handler)
-    logger = logging.getLogger("YADE-Bridge")
+    logger = logging.getLogger("MCP-Bridge")
 
-    main_executor = MainThreadExecutor()
+    executor = SerialExecutor()
 
     # Install PyRunner for interrupt checking during simulation.
     # install_pyrunner logs its own failure warning; ignore return value here.
-    install_pyrunner(main_executor, logger)
+    install_pyrunner(executor, logger)
 
     # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -84,7 +84,7 @@ def start(
     # Create the HTTP + SSE server (binds the socket eagerly, so a port
     # conflict raises here on the main thread before the serving thread starts)
     yade_server = create_server(
-        main_executor=main_executor,
+        executor=executor,
         host=host,
         port=port,
         runtime_mode=mode,
@@ -141,7 +141,7 @@ def start(
     use_qt = mode in ("auto", "gui")
     use_blocking = mode in ("auto", "console")
 
-    if use_qt and start_qt_pump(main_executor, logger):
+    if use_qt and start_qt_pump(executor, logger):
         yade_server.set_runtime_mode("gui")
         logger.info("Task pump running via Qt timer")
         return
@@ -153,7 +153,7 @@ def start(
         yade_server.set_runtime_mode("console")
         pump_thread = threading.Thread(
             target=run_background_pump,
-            args=(main_executor, logger),
+            args=(executor, logger),
             daemon=True,
             name="mcp-task-pump",
         )

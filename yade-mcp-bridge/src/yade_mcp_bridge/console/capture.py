@@ -8,7 +8,7 @@ import sys
 import threading
 from io import StringIO
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 
 class CaptureBuffer:

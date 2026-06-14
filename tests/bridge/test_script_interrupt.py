@@ -28,7 +28,7 @@ def fake_yade(monkeypatch):
 def runner():
     task_manager = MagicMock()
     task_manager.tasks = {}
-    return ScriptRunner(main_executor=MagicMock(), task_manager=task_manager)
+    return ScriptRunner(executor=MagicMock(), task_manager=task_manager)
 
 
 @pytest.fixture
