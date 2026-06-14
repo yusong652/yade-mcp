@@ -8,13 +8,12 @@ import os
 import time
 import uuid
 
+from ..paths import DATA_DIR, LOGS_DIR
 from ..utils import error_body, ok_body
 from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
 logger = logging.getLogger("MCP-Bridge")
 
-DATA_DIR = ".yade-mcp"
-LOGS_DIR = os.path.join(DATA_DIR, "logs")
 TASKS_FILENAME = os.path.join(DATA_DIR, "tasks.json")
 
 
