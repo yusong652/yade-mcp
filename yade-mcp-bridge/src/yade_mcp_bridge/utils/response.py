@@ -6,14 +6,14 @@
 class TaskDataBuilder:
     """Builder for task response data dictionaries."""
 
-    def __init__(self, task_id, task_type, entry_script, description):
-        # ``entry_script`` is the single source of truth for the script path;
+    def __init__(self, task_id, task_type, script_path, description):
+        # ``script_path`` is the single source of truth for the script path;
         # the basename (formerly a ``script_name`` wire field) is bridge-derived
         # and redundant on the wire, so it is no longer emitted here.
         self._data = {
             "task_id": task_id,
             "task_type": task_type,
-            "entry_script": entry_script,
+            "script_path": script_path,
             "description": description,
         }
 

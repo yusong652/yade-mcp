@@ -11,7 +11,7 @@ import uuid
 from ..utils import error_body, ok_body
 from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 DATA_DIR = ".yade-mcp"
 LOGS_DIR = os.path.join(DATA_DIR, "logs")
@@ -37,14 +37,14 @@ class TaskManager:
         self._prune_old_tasks()
         logger.info("TaskManager initialized")
 
-    def create_script_task(self, future, script_name, entry_script, output_buffer=None, description=None, task_id=None):
+    def create_script_task(self, future, script_name, script_path, output_buffer=None, description=None, task_id=None):
         if task_id is None:
             task_id = uuid.uuid4().hex[:8]
         task = ScriptTask(
             task_id,
             future,
             script_name,
-            entry_script,
+            script_path,
             output_buffer,
             description,
             on_status_change=self._on_task_status_change,
@@ -186,7 +186,7 @@ class TaskManager:
             "start_time": task.start_time,
             "end_time": task.end_time,
             "script_name": task.script_name,
-            "entry_script": task.entry_script,
+            "script_path": task.script_path,
             "log_path": task.log_path,
             "error": task.error,
             "error_details": getattr(task, "error_details", None),

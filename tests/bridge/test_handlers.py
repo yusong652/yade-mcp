@@ -29,11 +29,11 @@ def _make_ctx(runtime_mode="console", tasks=None):
     task_manager = MagicMock()
     task_manager.tasks = tasks or {}
     script_runner = MagicMock()
-    main_executor = MagicMock()
+    executor = MagicMock()
     return ServerContext(
         task_manager=task_manager,
         script_runner=script_runner,
-        main_executor=main_executor,
+        executor=executor,
         runtime_mode=runtime_mode,
     )
 

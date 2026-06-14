@@ -15,7 +15,7 @@ import logging
 import os
 import time
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 DATA_DIR = ".yade-mcp"
 HISTORY_FILENAME = os.path.join(DATA_DIR, "console_history.jsonl")

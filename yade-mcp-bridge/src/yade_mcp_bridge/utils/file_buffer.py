@@ -10,7 +10,7 @@ import logging
 import os
 
 # Module logger
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 
 class FileBuffer:

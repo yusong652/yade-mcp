@@ -24,7 +24,7 @@ class TestTaskDataBuilder:
         data = TaskDataBuilder("t1", "script", "/tmp/test.py", "desc").build()
         assert data["task_id"] == "t1"
         assert data["task_type"] == "script"
-        assert data["entry_script"] == "/tmp/test.py"
+        assert data["script_path"] == "/tmp/test.py"
         assert data["description"] == "desc"
         # script_name is no longer emitted on the wire (redundant basename).
         assert "script_name" not in data

@@ -29,7 +29,7 @@ from ..signals import (
 from ..utils import TeeBuffer, error_response, ok_response
 from .helpers import require_field
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 # How long to wait for the pump thread to unwind after we inject
 # ``BridgeTimeout``. A pure-Python loop aborts within a handful of
@@ -272,7 +272,7 @@ def handle_execute_code(ctx, data):
             ``except BridgeTimeout`` branch here is LOAD-BEARING:
             ``BridgeTimeout`` inherits ``BaseException`` and must not
             escape ``_execute_code``. If it did, it would slip past
-            ``MainThreadExecutor.process_task``'s ``except Exception``
+            ``SerialExecutor.run_next``'s ``except Exception``
             (which doesn't catch BaseException) and kill the pump
             thread permanently.
 
@@ -399,7 +399,7 @@ def handle_execute_code(ctx, data):
         # request on its own thread, so blocking here never stalls other
         # requests; ``future.result`` parks on a Condition that releases the
         # GIL while it waits.
-        future = ctx.main_executor.submit(_execute_code, code)
+        future = ctx.executor.submit(_execute_code, code)
         result = future.result(timeout=timeout_s)
 
         # ``result["status"]`` here is the INTERNAL future-result marker

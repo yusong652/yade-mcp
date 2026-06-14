@@ -109,7 +109,7 @@ def register(mcp: FastMCP) -> None:
             "start_time": format_unix_timestamp(data.get("start_time")),
             "end_time": format_unix_timestamp(data.get("end_time")),
             "elapsed_time": round_elapsed_seconds(data.get("elapsed_time")),
-            "entry_script": data.get("entry_script") or data.get("script_path"),
+            "script_path": data.get("script_path") or data.get("entry_script"),
             "description": data.get("description"),
             "output": output_text,
             "pagination": pagination,

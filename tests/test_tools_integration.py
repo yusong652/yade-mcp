@@ -165,7 +165,7 @@ class TestExecuteTask:
 
             # Submit task
             result = await client.call_tool("yade_execute_task", {
-                "entry_script": script_path,
+                "script_path": script_path,
                 "description": "integration test task",
             })
             data = _get_data(result)

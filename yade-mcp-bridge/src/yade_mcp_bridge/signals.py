@@ -8,7 +8,7 @@ import contextlib
 import logging
 import threading
 
-logger = logging.getLogger("YADE-Bridge")
+logger = logging.getLogger("MCP-Bridge")
 
 # Global state for interrupt signaling
 _current_task_id = None

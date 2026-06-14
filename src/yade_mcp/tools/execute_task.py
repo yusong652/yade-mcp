@@ -18,7 +18,7 @@ def register(mcp: FastMCP) -> None:
     @mcp.tool()
     @with_context
     async def yade_execute_task(
-        entry_script: ScriptPath,
+        script_path: ScriptPath,
         description: TaskDescription,
     ) -> dict[str, Any]:
         """Submit a Python script for asynchronous execution in YADE.
@@ -43,7 +43,7 @@ def register(mcp: FastMCP) -> None:
 
         try:
             response = await client.execute_task(
-                script_path=entry_script,
+                script_path=script_path,
                 description=description,
                 task_id=task_id,
             )
@@ -72,7 +72,7 @@ def register(mcp: FastMCP) -> None:
         return build_ok(
             {
                 "task_id": task_id,
-                "entry_script": entry_script,
+                "script_path": script_path,
                 "description": description,
                 "task_status": "pending",
                 "message": "submitted",

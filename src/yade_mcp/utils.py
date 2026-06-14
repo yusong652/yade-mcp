@@ -48,7 +48,7 @@ def validate_script_path(value: str) -> str:
     """Validate entry script path."""
     stripped = validate_non_empty_string(value)
     if not (PurePosixPath(stripped).is_absolute() or PureWindowsPath(stripped).is_absolute()):
-        raise ValueError("entry_script must be an absolute path")
+        raise ValueError("script_path must be an absolute path")
     return stripped
 
 
