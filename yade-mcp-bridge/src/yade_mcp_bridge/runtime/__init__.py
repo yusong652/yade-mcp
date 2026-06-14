@@ -9,11 +9,11 @@ executor work; ``pyrunner`` injects the interrupt/pause tick into ``O.run()``;
 they coordinate through.
 """
 
-from .pump import run_background_pump, start_qt_pump
+from .pump import start_background_pump, start_qt_pump
 from .pyrunner import install_pyrunner
 
 __all__ = [
-    "run_background_pump",
+    "start_background_pump",
     "start_qt_pump",
     "install_pyrunner",
 ]
