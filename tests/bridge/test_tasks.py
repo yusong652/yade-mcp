@@ -130,6 +130,9 @@ class TestScriptTask:
         assert isinstance(ScriptTask._serialize_result(object()), str)
 
     def test_from_persisted(self):
+        # Uses the legacy ``entry_script`` key to exercise the back-compat
+        # read in from_persisted (``script_path or entry_script``), so already
+        # persisted tasks.json files keep loading after the rename.
         data = {
             "task_id": "t1",
             "description": "restored task",
@@ -145,6 +148,7 @@ class TestScriptTask:
         assert task.task_id == "t1"
         assert task.status == "completed"
         assert task.description == "restored task"
+        assert task.script_path == "/tmp/test.py"
         assert task.future is None
 
     def test_get_status_response_pending(self):

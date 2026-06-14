@@ -25,13 +25,13 @@ class ScriptTask:
     """
 
     def __init__(
-        self, task_id, future, script_name, entry_script, output_buffer=None, description=None, on_status_change=None
+        self, task_id, future, script_name, script_path, output_buffer=None, description=None, on_status_change=None
     ):
         self.task_id = task_id
         self.future = future
         self.description = description or ""
         self.script_name = script_name
-        self.entry_script = entry_script
+        self.script_path = script_path
         self.output_buffer = output_buffer
         self.start_time = time.time()
         self.end_time = None
@@ -59,7 +59,7 @@ class ScriptTask:
         task.task_id = task_data["task_id"]
         task.description = task_data["description"]
         task.script_name = task_data.get("script_name", "")
-        task.entry_script = task_data.get("entry_script") or task_data.get("script_path") or ""
+        task.script_path = task_data.get("script_path") or task_data.get("entry_script") or ""
         task._status = task_data["status"]
         task.start_time = task_data["start_time"]
         task.end_time = task_data.get("end_time")
@@ -160,7 +160,7 @@ class ScriptTask:
         return text, pagination
 
     def _create_data_builder(self):
-        return TaskDataBuilder(self.task_id, "script", self.entry_script, self.description)
+        return TaskDataBuilder(self.task_id, "script", self.script_path, self.description)
 
     def get_status_response(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
         current_status = self.status
@@ -215,7 +215,7 @@ class ScriptTask:
             "status": self.status,
             "elapsed_time": self.get_elapsed_time(),
             "start_time": self.start_time,
-            "entry_script": self.entry_script,
+            "script_path": self.script_path,
         }
         if self.status in ["completed", "failed", "interrupted"] and self.end_time is not None:
             info["end_time"] = self.end_time

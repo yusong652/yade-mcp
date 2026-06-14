@@ -62,7 +62,7 @@ def register(mcp: FastMCP) -> None:
                 "start_time": format_unix_timestamp(task.get("start_time")),
                 "end_time": format_unix_timestamp(task.get("end_time")),
                 "elapsed_time": round_elapsed_seconds(task.get("elapsed_time")),
-                "entry_script": task.get("entry_script"),
+                "script_path": task.get("script_path") or task.get("entry_script"),
                 "description": task.get("description"),
             }
             normalized_tasks.append(normalized_task)

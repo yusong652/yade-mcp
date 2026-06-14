@@ -122,17 +122,17 @@ class TestExecuteCode:
 class TestExecuteTask:
     async def test_pending_new_envelope(self, bridge):
         bridge.execute_task.return_value = {"ok": True, "data": {"status": "pending", "task_id": "x"}}
-        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="drained triaxial")
+        data = await _call("yade_execute_task", script_path="/tmp/sim.py", description="drained triaxial")
         assert data["ok"] is True
         # task_id is generated tool-side (uuid), not echoed from the bridge.
         assert isinstance(data["data"]["task_id"], str) and data["data"]["task_id"]
         assert data["data"]["task_status"] == "pending"
-        assert data["data"]["entry_script"] == "/tmp/sim.py"
+        assert data["data"]["script_path"] == "/tmp/sim.py"
 
     async def test_pending_legacy_status_envelope(self, bridge):
         # Legacy bridge: submit success signalled by a bare status:"pending".
         bridge.execute_task.return_value = {"status": "pending", "message": "submitted"}
-        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        data = await _call("yade_execute_task", script_path="/tmp/sim.py", description="x")
         assert data["ok"] is True
         assert data["data"]["task_status"] == "pending"
 
@@ -143,14 +143,14 @@ class TestExecuteTask:
             "ok": False,
             "error": {"code": "script_not_found", "message": "Script file not found: /tmp/missing.py"},
         }
-        data = await _call("yade_execute_task", entry_script="/tmp/missing.py", description="x")
+        data = await _call("yade_execute_task", script_path="/tmp/missing.py", description="x")
         assert data["ok"] is False
         assert data["error"]["code"] == "script_not_found"
 
     async def test_submit_error_legacy_status_maps_to_error(self, bridge):
         # Legacy bridge: submit failure was a bare status:"error".
         bridge.execute_task.return_value = {"status": "error", "message": "no such file"}
-        data = await _call("yade_execute_task", entry_script="/tmp/missing.py", description="x")
+        data = await _call("yade_execute_task", script_path="/tmp/missing.py", description="x")
         assert data["ok"] is False
 
     async def test_missing_field_error_is_lifted(self, bridge):
@@ -158,13 +158,13 @@ class TestExecuteTask:
             "ok": False,
             "error": {"code": "missing_field", "message": "task_id required", "details": {"field": "task_id"}},
         }
-        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        data = await _call("yade_execute_task", script_path="/tmp/sim.py", description="x")
         assert data["ok"] is False
         assert data["error"]["code"] == "missing_field"
 
     async def test_connectivity_error_is_handled(self, bridge):
         bridge.execute_task.side_effect = ConnectionError("connection refused")
-        data = await _call("yade_execute_task", entry_script="/tmp/sim.py", description="x")
+        data = await _call("yade_execute_task", script_path="/tmp/sim.py", description="x")
         assert data["ok"] is False
         assert data["error"]["code"] == "bridge_unavailable"
 
@@ -272,7 +272,7 @@ class TestListTasks:
         bridge.list_tasks.return_value = {
             "ok": True,
             "data": [
-                {"task_id": "t1", "status": "completed", "source": "agent", "entry_script": "a.py"},
+                {"task_id": "t1", "status": "completed", "source": "agent", "script_path": "a.py"},
             ],
             "pagination": {"total_count": 1},
         }
@@ -281,7 +281,7 @@ class TestListTasks:
         task = data["data"]["tasks"][0]
         assert task["task_id"] == "t1"
         assert task["status"] == "completed"
-        assert task["entry_script"] == "a.py"
+        assert task["script_path"] == "a.py"
 
     async def test_legacy_status_is_normalized(self, bridge):
         # Legacy bridge task entry with status:"success" → normalized "completed".
