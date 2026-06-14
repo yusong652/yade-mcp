@@ -4,7 +4,7 @@ import threading
 import time
 
 import pytest
-from yade_mcp_bridge.signals import (
+from yade_mcp_bridge.runtime.signals import (
     clear_current_task,
     clear_interrupt,
     get_exec_thread,
@@ -22,19 +22,19 @@ class TestSignals:
         """Reset global state between tests."""
         clear_current_task()
         # Clear any leftover interrupt flags
-        from yade_mcp_bridge.signals import _exec_thread_ids, _interrupt_requested
+        from yade_mcp_bridge.runtime.signals import _exec_thread_ids, _interrupt_requested
 
         _interrupt_requested.clear()
         _exec_thread_ids.clear()
 
     def test_set_and_clear_current_task(self):
         set_current_task("task-1")
-        from yade_mcp_bridge.signals import _current_task_id
+        from yade_mcp_bridge.runtime.signals import _current_task_id
 
         assert _current_task_id == "task-1"
 
         clear_current_task()
-        from yade_mcp_bridge.signals import _current_task_id
+        from yade_mcp_bridge.runtime.signals import _current_task_id
 
         assert _current_task_id is None
 
@@ -97,7 +97,7 @@ class TestPeekCurrentTask:
 
 class TestExecThreadRegistry:
     def setup_method(self):
-        from yade_mcp_bridge.signals import _exec_thread_ids
+        from yade_mcp_bridge.runtime.signals import _exec_thread_ids
 
         _exec_thread_ids.clear()
 
@@ -129,7 +129,7 @@ class TestExecThreadRegistry:
         register_exec_thread("live-req", live_ident)
 
         # Inject a synthetic stale entry bypassing the scrub.
-        from yade_mcp_bridge.signals import _exec_thread_ids, _exec_thread_lock
+        from yade_mcp_bridge.runtime.signals import _exec_thread_ids, _exec_thread_lock
 
         with _exec_thread_lock:
             _exec_thread_ids["stale-req"] = 0xDEADBEEF
@@ -148,7 +148,7 @@ class TestSimPauseRendezvous:
     with a fake cycle thread — no YADE needed."""
 
     def setup_method(self):
-        from yade_mcp_bridge.signals import (
+        from yade_mcp_bridge.runtime.signals import (
             _cycle_parked,
             _pause_wanted,
             _repl_released,
@@ -164,7 +164,7 @@ class TestSimPauseRendezvous:
     def _spawn_cycle(self):
         """Fake sim-cycle thread: bumps ``state['count']`` each iteration
         and calls the cooperative brake ``park_if_pause_wanted``."""
-        from yade_mcp_bridge.signals import park_if_pause_wanted
+        from yade_mcp_bridge.runtime.signals import park_if_pause_wanted
 
         state = {"count": 0, "stop": False}
 
@@ -183,7 +183,7 @@ class TestSimPauseRendezvous:
         t.join(timeout=2.0)
 
     def test_window_freezes_cycle_then_resumes(self):
-        from yade_mcp_bridge.signals import sim_paused_window
+        from yade_mcp_bridge.runtime.signals import sim_paused_window
 
         state, t = self._spawn_cycle()
         try:
@@ -200,7 +200,7 @@ class TestSimPauseRendezvous:
             self._stop_cycle(state, t)
 
     def test_repl_holds_sim_only_inside_window(self):
-        from yade_mcp_bridge.signals import repl_holds_sim, sim_paused_window
+        from yade_mcp_bridge.runtime.signals import repl_holds_sim, sim_paused_window
 
         assert repl_holds_sim() is False
         # No cycle thread → won't park; short acquire timeout keeps it fast.
@@ -210,7 +210,7 @@ class TestSimPauseRendezvous:
         assert repl_holds_sim() is False
 
     def test_window_releases_cycle_on_exception(self):
-        from yade_mcp_bridge.signals import sim_paused_window
+        from yade_mcp_bridge.runtime.signals import sim_paused_window
 
         state, t = self._spawn_cycle()
         try:
@@ -229,7 +229,7 @@ class TestSimPauseRendezvous:
     def test_park_max_hold_returns_without_release(self):
         """If the REPL never releases, the brake still returns after
         ``max_hold_s`` so a hung REPL cannot freeze the sim forever."""
-        from yade_mcp_bridge.signals import _pause_wanted, park_if_pause_wanted
+        from yade_mcp_bridge.runtime.signals import _pause_wanted, park_if_pause_wanted
 
         _pause_wanted.set()
         done = threading.Event()

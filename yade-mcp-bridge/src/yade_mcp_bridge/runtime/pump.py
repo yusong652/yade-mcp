@@ -8,9 +8,13 @@ Two interchangeable pumps drive ``SerialExecutor.run_next``:
   main thread between GUI events without blocking it.
 * Background daemon thread (console mode): a plain polling loop.
 
+Both expose a ``start_*`` entry point that kicks the pump off and returns
+immediately (the background pump spawns its own thread), so the caller's
+thread — the YADE console in console mode — stays free for user input.
 ``bootstrap.start()`` picks one based on the runtime mode.
 """
 
+import threading
 import time
 
 # Keep a global reference to avoid Qt timer garbage collection.
@@ -57,7 +61,24 @@ def start_qt_pump(executor, logger):
     return True
 
 
-def run_background_pump(executor, logger):
+def start_background_pump(executor, logger):
+    """Spawn a daemon thread that polls the executor queue. Returns True.
+
+    Returns immediately after starting the thread, mirroring
+    ``start_qt_pump``'s non-blocking contract, so the caller's thread stays
+    free (in console mode that is the YADE prompt accepting user input).
+    """
+    pump_thread = threading.Thread(
+        target=_background_pump_loop,
+        args=(executor, logger),
+        daemon=True,
+        name="mcp-task-pump",
+    )
+    pump_thread.start()
+    return True
+
+
+def _background_pump_loop(executor, logger):
     """Poll the executor queue in a loop. Runs in a background daemon thread."""
     sleep_s = _TICK_INTERVAL_MS / 1000.0
     while True:

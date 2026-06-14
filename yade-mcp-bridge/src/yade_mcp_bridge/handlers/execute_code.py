@@ -15,7 +15,7 @@ from io import StringIO
 
 from ..execution.errors import BridgeTimeout, format_execution_error
 from ..execution.termination import fire_async_exception, is_safe_to_async_raise
-from ..signals import (
+from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
     get_exec_thread,

@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from yade_mcp_bridge.execution.script import ScriptRunner
-from yade_mcp_bridge.signals import (
+from yade_mcp_bridge.runtime.signals import (
     _exec_thread_ids,
     clear_interrupt,
     get_exec_thread,
@@ -122,7 +122,7 @@ class TestRegistryLifecycle:
         after the task returns."""
         code = (
             "import threading\n"
-            "from yade_mcp_bridge.signals import get_exec_thread\n"
+            "from yade_mcp_bridge.runtime.signals import get_exec_thread\n"
             "result = (get_exec_thread('ti-reg'), threading.get_ident())\n"
         )
         script_path, buffer = scratch(code)

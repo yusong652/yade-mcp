@@ -20,9 +20,8 @@ import traceback
 
 from .console import ConsoleCapture
 from .execution import SerialExecutor
-from .pump import run_background_pump, start_qt_pump
-from .pyrunner import install_pyrunner
-from .server import create_server
+from .runtime import install_pyrunner, start_background_pump, start_qt_pump
+from .transport import create_server
 
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
@@ -149,13 +148,6 @@ def start(
     if mode == "gui":
         raise RuntimeError("Qt is not available; cannot start in gui mode")
 
-    if use_blocking:
+    if use_blocking and start_background_pump(executor, logger):
         yade_server.set_runtime_mode("console")
-        pump_thread = threading.Thread(
-            target=run_background_pump,
-            args=(executor, logger),
-            daemon=True,
-            name="mcp-task-pump",
-        )
-        pump_thread.start()
         logger.info("Task pump running via background thread")
