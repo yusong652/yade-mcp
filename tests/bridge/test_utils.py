@@ -3,9 +3,9 @@
 import os
 import tempfile
 
+from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
 from yade_mcp_bridge.utils.path_utils import path_to_llm_format
 from yade_mcp_bridge.utils.response import TaskDataBuilder
-from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
 
 
 class TestPathToLlmFormat:
@@ -36,11 +36,7 @@ class TestTaskDataBuilder:
         assert data["status"] == "failed"
 
     def test_with_timing(self):
-        data = (
-            TaskDataBuilder("t1", "script", "/s", "d")
-            .with_timing(100.0, end_time=110.0, elapsed_time=10.0)
-            .build()
-        )
+        data = TaskDataBuilder("t1", "script", "/s", "d").with_timing(100.0, end_time=110.0, elapsed_time=10.0).build()
         assert data["start_time"] == 100.0
         assert data["end_time"] == 110.0
         assert data["elapsed_time"] == 10.0
@@ -84,13 +80,7 @@ class TestTaskDataBuilder:
         assert "error" not in data
 
     def test_chaining(self):
-        data = (
-            TaskDataBuilder("t1", "script", "/s", "d")
-            .with_timing(1.0)
-            .with_output("out")
-            .with_result("res")
-            .build()
-        )
+        data = TaskDataBuilder("t1", "script", "/s", "d").with_timing(1.0).with_output("out").with_result("res").build()
         assert data["start_time"] == 1.0
         assert data["output"] == "out"
         assert data["result"] == "res"
@@ -148,6 +138,7 @@ class TestFileBuffer:
 class TestTeeBuffer:
     def test_writes_to_both(self):
         from io import StringIO
+
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
             terminal = StringIO()
@@ -161,9 +152,11 @@ class TestTeeBuffer:
 
     def test_terminal_error_does_not_break_capture(self):
         """If terminal write fails, file capture still works."""
+
         class BrokenWriter:
             def write(self, s):
                 raise OSError("terminal broken")
+
             def flush(self):
                 raise OSError("terminal broken")
 
@@ -178,6 +171,7 @@ class TestTeeBuffer:
 
     def test_isatty(self):
         from io import StringIO
+
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
             fb = FileBuffer(path)

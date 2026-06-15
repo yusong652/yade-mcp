@@ -10,9 +10,9 @@ from yade_mcp_bridge.handlers.execute_code import (
 )
 from yade_mcp_bridge.handlers.tasks import (
     handle_check_task_status,
+    handle_execute_task,
     handle_interrupt_task,
     handle_list_tasks,
-    handle_execute_task,
 )
 from yade_mcp_bridge.runtime.signals import (
     _exec_thread_ids,
@@ -59,7 +59,10 @@ class TestHandleCheckTaskStatus:
         }
         resp = handle_check_task_status(ctx, {"request_id": "r1", "task_id": "t1"})
         ctx.task_manager.get_task_status.assert_called_once_with(
-            "t1", skip_newest=0, limit=64, filter_text=None,
+            "t1",
+            skip_newest=0,
+            limit=64,
+            filter_text=None,
         )
         assert resp["ok"] is True
         assert resp["data"]["status"] == "completed"
@@ -68,15 +71,21 @@ class TestHandleCheckTaskStatus:
     def test_forwards_pagination_params(self):
         ctx = _make_ctx()
         ctx.task_manager.get_task_status.return_value = {"ok": True, "data": {"status": "running"}}
-        handle_check_task_status(ctx, {
-            "request_id": "r1",
-            "task_id": "t1",
-            "skip_newest": 10,
-            "limit": 32,
-            "filter_text": "error",
-        })
+        handle_check_task_status(
+            ctx,
+            {
+                "request_id": "r1",
+                "task_id": "t1",
+                "skip_newest": 10,
+                "limit": 32,
+                "filter_text": "error",
+            },
+        )
         ctx.task_manager.get_task_status.assert_called_once_with(
-            "t1", skip_newest=10, limit=32, filter_text="error",
+            "t1",
+            skip_newest=10,
+            limit=32,
+            filter_text="error",
         )
 
 
@@ -139,7 +148,7 @@ class TestHandleInterruptTask:
         assert "terminal state" in resp["error"]["message"].lower()
 
     def test_interrupt_running_task(self):
-        from yade_mcp_bridge.runtime.signals import clear_interrupt, is_interrupt_requested
+        from yade_mcp_bridge.runtime.signals import clear_interrupt, is_task_interrupt_requested
 
         task = MagicMock()
         task.status = "running"
@@ -149,7 +158,7 @@ class TestHandleInterruptTask:
         try:
             assert resp["ok"] is True
             assert resp["data"]["interrupt_requested"] is True
-            assert is_interrupt_requested("t1") is True
+            assert is_task_interrupt_requested("t1") is True
             # No thread registered for "t1" → async-exc path must skip,
             # flag-only method reported.
             assert resp["data"]["method"] == "flag_only"
@@ -315,15 +324,16 @@ class TestHandleExecuteTask:
 
     def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
-        ctx.script_runner.run = MagicMock(
-            return_value={"ok": True, "data": {"status": "pending"}}
+        ctx.script_runner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
+        handle_execute_task(
+            ctx,
+            {
+                "request_id": "r1",
+                "script_path": "/tmp/test.py",
+                "task_id": "t1",
+                "description": "my task",
+            },
         )
-        resp = handle_execute_task(ctx, {
-            "request_id": "r1",
-            "script_path": "/tmp/test.py",
-            "task_id": "t1",
-            "description": "my task",
-        })
         ctx.script_runner.run.assert_called_once()
 
 
@@ -403,12 +413,15 @@ class TestTerminateStuckExecution:
         # Resolve future BEFORE calling — grace wait_for will see it immediately
         future.set_result({"status": "terminated", "output": "partial"})
 
-        with patch(
-            "yade_mcp_bridge.execution.termination._find_thread",
-            return_value=_FakeSafe(),
-        ), patch(
-            "yade_mcp_bridge.handlers.execute_code.fire_async_exception",
-            return_value=1,
+        with (
+            patch(
+                "yade_mcp_bridge.execution.termination._find_thread",
+                return_value=_FakeSafe(),
+            ),
+            patch(
+                "yade_mcp_bridge.handlers.execute_code.fire_async_exception",
+                return_value=1,
+            ),
         ):
             result = _terminate_stuck_execution("req-3", future)
 
@@ -429,15 +442,19 @@ class TestTerminateStuckExecution:
 
         register_exec_thread("req-4", 88888)
 
-        with patch(
-            "yade_mcp_bridge.execution.termination._find_thread",
-            return_value=_FakeSafe(),
-        ), patch(
-            "yade_mcp_bridge.handlers.execute_code.fire_async_exception",
-            return_value=1,
-        ), patch(
-            "yade_mcp_bridge.handlers.execute_code._TERMINATION_GRACE_S",
-            0.05,  # short grace to keep test fast
+        with (
+            patch(
+                "yade_mcp_bridge.execution.termination._find_thread",
+                return_value=_FakeSafe(),
+            ),
+            patch(
+                "yade_mcp_bridge.handlers.execute_code.fire_async_exception",
+                return_value=1,
+            ),
+            patch(
+                "yade_mcp_bridge.handlers.execute_code._TERMINATION_GRACE_S",
+                0.05,  # short grace to keep test fast
+            ),
         ):
             result = _terminate_stuck_execution("req-4", future)
 
@@ -471,12 +488,15 @@ class TestTerminateStuckExecution:
         grace → method='cycle_stuck', unresolved; state still cleaned."""
         future = Future()  # never resolved
 
-        with patch(
-            "yade_mcp_bridge.handlers.execute_code._sim_running",
-            return_value=True,
-        ), patch(
-            "yade_mcp_bridge.handlers.execute_code._CYCLE_INTERRUPT_GRACE_S",
-            0.05,  # short grace to keep test fast
+        with (
+            patch(
+                "yade_mcp_bridge.handlers.execute_code._sim_running",
+                return_value=True,
+            ),
+            patch(
+                "yade_mcp_bridge.handlers.execute_code._CYCLE_INTERRUPT_GRACE_S",
+                0.05,  # short grace to keep test fast
+            ),
         ):
             result = _terminate_stuck_execution("cyc-2", future)
 

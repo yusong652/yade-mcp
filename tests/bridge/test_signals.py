@@ -8,7 +8,8 @@ from yade_mcp_bridge.runtime.signals import (
     clear_current_task,
     clear_interrupt,
     get_exec_thread,
-    is_interrupt_requested,
+    is_current_interrupt_requested,
+    is_task_interrupt_requested,
     peek_current_task,
     register_exec_thread,
     request_interrupt,
@@ -39,27 +40,27 @@ class TestSignals:
         assert _current_task_id is None
 
     def test_request_and_check_interrupt_by_id(self):
-        assert not is_interrupt_requested("task-1")
+        assert not is_task_interrupt_requested("task-1")
         request_interrupt("task-1")
-        assert is_interrupt_requested("task-1")
-        assert not is_interrupt_requested("task-2")
+        assert is_task_interrupt_requested("task-1")
+        assert not is_task_interrupt_requested("task-2")
 
-    def test_is_interrupt_requested_uses_current_task(self):
+    def test_is_current_interrupt_requested_uses_current_task(self):
         set_current_task("task-1")
-        assert not is_interrupt_requested()
+        assert not is_current_interrupt_requested()
 
         request_interrupt("task-1")
-        assert is_interrupt_requested()
+        assert is_current_interrupt_requested()
 
-    def test_is_interrupt_requested_no_current_task(self):
-        assert not is_interrupt_requested()
+    def test_is_current_interrupt_requested_no_current_task(self):
+        assert not is_current_interrupt_requested()
 
     def test_clear_interrupt(self):
         request_interrupt("task-1")
-        assert is_interrupt_requested("task-1")
+        assert is_task_interrupt_requested("task-1")
 
         clear_interrupt("task-1")
-        assert not is_interrupt_requested("task-1")
+        assert not is_task_interrupt_requested("task-1")
 
     def test_clear_interrupt_nonexistent(self):
         clear_interrupt("nonexistent")  # should not raise

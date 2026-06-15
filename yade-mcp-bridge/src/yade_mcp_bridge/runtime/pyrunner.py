@@ -47,7 +47,7 @@ def install_pyrunner(logger):
 
     import sys as _sys
 
-    from .signals import is_interrupt_requested, park_if_pause_wanted, repl_holds_sim
+    from .signals import is_current_interrupt_requested, park_if_pause_wanted, repl_holds_sim
 
     # Flag checked after O.run() returns
     _interrupt_triggered = {"value": False}
@@ -59,7 +59,7 @@ def install_pyrunner(logger):
         # YADE's C++ layer to log a FATAL ERROR), we just pause the
         # simulation. The hooked O.run() will check the flag after
         # O.run() returns and raise InterruptedError at the Python level.
-        if is_interrupt_requested():
+        if is_current_interrupt_requested():
             _interrupt_triggered["value"] = True
             try:
                 O.pause()

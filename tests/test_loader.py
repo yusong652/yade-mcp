@@ -7,7 +7,6 @@ the 11-top-level-category YADE structure.
 
 from yade_mcp.knowledge.loader import APILoader
 
-
 # =============================================================================
 # Categories & basic structure
 # =============================================================================
@@ -19,9 +18,17 @@ class TestListCategories:
         names = {c["name"] for c in cats}
         # Every YADE-native category must exist.
         expected = {
-            "engine", "functor", "material", "shape",
-            "iphys", "igeom", "state", "body",
-            "bound", "runtime", "misc",
+            "engine",
+            "functor",
+            "material",
+            "shape",
+            "iphys",
+            "igeom",
+            "state",
+            "body",
+            "bound",
+            "runtime",
+            "misc",
         }
         assert names == expected, f"missing={expected - names}, extra={names - expected}"
 
@@ -166,9 +173,7 @@ class TestResolvePath:
         # Law2_ScGeom_BubblePhys_Bubble is a pure LawFunctor leaf (no own
         # subclasses) — Law2_ScGeom_FrictPhys_CundallStrack is itself a
         # tree node because it has subclasses of its own.
-        r = APILoader.resolve_path(
-            "functor.LawFunctor.Law2_ScGeom_BubblePhys_Bubble"
-        )
+        r = APILoader.resolve_path("functor.LawFunctor.Law2_ScGeom_BubblePhys_Bubble")
         assert r["level"] == "class"
         assert r["class_name"] == "Law2_ScGeom_BubblePhys_Bubble"
 
@@ -177,9 +182,7 @@ class TestResolvePath:
         Law2_ScGeom_FrictPhys_CundallStrack → Law2_..._ViscoFrictPhys_...)
         are internal tree nodes. Resolving their path returns tree_node,
         not class; the class's own docs come via the node's self_class."""
-        r = APILoader.resolve_path(
-            "functor.LawFunctor.Law2_ScGeom_FrictPhys_CundallStrack"
-        )
+        r = APILoader.resolve_path("functor.LawFunctor.Law2_ScGeom_FrictPhys_CundallStrack")
         assert r["level"] == "tree_node"
         assert r["tree_path"][-1] == "Law2_ScGeom_FrictPhys_CundallStrack"
 
@@ -255,9 +258,7 @@ class TestPatchedParentData:
 
     def test_functor_subtree_parents_match_yade(self):
         # Law2_* should be LawFunctor children.
-        assert self._load_doc(
-            "functor", "Law2_ScGeom_FrictPhys_CundallStrack"
-        )["parent"] == "LawFunctor"
+        assert self._load_doc("functor", "Law2_ScGeom_FrictPhys_CundallStrack")["parent"] == "LawFunctor"
         assert self._load_doc("functor", "Bo1_Sphere_Aabb")["parent"] == "BoundFunctor"
 
 
