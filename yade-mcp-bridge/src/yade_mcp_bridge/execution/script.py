@@ -265,7 +265,6 @@ class ScriptRunner:
                 if not future.set_running_or_notify_cancel():
                     return
                 try:
-                    #
                     result = self._execute(script_path, script_content, output_buffer, task_id)
                     future.set_result(result)
                 except BaseException as exc:  # noqa: BLE001 — surface every failure to the future
@@ -279,17 +278,8 @@ class ScriptRunner:
             script_thread.start()
 
             submit_time = time.time()
+            # pending -> running is promoted by _execute / the task manager.
             self.task_manager.create_script_task(future, script_name, script_path, output_buffer, description, task_id)
-
-            task = self.task_manager.tasks.get(task_id)
-            if task and task.status == "pending":
-                try:
-                    if future.running():
-                        task.status = "running"
-                        if task.on_status_change:
-                            task.on_status_change(task)
-                except RuntimeError:
-                    pass
 
             data = (
                 TaskDataBuilder(task_id, "script", script_path, description)
