@@ -8,8 +8,8 @@ from concurrent.futures import Future
 import httpx
 import pytest
 from yade_mcp_bridge.execution.serial import SerialExecutor
-from yade_mcp_bridge.transport.server import create_server
 from yade_mcp_bridge.tasks.task import ScriptTask
+from yade_mcp_bridge.transport.server import create_server
 
 
 def _start_bridge():
@@ -22,7 +22,7 @@ def _start_bridge():
     """
     executor = SerialExecutor()
     server = create_server(executor=executor, host="127.0.0.1", port=0, runtime_mode="test")
-    url = "http://127.0.0.1:{}".format(server._httpd.server_address[1])
+    url = f"http://127.0.0.1:{server._httpd.server_address[1]}"
 
     serve_thread = threading.Thread(target=server.serve_forever, daemon=True)
     serve_thread.start()
@@ -147,11 +147,14 @@ class TestExecuteCodeProtocol:
 class TestTaskProtocol:
     async def test_check_nonexistent_task(self, bridge_server):
         url, _ = bridge_server
-        resp = await _send_recv(url, {
-            "type": "check_task_status",
-            "request_id": "t1",
-            "task_id": "nonexistent",
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "check_task_status",
+                "request_id": "t1",
+                "task_id": "nonexistent",
+            },
+        )
         assert resp["ok"] is False
         assert resp["error"]["code"] == "not_found"
 
@@ -176,11 +179,14 @@ class TestTaskProtocol:
 
     async def test_interrupt_nonexistent_task(self, bridge_server):
         url, _ = bridge_server
-        resp = await _send_recv(url, {
-            "type": "interrupt_task",
-            "request_id": "i1",
-            "task_id": "nonexistent",
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "interrupt_task",
+                "request_id": "i1",
+                "task_id": "nonexistent",
+            },
+        )
         assert resp["ok"] is False
         assert resp["error"]["code"] == "not_found"
 
@@ -228,11 +234,14 @@ class TestCheckTaskStatusPagination:
         url, task_manager, tmp_path = bridge_server_with_tasks
         self._inject_task(task_manager, tmp_path, "tail1", [f"line {i}" for i in range(200)])
 
-        resp = await _send_recv(url, {
-            "type": "check_task_status",
-            "request_id": "p1",
-            "task_id": "tail1",
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "check_task_status",
+                "request_id": "p1",
+                "task_id": "tail1",
+            },
+        )
 
         data = resp["data"]
         assert data["status"] == "completed"
@@ -248,13 +257,16 @@ class TestCheckTaskStatusPagination:
         url, task_manager, tmp_path = bridge_server_with_tasks
         self._inject_task(task_manager, tmp_path, "skip1", [f"line {i}" for i in range(100)])
 
-        resp = await _send_recv(url, {
-            "type": "check_task_status",
-            "request_id": "p2",
-            "task_id": "skip1",
-            "skip_newest": 10,
-            "limit": 5,
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "check_task_status",
+                "request_id": "p2",
+                "task_id": "skip1",
+                "skip_newest": 10,
+                "limit": 5,
+            },
+        )
 
         data = resp["data"]
         assert data["pagination"]["total_lines"] == 100
@@ -279,13 +291,16 @@ class TestCheckTaskStatusPagination:
                 lines.append(f"ok {i}")
         self._inject_task(task_manager, tmp_path, "filter1", lines)
 
-        resp = await _send_recv(url, {
-            "type": "check_task_status",
-            "request_id": "p3",
-            "task_id": "filter1",
-            "filter_text": "error",
-            "limit": 10,
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "check_task_status",
+                "request_id": "p3",
+                "task_id": "filter1",
+                "filter_text": "error",
+                "limit": 10,
+            },
+        )
 
         data = resp["data"]
         assert data["pagination"]["total_lines"] == 3
@@ -298,11 +313,14 @@ class TestCheckTaskStatusPagination:
         url, task_manager, tmp_path = bridge_server_with_tasks
         self._inject_task(task_manager, tmp_path, "empty1", [])
 
-        resp = await _send_recv(url, {
-            "type": "check_task_status",
-            "request_id": "p4",
-            "task_id": "empty1",
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "check_task_status",
+                "request_id": "p4",
+                "task_id": "empty1",
+            },
+        )
 
         data = resp["data"]
         assert data["pagination"]["total_lines"] == 0
@@ -355,9 +373,9 @@ class TestConnectionManagement:
         url, _ = bridge_server
         async with httpx.AsyncClient(base_url=url) as client:
             for i in range(3):
-                resp = await client.post("/list_tasks", json={"type": "list_tasks", "request_id": "m{}".format(i)})
+                resp = await client.post("/list_tasks", json={"type": "list_tasks", "request_id": f"m{i}"})
                 body = resp.json()
-                assert body["request_id"] == "m{}".format(i)
+                assert body["request_id"] == f"m{i}"
                 assert body["type"] == "result"
 
     async def test_concurrent_connections(self, bridge_server):
@@ -383,12 +401,15 @@ class TestExecuteCodeTimeoutTermination:
         """Pure-Python infinite loop hits short timeout → SetAsyncExc
         aborts it → status="terminated"."""
         url, _ = bridge_server_with_pump
-        resp = await _send_recv(url, {
-            "type": "execute_code",
-            "request_id": "term-tight",
-            "code": "while True:\n    pass",
-            "timeout_ms": 500,
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "execute_code",
+                "request_id": "term-tight",
+                "code": "while True:\n    pass",
+                "timeout_ms": 500,
+            },
+        )
 
         assert resp["type"] == "execute_code_result"
         assert resp["request_id"] == "term-tight"
@@ -404,22 +425,28 @@ class TestExecuteCodeTimeoutTermination:
         forever."""
         url, _ = bridge_server_with_pump
 
-        first = await _send_recv(url, {
-            "type": "execute_code",
-            "request_id": "pre",
-            "code": "while True:\n    pass",
-            "timeout_ms": 500,
-        })
+        first = await _send_recv(
+            url,
+            {
+                "type": "execute_code",
+                "request_id": "pre",
+                "code": "while True:\n    pass",
+                "timeout_ms": 500,
+            },
+        )
         assert first["error"]["code"] == "terminated"
 
         # Now a quick call on the SAME pump: must succeed fast.
         t0 = time.time()
-        second = await _send_recv(url, {
-            "type": "execute_code",
-            "request_id": "post",
-            "code": "1 + 1",
-            "timeout_ms": 1000,
-        })
+        second = await _send_recv(
+            url,
+            {
+                "type": "execute_code",
+                "request_id": "post",
+                "code": "1 + 1",
+                "timeout_ms": 1000,
+            },
+        )
         elapsed = time.time() - t0
 
         assert second["ok"] is True, f"pump didn't recover: {second}"
@@ -444,12 +471,15 @@ class TestExecuteCodeTimeoutTermination:
             "    except BaseException:\n"
             "        pass\n"
         )
-        resp = await _send_recv(url, {
-            "type": "execute_code",
-            "request_id": "swallow",
-            "code": code,
-            "timeout_ms": 300,
-        })
+        resp = await _send_recv(
+            url,
+            {
+                "type": "execute_code",
+                "request_id": "swallow",
+                "code": code,
+                "timeout_ms": 300,
+            },
+        )
 
         # Either "terminated" (if injection happens OUTSIDE the try,
         # e.g., in the while-condition evaluation) or "timeout"
@@ -461,19 +491,22 @@ class TestExecuteCodeTimeoutTermination:
         # In either case, confirm pump recovers with a follow-up call.
         # Wait for the bridge's 1.5s self-termination in the stuck case.
         await asyncio.sleep(2.0)
-        follow = await _send_recv(url, {
-            "type": "execute_code",
-            "request_id": "after",
-            "code": "42",
-            "timeout_ms": 2000,
-        })
+        follow = await _send_recv(
+            url,
+            {
+                "type": "execute_code",
+                "request_id": "after",
+                "code": "42",
+                "timeout_ms": 2000,
+            },
+        )
         assert follow["ok"] is True
 
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
         """Regression: _execute_code must NOT set_current_task(request_id).
 
         If it did, a subsequent REPL timeout's request_interrupt() would
-        set a flag that PyRunner's no-arg is_interrupt_requested() reads
+        set a flag that PyRunner's is_current_interrupt_requested() reads
         via _current_task_id → O.pause() fires → _hooked_run raises
         InterruptedError → the enclosing script task gets spuriously
         marked ``interrupted``. The fix: leave _current_task_id alone.
@@ -486,12 +519,15 @@ class TestExecuteCodeTimeoutTermination:
         set_current_task("outer-task")
         try:
             # Normal, successful execute_code.
-            ok = await _send_recv(url, {
-                "type": "execute_code",
-                "request_id": "nested-ok",
-                "code": "1 + 1",
-                "timeout_ms": 2000,
-            })
+            ok = await _send_recv(
+                url,
+                {
+                    "type": "execute_code",
+                    "request_id": "nested-ok",
+                    "code": "1 + 1",
+                    "timeout_ms": 2000,
+                },
+            )
             assert ok["ok"] is True
             # After execute_code completes, the outer task must still
             # be the current one — not None, not request_id.
@@ -501,12 +537,15 @@ class TestExecuteCodeTimeoutTermination:
             # request_interrupt(request_id) on the REPL's own id.
             # That flag must not leak into any PyRunner tick reading
             # _current_task_id.
-            terminated = await _send_recv(url, {
-                "type": "execute_code",
-                "request_id": "nested-timeout",
-                "code": "while True:\n    pass",
-                "timeout_ms": 500,
-            })
+            terminated = await _send_recv(
+                url,
+                {
+                    "type": "execute_code",
+                    "request_id": "nested-timeout",
+                    "code": "while True:\n    pass",
+                    "timeout_ms": 500,
+                },
+            )
             assert terminated["error"]["code"] == "terminated"
             assert peek_current_task() == "outer-task"
         finally:

@@ -278,8 +278,8 @@ def handle_execute_code(ctx, data):
             thread permanently.
 
             We intentionally do NOT touch ``_current_task_id``. That
-            global is read by ``_mcp_pyrunner_tick``'s no-arg
-            ``is_interrupt_requested()`` check. If we overwrote it with
+            global is read by ``_mcp_pyrunner_tick``'s
+            ``is_current_interrupt_requested()`` check. If we overwrote it with
             ``request_id``, a subsequent ``_terminate_stuck_execution``
             setting the REPL's own interrupt flag would be misread by
             PyRunner tick as a task interrupt — ``O.pause()`` + the

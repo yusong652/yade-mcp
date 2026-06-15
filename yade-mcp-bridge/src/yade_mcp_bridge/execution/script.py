@@ -17,7 +17,7 @@ from ..paths import LOGS_DIR
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
-    is_interrupt_requested,
+    is_task_interrupt_requested,
     register_exec_thread,
     set_current_task,
     unregister_exec_thread,
@@ -86,7 +86,7 @@ class ScriptRunner:
                 if _O.running:
                     _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
-                if is_interrupt_requested(task_id):
+                if is_task_interrupt_requested(task_id):
                     raise InterruptedError("Interrupted by MCP bridge")
             except ImportError:
                 pass

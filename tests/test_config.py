@@ -1,7 +1,5 @@
 """Tests for runtime configuration."""
 
-import os
-
 from yade_mcp.config import get_bridge_config
 
 

@@ -2,16 +2,13 @@
 
 import json
 import os
-import tempfile
 import time
 from concurrent.futures import Future
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
-
-from yade_mcp_bridge.tasks.task import ScriptTask
 from yade_mcp_bridge.tasks.manager import TaskManager
-
+from yade_mcp_bridge.tasks.task import ScriptTask
 
 # =========================================================================
 # ScriptTask
@@ -69,8 +66,11 @@ class TestScriptTask:
     def test_on_status_change_callback(self):
         changes = []
         f = Future()
-        task = ScriptTask(
-            "t1", f, "test.py", "/tmp/test.py",
+        ScriptTask(
+            "t1",
+            f,
+            "test.py",
+            "/tmp/test.py",
             on_status_change=lambda t: changes.append(t.status),
         )
         f.set_result({"status": "success"})
@@ -218,9 +218,7 @@ class TestScriptTask:
         assert "line 14" in text
 
     def test_paginated_output_filter(self, tmp_path):
-        task = self._make_task_with_log(
-            tmp_path, ["error: one", "info: ok", "error: two", "debug: noise"]
-        )
+        task = self._make_task_with_log(tmp_path, ["error: one", "info: ok", "error: two", "debug: noise"])
         text, pag = task.get_paginated_output(filter_text="error")
         assert pag["total_lines"] == 2
         assert "info" not in text
@@ -306,7 +304,7 @@ class TestTaskManager:
         tm = TaskManager()
         for i in range(3):
             f = Future()
-            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i))
+            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py")
         result = tm.list_all_tasks()
         assert result["ok"] is True
         assert len(result["data"]) == 3
@@ -315,7 +313,7 @@ class TestTaskManager:
         tm = TaskManager()
         for i in range(5):
             f = Future()
-            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i))
+            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py")
         result = tm.list_all_tasks(offset=1, limit=2)
         assert len(result["data"]) == 2
         assert result["pagination"]["total_count"] == 5
@@ -333,7 +331,7 @@ class TestTaskManager:
     def test_persistence_save_and_load(self):
         tm = TaskManager()
         f = Future()
-        tid = tm.create_script_task(f, "test.py", "/test.py", description="persist me", task_id="persist-1")
+        tm.create_script_task(f, "test.py", "/test.py", description="persist me", task_id="persist-1")
         f.set_result({"status": "success"})
 
         # Create new manager to load from disk
@@ -359,9 +357,9 @@ class TestTaskManager:
         for i in range(5):
             f = Future()
             f.set_result({"status": "success"})
-            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
+            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
             # Space out start_time so ordering is deterministic
-            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+            tm.tasks[f"t{i}"].start_time = 1000.0 + i
         tm._save_tasks()
 
         # Reload with max_tasks=3 — oldest 2 should be pruned
@@ -381,13 +379,13 @@ class TestTaskManager:
         for i in range(3):
             f = Future()
             f.set_result({"status": "success"})
-            log_path = str(logs_dir / "task_t{}.log".format(i))
+            log_path = str(logs_dir / f"task_t{i}.log")
             # Create the log file
             with open(log_path, "w") as fh:
-                fh.write("output {}".format(i))
-            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
-            tm.tasks["t{}".format(i)].log_path = log_path
-            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+                fh.write(f"output {i}")
+            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
+            tm.tasks[f"t{i}"].log_path = log_path
+            tm.tasks[f"t{i}"].start_time = 1000.0 + i
 
         # After adding t2, max_tasks=2 should prune t0
         tm._prune_old_tasks()
@@ -402,8 +400,8 @@ class TestTaskManager:
         for i in range(3):
             f = Future()
             f.set_result({"status": "success"})
-            tm.create_script_task(f, "s{}.py".format(i), "/s{}.py".format(i), task_id="t{}".format(i))
-            tm.tasks["t{}".format(i)].start_time = 1000.0 + i
+            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
+            tm.tasks[f"t{i}"].start_time = 1000.0 + i
 
         assert len(tm.tasks) == 3
 

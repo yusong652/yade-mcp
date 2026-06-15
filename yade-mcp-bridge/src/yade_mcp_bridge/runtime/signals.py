@@ -57,14 +57,25 @@ def request_interrupt(task_id):
     logger.info(f"Interrupt requested for task: {task_id}")
 
 
-def is_interrupt_requested(task_id=None):
-    """Check if interruption was requested for a task."""
-    if task_id:
-        return _interrupt_requested.get(task_id, False)
+def is_task_interrupt_requested(task_id):
+    """Check if interruption was requested for a specific task.
+
+    Used where the caller knows its own task id (e.g. a task script).
+    """
+    return _interrupt_requested.get(task_id, False)
+
+
+def is_current_interrupt_requested():
+    """Check if interruption was requested for the currently-running task.
+
+    Used where the caller has no handle on its own task id — notably the
+    PyRunner tick, which fires generically on YADE's sim thread and
+    discovers the active task via the ambient ``_current_task_id`` set by
+    ``set_current_task``.
+    """
     with _current_task_lock:
-        if _current_task_id:
-            return _interrupt_requested.get(_current_task_id, False)
-    return False
+        task_id = _current_task_id
+    return bool(task_id) and _interrupt_requested.get(task_id, False)
 
 
 def clear_interrupt(task_id):
