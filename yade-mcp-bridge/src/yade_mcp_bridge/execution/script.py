@@ -235,11 +235,10 @@ class ScriptRunner:
             # a close error can't skip the signal cleanup above.
             output_buffer.close()
 
-    def run(self, script_path, description, task_id=None):
+    def run(self, script_path, description, task_id):
         """Submit script to main thread queue and return immediately."""
         if not task_id:
-            # Mirrors require_field's missing_field shape; the handler already
-            # guarantees task_id, so this is a defensive duplicate.
+            # task_id keys the task's history, so it must be present.
             return error_body("missing_field", "task_id required", details={"field": "task_id"})
 
         script_name = os.path.basename(script_path)
