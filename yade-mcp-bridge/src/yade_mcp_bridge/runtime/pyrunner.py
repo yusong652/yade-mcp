@@ -47,7 +47,12 @@ def install_pyrunner(logger):
 
     import sys as _sys
 
-    from .signals import is_current_interrupt_requested, park_if_pause_wanted, repl_holds_sim
+    from .signals import (
+        is_current_interrupt_requested,
+        mark_async_cycling,
+        park_if_pause_wanted,
+        repl_holds_sim,
+    )
 
     # Flag checked after O.run() returns
     _interrupt_triggered = {"value": False}
@@ -192,6 +197,12 @@ def install_pyrunner(logger):
             _normalize_pyrunner()
             _interrupt_triggered["value"] = False
             result = _original_run(*args, **kwargs)
+            # Record fire-and-forget cycling so the task drain knows to wait
+            # for the C++ sim thread to pick it up. wait=True already drained
+            # synchronously. Signature: O.run(nSteps=-1, wait=False), so wait
+            # is the 2nd positional or the "wait" keyword.
+            wait = kwargs["wait"] if "wait" in kwargs else (args[1] if len(args) >= 2 else False)
+            mark_async_cycling(not wait)
             # After O.run() returns (possibly due to O.pause() from interrupt),
             # check if interrupt was the reason and raise at Python level.
             # This avoids the FATAL ERROR from YADE's C++ exception handling.
