@@ -257,7 +257,7 @@ class YADEBridgeServer:
         # reach them via ``self.context``, never as server attributes.
         self.context = ServerContext(
             task_manager=task_manager,
-            script_runner=ScriptRunner(executor, task_manager),
+            script_runner=ScriptRunner(task_manager),
             executor=executor,
             runtime_mode=runtime_mode,
             console_history=console_history,
