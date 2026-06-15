@@ -2,8 +2,8 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE Script Executor - Executes Python scripts in YADE environment.
 
-Runs scripts in YADE's main thread via queue, with stdout capture
-and interrupt support.
+Runs each script as a background task on its own thread, with stdout
+capture and interrupt support.
 """
 
 import logging
@@ -36,14 +36,13 @@ _ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5
 
 
 class ScriptRunner:
-    """Run Python scripts via YADE main thread queue."""
+    """Run user scripts as background tasks, each on its own thread."""
 
-    def __init__(self, executor, task_manager):
-        self.executor = executor
+    def __init__(self, task_manager):
         self.task_manager = task_manager
 
     def _execute(self, script_path, script_content, output_buffer, task_id):
-        """Execute script in main thread (called via queue).
+        """Execute the script on the task's own thread.
 
         Captures stdout during execution for progress tracking.
         Supports interruption via interrupt flag.
@@ -236,7 +235,7 @@ class ScriptRunner:
             output_buffer.close()
 
     def run(self, script_path, description, task_id):
-        """Submit script to main thread queue and return immediately."""
+        """Spawn the script on its own daemon thread and return immediately."""
         if not task_id:
             # task_id keys the task's history, so it must be present.
             return error_body("missing_field", "task_id required", details={"field": "task_id"})
@@ -245,6 +244,8 @@ class ScriptRunner:
 
         try:
             with open(script_path, encoding="utf-8") as f:
+                # Read script file content here in the handler thread,
+                # not the daemon thread, to handle file read errors
                 script_content = f.read()
         except FileNotFoundError:
             return error_body("script_not_found", f"Script file not found: {script_path}")
@@ -255,25 +256,16 @@ class ScriptRunner:
             log_path = os.path.join(LOGS_DIR, f"task_{task_id}.log")
             output_buffer = FileBuffer(log_path)
 
-            # Run in a dedicated daemon thread instead of on the
-            # executor pump. The script's ``O.run(wait=True)`` would
-            # otherwise block the pump for the task's entire lifetime,
-            # starving ``execute_code`` requests — which then have to
-            # fall back to PyRunner-tick pumping on a boost::python
-            # ``Dummy-N`` thread. If a user REPL call goes stuck there,
-            # ``is_safe_to_async_raise`` correctly refuses to inject
-            # (C++ FATAL risk), but the pump that *could* have recovered
-            # the bridge is itself wedged behind the task's ``O.run``.
-            # Net effect before this change: a single misbehaving
-            # REPL-while-task would hard-lock the bridge. Running the
-            # script on its own thread leaves the pump free to service
-            # and async-abort subsequent ``execute_code`` requests.
+            # Own thread, not the shared executor pump (unlike execute_code):
+            # a long O.run(wait=True) here would otherwise block the pump and
+            # starve execute_code for the task's whole lifetime.
             future: Future = Future()
 
             def _script_runner():
                 if not future.set_running_or_notify_cancel():
                     return
                 try:
+                    #
                     result = self._execute(script_path, script_content, output_buffer, task_id)
                     future.set_result(result)
                 except BaseException as exc:  # noqa: BLE001 — surface every failure to the future
