@@ -15,6 +15,7 @@ from concurrent.futures import Future
 
 from ..paths import LOGS_DIR
 from ..runtime.signals import (
+    async_cycling_pending,
     clear_current_task,
     clear_interrupt,
     is_task_interrupt_requested,
@@ -26,6 +27,12 @@ from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body,
 from .errors import TaskInterrupt, format_execution_error
 
 logger = logging.getLogger("MCP-Bridge")
+
+# Max time the task drain waits for YADE's C++ sim thread to flip O.running
+# True after a just-dispatched O.run(wait=False), before concluding no
+# cycling actually started. The pickup gap is normally sub-millisecond; this
+# bound only caps the rare stall on a contended sim thread.
+_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5
 
 
 class ScriptRunner:
@@ -81,10 +88,18 @@ class ScriptRunner:
             try:
                 from yade import O as _O
 
-                # Give sim thread a beat to pick up just-dispatched cycling.
-                time.sleep(0.05)
-                if _O.running:
-                    _O.wait()  # blocks; re-raises cycling errors as RuntimeError
+                # Only wait when this task actually dispatched fire-and-forget
+                # cycling (O.run(wait=False), tracked per thread by the O.run
+                # hook). A wait=False call returns before the C++ sim thread
+                # flips O.running True, so poll briefly until it picks the
+                # cycling up, then drain. wait=True runs already drained
+                # synchronously; non-cycling scripts never enter here at all.
+                if async_cycling_pending():
+                    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
+                    while not _O.running and time.monotonic() < deadline:
+                        time.sleep(0.005)
+                    if _O.running:
+                        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
                 if is_task_interrupt_requested(task_id):
                     raise InterruptedError("Interrupted by MCP bridge")

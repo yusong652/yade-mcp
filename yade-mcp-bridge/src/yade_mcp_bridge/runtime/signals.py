@@ -83,6 +83,35 @@ def clear_interrupt(task_id):
     _interrupt_requested.pop(task_id, None)
 
 
+# ---------------------------------------------------------------------------
+# Fire-and-forget cycling marker (per thread).
+#
+# ``O.run(wait=False)`` returns before YADE's C++ sim thread has flipped
+# ``O.running`` True. A task that ends with such a dispatch must drain the
+# cycling before reporting success, but right after the script's ``exec``
+# there is no way to tell "cycling about to start" from "no cycling at all" —
+# both read ``O.running == False``. The ``O.run`` hook records, per calling
+# thread, whether the last run left fire-and-forget cycling; the task drain
+# reads its OWN thread's flag to decide whether to wait. Per-thread
+# (``threading.local``) so an ``execute_code`` ``O.run`` on the pump thread
+# never bleeds into a task's drain on its own dedicated thread.
+# ---------------------------------------------------------------------------
+
+_async_cycling = threading.local()
+
+
+def mark_async_cycling(pending):
+    """Record whether the calling thread's last ``O.run`` left undrained
+    fire-and-forget cycling (``wait=False``)."""
+    _async_cycling.pending = pending
+
+
+def async_cycling_pending():
+    """True if THIS thread's last ``O.run`` was a ``wait=False`` dispatch
+    whose cycling has not been drained yet."""
+    return getattr(_async_cycling, "pending", False)
+
+
 def register_exec_thread(request_id: str, thread_id: int) -> None:
     """Record which OS thread is currently running ``request_id``.
 
