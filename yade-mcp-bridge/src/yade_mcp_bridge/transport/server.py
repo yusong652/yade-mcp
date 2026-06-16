@@ -223,7 +223,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
 class BridgeServer:
-    """HTTP + SSE bridge for YADE script execution via the main-thread queue."""
+    """HTTP + SSE bridge for executing code and running script tasks inside a YADE process."""
 
     _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB output safety net
 
