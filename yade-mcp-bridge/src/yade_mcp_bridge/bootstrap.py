@@ -137,7 +137,7 @@ def start(
     """Start the MCP bridge server.
 
     Brings up an HTTP + SSE server on a background thread (``host``:``port``,
-    default localhost:9002), then drives queued main-thread work via a task
+    default localhost:9002), then drains queued execute_code work via a
     pump. ``mode`` selects the pump: "auto" tries a Qt timer and falls back
     to a blocking background thread, "gui" forces Qt, "console" forces
     blocking.
