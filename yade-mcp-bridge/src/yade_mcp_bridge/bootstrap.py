@@ -1,12 +1,12 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Bridge startup: logging, preflight checks, wiring and process lifecycle.
+"""Bridge startup and process lifecycle.
 
-``start()`` is the package's single entry point. It configures logging,
-installs the simulation-side PyRunner hook, creates the HTTP + SSE server
-on a background thread, wires console capture and graceful shutdown
-(atexit + signals), and finally starts the execute_code pump that drains
-queued requests (Qt timer in gui mode, daemon thread in console mode).
+``start()`` is the package's single entry point. It composes the helpers
+below: configure logging, install the PyRunner interrupt hook, bring up
+the HTTP + SSE server on a background thread, wire console capture and
+graceful shutdown, then start the execute_code pump that drains queued
+requests (Qt timer in gui mode, daemon thread in console mode).
 """
 
 import atexit
@@ -27,6 +27,108 @@ from .transport import create_server
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
 
+def _setup_logging():
+    """Configure root logging and return (logger, log_file path).
+
+    stdout shows WARNING+ only (keeps the interactive prompt clean); the
+    file handler keeps everything for post-mortem debugging.
+    """
+    bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
+    if not os.path.exists(bridge_dir):
+        os.makedirs(bridge_dir)
+    log_file = os.path.join(bridge_dir, "bridge.log")
+
+    formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.WARNING)
+    stdout_handler.setFormatter(formatter)
+    file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
+    file_handler.setFormatter(formatter)
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.handlers.clear()
+    root_logger.addHandler(stdout_handler)
+    root_logger.addHandler(file_handler)
+
+    return logging.getLogger("MCP-Bridge"), log_file
+
+
+def _check_port_free(host, port):
+    """Fail fast on the main thread if the port is taken.
+
+    SO_REUSEADDR handles crash/restart scenarios.
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        sock.bind((host, port))
+    except OSError as exc:
+        raise RuntimeError(f"Port {port} is already in use. Try: {__package__}.start(port={port + 1})") from exc
+    finally:
+        sock.close()
+
+
+def _start_server_thread(bridge_server, logger):
+    """Serve the bridge on a daemon thread."""
+
+    def run():
+        try:
+            bridge_server.serve_forever()
+        except Exception as e:
+            logger.error(f"Server error: {e}")
+            traceback.print_exc()
+
+    thread = threading.Thread(target=run, daemon=True)
+    thread.start()
+    if not thread.is_alive():
+        raise RuntimeError("Bridge server thread failed to start")
+
+
+def _install_shutdown(bridge_server, logger):
+    """Register idempotent shutdown on atexit and SIGTERM/SIGINT.
+
+    atexit alone is not enough: it doesn't run while the main thread is
+    blocked (e.g. time.sleep inside a task), so signals are handled too.
+    """
+    done = {"value": False}
+
+    def shutdown():
+        if done["value"]:
+            return
+        done["value"] = True
+        logger.info("Bridge shutting down...")
+        bridge_server.shutdown()
+
+    atexit.register(shutdown)
+
+    def handler(signum, _frame):
+        logger.info("Received %s, shutting down...", signal.Signals(signum).name)
+        shutdown()
+        # Re-raise under the default handler so the OS terminates normally
+        # and the shell can restore terminal settings (echo, line mode).
+        signal.signal(signum, signal.SIG_DFL)
+        os.kill(os.getpid(), signum)
+
+    signal.signal(signal.SIGTERM, handler)
+    signal.signal(signal.SIGINT, handler)
+
+
+def _start_pump(executor, bridge_server, logger, mode):
+    """Start the execute_code pump and record the resolved runtime mode."""
+    if mode in ("auto", "gui") and start_qt_pump(executor, logger):
+        bridge_server.set_runtime_mode("gui")
+        logger.info("execute_code pump running via Qt timer")
+        return
+
+    if mode == "gui":
+        raise RuntimeError("Qt is not available; cannot start in gui mode")
+
+    if mode in ("auto", "console") and start_background_pump(executor, logger):
+        bridge_server.set_runtime_mode("console")
+        logger.info("execute_code pump running via background thread")
+
+
 def start(
     host="localhost",
     port=9002,
@@ -43,112 +145,20 @@ def start(
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
 
-    # Logging setup
-    bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
-    if not os.path.exists(bridge_dir):
-        os.makedirs(bridge_dir)
-    log_file = os.path.join(bridge_dir, "bridge.log")
+    logger, log_file = _setup_logging()
 
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
-    root_logger.handlers.clear()
-
-    formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
-    # stdout shows WARNING+ only (keeps the interactive prompt clean);
-    # file handler keeps everything for post-mortem debugging.
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setLevel(logging.WARNING)
-    stdout_handler.setFormatter(formatter)
-    file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
-    file_handler.setFormatter(formatter)
-    root_logger.addHandler(stdout_handler)
-    root_logger.addHandler(file_handler)
-    logger = logging.getLogger("MCP-Bridge")
-
-    executor = SerialExecutor()
-
-    # Install PyRunner for interrupt checking during simulation.
-    # install_pyrunner logs its own failure warning; ignore return value here.
+    # install_pyrunner logs its own failure warning; ignore the return value.
     install_pyrunner(logger)
 
-    # Port availability check (SO_REUSEADDR handles crash/restart scenarios)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    try:
-        sock.bind((host, port))
-    except OSError as exc:
-        raise RuntimeError(f"Port {port} is already in use. Try: {__package__}.start(port={port + 1})") from exc
-    finally:
-        sock.close()
+    _check_port_free(host, port)
 
-    # Create the HTTP + SSE server (binds the socket eagerly, so a port
-    # conflict raises here on the main thread before the serving thread starts)
-    yade_server = create_server(
-        executor=executor,
-        host=host,
-        port=port,
-        runtime_mode=mode,
-    )
+    executor = SerialExecutor()
+    bridge_server = create_server(executor=executor, host=host, port=port, runtime_mode=mode)
+    ConsoleCapture(bridge_server.context.console_history).install()
 
-    # Install IPython hooks for console history capture
-    console_capture = ConsoleCapture(yade_server.context.console_history)
-    console_capture.install()
-
-    def run_server_background():
-        try:
-            yade_server.serve_forever()
-        except Exception as e:
-            logger.error(f"Server error: {e}")
-            traceback.print_exc()
-
-    server_thread = threading.Thread(target=run_server_background, daemon=True)
-    server_thread.start()
-
-    if not server_thread.is_alive():
-        raise RuntimeError("Bridge server thread failed to start")
-
-    # Graceful shutdown — must be idempotent (signal + atexit may both fire)
-    _shutdown_done = {"value": False}
-
-    def _shutdown():
-        if _shutdown_done["value"]:
-            return
-        _shutdown_done["value"] = True
-        logger.info("Bridge shutting down...")
-        yade_server.shutdown()
-
-    atexit.register(_shutdown)
-
-    # SIGTERM/SIGINT handler: atexit doesn't run when the main thread is
-    # blocked (e.g. time.sleep inside a task). Explicit signal handling
-    # ensures cleanup always happens.
-    def _signal_handler(signum, _frame):
-        sig_name = signal.Signals(signum).name
-        logger.info("Received %s, shutting down...", sig_name)
-        _shutdown()
-        # Restore default handler and re-raise so the OS terminates the
-        # process normally.  This lets the shell detect signal death and
-        # restore terminal settings (echo, line mode, etc.).
-        signal.signal(signum, signal.SIG_DFL)
-        os.kill(os.getpid(), signum)
-
-    signal.signal(signal.SIGTERM, _signal_handler)
-    signal.signal(signal.SIGINT, _signal_handler)
+    _start_server_thread(bridge_server, logger)
+    _install_shutdown(bridge_server, logger)
 
     print(f"YADE MCP Bridge on http://{host}:{port}, log: {log_file}")
 
-    # execute_code pump
-    use_qt = mode in ("auto", "gui")
-    use_blocking = mode in ("auto", "console")
-
-    if use_qt and start_qt_pump(executor, logger):
-        yade_server.set_runtime_mode("gui")
-        logger.info("execute_code pump running via Qt timer")
-        return
-
-    if mode == "gui":
-        raise RuntimeError("Qt is not available; cannot start in gui mode")
-
-    if use_blocking and start_background_pump(executor, logger):
-        yade_server.set_runtime_mode("console")
-        logger.info("execute_code pump running via background thread")
+    _start_pump(executor, bridge_server, logger, mode)
