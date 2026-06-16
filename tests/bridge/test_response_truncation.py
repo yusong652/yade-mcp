@@ -1,10 +1,10 @@
-"""Tests for bridge response truncation (``YADEBridgeServer._truncate_response``)."""
+"""Tests for bridge response truncation (``BridgeServer._truncate_response``)."""
 
-from yade_mcp_bridge.transport.server import YADEBridgeServer
+from yade_mcp_bridge.transport.server import BridgeServer
 
 
 def _truncate(response):
-    return YADEBridgeServer._truncate_response(response)
+    return BridgeServer._truncate_response(response)
 
 
 class TestTruncateResponse:

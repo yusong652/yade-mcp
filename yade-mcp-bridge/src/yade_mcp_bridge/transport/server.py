@@ -66,7 +66,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 
     ``POST /<command>`` dispatches to the request/response handler;
     ``GET /events`` serves the SSE doorbell stream. The owning
-    ``YADEBridgeServer`` is reachable via ``self.server.bridge``.
+    ``BridgeServer`` is reachable via ``self.server.bridge``.
     """
 
     protocol_version = "HTTP/1.1"
@@ -222,7 +222,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
             self._bridge.unregister_sse_client(q)
 
 
-class YADEBridgeServer:
+class BridgeServer:
     """HTTP + SSE bridge for YADE script execution via the main-thread queue."""
 
     _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB output safety net
@@ -413,7 +413,7 @@ def create_server(
     host="localhost",
     port=9002,
 ):
-    return YADEBridgeServer(
+    return BridgeServer(
         executor,
         runtime_mode,
         host=host,
