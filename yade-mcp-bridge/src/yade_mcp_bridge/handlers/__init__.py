@@ -2,9 +2,9 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """MCP bridge message handlers."""
 
+from .code import handle_execute_code
 from .console import handle_console_history
 from .context import ServerContext
-from .execute_code import handle_execute_code
 from .tasks import (
     handle_check_task_status,
     handle_execute_task,

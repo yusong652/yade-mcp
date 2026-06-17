@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Async exception injection for terminating stuck code execution.
 
-Used by ``handlers/execute_code.py`` when a timeout fires: we inject a
+Used by ``handlers/code.py`` when a timeout fires: we inject a
 ``BridgeTimeout`` into the thread that is running user code so the code
 unwinds at the next Python bytecode edge, freeing the pump thread.
 
