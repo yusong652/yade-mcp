@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Async exception injection for terminating stuck code execution.
 
-Used by ``handlers/code.py`` when a timeout fires: we inject a
+Used by ``repl.py`` when a timeout fires: we inject a
 ``BridgeTimeout`` into the thread that is running user code so the code
 unwinds at the next Python bytecode edge, freeing the pump thread.
 
@@ -18,15 +18,15 @@ YADE's C++ FATAL handler.
 MainThread is intentionally ALLOWED. In Qt mode the bridge pump runs
 on MainThread via a ``QTimer`` tick, so a stuck ``execute_code`` body
 is always sitting on MainThread's Python stack (``QTimer →
-_pump_tick → run_next → _execute_code → exec(user_code)``).
+_pump_tick → run_next → _run_code → exec(user_code)``).
 Refusing to inject there would strand the pump forever with no way to
 recover short of restarting the bridge. The injection is safe because:
 
 * The caller (``_terminate_stuck_execution``) looks up the target
   ``tid`` via ``get_exec_thread(request_id)``, which only returns a
-  value while ``_execute_code`` is inside its try-block — so MainThread
+  value while ``_run_code`` is inside its try-block — so MainThread
   is demonstrably running user code, not idling in ``QApplication.exec_``.
-* ``BridgeTimeout`` is caught by ``_execute_code``'s explicit
+* ``BridgeTimeout`` is caught by ``_run_code``'s explicit
   ``except BridgeTimeout`` branch and never propagates back up into
   the Qt event loop.
 

@@ -18,7 +18,7 @@ _interrupt_requested = {}  # task_id -> bool
 # Thread registry for execute_code cancellation. Keyed by request_id
 # (or task_id — both are opaque strings here), value is the
 # ``threading.get_ident()`` of the worker currently running that
-# request. Populated at the top of ``_execute_code``, cleaned in its
+# request. Populated at the top of ``_run_code``, cleaned in its
 # ``finally``. Read by the execute_code timeout handler to target
 # ``PyThreadState_SetAsyncExc``.
 _exec_thread_ids: dict[str, int] = {}
@@ -42,7 +42,7 @@ def clear_current_task():
 def peek_current_task():
     """Return the currently-set task/request id, or None.
 
-    Used by ``_execute_code`` to implement a save-and-restore pattern:
+    Used by ``_run_code`` to implement a save-and-restore pattern:
     when an execute_code runs *inside* another script's PyRunner tick,
     we must not clobber the outer script's ``_current_task_id`` on the
     way out.
@@ -117,7 +117,7 @@ def register_exec_thread(request_id: str, thread_id: int) -> None:
 
     As a cheap leak-defense, scrubs any pre-existing entries whose
     recorded thread is no longer alive. Leaks would only occur if
-    ``_execute_code`` exited through a path that skipped its
+    ``_run_code`` exited through a path that skipped its
     ``finally`` — vanishingly rare, but the scrub keeps the registry
     from growing unboundedly over a long-lived bridge session.
     """

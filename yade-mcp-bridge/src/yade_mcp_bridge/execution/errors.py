@@ -37,10 +37,10 @@ class BridgeTimeout(BaseException):
     execute_code body.
 
     Inherits ``BaseException`` (not ``Exception``) so user-code handlers
-    of the form ``except Exception:`` cannot swallow it. The handler's
-    ``_execute_code`` closure catches it explicitly and returns a
+    of the form ``except Exception:`` cannot swallow it. ``repl.py``'s
+    ``_run_code`` catches it explicitly and returns a
     ``status="terminated"`` marker — this exception must never escape
-    ``_execute_code``, or ``SerialExecutor.run_next``'s
+    ``_run_code``, or ``SerialExecutor.run_next``'s
     ``except Exception`` (which does NOT catch BaseException) will let
     it kill the pump thread permanently.
     """
