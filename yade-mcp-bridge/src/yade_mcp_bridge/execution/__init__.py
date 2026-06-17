@@ -2,8 +2,8 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE Script Execution Engine."""
 
+from .executor import SerialExecutor
 from .script import ScriptRunner
-from .serial import SerialExecutor
 
 __all__ = [
     "ScriptRunner",

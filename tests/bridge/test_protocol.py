@@ -7,7 +7,7 @@ from concurrent.futures import Future
 
 import httpx
 import pytest
-from yade_mcp_bridge.execution.serial import SerialExecutor
+from yade_mcp_bridge.execution.executor import SerialExecutor
 from yade_mcp_bridge.tasks.task import ScriptTask
 from yade_mcp_bridge.transport.server import create_server
 

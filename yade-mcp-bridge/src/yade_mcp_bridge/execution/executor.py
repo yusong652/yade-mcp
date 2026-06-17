@@ -1,10 +1,10 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Serial executor - thread-safe queue that runs submitted callables one at a time.
+"""Executor that runs ``execute_code`` submissions on the pump thread.
 
-HTTP request threads concurrently ``submit()`` callables; a single pump
-drains them in FIFO order via ``run_next()``. The single-consumer invariant
-serializes YADE operations so they never race on engine state.
+``submit()`` enqueues code; a single pump drains the FIFO queue via
+``run_next()``. The queue is a safety net: should two submissions ever
+overlap, they run serially instead of racing on YADE engine state.
 
 Which thread the pump runs on depends on the runtime mode (see pump.py):
 
@@ -27,19 +27,15 @@ logger = logging.getLogger("MCP-Bridge")
 
 
 class SerialExecutor:
-    """Run submitted callables serially via a queue.
-
-    HTTP request threads submit callables via submit(); the pump drains them
-    one at a time via run_next().
-    """
+    """Run ``execute_code`` submissions serially via a FIFO queue."""
 
     def __init__(self):
         self._queue = queue.Queue()
         logger.info("SerialExecutor initialized")
 
     def submit(self, func, *args, **kwargs):
-        """Submit a callable to the serial queue, called from a background
-        thread. Returns a ``Future`` to await the result.
+        """Queue code to run on the pump thread. Returns a ``Future`` to
+        await the result.
         """
         future = Future()
         self._queue.put((func, args, kwargs, future))
