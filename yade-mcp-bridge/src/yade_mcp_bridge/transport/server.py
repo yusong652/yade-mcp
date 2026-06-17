@@ -19,7 +19,7 @@ import threading
 import time
 
 from ..console import ConsoleHistory
-from ..execution import ScriptRunner
+from ..execution import CodeRunner, ScriptRunner
 from ..handlers import (
     ServerContext,
     handle_check_task_status,
@@ -258,6 +258,7 @@ class BridgeServer:
         self.context = ServerContext(
             task_manager=task_manager,
             script_runner=ScriptRunner(task_manager),
+            code_runner=CodeRunner(executor),
             executor=executor,
             runtime_mode=runtime_mode,
             console_history=console_history,

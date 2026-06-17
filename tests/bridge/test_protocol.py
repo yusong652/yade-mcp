@@ -503,7 +503,7 @@ class TestExecuteCodeTimeoutTermination:
         assert follow["ok"] is True
 
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
-        """Regression: _execute_code must NOT set_current_task(request_id).
+        """Regression: _run_code must NOT set_current_task(request_id).
 
         If it did, a subsequent REPL timeout's request_interrupt() would
         set a flag that PyRunner's is_current_interrupt_requested() reads
