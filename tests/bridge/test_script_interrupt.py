@@ -59,10 +59,7 @@ class TestTaskInterrupt:
     def test_script_raising_taskinterrupt_returns_interrupted(self, fake_yade, runner, scratch):
         """User script directly raising TaskInterrupt mirrors what the
         async-exc injection does from the outside."""
-        code = (
-            "from yade_mcp_bridge.execution.errors import TaskInterrupt\n"
-            "raise TaskInterrupt()\n"
-        )
+        code = "from yade_mcp_bridge.execution.errors import TaskInterrupt\nraise TaskInterrupt()\n"
         script_path, buffer = scratch(code)
         result = runner._execute(script_path, code, buffer, task_id="ti-1")
 
@@ -75,10 +72,7 @@ class TestTaskInterrupt:
         _execute must ``O.pause()`` + ``O.wait()`` so the sim doesn't
         linger and poison the next task's drain check."""
         fake_yade.running = True
-        code = (
-            "from yade_mcp_bridge.execution.errors import TaskInterrupt\n"
-            "raise TaskInterrupt()\n"
-        )
+        code = "from yade_mcp_bridge.execution.errors import TaskInterrupt\nraise TaskInterrupt()\n"
         script_path, buffer = scratch(code)
         result = runner._execute(script_path, code, buffer, task_id="ti-2")
 
@@ -88,10 +82,7 @@ class TestTaskInterrupt:
 
     def test_sim_cleanup_skipped_when_not_running(self, fake_yade, runner, scratch):
         fake_yade.running = False
-        code = (
-            "from yade_mcp_bridge.execution.errors import TaskInterrupt\n"
-            "raise TaskInterrupt()\n"
-        )
+        code = "from yade_mcp_bridge.execution.errors import TaskInterrupt\nraise TaskInterrupt()\n"
         script_path, buffer = scratch(code)
         result = runner._execute(script_path, code, buffer, task_id="ti-3")
 
@@ -105,10 +96,7 @@ class TestTaskInterrupt:
         exception as the task's top-line status."""
         fake_yade.running = True
         fake_yade.wait.side_effect = RuntimeError("sim zombie")
-        code = (
-            "from yade_mcp_bridge.execution.errors import TaskInterrupt\n"
-            "raise TaskInterrupt()\n"
-        )
+        code = "from yade_mcp_bridge.execution.errors import TaskInterrupt\nraise TaskInterrupt()\n"
         script_path, buffer = scratch(code)
         result = runner._execute(script_path, code, buffer, task_id="ti-4")
 
