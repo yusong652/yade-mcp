@@ -3,7 +3,7 @@
 import threading
 from concurrent.futures import Future
 
-from yade_mcp_bridge.execution.serial import SerialExecutor
+from yade_mcp_bridge.execution.executor import SerialExecutor
 
 
 class TestSerialExecutor:
