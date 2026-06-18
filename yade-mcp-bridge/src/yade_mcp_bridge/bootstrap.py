@@ -23,6 +23,7 @@ from .execution import SerialExecutor
 from .paths import DATA_DIR
 from .runtime import install_pyrunner, start_background_pump, start_qt_pump
 from .transport import create_server
+from .utils.safe_logging import GapFreeFileHandler, GapFreeStreamHandler
 
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
@@ -38,11 +39,13 @@ def _setup_logging():
         os.makedirs(bridge_dir)
     log_file = os.path.join(bridge_dir, "bridge.log")
 
+    # Gap-free handlers: the L2 timeout path can async-raise into a thread
+    # mid-handle() and orphan the stdlib handler lock; see utils/safe_logging.
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
-    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler = GapFreeStreamHandler(sys.stdout)
     stdout_handler.setLevel(logging.WARNING)
     stdout_handler.setFormatter(formatter)
-    file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
+    file_handler = GapFreeFileHandler(log_file, mode="w", encoding="utf-8")
     file_handler.setFormatter(formatter)
 
     root_logger = logging.getLogger()
