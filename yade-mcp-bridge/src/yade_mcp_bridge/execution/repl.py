@@ -5,9 +5,6 @@
 ``CodeRunner`` runs an ``execute_code`` snippet on the pump thread and
 returns the wire response. REPL semantics: eval-first-then-exec against the
 persistent ``__main__`` namespace, stdout captured, last value returned.
-
-Counterpart to ``ScriptRunner`` (script.py), which runs script *files* as
-background tasks; this path is synchronous and single-shot.
 """
 
 import concurrent.futures
@@ -332,8 +329,8 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
 class CodeRunner:
     """Run ``execute_code`` snippets synchronously on the pump thread.
 
-    Counterpart to ``ScriptRunner``: submits each snippet to the serial executor
-    and blocks the calling request thread until it resolves or the timeout fires.
+    Submits each snippet to the serial executor and blocks the calling request
+    thread until it resolves or the timeout fires.
     """
 
     def __init__(self, executor):
