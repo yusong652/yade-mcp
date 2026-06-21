@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared error formatting for user-code execution paths.
 
-Both ``execute_code`` (synchronous REPL) and ``execute_task`` (async
+Both ``execute_code`` (synchronous snippet) and ``execute_task`` (async
 script) catch user-code exceptions and need the same treatment:
 
 * Filter the traceback to **user frames only** (YADE/bridge internals
@@ -18,7 +18,7 @@ consistent. Each caller provides:
   frame belongs to user code (not YADE / bridge internals).
 * ``display_path``: how user files should be rendered in the message
   (e.g. YADE's ``path_to_llm_format`` for scripts, ``<execute_code>``
-  for REPL snippets).
+  for execute_code snippets).
 * ``overflow_writer``: optional callable invoked only when the
   traceback exceeds the inline cap. It receives the full traceback
   text, persists it, and returns an absolute path. Callers that do

@@ -51,7 +51,7 @@ def install_pyrunner(logger):
         is_current_interrupt_requested,
         mark_async_cycling,
         park_if_pause_wanted,
-        repl_holds_sim,
+        snippet_holds_sim,
     )
 
     # Flag checked after O.run() returns
@@ -183,8 +183,8 @@ def install_pyrunner(logger):
             # PyRunner tick), so this O.run()'s O.wait() would block on an
             # iteration the cycle can never reach → deadlock. The task's own
             # O.run runs on its companion thread (never inside a window), so
-            # repl_holds_sim() is False there and the task is unaffected.
-            if repl_holds_sim():
+            # snippet_holds_sim() is False there and the task is unaffected.
+            if snippet_holds_sim():
                 raise RuntimeError(
                     "O.run() refused: execute_code is holding a paused-snapshot "
                     "window (the simulation cycle is frozen for a consistent "

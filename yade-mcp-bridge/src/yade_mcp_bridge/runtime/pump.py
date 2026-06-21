@@ -22,7 +22,7 @@ _qt_pump_timer = None
 
 # Pump tick cadence in milliseconds: how often run_next() is invoked.
 # 20ms balances execute_code responsiveness against polling overhead and is
-# the floor on REPL latency. A pump implementation detail, not a tunable.
+# the floor on execute_code latency. A pump implementation detail, not a tunable.
 _TICK_INTERVAL_MS = 20
 
 
