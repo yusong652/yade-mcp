@@ -145,20 +145,20 @@ class TestExecThreadRegistry:
 
 class TestSimPauseRendezvous:
     """The execute_code consistent-snapshot window: a handshake between the
-    REPL (pump thread) and the PyRunner tick (sim thread). Exercised here
+    snippet (pump thread) and the PyRunner tick (sim thread). Exercised here
     with a fake cycle thread — no YADE needed."""
 
     def setup_method(self):
         from yade_mcp_bridge.runtime.signals import (
             _cycle_parked,
             _pause_wanted,
-            _repl_released,
+            _snippet_released,
             _window_local,
         )
 
         _pause_wanted.clear()
         _cycle_parked.clear()
-        _repl_released.clear()
+        _snippet_released.clear()
         if getattr(_window_local, "active", False):
             _window_local.active = False
 
@@ -200,15 +200,15 @@ class TestSimPauseRendezvous:
         finally:
             self._stop_cycle(state, t)
 
-    def test_repl_holds_sim_only_inside_window(self):
-        from yade_mcp_bridge.runtime.signals import repl_holds_sim, sim_paused_window
+    def test_snippet_holds_sim_only_inside_window(self):
+        from yade_mcp_bridge.runtime.signals import sim_paused_window, snippet_holds_sim
 
-        assert repl_holds_sim() is False
+        assert snippet_holds_sim() is False
         # No cycle thread → won't park; short acquire timeout keeps it fast.
         with sim_paused_window(acquire_timeout_s=0.05) as parked:
             assert parked is False  # nothing to park
-            assert repl_holds_sim() is True
-        assert repl_holds_sim() is False
+            assert snippet_holds_sim() is True
+        assert snippet_holds_sim() is False
 
     def test_window_releases_cycle_on_exception(self):
         from yade_mcp_bridge.runtime.signals import sim_paused_window
@@ -228,8 +228,8 @@ class TestSimPauseRendezvous:
             self._stop_cycle(state, t)
 
     def test_park_max_hold_returns_without_release(self):
-        """If the REPL never releases, the brake still returns after
-        ``max_hold_s`` so a hung REPL cannot freeze the sim forever."""
+        """If the snippet never releases, the brake still returns after
+        ``max_hold_s`` so a hung snippet cannot freeze the sim forever."""
         from yade_mcp_bridge.runtime.signals import _pause_wanted, park_if_pause_wanted
 
         _pause_wanted.set()

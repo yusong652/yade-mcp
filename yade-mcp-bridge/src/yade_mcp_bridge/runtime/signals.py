@@ -152,26 +152,26 @@ def get_exec_thread(request_id: str) -> int | None:
 # async-abort on timeout still works (the alternative, running the snippet
 # ON the sim thread, is un-abortable: Dummy-N → boost::python → C++ FATAL).
 #
-# It is a two-way handshake between the REPL (pump thread) and the PyRunner
+# It is a two-way handshake between the snippet (pump thread) and the PyRunner
 # tick (YADE's C++ sim thread, a Dummy-N boost::python thread). The tick
 # NEVER receives an injected exception — it parks COOPERATIVELY on an Event
-# (GIL released), so the REPL can run while it waits:
+# (GIL released), so the snippet can run while it waits:
 #
-#   REPL:  set _pause_wanted -> wait _cycle_parked -> <work> -> clear + set _repl_released
-#   tick:  see _pause_wanted -> set _cycle_parked -> wait _repl_released -> continue
+#   snippet: set _pause_wanted -> wait _cycle_parked -> <work> -> clear + set _snippet_released
+#   tick:    see _pause_wanted -> set _cycle_parked -> wait _snippet_released -> continue
 #
 # Events (not Conditions) are used deliberately: a set() persists, so there
 # is no lost-wakeup risk regardless of which side reaches its wait first.
 # ---------------------------------------------------------------------------
 
 _pause_lock = threading.Lock()  # serialize: at most one window at a time
-_pause_wanted = threading.Event()  # REPL -> cycle: please park
-_cycle_parked = threading.Event()  # cycle -> REPL: parked, scene is frozen
-_repl_released = threading.Event()  # REPL -> cycle: done, resume
+_pause_wanted = threading.Event()  # snippet -> cycle: please park
+_cycle_parked = threading.Event()  # cycle -> snippet: parked, scene is frozen
+_snippet_released = threading.Event()  # snippet -> cycle: done, resume
 _window_local = threading.local()  # marks the thread currently holding a window
 
-# Max time the cycle will stay parked waiting for the REPL to finish. Bounds
-# the damage if the REPL hangs (e.g. stuck C-level I/O) while holding the
+# Max time the cycle will stay parked waiting for the snippet to finish. Bounds
+# the damage if the snippet hangs (e.g. stuck C-level I/O) while holding the
 # window: the sim resumes instead of freezing forever.
 _PAUSE_MAX_HOLD_S = 30.0
 
@@ -180,25 +180,25 @@ def park_if_pause_wanted(max_hold_s: float = _PAUSE_MAX_HOLD_S) -> None:
     """Cooperative brake, called by the PyRunner tick on YADE's sim thread.
 
     If an execute_code snippet has requested a snapshot window, park here
-    (GIL released, so the REPL can run) until it releases — or until
-    ``max_hold_s`` elapses, after which we resume anyway so a hung REPL
+    (GIL released, so the snippet can run) until it releases — or until
+    ``max_hold_s`` elapses, after which we resume anyway so a hung snippet
     can't freeze the sim indefinitely. The scene is quiescent at the
-    PyRunner's engine slot, so the REPL gets a consistent view.
+    PyRunner's engine slot, so the snippet gets a consistent view.
     """
     if not _pause_wanted.is_set():
         return
-    _repl_released.clear()
+    _snippet_released.clear()
     _cycle_parked.set()
-    if not _repl_released.wait(timeout=max_hold_s):
+    if not _snippet_released.wait(timeout=max_hold_s):
         logger.warning(
             "execute_code pause window exceeded %.0fs; resuming sim "
-            "(REPL may be stuck in a C call while holding the window)",
+            "(snippet may be stuck in a C call while holding the window)",
             max_hold_s,
         )
     _cycle_parked.clear()
 
 
-def repl_holds_sim() -> bool:
+def snippet_holds_sim() -> bool:
     """True if the CURRENT thread is inside a sim-pause window.
 
     Read by the ``O.run`` hook to refuse driving the cycle from a snippet
@@ -213,7 +213,7 @@ def repl_holds_sim() -> bool:
 
 @contextlib.contextmanager
 def sim_paused_window(acquire_timeout_s: float = 2.0):
-    """REPL side: freeze the sim cycle for an exclusive snapshot window.
+    """Snippet side: freeze the sim cycle for an exclusive snapshot window.
 
     Yields ``True`` if the cycle actually parked (snapshot is consistent),
     ``False`` if it did not park within ``acquire_timeout_s`` (a single
@@ -225,7 +225,7 @@ def sim_paused_window(acquire_timeout_s: float = 2.0):
     """
     with _pause_lock:
         _cycle_parked.clear()
-        _repl_released.clear()
+        _snippet_released.clear()
         _pause_wanted.set()
         _window_local.active = True
         try:
@@ -234,4 +234,4 @@ def sim_paused_window(acquire_timeout_s: float = 2.0):
         finally:
             _window_local.active = False
             _pause_wanted.clear()
-            _repl_released.set()
+            _snippet_released.set()

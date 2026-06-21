@@ -505,7 +505,7 @@ class TestExecuteCodeTimeoutTermination:
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
         """Regression: _run_code must NOT set_current_task(request_id).
 
-        If it did, a subsequent REPL timeout's request_interrupt() would
+        If it did, a subsequent execute_code timeout's request_interrupt() would
         set a flag that PyRunner's is_current_interrupt_requested() reads
         via _current_task_id → O.pause() fires → _hooked_run raises
         InterruptedError → the enclosing script task gets spuriously
@@ -534,7 +534,7 @@ class TestExecuteCodeTimeoutTermination:
             assert peek_current_task() == "outer-task"
 
             # Timed-out execute_code: the termination path calls
-            # request_interrupt(request_id) on the REPL's own id.
+            # request_interrupt(request_id) on the execute_code's own id.
             # That flag must not leak into any PyRunner tick reading
             # _current_task_id.
             terminated = await _send_recv(
