@@ -149,7 +149,7 @@ def handle_interrupt_task(ctx, data):
             logger.info("Task %s async_exc refused (%s); flag-only path in effect", task_id, safe_reason)
 
     # Defend against TOCTOU: task may have finished between the status check
-    # above and request_interrupt. script.py's finally clears the flag on exit,
+    # above and request_interrupt. script_runner.py's finally clears the flag on exit,
     # but if we add it after that runs, the flag would leak. Re-check and clean.
     if task.status not in ("pending", "running"):
         clear_interrupt(task_id)

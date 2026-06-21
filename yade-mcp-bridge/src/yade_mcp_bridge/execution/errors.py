@@ -37,7 +37,7 @@ class BridgeTimeout(BaseException):
     execute_code body.
 
     Inherits ``BaseException`` (not ``Exception``) so user-code handlers
-    of the form ``except Exception:`` cannot swallow it. ``repl.py``'s
+    of the form ``except Exception:`` cannot swallow it. ``code_runner.py``'s
     ``_run_code`` catches it explicitly and returns a
     ``status="terminated"`` marker — this exception must never escape
     ``_run_code``, or ``SerialExecutor.run_next``'s

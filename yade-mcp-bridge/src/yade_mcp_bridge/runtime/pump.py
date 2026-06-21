@@ -4,7 +4,7 @@
 
 A pump ticks ``SerialExecutor.run_next`` to drain execute_code requests one
 at a time. Long-running tasks bypass it — they run on their own daemon
-thread (see execution/script.py) — so a task can't starve the pump.
+thread (see execution/script_runner.py) — so a task can't starve the pump.
 
 ``bootstrap.start()`` picks one per runtime mode; both start non-blocking:
 

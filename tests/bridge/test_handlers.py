@@ -3,7 +3,7 @@
 from concurrent.futures import Future
 from unittest.mock import MagicMock, patch
 
-from yade_mcp_bridge.execution.repl import (
+from yade_mcp_bridge.execution.code_runner import (
     _terminate_stuck_execution,
     _timeout_response,
 )
@@ -421,7 +421,7 @@ class TestTerminateStuckExecution:
                 return_value=_FakeSafe(),
             ),
             patch(
-                "yade_mcp_bridge.execution.repl.fire_async_exception",
+                "yade_mcp_bridge.execution.code_runner.fire_async_exception",
                 return_value=1,
             ),
         ):
@@ -450,11 +450,11 @@ class TestTerminateStuckExecution:
                 return_value=_FakeSafe(),
             ),
             patch(
-                "yade_mcp_bridge.execution.repl.fire_async_exception",
+                "yade_mcp_bridge.execution.code_runner.fire_async_exception",
                 return_value=1,
             ),
             patch(
-                "yade_mcp_bridge.execution.repl._TERMINATION_GRACE_S",
+                "yade_mcp_bridge.execution.code_runner._TERMINATION_GRACE_S",
                 0.05,  # short grace to keep test fast
             ),
         ):
@@ -473,7 +473,7 @@ class TestTerminateStuckExecution:
 
         # No task owns the sim (setup cleared _current_task_id).
         with patch(
-            "yade_mcp_bridge.execution.repl._sim_running",
+            "yade_mcp_bridge.execution.code_runner._sim_running",
             return_value=True,
         ):
             result = _terminate_stuck_execution("cyc-1", future)
@@ -492,11 +492,11 @@ class TestTerminateStuckExecution:
 
         with (
             patch(
-                "yade_mcp_bridge.execution.repl._sim_running",
+                "yade_mcp_bridge.execution.code_runner._sim_running",
                 return_value=True,
             ),
             patch(
-                "yade_mcp_bridge.execution.repl._CYCLE_INTERRUPT_GRACE_S",
+                "yade_mcp_bridge.execution.code_runner._CYCLE_INTERRUPT_GRACE_S",
                 0.05,  # short grace to keep test fast
             ),
         ):
@@ -515,7 +515,7 @@ class TestTerminateStuckExecution:
         set_current_task("owner-task")
 
         with patch(
-            "yade_mcp_bridge.execution.repl._sim_running",
+            "yade_mcp_bridge.execution.code_runner._sim_running",
             return_value=True,
         ):
             result = _terminate_stuck_execution("cyc-3", future)
@@ -533,7 +533,7 @@ class TestTerminateStuckExecution:
 
         # _sim_running defaults to False without YADE; assert explicitly.
         with patch(
-            "yade_mcp_bridge.execution.repl._sim_running",
+            "yade_mcp_bridge.execution.code_runner._sim_running",
             return_value=False,
         ):
             result = _terminate_stuck_execution("cyc-4", future)

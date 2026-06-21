@@ -137,7 +137,7 @@ class TestExecuteTask:
         assert data["data"]["task_status"] == "pending"
 
     async def test_submit_error_maps_to_error(self, bridge):
-        # script.py SUBMIT errors now emit a structured error{} (point #3):
+        # script_runner.py SUBMIT errors now emit a structured error{} (point #3):
         # script_not_found / script_read_error / submit_failed.
         bridge.execute_task.return_value = {
             "ok": False,

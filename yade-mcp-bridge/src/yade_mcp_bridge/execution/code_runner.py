@@ -3,8 +3,9 @@
 """Synchronous code executor for the bridge.
 
 ``CodeRunner`` runs an ``execute_code`` snippet on the pump thread and
-returns the wire response. REPL semantics: eval-first-then-exec against the
-persistent ``__main__`` namespace, stdout captured, last value returned.
+returns the wire response. Eval-then-exec semantics: a bare expression is
+evaluated and its value returned, otherwise the snippet is exec'd against
+the persistent ``__main__`` namespace, stdout captured, last value returned.
 """
 
 import concurrent.futures
@@ -137,7 +138,8 @@ def _run_code(request_id, code_str):
 
         def _overflow_writer(full_tb: str) -> str:
             # Only on truncation. Fresh timestamped file per error: execute_code
-            # is a synchronous REPL, so a rolling file would race a concurrent call.
+            # runs synchronously one-at-a-time, so a rolling file would race a
+            # concurrent call.
             os.makedirs(LOGS_DIR, exist_ok=True)
             path = os.path.join(LOGS_DIR, f"exec_code_error_{int(time.time() * 1000)}.log")
             with open(path, "w", encoding="utf-8") as f:
