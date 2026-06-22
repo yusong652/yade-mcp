@@ -103,29 +103,6 @@ class ConsoleHistory:
             "has_more": any(e["id"] > self._last_delivered_id for e in self._entries),
         }
 
-    def query(self, since_id=0, limit=20):
-        """Return entries with id > ``since_id``, read-only (does not advance
-        the cursor).
-
-        ``since_id`` of 0 returns all; at most ``limit`` entries come back.
-        The result dict carries the entries list and the latest id.
-        """
-        filtered = [e for e in self._entries if e["id"] > since_id]
-        if len(filtered) > limit:
-            filtered = filtered[-limit:]
-
-        latest_id = self._entries[-1]["id"] if self._entries else 0
-
-        return {
-            "entries": filtered,
-            "latest_id": latest_id,
-            "total": len(self._entries),
-        }
-
-    @property
-    def latest_id(self):
-        return self._entries[-1]["id"] if self._entries else 0
-
     def _append_to_file(self, entry):
         try:
             with open(self._path, "a", encoding="utf-8") as f:

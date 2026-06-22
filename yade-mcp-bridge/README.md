@@ -68,7 +68,7 @@ client of it. A request is `POST /<command>` with a JSON body carrying a
 | `list_tasks` | List known tasks | `offset`, `limit` |
 | `interrupt_task` | Request a graceful interrupt of a running task | `task_id` |
 | `execute_code` | Run a snippet in the shared `__main__` namespace | `code`, `timeout_ms` |
-| `console_history` | Read captured console output | `limit`, `since_id` |
+| `console_history` | Read captured console output | `limit` |
 
 Server→client SSE events on `GET /events`: `task_status_changed`,
 `console_entry`. `GET /health` reports liveness and runtime mode.
