@@ -10,9 +10,8 @@ logger = logging.getLogger("MCP-Bridge")
 def handle_console_history(ctx, data):
     """Handle console_history message.
 
-    Two modes:
-    - consume (default): return undelivered entries, advance cursor
-    - query: return entries since a given ID (read-only)
+    Returns undelivered entries and advances the bridge-side delivery cursor;
+    the MCP client stays stateless (it sends no cursor, just consumes).
     """
     request_id = data.get("request_id", "unknown")
     limit = data.get("limit", 20)
@@ -26,13 +25,7 @@ def handle_console_history(ctx, data):
             "data": None,
         }
 
-    since_id = data.get("since_id")
-    if since_id is not None:
-        # Read-only query, does not advance cursor
-        result = ctx.console_history.query(since_id=since_id, limit=limit)
-    else:
-        # Consume: return new entries and advance cursor
-        result = ctx.console_history.consume(limit=limit)
+    result = ctx.console_history.consume(limit=limit)
 
     return {
         "type": "console_history_result",
