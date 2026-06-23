@@ -161,38 +161,25 @@ def _run_code(request_id, code_str):
 
 
 def _terminate_stuck_execution(request_id: str, future) -> dict:
-    """Best-effort cancellation of an ``execute_code`` submission that blew its
-    timeout. Returns a dict summarising the outcome:
+    """Best-effort cancellation of a timed-out ``execute_code`` submission.
 
-    * ``resolved``: did the pump settle the future within the grace? True → pump
-      free, bridge healthy; False → pump may still be blocked.
-    * ``method``: ``self`` (already resolved), ``async_exc`` (SetAsyncExc
-      succeeded), ``flag_only`` (couldn't SetAsyncExc — nested or qt-main),
-      ``stuck_in_c`` (SetAsyncExc fired but no response in grace),
-      ``cycle_interrupt`` / ``cycle_self`` / ``cycle_stuck`` (cycle path below).
-    * ``reason``: machine-readable reason when ``method == "flag_only"``.
-    * ``result``: the future's result dict when resolved, else None.
+    Returns an outcome dict consumed by ``_timeout_response``: ``resolved``
+    (did the pump settle the future within the grace), ``method`` (which
+    cancellation path ran), ``reason`` (set on ``flag_only``), and ``result``
+    (the future's result dict when resolved, else None).
     """
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
     request_interrupt(request_id)
 
-    # Cycle-interrupt path. When no task owns the sim (``peek_current_task`` is
-    # None) yet ``O.running`` is True, the live ``O.run`` must be this
-    # execute_code's own, so it is safe to arm ``_current_task_id`` with our
-    # request_id: ``_mcp_pyrunner_tick`` then honors the flag fired above —
-    # ``O.pause()`` at the next tick → ``O.run`` returns → ``_hooked_run`` raises
-    # ``InterruptedError``, which ``_run_code`` reports as ``interrupted``.
-    #
-    # We deliberately do NOT arm ``_current_task_id`` during normal execute_code
-    # (it would mask a concurrent task). This None-gate fires only at timeout AND
-    # only when no task owns the sim, and CAS-clears on the way out so a task that
-    # claimed the slot mid-grace is never wiped.
-    #
-    # async_exc is intentionally NOT used here: a C++ ``O.run`` has released the
-    # GIL, so an injected ``BridgeTimeout`` could not fire until the cycle returns
-    # anyway. The flag/O.pause IS the mechanism, and skipping async_exc keeps the
-    # reported status deterministic.
+    # Cycle-interrupt path: no task owns the sim yet ``O.running`` is True, so the
+    # live ``O.run`` must be this execute_code's own. Arm ``_current_task_id`` with
+    # our request_id (normally we don't — it would mask a concurrent task) so the
+    # PyRunner tick honors the flag: ``O.pause()`` → ``O.run`` returns →
+    # ``_hooked_run`` raises ``InterruptedError`` → reported as ``interrupted``.
+    # CAS-clears on exit so a task that claimed the slot mid-grace survives.
+    # async_exc is skipped here: a C++ ``O.run`` released the GIL, so an injected
+    # ``BridgeTimeout`` could not fire until the cycle returns anyway.
     if peek_current_task() is None and _sim_running():
         set_current_task(request_id)
         try:
@@ -341,15 +328,11 @@ class CodeRunner:
     def execute(self, request_id, code, timeout_ms):
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
-            # Submit to the pump and block THIS request thread until it resolves
-            # or times out. ThreadingHTTPServer serves each request on its own
-            # thread, so blocking here never stalls others; ``future.result``
-            # releases the GIL while it waits.
+            # Submit to the pump and block until it resolves or times out.
             future = self.executor.submit(_run_code, request_id, code)
             result = future.result(timeout=timeout_ms / 1000.0)
 
-            # ``result["status"]`` is the INTERNAL marker from ``_run_code``, not
-            # a wire field — the envelope is success/failure via ``ok`` + error.code.
+            # ``status`` is _run_code's internal marker; translate it to the envelope.
             if result.get("status") == "error":
                 details: dict = {}
                 for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):

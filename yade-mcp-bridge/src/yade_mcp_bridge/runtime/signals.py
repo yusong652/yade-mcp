@@ -52,7 +52,13 @@ def peek_current_task():
 
 
 def request_interrupt(task_id):
-    """Request interruption of a specific task."""
+    """Set the interrupt flag for an id (opaque: a task_id or a request_id).
+
+    Shared by both interrupt paths: the task-interrupt handler keys it by
+    task_id, the execute_code cycle-interrupt path keys it by request_id.
+    The PyRunner tick honors it via ``is_current_interrupt_requested`` once
+    the matching id sits in ``_current_task_id``.
+    """
     _interrupt_requested[task_id] = True
     logger.info(f"Interrupt requested for task: {task_id}")
 
