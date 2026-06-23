@@ -18,7 +18,7 @@ from yade_mcp_bridge.runtime.signals import (
     _exec_thread_ids,
     _interrupt_requested,
     clear_current_task,
-    peek_current_task,
+    get_current_task,
     register_exec_thread,
     set_current_task,
 )
@@ -482,7 +482,7 @@ class TestTerminateStuckExecution:
         assert result["method"] == "cycle_interrupt"
         assert result["result"]["output"] == "paused"
         # CAS-cleared on the way out; interrupt flag cleared too.
-        assert peek_current_task() is None
+        assert get_current_task() is None
         assert _interrupt_requested.get("cyc-1") is None
 
     def test_cycle_stuck_when_future_never_resolves(self):
@@ -504,7 +504,7 @@ class TestTerminateStuckExecution:
 
         assert result["resolved"] is False
         assert result["method"] == "cycle_stuck"
-        assert peek_current_task() is None
+        assert get_current_task() is None
         assert _interrupt_requested.get("cyc-2") is None
 
     def test_cycle_gate_skipped_when_task_owns_sim(self):
@@ -523,7 +523,7 @@ class TestTerminateStuckExecution:
         # Falls through to the non-cycle path; no exec thread registered
         # → 'self'. The task's slot is untouched.
         assert result["method"] == "self"
-        assert peek_current_task() == "owner-task"
+        assert get_current_task() == "owner-task"
 
     def test_cycle_gate_skipped_when_sim_not_running(self):
         """O not running (e.g. no YADE / pure-Python stuck) → cycle gate

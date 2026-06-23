@@ -39,7 +39,7 @@ def clear_current_task():
         _current_task_id = None
 
 
-def peek_current_task():
+def get_current_task():
     """Return the currently-set task/request id, or None.
 
     Used by ``_run_code`` to implement a save-and-restore pattern:

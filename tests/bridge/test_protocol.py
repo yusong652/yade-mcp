@@ -512,7 +512,7 @@ class TestExecuteCodeTimeoutTermination:
         marked ``interrupted``. The fix: leave _current_task_id alone.
         """
         url, _ = bridge_server_with_pump
-        from yade_mcp_bridge.runtime.signals import clear_current_task, peek_current_task, set_current_task
+        from yade_mcp_bridge.runtime.signals import clear_current_task, get_current_task, set_current_task
 
         # Simulate a running task by setting the sentinel outer task.
         clear_current_task()
@@ -531,7 +531,7 @@ class TestExecuteCodeTimeoutTermination:
             assert ok["ok"] is True
             # After execute_code completes, the outer task must still
             # be the current one — not None, not request_id.
-            assert peek_current_task() == "outer-task"
+            assert get_current_task() == "outer-task"
 
             # Timed-out execute_code: the termination path calls
             # request_interrupt(request_id) on the execute_code's own id.
@@ -547,6 +547,6 @@ class TestExecuteCodeTimeoutTermination:
                 },
             )
             assert terminated["error"]["code"] == "terminated"
-            assert peek_current_task() == "outer-task"
+            assert get_current_task() == "outer-task"
         finally:
             clear_current_task()

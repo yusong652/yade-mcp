@@ -20,8 +20,8 @@ from ..paths import LOGS_DIR
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
+    get_current_task,
     get_exec_thread,
-    peek_current_task,
     register_exec_thread,
     request_interrupt,
     set_current_task,
@@ -180,7 +180,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
     # CAS-clears on exit so a task that claimed the slot mid-grace survives.
     # async_exc is skipped here: a C++ ``O.run`` released the GIL, so an injected
     # ``BridgeTimeout`` could not fire until the cycle returns anyway.
-    if peek_current_task() is None and _sim_running():
+    if get_current_task() is None and _sim_running():
         set_current_task(request_id)
         try:
             result = future.result(timeout=_CYCLE_INTERRUPT_GRACE_S)
@@ -191,7 +191,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
             return {"resolved": False, "method": "cycle_stuck", "result": None}
         finally:
             # CAS: don't wipe a task that claimed the slot mid-grace.
-            if peek_current_task() == request_id:
+            if get_current_task() == request_id:
                 clear_current_task()
             clear_interrupt(request_id)
 
