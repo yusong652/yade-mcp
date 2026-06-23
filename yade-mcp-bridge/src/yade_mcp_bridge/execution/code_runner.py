@@ -173,14 +173,10 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
     request_interrupt(request_id)
 
     # Cycle-interrupt path: no task owns the sim yet ``O.running`` is True, so the
-    # live ``O.run`` must be this execute_code's own. Arm ``_current_task_id`` with
-    # our request_id (normally we don't — it would mask a concurrent task) so the
-    # PyRunner tick honors the flag: ``O.pause()`` → ``O.run`` returns →
-    # ``_hooked_run`` raises ``InterruptedError`` → reported as ``interrupted``.
-    # CAS-clears on exit so a task that claimed the slot mid-grace survives.
-    # async_exc is skipped here: a C++ ``O.run`` released the GIL, so an injected
-    # ``BridgeTimeout`` could not fire until the cycle returns anyway.
+    # live ``O.run`` must be this execute_code's own — safe to arm ``_current_task_id``
+    # (normally avoided: it would mask a concurrent task).
     if get_current_task() is None and _sim_running():
+        # Arming our id makes the PyRunner tick honor the flag and O.pause() the run.
         set_current_task(request_id)
         try:
             result = future.result(timeout=_CYCLE_INTERRUPT_GRACE_S)
