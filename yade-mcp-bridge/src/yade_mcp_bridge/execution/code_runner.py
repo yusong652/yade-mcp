@@ -203,7 +203,11 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
       be partially modified by whatever the user code wrote before the abort.
     * ``resolved=False`` → status ``"timeout"``: cancellation couldn't complete.
     * ``method == "cycle_interrupt"`` → status ``"interrupted"``: a standalone
-      ``O.run`` was cleanly paused, with a pull-back to ``yade_execute_task``.
+      ``O.run`` was cleanly paused at an iteration boundary.
+
+    Messages state only what the bridge observed/did — no client-tool names or
+    agent guidance. The MCP layer maps ``code`` + ``details.method`` to
+    agent-facing advice (which tool to use, when to restart).
     """
     resolved = termination["resolved"]
     method = termination["method"]
@@ -215,45 +219,37 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
         output = result.get("output", "") or ""
 
     if method == "cycle_interrupt":
-        # A standalone execute_code ran an O.run cycle past its timeout; the
-        # bridge paused it cleanly. Pull the agent back to the task tool.
+        # A standalone O.run cycle blew the timeout; paused at a boundary.
         error_code = "interrupted"
         message = (
-            f"Ran a simulation cycle (O.run) inside execute_code that "
-            f"exceeded the {timeout_ms}ms timeout; it was interrupted and "
-            "the simulation paused cleanly at an iteration boundary. For "
-            "long simulations or solving to equilibrium, use "
-            "yade_execute_task — it tracks progress and can be cleanly "
-            "stopped via yade_interrupt_task."
+            f"A simulation cycle (O.run) inside execute_code exceeded the "
+            f"{timeout_ms}ms timeout and was paused cleanly at an iteration "
+            "boundary."
         )
     elif resolved:
         error_code = "terminated"
         message = (
-            f"Execution timed out after {timeout_ms}ms and was aborted. "
-            "YADE state may be partially modified by the aborted code; "
-            "inspect via yade_execute_code before retrying."
+            f"Execution exceeded the {timeout_ms}ms timeout and was aborted. "
+            "YADE state may be partially modified by code that ran before the "
+            "abort."
         )
     else:
         error_code = "timeout"
         if method == "stuck_in_c":
             message = (
-                f"Execution timed out after {timeout_ms}ms. Bridge "
-                "failed to terminate the code — it is likely stuck in "
-                "a C extension (e.g. numpy/scipy). The bridge may "
-                "recover when the C call returns; otherwise restart."
+                f"Execution exceeded the {timeout_ms}ms timeout; the abort "
+                "exception was queued but the code has not yielded — likely "
+                "blocked in a C extension."
             )
         elif method == "cycle_stuck":
             message = (
-                f"Execution timed out after {timeout_ms}ms while running a "
-                "simulation cycle (O.run). The bridge requested a pause "
-                "but the cycle did not yield within the grace period; it "
-                "should stop shortly. Use yade_execute_task for long "
-                "simulations; restart the bridge if execute_code stays "
-                "unresponsive."
+                f"A simulation cycle (O.run) exceeded the {timeout_ms}ms "
+                "timeout; a pause was requested but the cycle did not yield "
+                "within the grace period."
             )
         else:
             # finished without resolved — defensive.
-            message = f"Execution timed out after {timeout_ms}ms."
+            message = f"Execution exceeded the {timeout_ms}ms timeout."
 
     details = {"method": method}
 

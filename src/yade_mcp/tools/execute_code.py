@@ -150,18 +150,28 @@ def register(mcp: FastMCP) -> None:
             )
 
         if code == "timeout":
-            # Abort failed — pump may still be blocked.
+            # Abort failed — pump may still be blocked. Tailor guidance to
+            # which abort path stalled (carried in details.method).
+            method = bridge_details.get("method")
+            if method == "cycle_stuck":
+                action = (
+                    "A simulation cycle did not yield to the pause within the "
+                    "grace period; it should stop shortly. Use yade_execute_task "
+                    "for long simulations, and restart the bridge if "
+                    "execute_code stays unresponsive."
+                )
+            else:
+                action = (
+                    "The code may still be running (stuck in a C extension or a "
+                    "nested callback). Restart the bridge if subsequent "
+                    "execute_code calls hang."
+                )
             return build_operation_error(
                 "timeout",
                 "Execution timed out and abort failed",
                 reason=message,
-                action=(
-                    "The code may still be running (stuck in C "
-                    "extension or nested callback). Restart the "
-                    "bridge if subsequent execute_code calls hang."
-                ),
-                method=bridge_details.get("method"),
-                stuck_reason=bridge_details.get("reason"),
+                action=action,
+                method=method,
             )
 
         partial_output = bridge_data.get("output")

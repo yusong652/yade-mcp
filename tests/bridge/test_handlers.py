@@ -484,7 +484,7 @@ class TestTimeoutResponse:
         assert "C extension" in resp["error"]["message"]
         assert resp["data"]["output"] == ""
 
-    def test_cycle_interrupt_returns_interrupted_with_pullback(self):
+    def test_cycle_interrupt_returns_interrupted(self):
         termination = {
             "resolved": True,
             "method": "cycle_interrupt",
@@ -493,8 +493,10 @@ class TestTimeoutResponse:
         resp = _timeout_response("req-5", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "interrupted"
-        # Pull-back to the task tool is the whole point of this path.
-        assert "yade_execute_task" in resp["error"]["message"]
+        # Bridge states the fact (paused at a boundary); no client-tool names —
+        # the agent pull-back to yade_execute_task lives in the MCP layer.
+        assert "yade_" not in resp["error"]["message"]
+        assert "paused" in resp["error"]["message"]
         assert resp["data"]["output"] == "iter=500"
         assert resp["error"]["details"]["method"] == "cycle_interrupt"
 
