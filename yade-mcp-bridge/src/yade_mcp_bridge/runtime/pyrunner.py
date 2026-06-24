@@ -31,7 +31,7 @@ def install_pyrunner(logger):
     ``InterruptedError`` after ``O.run()`` returns. It must do nothing
     else: any other work would run on the ``Dummy-N`` thread, where an
     async exception would unwind into the boost::python stack → C++ FATAL
-    (the reason ``fire_async_exception`` refuses ``Dummy-N`` targets).
+    (the reason ``inject_async_exception`` refuses ``Dummy-N`` targets).
 
     Returns True if the PyRunner was installed successfully.
     """

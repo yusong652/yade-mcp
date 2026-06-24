@@ -30,7 +30,7 @@ from ..runtime.signals import (
 )
 from ..utils import TeeBuffer, error_response, ok_response
 from .errors import BridgeTimeout, format_execution_error
-from .termination import fire_async_exception
+from .termination import inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -147,7 +147,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
     """Terminate a timed-out ``execute_code`` submission.
 
     Returns an outcome dict for ``_timeout_response``: ``resolved``, ``method``,
-    optional ``reason``, and ``result`` (the future's result when resolved).
+    and ``result`` (the future's result when resolved).
     """
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
@@ -187,7 +187,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
             return {"resolved": True, "method": "finished", "result": future.result()}
         return {"resolved": False, "method": "finished", "result": None}
 
-    fire_async_exception(tid, BridgeTimeout)
+    inject_async_exception(tid, BridgeTimeout)
 
     try:
         result = future.result(timeout=_TERMINATION_GRACE_S)

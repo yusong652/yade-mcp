@@ -5,10 +5,10 @@ import time
 
 import pytest
 from yade_mcp_bridge.execution.errors import BridgeTimeout
-from yade_mcp_bridge.execution.termination import fire_async_exception
+from yade_mcp_bridge.execution.termination import inject_async_exception
 
 
-class TestFireAsyncException:
+class TestInjectAsyncException:
     def test_terminates_tight_python_loop(self):
         """A pure Python loop hits a bytecode edge every instruction,
         so the injected exception fires immediately. The target catches
@@ -26,7 +26,7 @@ class TestFireAsyncException:
         t.start()
         time.sleep(0.05)  # let the loop get running
 
-        affected = fire_async_exception(t.ident, BridgeTimeout)
+        affected = inject_async_exception(t.ident, BridgeTimeout)
         assert affected == 1
 
         t.join(timeout=1.0)
@@ -52,7 +52,7 @@ class TestFireAsyncException:
         t.start()
         time.sleep(0.05)
 
-        affected = fire_async_exception(t.ident, BridgeTimeout)
+        affected = inject_async_exception(t.ident, BridgeTimeout)
         assert affected == 1
 
         # Must wait longer than sleep(0.5) — sleep blocks the exception.
@@ -63,7 +63,7 @@ class TestFireAsyncException:
 
     def test_returns_zero_for_nonexistent_thread_id(self):
         """Invalid tids yield 0 (no matching PyThreadState)."""
-        affected = fire_async_exception(0xDEADBEEF, BridgeTimeout)
+        affected = inject_async_exception(0xDEADBEEF, BridgeTimeout)
         assert affected == 0
 
     def test_refuses_dummy_thread_target(self):
@@ -80,7 +80,7 @@ class TestFireAsyncException:
         t = threading.Thread(target=target, name="Dummy-7", daemon=True)
         t.start()
         try:
-            affected = fire_async_exception(t.ident, BridgeTimeout)
+            affected = inject_async_exception(t.ident, BridgeTimeout)
             assert affected == 0  # refused, no injection
         finally:
             stop.set()
@@ -88,7 +88,7 @@ class TestFireAsyncException:
 
 
 @pytest.mark.parametrize("exc_cls", [BridgeTimeout, InterruptedError])
-def test_fire_async_with_different_exception_classes(exc_cls):
+def test_inject_async_with_different_exception_classes(exc_cls):
     """The helper doesn't care about the exception class — confirm it
     works for both our custom ``BridgeTimeout`` and a stock exception."""
 
@@ -103,6 +103,6 @@ def test_fire_async_with_different_exception_classes(exc_cls):
     t.start()
     time.sleep(0.05)
 
-    fire_async_exception(t.ident, exc_cls)
+    inject_async_exception(t.ident, exc_cls)
     t.join(timeout=1.0)
     assert not t.is_alive()

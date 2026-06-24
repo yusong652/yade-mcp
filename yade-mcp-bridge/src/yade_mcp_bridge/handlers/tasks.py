@@ -93,7 +93,7 @@ def handle_interrupt_task(ctx, data):
     so the script thread's cleanup runs without being re-interrupted.
     """
     from ..execution.errors import TaskInterrupt
-    from ..execution.termination import fire_async_exception
+    from ..execution.termination import inject_async_exception
     from ..runtime.signals import (
         clear_interrupt,
         get_exec_thread,
@@ -130,14 +130,14 @@ def handle_interrupt_task(ctx, data):
     request_interrupt(task_id)
     logger.info("Interrupt flag set for task: %s", task_id)
 
-    # Best-effort async injection. Atomic unregister-then-fire prevents
+    # Best-effort async injection. Atomic unregister-then-inject prevents
     # a re-entrant interrupt from landing a second TaskInterrupt in the
     # middle of the script thread's except-block cleanup.
     method = "flag_only"
     tid = get_exec_thread(task_id)
     if tid is not None:
         unregister_exec_thread(task_id)
-        fire_async_exception(tid, TaskInterrupt)
+        inject_async_exception(tid, TaskInterrupt)
         method = "flag_and_async_exc"
         logger.info("Async TaskInterrupt injected into task %s (tid=%s)", task_id, tid)
 

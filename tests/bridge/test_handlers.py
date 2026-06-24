@@ -346,7 +346,7 @@ class TestTerminateStuckExecution:
         future.set_result({"status": "terminated", "output": "partial"})
 
         with patch(
-            "yade_mcp_bridge.execution.code_runner.fire_async_exception",
+            "yade_mcp_bridge.execution.code_runner.inject_async_exception",
             return_value=1,
         ):
             result = _terminate_stuck_execution("req-3", future)
@@ -363,7 +363,7 @@ class TestTerminateStuckExecution:
 
         with (
             patch(
-                "yade_mcp_bridge.execution.code_runner.fire_async_exception",
+                "yade_mcp_bridge.execution.code_runner.inject_async_exception",
                 return_value=1,
             ),
             patch(
