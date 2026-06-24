@@ -20,8 +20,8 @@ from ..paths import LOGS_DIR
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
+    get_current_task,
     get_exec_thread,
-    peek_current_task,
     register_exec_thread,
     request_interrupt,
     set_current_task,
@@ -30,28 +30,22 @@ from ..runtime.signals import (
 )
 from ..utils import TeeBuffer, error_response, ok_response
 from .errors import BridgeTimeout, format_execution_error
-from .termination import fire_async_exception, is_safe_to_async_raise
+from .termination import inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
 
-# Grace for the pump thread to unwind after we inject ``BridgeTimeout``. A
-# pure-Python loop aborts within milliseconds; 0.5s covers worst-case user
-# ``finally`` blocks without letting "stuck in C" cases stall the response.
-_TERMINATION_GRACE_S = 0.5
-
-# Grace for the cycle-interrupt path after arming the flag. ``_mcp_pyrunner_tick``
-# runs every iteration, so ``O.pause()`` lands almost immediately; only a single
-# step longer than this can exceed it. Slightly above ``_TERMINATION_GRACE_S`` to
-# absorb a heavy step before the cycle yields.
+# Grace for the cycle-interrupt (PyRunner) path: how long we wait for O.pause()
+# to land after arming the flag. The tick runs every iteration, so only a step
+# longer than this can exceed it.
 _CYCLE_INTERRUPT_GRACE_S = 2.0
+
+# Grace for the thread-injection path: how long we wait for the pump thread to
+# unwind after we async-inject BridgeTimeout, before giving up as "stuck in C".
+_TERMINATION_GRACE_S = 0.5
 
 
 def _sim_running() -> bool:
-    """True if YADE's simulation loop is live (``O.running``).
-
-    Lazy import so this module stays importable without YADE (unit/protocol
-    tests), where the cycle-interrupt path is simply never taken.
-    """
+    """True if YADE's simulation loop is live (``O.running``)."""
     try:
         from yade import O
 
@@ -63,26 +57,16 @@ def _sim_running() -> bool:
 def _run_code(request_id, code_str):
     """Run a snippet on the pump thread, capturing stdout. Returns an internal
     status dict (success / error / terminated / interrupted).
-
-    Registers the running thread id so a timeout in the caller can inject
-    ``PyThreadState_SetAsyncExc(BridgeTimeout)``. The ``except BridgeTimeout``
-    branch is LOAD-BEARING: ``BridgeTimeout`` is a ``BaseException`` and must
-    not escape, or it slips past ``SerialExecutor.run_next``'s
-    ``except Exception`` and kills the pump thread permanently.
-
-    Deliberately does NOT touch ``_current_task_id``: it is read by
-    ``_mcp_pyrunner_tick``, and overwriting it with our ``request_id`` would
-    make a later ``_terminate_stuck_execution`` flag look like a task interrupt,
-    wrongly pausing a concurrent task. execute_code cancels via async_exc.
     """
     output_buffer = StringIO()
     old_stdout = sys.stdout
 
+    # Register our thread id so a timeout in the caller can async-inject
+    # BridgeTimeout to abort us — execute_code cancels via this async_exc
+    # path, not the PyRunner interrupt flag that tasks use.
     register_exec_thread(request_id, threading.get_ident())
 
     try:
-        # Redirect inside the try so ``finally``'s restore is always paired
-        # with a successful assignment.
         terminal = sys.__stdout__ if sys.__stdout__ is not None else old_stdout
         sys.stdout = TeeBuffer(terminal, output_buffer)
 
@@ -102,10 +86,8 @@ def _run_code(request_id, code_str):
                 return exec_globals.get("result", None)
 
         if _sim_running():
-            # A task owns the live cycle: freeze it at an engine boundary so the
-            # snippet reads a consistent snapshot and any mutation does not race
-            # the cycle. Still runs on the pump thread, so a timeout can async-
-            # abort it. Always resumes on exit (the window's finally).
+            # A task owns the live cycle: pause it so the snippet reads a
+            # consistent snapshot and does not race the task. Resumes on exit.
             with sim_paused_window():
                 result = _do_exec()
         else:
@@ -120,20 +102,21 @@ def _run_code(request_id, code_str):
             if result is not None
             else None,
         }
-    except BridgeTimeout:
-        # Bridge-initiated termination. Return a marker (not a raise) so the
-        # caller reports status="terminated"; must NOT escape — see docstring.
-        return {"status": "terminated", "output": output_buffer.getvalue()}
     except InterruptedError:
-        # Cycle-interrupt: ``_terminate_stuck_execution`` armed our request_id,
-        # the tick paused our own ``O.run``, and ``_hooked_run`` raised here.
-        # Marker → status="interrupted". Like BridgeTimeout, caught here so the
-        # future resolves and the pump frees.
+        # Cycle-interrupt SUCCEEDED: the tick paused our O.run at a cycle
+        # boundary and _hooked_run raised here. Marker → status="interrupted".
         return {"status": "interrupted", "output": output_buffer.getvalue()}
+    except BridgeTimeout:
+        # Async-injection SUCCEEDED: our BridgeTimeout reached code stuck in a
+        # pure-Python loop and aborted it. Return a marker, not a raise — see
+        # BridgeTimeout's BaseException rationale in errors.py.
+        return {"status": "terminated", "output": output_buffer.getvalue()}
     except Exception as e:
+        # The agent's own code raised — a real execution error, not a bridge
+        # cancellation. Format it into an agent-facing error response.
         output_text = output_buffer.getvalue()
-        # Suppress the compile(eval)->compile(exec) fallback's chained-exception
-        # "During handling of the above..." preamble — pure plumbing.
+        # Drop the compile(eval)->compile(exec) fallback's chained-SyntaxError
+        # preamble — pure plumbing.
         e.__suppress_context__ = True
 
         def _overflow_writer(full_tb: str) -> str:
@@ -161,86 +144,50 @@ def _run_code(request_id, code_str):
 
 
 def _terminate_stuck_execution(request_id: str, future) -> dict:
-    """Best-effort cancellation of an ``execute_code`` submission that blew its
-    timeout. Returns a dict summarising the outcome:
+    """Terminate a timed-out ``execute_code`` submission.
 
-    * ``resolved``: did the pump settle the future within the grace? True → pump
-      free, bridge healthy; False → pump may still be blocked.
-    * ``method``: ``self`` (already resolved), ``async_exc`` (SetAsyncExc
-      succeeded), ``flag_only`` (couldn't SetAsyncExc — nested or qt-main),
-      ``stuck_in_c`` (SetAsyncExc fired but no response in grace),
-      ``cycle_interrupt`` / ``cycle_self`` / ``cycle_stuck`` (cycle path below).
-    * ``reason``: machine-readable reason when ``method == "flag_only"``.
-    * ``result``: the future's result dict when resolved, else None.
+    Returns an outcome dict for ``_timeout_response``: ``resolved``, ``method``,
+    and ``result`` (the future's result when resolved).
     """
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
     request_interrupt(request_id)
 
-    # Cycle-interrupt path. When no task owns the sim (``peek_current_task`` is
-    # None) yet ``O.running`` is True, the live ``O.run`` must be this
-    # execute_code's own, so it is safe to arm ``_current_task_id`` with our
-    # request_id: ``_mcp_pyrunner_tick`` then honors the flag fired above —
-    # ``O.pause()`` at the next tick → ``O.run`` returns → ``_hooked_run`` raises
-    # ``InterruptedError``, which ``_run_code`` reports as ``interrupted``.
-    #
-    # We deliberately do NOT arm ``_current_task_id`` during normal execute_code
-    # (it would mask a concurrent task). This None-gate fires only at timeout AND
-    # only when no task owns the sim, and CAS-clears on the way out so a task that
-    # claimed the slot mid-grace is never wiped.
-    #
-    # async_exc is intentionally NOT used here: a C++ ``O.run`` has released the
-    # GIL, so an injected ``BridgeTimeout`` could not fire until the cycle returns
-    # anyway. The flag/O.pause IS the mechanism, and skipping async_exc keeps the
-    # reported status deterministic.
-    if peek_current_task() is None and _sim_running():
+    # Cycle-interrupt path: no task owns the sim yet ``O.running`` is True, so the
+    # live ``O.run`` must be this execute_code's own — safe to arm ``_current_task_id``
+    # (normally avoided: it would mask a concurrent task).
+    if get_current_task() is None and _sim_running():
+        # Arming our id makes the PyRunner tick honor the flag and O.pause() the run.
         set_current_task(request_id)
         try:
             result = future.result(timeout=_CYCLE_INTERRUPT_GRACE_S)
         except concurrent.futures.TimeoutError:
-            # O.pause didn't free O.run within grace (a single step longer than
-            # the grace, or no tick yet). The O.pause is sticky, so the pump will
-            # likely free shortly after we return.
+            # Pause signalled, but a too-heavy step didn't reach the next cycle
+            # boundary within grace. The pause is sticky, so the pump should
+            # free shortly after we return.
             return {"resolved": False, "method": "cycle_stuck", "result": None}
         finally:
             # CAS: don't wipe a task that claimed the slot mid-grace.
-            if peek_current_task() == request_id:
+            if get_current_task() == request_id:
                 clear_current_task()
             clear_interrupt(request_id)
 
         status = result.get("status") if isinstance(result, dict) else None
         # ``interrupted`` means the tick paused our O.run as intended; any other
         # status means the cycle finished on its own within the grace window.
-        method = "cycle_interrupt" if status == "interrupted" else "cycle_self"
+        method = "cycle_interrupt" if status == "interrupted" else "cycle_finished"
         return {"resolved": True, "method": method, "result": result}
 
     tid = get_exec_thread(request_id)
 
     # Registry already cleared → _run_code's finally ran → the pump is free.
+    # The code finished on its own, racing the timeout, before we could inject.
     if tid is None:
         if future.done():
-            return {"resolved": True, "method": "self", "result": future.result()}
-        return {"resolved": False, "method": "self", "result": None}
+            return {"resolved": True, "method": "finished", "result": future.result()}
+        return {"resolved": False, "method": "finished", "result": None}
 
-    safe, reason = is_safe_to_async_raise(tid)
-    if not safe:
-        # Can't safely inject (Dummy-N nested case, or Qt main thread in GUI
-        # mode). Fall back to flag-only cancellation.
-        if future.done():
-            return {
-                "resolved": True,
-                "method": "flag_only",
-                "reason": reason,
-                "result": future.result(),
-            }
-        return {
-            "resolved": False,
-            "method": "flag_only",
-            "reason": reason,
-            "result": None,
-        }
-
-    fire_async_exception(tid, BridgeTimeout)
+    inject_async_exception(tid, BridgeTimeout)
 
     try:
         result = future.result(timeout=_TERMINATION_GRACE_S)
@@ -288,13 +235,7 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
         )
     else:
         error_code = "timeout"
-        if method == "flag_only":
-            message = (
-                f"Execution timed out after {timeout_ms}ms. Full abort "
-                f"was not possible ({termination.get('reason')}); the "
-                "code may still be running in the background."
-            )
-        elif method == "stuck_in_c":
+        if method == "stuck_in_c":
             message = (
                 f"Execution timed out after {timeout_ms}ms. Bridge "
                 "failed to terminate the code — it is likely stuck in "
@@ -311,12 +252,10 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
                 "unresponsive."
             )
         else:
-            # self without resolved — defensive.
+            # finished without resolved — defensive.
             message = f"Execution timed out after {timeout_ms}ms."
 
     details = {"method": method}
-    if "reason" in termination:
-        details["reason"] = termination["reason"]
 
     return error_response(
         "execute_code_result",
@@ -341,15 +280,11 @@ class CodeRunner:
     def execute(self, request_id, code, timeout_ms):
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
-            # Submit to the pump and block THIS request thread until it resolves
-            # or times out. ThreadingHTTPServer serves each request on its own
-            # thread, so blocking here never stalls others; ``future.result``
-            # releases the GIL while it waits.
+            # Submit to the pump and block until it resolves or times out.
             future = self.executor.submit(_run_code, request_id, code)
             result = future.result(timeout=timeout_ms / 1000.0)
 
-            # ``result["status"]`` is the INTERNAL marker from ``_run_code``, not
-            # a wire field — the envelope is success/failure via ``ok`` + error.code.
+            # ``status`` is _run_code's internal marker; translate it to the envelope.
             if result.get("status") == "error":
                 details: dict = {}
                 for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):

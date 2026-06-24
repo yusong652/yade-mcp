@@ -18,7 +18,7 @@ from yade_mcp_bridge.runtime.signals import (
     _exec_thread_ids,
     _interrupt_requested,
     clear_current_task,
-    peek_current_task,
+    get_current_task,
     register_exec_thread,
     set_current_task,
 )
@@ -252,43 +252,8 @@ class TestHandleInterruptTask:
         try:
             assert resp["ok"] is True
             assert resp["data"]["method"] == "flag_only"
-            assert resp["data"].get("async_exc_skipped_reason") is None
         finally:
             clear_interrupt("t3")
-
-    def test_dummy_thread_registration_falls_back_to_flag_only(self):
-        """If something weird registers a Dummy-N tid (shouldn't happen
-        for script tasks, but defense in depth), the handler must
-        refuse async-exc and report a reason."""
-        from unittest.mock import patch
-
-        from yade_mcp_bridge.runtime.signals import clear_interrupt, register_exec_thread, unregister_exec_thread
-
-        task = MagicMock()
-        task.status = "running"
-        ctx = _make_ctx(tasks={"t4": task})
-        clear_interrupt("t4")
-
-        class _FakeDummy:
-            ident = 98765
-            name = "Dummy-99"
-
-            def is_alive(self):
-                return True
-
-        register_exec_thread("t4", 98765)
-        with patch(
-            "yade_mcp_bridge.execution.termination._find_thread",
-            return_value=_FakeDummy(),
-        ):
-            resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t4"})
-        try:
-            assert resp["ok"] is True
-            assert resp["data"]["method"] == "flag_only"
-            assert resp["data"]["async_exc_skipped_reason"] == "nested_boost_python_callback"
-        finally:
-            clear_interrupt("t4")
-            unregister_exec_thread("t4")
 
     def test_interrupt_pending_task(self):
         from yade_mcp_bridge.runtime.signals import clear_interrupt
@@ -351,79 +316,38 @@ class TestTerminateStuckExecution:
         clear_current_task()
 
     def test_no_thread_registered_resolved_future(self):
-        """Registry empty + future already done → 'self' path, resolved."""
+        """Registry empty + future already done → 'finished' path, resolved."""
         future = Future()
         future.set_result({"status": "success", "output": "hi"})
 
         result = _terminate_stuck_execution("req-1", future)
 
         assert result["resolved"] is True
-        assert result["method"] == "self"
+        assert result["method"] == "finished"
         assert result["result"]["status"] == "success"
-        # request_interrupt still fires, even on the self path
+        # request_interrupt still fires, even on the finished path
         assert _interrupt_requested.get("req-1") is True
 
     def test_no_thread_registered_pending_future(self):
-        """Registry empty + future pending → 'self', not resolved.
+        """Registry empty + future pending → 'finished', not resolved.
         Defensive: shouldn't happen in practice (finally would have
         resolved the future before clearing the registry)."""
         future = Future()
         result = _terminate_stuck_execution("req-1", future)
         assert result["resolved"] is False
-        assert result["method"] == "self"
-
-    def test_flag_only_when_thread_is_dummy(self):
-        """Dummy-N thread (nested via PyRunner) → flag-only fallback."""
-        future = Future()
-
-        class _FakeDummy:
-            ident = 99999
-            name = "Dummy-3"
-
-            def is_alive(self):
-                return True
-
-        register_exec_thread("req-2", 99999)
-
-        with patch(
-            "yade_mcp_bridge.execution.termination._find_thread",
-            return_value=_FakeDummy(),
-        ):
-            result = _terminate_stuck_execution("req-2", future)
-
-        assert result["resolved"] is False
-        assert result["method"] == "flag_only"
-        assert result["reason"] == "nested_boost_python_callback"
-        assert _interrupt_requested.get("req-2") is True
+        assert result["method"] == "finished"
 
     def test_async_exc_resolves_future_in_grace_period(self):
         """SetAsyncExc succeeds → future resolves → method=async_exc."""
         future = Future()
 
-        # Construct a fake thread that passes all safety guards — we
-        # don't need a real thread here since we patch
-        # fire_async_exception.
-        class _FakeSafe:
-            def __init__(self):
-                self.ident = 77777
-                self.name = "mcp-exec-pump"
-
-            def is_alive(self):
-                return True
-
         register_exec_thread("req-3", 77777)
         # Resolve future BEFORE calling — grace wait_for will see it immediately
         future.set_result({"status": "terminated", "output": "partial"})
 
-        with (
-            patch(
-                "yade_mcp_bridge.execution.termination._find_thread",
-                return_value=_FakeSafe(),
-            ),
-            patch(
-                "yade_mcp_bridge.execution.code_runner.fire_async_exception",
-                return_value=1,
-            ),
+        with patch(
+            "yade_mcp_bridge.execution.code_runner.inject_async_exception",
+            return_value=1,
         ):
             result = _terminate_stuck_execution("req-3", future)
 
@@ -435,22 +359,11 @@ class TestTerminateStuckExecution:
         """SetAsyncExc called but future never resolves → stuck_in_c."""
         future = Future()  # never resolved
 
-        class _FakeSafe:
-            ident = 88888
-            name = "mcp-exec-pump"
-
-            def is_alive(self):
-                return True
-
         register_exec_thread("req-4", 88888)
 
         with (
             patch(
-                "yade_mcp_bridge.execution.termination._find_thread",
-                return_value=_FakeSafe(),
-            ),
-            patch(
-                "yade_mcp_bridge.execution.code_runner.fire_async_exception",
+                "yade_mcp_bridge.execution.code_runner.inject_async_exception",
                 return_value=1,
             ),
             patch(
@@ -482,7 +395,7 @@ class TestTerminateStuckExecution:
         assert result["method"] == "cycle_interrupt"
         assert result["result"]["output"] == "paused"
         # CAS-cleared on the way out; interrupt flag cleared too.
-        assert peek_current_task() is None
+        assert get_current_task() is None
         assert _interrupt_requested.get("cyc-1") is None
 
     def test_cycle_stuck_when_future_never_resolves(self):
@@ -504,7 +417,7 @@ class TestTerminateStuckExecution:
 
         assert result["resolved"] is False
         assert result["method"] == "cycle_stuck"
-        assert peek_current_task() is None
+        assert get_current_task() is None
         assert _interrupt_requested.get("cyc-2") is None
 
     def test_cycle_gate_skipped_when_task_owns_sim(self):
@@ -521,9 +434,9 @@ class TestTerminateStuckExecution:
             result = _terminate_stuck_execution("cyc-3", future)
 
         # Falls through to the non-cycle path; no exec thread registered
-        # → 'self'. The task's slot is untouched.
-        assert result["method"] == "self"
-        assert peek_current_task() == "owner-task"
+        # → 'finished'. The task's slot is untouched.
+        assert result["method"] == "finished"
+        assert get_current_task() == "owner-task"
 
     def test_cycle_gate_skipped_when_sim_not_running(self):
         """O not running (e.g. no YADE / pure-Python stuck) → cycle gate
@@ -538,7 +451,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("cyc-4", future)
 
-        assert result["method"] == "self"
+        assert result["method"] == "finished"
         assert result["resolved"] is True
 
 
@@ -558,20 +471,6 @@ class TestTimeoutResponse:
         assert resp["data"]["output"] == "hello"
         assert resp["error"]["code"] == "terminated"
         assert resp["error"]["details"]["method"] == "async_exc"
-
-    def test_flag_only_returns_timeout_with_reason(self):
-        termination = {
-            "resolved": False,
-            "method": "flag_only",
-            "reason": "nested_boost_python_callback",
-            "result": None,
-        }
-        resp = _timeout_response("req-2", 3000, termination)
-        assert resp["ok"] is False
-        assert resp["error"]["code"] == "timeout"
-        assert "nested_boost_python_callback" in resp["error"]["message"]
-        assert resp["error"]["details"]["method"] == "flag_only"
-        assert resp["error"]["details"]["reason"] == "nested_boost_python_callback"
 
     def test_stuck_in_c_returns_timeout(self):
         termination = {

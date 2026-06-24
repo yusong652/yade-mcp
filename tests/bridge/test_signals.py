@@ -7,10 +7,10 @@ import pytest
 from yade_mcp_bridge.runtime.signals import (
     clear_current_task,
     clear_interrupt,
+    get_current_task,
     get_exec_thread,
     is_current_interrupt_requested,
     is_task_interrupt_requested,
-    peek_current_task,
     register_exec_thread,
     request_interrupt,
     set_current_task,
@@ -71,29 +71,29 @@ class TestPeekCurrentTask:
         clear_current_task()
 
     def test_peek_returns_none_when_unset(self):
-        assert peek_current_task() is None
+        assert get_current_task() is None
 
     def test_peek_returns_current_task(self):
         set_current_task("task-A")
-        assert peek_current_task() == "task-A"
+        assert get_current_task() == "task-A"
 
     def test_save_and_restore_pattern(self):
         """Simulates execute_code nested inside a running task:
         outer sets A, inner saves/sets B, inner clears + restores A."""
         set_current_task("task-A")
-        assert peek_current_task() == "task-A"
+        assert get_current_task() == "task-A"
 
         # Enter inner execute_code
-        prev = peek_current_task()
+        prev = get_current_task()
         set_current_task("request-B")
-        assert peek_current_task() == "request-B"
+        assert get_current_task() == "request-B"
 
         # Exit inner execute_code
         clear_current_task()
         if prev is not None:
             set_current_task(prev)
 
-        assert peek_current_task() == "task-A"
+        assert get_current_task() == "task-A"
 
 
 class TestExecThreadRegistry:

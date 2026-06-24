@@ -29,9 +29,9 @@ def install_pyrunner(logger):
     (``_INTERRUPT_CHECK_PERIOD``). The tick's only job is to observe the
     interrupt flag and call ``O.pause()`` — the Python side then raises
     ``InterruptedError`` after ``O.run()`` returns. It must do nothing
-    else: any other work would run on the ``Dummy-N`` thread, which
-    ``is_safe_to_async_raise`` cannot abort (boost::python stack → C++
-    FATAL on exception).
+    else: any other work would run on the ``Dummy-N`` thread, where an
+    async exception would unwind into the boost::python stack → C++ FATAL
+    (the reason ``inject_async_exception`` refuses ``Dummy-N`` targets).
 
     Returns True if the PyRunner was installed successfully.
     """
