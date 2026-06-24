@@ -351,26 +351,26 @@ class TestTerminateStuckExecution:
         clear_current_task()
 
     def test_no_thread_registered_resolved_future(self):
-        """Registry empty + future already done → 'self' path, resolved."""
+        """Registry empty + future already done → 'finished' path, resolved."""
         future = Future()
         future.set_result({"status": "success", "output": "hi"})
 
         result = _terminate_stuck_execution("req-1", future)
 
         assert result["resolved"] is True
-        assert result["method"] == "self"
+        assert result["method"] == "finished"
         assert result["result"]["status"] == "success"
-        # request_interrupt still fires, even on the self path
+        # request_interrupt still fires, even on the finished path
         assert _interrupt_requested.get("req-1") is True
 
     def test_no_thread_registered_pending_future(self):
-        """Registry empty + future pending → 'self', not resolved.
+        """Registry empty + future pending → 'finished', not resolved.
         Defensive: shouldn't happen in practice (finally would have
         resolved the future before clearing the registry)."""
         future = Future()
         result = _terminate_stuck_execution("req-1", future)
         assert result["resolved"] is False
-        assert result["method"] == "self"
+        assert result["method"] == "finished"
 
     def test_flag_only_when_thread_is_dummy(self):
         """Dummy-N thread (nested via PyRunner) → flag-only fallback."""
@@ -521,8 +521,8 @@ class TestTerminateStuckExecution:
             result = _terminate_stuck_execution("cyc-3", future)
 
         # Falls through to the non-cycle path; no exec thread registered
-        # → 'self'. The task's slot is untouched.
-        assert result["method"] == "self"
+        # → 'finished'. The task's slot is untouched.
+        assert result["method"] == "finished"
         assert get_current_task() == "owner-task"
 
     def test_cycle_gate_skipped_when_sim_not_running(self):
@@ -538,7 +538,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("cyc-4", future)
 
-        assert result["method"] == "self"
+        assert result["method"] == "finished"
         assert result["resolved"] is True
 
 
