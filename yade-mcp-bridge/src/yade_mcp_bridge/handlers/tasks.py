@@ -93,7 +93,7 @@ def handle_interrupt_task(ctx, data):
     so the script thread's cleanup runs without being re-interrupted.
     """
     from ..execution.errors import TaskInterrupt
-    from ..execution.termination import fire_async_exception, is_safe_to_async_raise
+    from ..execution.termination import fire_async_exception
     from ..runtime.signals import (
         clear_interrupt,
         get_exec_thread,
@@ -134,19 +134,12 @@ def handle_interrupt_task(ctx, data):
     # a re-entrant interrupt from landing a second TaskInterrupt in the
     # middle of the script thread's except-block cleanup.
     method = "flag_only"
-    reason = None
     tid = get_exec_thread(task_id)
     if tid is not None:
-        safe, safe_reason = is_safe_to_async_raise(tid)
-        if safe:
-            unregister_exec_thread(task_id)
-            fire_async_exception(tid, TaskInterrupt)
-            method = "flag_and_async_exc"
-            logger.info("Async TaskInterrupt injected into task %s (tid=%s)", task_id, tid)
-        else:
-            method = "flag_only"
-            reason = safe_reason
-            logger.info("Task %s async_exc refused (%s); flag-only path in effect", task_id, safe_reason)
+        unregister_exec_thread(task_id)
+        fire_async_exception(tid, TaskInterrupt)
+        method = "flag_and_async_exc"
+        logger.info("Async TaskInterrupt injected into task %s (tid=%s)", task_id, tid)
 
     # Defend against TOCTOU: task may have finished between the status check
     # above and request_interrupt. script_runner.py's finally clears the flag on exit,
@@ -172,7 +165,5 @@ def handle_interrupt_task(ctx, data):
             "a fresh yade_execute_task with a short continuation script."
         ),
     }
-    if reason is not None:
-        data_payload["async_exc_skipped_reason"] = reason
 
     return ok_response("result", request_id, data=data_payload)

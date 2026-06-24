@@ -30,7 +30,7 @@ from ..runtime.signals import (
 )
 from ..utils import TeeBuffer, error_response, ok_response
 from .errors import BridgeTimeout, format_execution_error
-from .termination import fire_async_exception, is_safe_to_async_raise
+from .termination import fire_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -187,24 +187,6 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
             return {"resolved": True, "method": "finished", "result": future.result()}
         return {"resolved": False, "method": "finished", "result": None}
 
-    safe, reason = is_safe_to_async_raise(tid)
-    if not safe:
-        # Can't safely inject (Dummy-N nested case, or Qt main thread in GUI
-        # mode). Fall back to flag-only cancellation.
-        if future.done():
-            return {
-                "resolved": True,
-                "method": "flag_only",
-                "reason": reason,
-                "result": future.result(),
-            }
-        return {
-            "resolved": False,
-            "method": "flag_only",
-            "reason": reason,
-            "result": None,
-        }
-
     fire_async_exception(tid, BridgeTimeout)
 
     try:
@@ -253,13 +235,7 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
         )
     else:
         error_code = "timeout"
-        if method == "flag_only":
-            message = (
-                f"Execution timed out after {timeout_ms}ms. Full abort "
-                f"was not possible ({termination.get('reason')}); the "
-                "code may still be running in the background."
-            )
-        elif method == "stuck_in_c":
+        if method == "stuck_in_c":
             message = (
                 f"Execution timed out after {timeout_ms}ms. Bridge "
                 "failed to terminate the code — it is likely stuck in "
@@ -280,8 +256,6 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
             message = f"Execution timed out after {timeout_ms}ms."
 
     details = {"method": method}
-    if "reason" in termination:
-        details["reason"] = termination["reason"]
 
     return error_response(
         "execute_code_result",
