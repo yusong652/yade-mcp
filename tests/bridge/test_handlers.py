@@ -322,20 +322,20 @@ class TestTerminateStuckExecution:
 
         result = _terminate_stuck_execution("req-1", future)
 
-        assert result["resolved"] is True
+        assert result["result"] is not None
         assert result["method"] == "finished"
         assert result["result"]["status"] == "success"
         # request_interrupt still fires, even on the finished path
         assert _interrupt_requested.get("req-1") is True
 
     def test_no_thread_registered_pending_future(self):
-        """Registry empty + future pending → 'finished', not resolved.
-        Defensive: shouldn't happen in practice (finally would have
-        resolved the future before clearing the registry)."""
+        """Registry empty + future pending → 'unsettled'.
+        Defensive: the ultra-narrow window where the registry is cleared but
+        the executor hasn't set the future's result yet."""
         future = Future()
         result = _terminate_stuck_execution("req-1", future)
-        assert result["resolved"] is False
-        assert result["method"] == "finished"
+        assert result["result"] is None
+        assert result["method"] == "unsettled"
 
     def test_async_exc_resolves_future_in_grace_period(self):
         """SetAsyncExc succeeds → future resolves → method=async_exc."""
@@ -351,7 +351,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("req-3", future)
 
-        assert result["resolved"] is True
+        assert result["result"] is not None
         assert result["method"] == "async_exc"
         assert result["result"]["output"] == "partial"
 
@@ -373,7 +373,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("req-4", future)
 
-        assert result["resolved"] is False
+        assert result["result"] is None
         assert result["method"] == "stuck_in_c"
 
     # --- cycle-interrupt path (standalone O.run inside execute_code) ---
@@ -391,7 +391,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("cyc-1", future)
 
-        assert result["resolved"] is True
+        assert result["result"] is not None
         assert result["method"] == "cycle_interrupt"
         assert result["result"]["output"] == "paused"
         # CAS-cleared on the way out; interrupt flag cleared too.
@@ -415,7 +415,7 @@ class TestTerminateStuckExecution:
         ):
             result = _terminate_stuck_execution("cyc-2", future)
 
-        assert result["resolved"] is False
+        assert result["result"] is None
         assert result["method"] == "cycle_stuck"
         assert get_current_task() is None
         assert _interrupt_requested.get("cyc-2") is None
@@ -452,13 +452,12 @@ class TestTerminateStuckExecution:
             result = _terminate_stuck_execution("cyc-4", future)
 
         assert result["method"] == "finished"
-        assert result["resolved"] is True
+        assert result["result"] is not None
 
 
 class TestTimeoutResponse:
     def test_resolved_returns_terminated(self):
         termination = {
-            "resolved": True,
             "method": "async_exc",
             "result": {"status": "terminated", "output": "hello"},
         }
@@ -474,7 +473,6 @@ class TestTimeoutResponse:
 
     def test_stuck_in_c_returns_timeout(self):
         termination = {
-            "resolved": False,
             "method": "stuck_in_c",
             "result": None,
         }
@@ -484,23 +482,23 @@ class TestTimeoutResponse:
         assert "C extension" in resp["error"]["message"]
         assert resp["data"]["output"] == ""
 
-    def test_cycle_interrupt_returns_interrupted_with_pullback(self):
+    def test_cycle_interrupt_returns_interrupted(self):
         termination = {
-            "resolved": True,
             "method": "cycle_interrupt",
             "result": {"status": "interrupted", "output": "iter=500"},
         }
         resp = _timeout_response("req-5", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "interrupted"
-        # Pull-back to the task tool is the whole point of this path.
-        assert "yade_execute_task" in resp["error"]["message"]
+        # Bridge states the fact (paused at a boundary); no client-tool names —
+        # the agent pull-back to yade_execute_task lives in the MCP layer.
+        assert "yade_" not in resp["error"]["message"]
+        assert "paused" in resp["error"]["message"]
         assert resp["data"]["output"] == "iter=500"
         assert resp["error"]["details"]["method"] == "cycle_interrupt"
 
     def test_cycle_stuck_returns_timeout(self):
         termination = {
-            "resolved": False,
             "method": "cycle_stuck",
             "result": None,
         }
@@ -509,3 +507,26 @@ class TestTimeoutResponse:
         assert resp["error"]["code"] == "timeout"
         assert "O.run" in resp["error"]["message"]
         assert resp["error"]["details"]["method"] == "cycle_stuck"
+
+    def test_unsettled_returns_timeout(self):
+        # Defensive method: registry cleared but the future wasn't retrievable.
+        termination = {
+            "method": "unsettled",
+            "result": None,
+        }
+        resp = _timeout_response("req-7", 3000, termination)
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "timeout"
+        assert resp["error"]["details"]["method"] == "unsettled"
+
+    def test_finished_returns_terminated(self):
+        # The code raced the timeout and settled → terminated, with its stdout.
+        termination = {
+            "method": "finished",
+            "result": {"status": "success", "output": "done"},
+        }
+        resp = _timeout_response("req-8", 3000, termination)
+        assert resp["ok"] is False
+        assert resp["error"]["code"] == "terminated"
+        assert resp["data"]["output"] == "done"
+        assert resp["error"]["details"]["method"] == "finished"

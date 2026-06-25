@@ -99,6 +99,35 @@ class TestExecuteCode:
         assert "aborted" in data["error"]["details"]["reason"]
         assert data["data"]["output"] == "partial"
 
+    async def test_timeout_action_distinguishes_cycle_stuck(self, bridge):
+        # The bridge message is factual; the MCP layer turns code+method into
+        # agent guidance. cycle_stuck → cycle-specific action (yade_execute_task).
+        bridge.execute_code.return_value = {
+            "ok": False,
+            "error": {
+                "code": "timeout",
+                "message": "a simulation cycle (O.run) exceeded 1000ms",
+                "details": {"method": "cycle_stuck"},
+            },
+        }
+        data = await _call("yade_execute_code", code="O.run(10**9, True)")
+        assert data["ok"] is False
+        assert data["error"]["code"] == "timeout"
+        assert "yade_execute_task" in data["error"]["details"]["action"]
+
+    async def test_timeout_action_defaults_to_stuck_in_c(self, bridge):
+        bridge.execute_code.return_value = {
+            "ok": False,
+            "error": {
+                "code": "timeout",
+                "message": "abort exception queued but the code has not yielded",
+                "details": {"method": "stuck_in_c"},
+            },
+        }
+        data = await _call("yade_execute_code", code="np.linalg.inv(huge)")
+        assert data["ok"] is False
+        assert "C extension" in data["error"]["details"]["action"]
+
     async def test_legacy_status_envelope_still_handled(self, bridge):
         # Backward-compat: a bridge that predates the ok envelope sends a
         # bare ``status`` string. The tool must still classify it correctly.

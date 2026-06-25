@@ -61,9 +61,8 @@ def _run_code(request_id, code_str):
     output_buffer = StringIO()
     old_stdout = sys.stdout
 
-    # Register our thread id so a timeout in the caller can async-inject
-    # BridgeTimeout to abort us — execute_code cancels via this async_exc
-    # path, not the PyRunner interrupt flag that tasks use.
+    # Record the pump thread so the timeout caller can async-inject
+    # BridgeTimeout to abort us.
     register_exec_thread(request_id, threading.get_ident())
 
     try:
@@ -146,8 +145,9 @@ def _run_code(request_id, code_str):
 def _terminate_stuck_execution(request_id: str, future) -> dict:
     """Terminate a timed-out ``execute_code`` submission.
 
-    Returns an outcome dict for ``_timeout_response``: ``resolved``, ``method``,
-    and ``result`` (the future's result when resolved).
+    Returns an outcome dict for ``_timeout_response``: ``method`` (which
+    cancellation outcome occurred) and ``result`` (the future's result dict,
+    carried for its stdout, or None when no result was retrieved).
     """
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
@@ -165,7 +165,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
             # Pause signalled, but a too-heavy step didn't reach the next cycle
             # boundary within grace. The pause is sticky, so the pump should
             # free shortly after we return.
-            return {"resolved": False, "method": "cycle_stuck", "result": None}
+            return {"method": "cycle_stuck", "result": None}
         finally:
             # CAS: don't wipe a task that claimed the slot mid-grace.
             if get_current_task() == request_id:
@@ -176,84 +176,84 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
         # ``interrupted`` means the tick paused our O.run as intended; any other
         # status means the cycle finished on its own within the grace window.
         method = "cycle_interrupt" if status == "interrupted" else "cycle_finished"
-        return {"resolved": True, "method": method, "result": result}
+        return {"method": method, "result": result}
 
     tid = get_exec_thread(request_id)
 
     # Registry already cleared → _run_code's finally ran → the pump is free.
-    # The code finished on its own, racing the timeout, before we could inject.
     if tid is None:
         if future.done():
-            return {"resolved": True, "method": "finished", "result": future.result()}
-        return {"resolved": False, "method": "finished", "result": None}
+            # The code raced the timeout and settled before we could inject.
+            return {"method": "finished", "result": future.result()}
+        # Ultra-narrow window: registry cleared but the executor hasn't set the
+        # future's result yet (it sets it after _run_code returns).
+        return {"method": "unsettled", "result": None}
 
     inject_async_exception(tid, BridgeTimeout)
 
     try:
         result = future.result(timeout=_TERMINATION_GRACE_S)
-        return {"resolved": True, "method": "async_exc", "result": result}
+        return {"method": "async_exc", "result": result}
     except concurrent.futures.TimeoutError:
-        return {"resolved": False, "method": "stuck_in_c", "result": None}
+        return {"method": "stuck_in_c", "result": None}
 
 
 def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> dict:
     """Build the wire response for an ``execute_code`` that timed out.
 
-    * ``resolved=True`` → status ``"terminated"``: pump free, but YADE state may
-      be partially modified by whatever the user code wrote before the abort.
-    * ``resolved=False`` → status ``"timeout"``: cancellation couldn't complete.
-    * ``method == "cycle_interrupt"`` → status ``"interrupted"``: a standalone
-      ``O.run`` was cleanly paused, with a pull-back to ``yade_execute_task``.
+    Each cancellation ``method`` maps to exactly one wire outcome
+    (``error.code`` + message) — there is no separate resolved/unresolved axis:
+
+    * ``cycle_interrupt`` → ``interrupted`` (a standalone O.run was paused)
+    * ``async_exc`` / ``finished`` / ``cycle_finished`` → ``terminated``
+    * ``stuck_in_c`` / ``cycle_stuck`` / ``unsettled`` → ``timeout``
+
+    Messages state only what the bridge observed/did — no client-tool names or
+    agent guidance. The MCP layer maps ``code`` + ``details.method`` to
+    agent-facing advice (which tool to use, when to restart).
     """
-    resolved = termination["resolved"]
     method = termination["method"]
     result = termination.get("result")
 
-    # Output captured up to the abort point (present on async_exc / self paths).
+    # Partial stdout captured before the abort. Only the settled methods carry a
+    # result dict; the rest leave it None.
     output = ""
     if isinstance(result, dict):
         output = result.get("output", "") or ""
 
     if method == "cycle_interrupt":
-        # A standalone execute_code ran an O.run cycle past its timeout; the
-        # bridge paused it cleanly. Pull the agent back to the task tool.
         error_code = "interrupted"
         message = (
-            f"Ran a simulation cycle (O.run) inside execute_code that "
-            f"exceeded the {timeout_ms}ms timeout; it was interrupted and "
-            "the simulation paused cleanly at an iteration boundary. For "
-            "long simulations or solving to equilibrium, use "
-            "yade_execute_task — it tracks progress and can be cleanly "
-            "stopped via yade_interrupt_task."
+            f"A simulation cycle (O.run) inside execute_code exceeded the "
+            f"{timeout_ms}ms timeout and was paused cleanly at an iteration "
+            "boundary."
         )
-    elif resolved:
+    elif method in ("async_exc", "finished", "cycle_finished"):
+        # Aborted by async exception, or the code finished on its own racing
+        # the timeout — either way the pump is free.
         error_code = "terminated"
         message = (
-            f"Execution timed out after {timeout_ms}ms and was aborted. "
-            "YADE state may be partially modified by the aborted code; "
-            "inspect via yade_execute_code before retrying."
+            f"Execution exceeded the {timeout_ms}ms timeout and was aborted. "
+            "YADE state may be partially modified by code that ran before the "
+            "abort."
         )
-    else:
+    elif method == "stuck_in_c":
         error_code = "timeout"
-        if method == "stuck_in_c":
-            message = (
-                f"Execution timed out after {timeout_ms}ms. Bridge "
-                "failed to terminate the code — it is likely stuck in "
-                "a C extension (e.g. numpy/scipy). The bridge may "
-                "recover when the C call returns; otherwise restart."
-            )
-        elif method == "cycle_stuck":
-            message = (
-                f"Execution timed out after {timeout_ms}ms while running a "
-                "simulation cycle (O.run). The bridge requested a pause "
-                "but the cycle did not yield within the grace period; it "
-                "should stop shortly. Use yade_execute_task for long "
-                "simulations; restart the bridge if execute_code stays "
-                "unresponsive."
-            )
-        else:
-            # finished without resolved — defensive.
-            message = f"Execution timed out after {timeout_ms}ms."
+        message = (
+            f"Execution exceeded the {timeout_ms}ms timeout; the abort "
+            "exception was queued but the code has not yielded — likely "
+            "blocked in a C extension."
+        )
+    elif method == "cycle_stuck":
+        error_code = "timeout"
+        message = (
+            f"A simulation cycle (O.run) exceeded the {timeout_ms}ms timeout; a "
+            "pause was requested but the cycle did not yield within the grace "
+            "period."
+        )
+    else:  # "unsettled" — defensive: registry cleared but future not yet set.
+        error_code = "timeout"
+        message = f"Execution exceeded the {timeout_ms}ms timeout."
 
     details = {"method": method}
 
