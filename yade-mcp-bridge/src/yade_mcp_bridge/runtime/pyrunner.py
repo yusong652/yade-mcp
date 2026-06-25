@@ -2,14 +2,12 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """YADE simulation-side integration: PyRunner injection and the O.run() hook.
 
-This is the bridge's only foothold inside the running simulation. A
-self-identifying PyRunner engine is kept at ``O.engines[0]`` so that while
-``O.run()`` is live, YADE's C++ sim loop periodically calls back into
-Python to (a) observe the MCP interrupt flag and (b) park at a consistent
-engine boundary when an ``execute_code`` snippet holds a paused-snapshot
-window. A hook around ``O.run()`` re-injects and normalizes the engine
-before every run, surviving ``O.reset()`` and user scripts that reassign
-``O.engines``.
+The bridge's only foothold inside a running simulation: a self-identifying
+PyRunner engine at ``O.engines[0]`` that, while ``O.run()`` is live, lets
+YADE's C++ sim loop call back into Python each step (interrupt checks and
+snapshot-window parking). A hook around ``O.run()`` re-injects and
+normalizes the engine before every run, surviving ``O.reset()`` and user
+scripts that reassign ``O.engines``.
 """
 
 # PyRunner check cadence (iterPeriod): how many simulation iterations pass
@@ -21,20 +19,8 @@ _INTERRUPT_CHECK_PERIOD = 1
 
 
 def install_pyrunner(logger):
-    """Install a YADE PyRunner engine for interrupt checking during
-    simulation.
-
-    While ``O.run()`` is live, YADE's C++ sim loop calls this tick on a
-    ``Dummy-N`` (boost::python) thread every simulation step
-    (``_INTERRUPT_CHECK_PERIOD``). The tick's only job is to observe the
-    interrupt flag and call ``O.pause()`` — the Python side then raises
-    ``InterruptedError`` after ``O.run()`` returns. It must do nothing
-    else: any other work would run on the ``Dummy-N`` thread, where an
-    async exception would unwind into the boost::python stack → C++ FATAL
-    (the reason ``inject_async_exception`` refuses ``Dummy-N`` targets).
-
-    Returns True if the PyRunner was installed successfully.
-    """
+    """Install the interrupt/snapshot PyRunner at ``O.engines[0]`` and hook
+    ``O.run()`` to re-inject it. Returns True on success."""
     try:
         from yade import O
         from yade._utils import PyRunner  # noqa: F811
@@ -58,12 +44,9 @@ def install_pyrunner(logger):
     _interrupt_triggered = {"value": False}
 
     def _mcp_pyrunner_tick():
-        # Interrupt flag check only — do nothing else here (see
-        # install_pyrunner docstring: this runs on a Dummy-N thread).
-        # Instead of raising an exception inside PyRunner (which causes
-        # YADE's C++ layer to log a FATAL ERROR), we just pause the
-        # simulation. The hooked O.run() will check the flag after
-        # O.run() returns and raise InterruptedError at the Python level.
+        # Interrupt path: never raise here (sim thread → C++ FATAL; see
+        # install_pyrunner). Set a flag + O.pause(); the O.run() hook
+        # raises InterruptedError at the Python level once O.run() returns.
         if is_current_interrupt_requested():
             _interrupt_triggered["value"] = True
             try:

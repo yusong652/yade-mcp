@@ -92,15 +92,12 @@ def clear_interrupt(task_id):
 # ---------------------------------------------------------------------------
 # Fire-and-forget cycling marker (per thread).
 #
-# ``O.run(wait=False)`` returns before YADE's C++ sim thread has flipped
-# ``O.running`` True. A task that ends with such a dispatch must drain the
-# cycling before reporting success, but right after the script's ``exec``
-# there is no way to tell "cycling about to start" from "no cycling at all" —
-# both read ``O.running == False``. The ``O.run`` hook records, per calling
-# thread, whether the last run left fire-and-forget cycling; the task drain
-# reads its OWN thread's flag to decide whether to wait. Per-thread
-# (``threading.local``) so an ``execute_code`` ``O.run`` on the pump thread
-# never bleeds into a task's drain on its own dedicated thread.
+# ``O.run(wait=False)`` returns before the C++ sim thread flips ``O.running``
+# True, so just after a script's ``exec`` "about to cycle" and "not cycling"
+# both read ``O.running == False``. The ``O.run`` hook records per thread
+# whether the last run was such a dispatch; the task drain reads its own
+# thread's flag to decide whether to wait. ``threading.local`` keeps a
+# pump-thread ``execute_code`` run from bleeding into a task's drain.
 # ---------------------------------------------------------------------------
 
 _async_cycling = threading.local()
@@ -170,7 +167,9 @@ def get_exec_thread(request_id: str) -> int | None:
 # is no lost-wakeup risk regardless of which side reaches its wait first.
 # ---------------------------------------------------------------------------
 
-_pause_lock = threading.Lock()  # serialize: at most one window at a time
+_pause_lock = threading.Lock()  # one window at a time. The serial pump never
+# contends today; kept as a defensive guard so the Event handshake can't corrupt
+# if a second thread ever opens a window.
 _pause_wanted = threading.Event()  # snippet -> cycle: please park
 _cycle_parked = threading.Event()  # cycle -> snippet: parked, scene is frozen
 _snippet_released = threading.Event()  # snippet -> cycle: done, resume
