@@ -108,32 +108,24 @@ def install_pyrunner(logger):
     def _normalize_pyrunner():
         """Ensure the MCP bridge PyRunner is still present, live, and at O.engines[0],
         restoring it if a user script wiped, disabled, or moved it."""
-        expected_period = _INTERRUPT_CHECK_PERIOD
         existing = _find_our_pyrunner()
 
         if existing is None:
             # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
                 O.engines = [_make_pyrunner()] + list(O.engines)
-                logger.info("PyRunner auto-injected at O.engines[0] before O.run()")
+                logger.debug("PyRunner auto-injected at O.engines[0] before O.run()")
             except Exception as e:
                 logger.warning(f"PyRunner auto-injection failed: {e}")
             return
 
-        # Read the changed values before restoring, so the warning logs them.
-        actual_period = getattr(existing, "iterPeriod", expected_period)
-        actual_dead = getattr(existing, "dead", False)
-        if actual_period != expected_period or actual_dead:
-            logger.warning(
-                "MCP PyRunner config changed (iterPeriod=%r, dead=%r); restoring iterPeriod=%d, dead=False.",
-                actual_period,
-                actual_dead,
-                expected_period,
-            )
-
+        # Restore config in case a user script changed it (e.g. a negative index
+        # landing on the engine at O.engines[0]).
         try:
-            existing.iterPeriod = expected_period
-            existing.dead = False
+            if existing.iterPeriod != _INTERRUPT_CHECK_PERIOD or existing.dead:
+                logger.debug("MCP bridge PyRunner iterPeriod/dead changed; restoring")
+                existing.iterPeriod = _INTERRUPT_CHECK_PERIOD
+                existing.dead = False
         except Exception as e:
             logger.warning(f"Failed to normalize PyRunner config: {e}")
 
