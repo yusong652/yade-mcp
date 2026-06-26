@@ -4,8 +4,8 @@
 
 These modules drive and observe YADE's main-thread / simulation loop —
 distinct from request handling. ``pump`` chooses the thread that drains the
-execute_code queue; ``pyrunner`` injects the interrupt/pause tick into
-``O.run()``; ``signals`` holds the cross-thread interrupt and paused-snapshot
+execute_code queue; ``pyrunner`` injects the interrupt/hold tick into
+``O.run()``; ``signals`` holds the cross-thread interrupt and sim-hold-snapshot
 primitives they coordinate through.
 """
 

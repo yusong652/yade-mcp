@@ -506,8 +506,8 @@ class TestExecuteCodeTimeoutTermination:
         """Regression: _run_code must NOT set_current_task(request_id).
 
         If it did, a subsequent execute_code timeout's request_interrupt() would
-        set a flag that PyRunner's is_current_interrupt_requested() reads
-        via _current_task_id → O.pause() fires → _hooked_run raises
+        set a flag that the PyRunner tick reads via the ambient _current_task_id
+        → O.pause() fires → _hooked_run raises
         InterruptedError → the enclosing script task gets spuriously
         marked ``interrupted``. The fix: leave _current_task_id alone.
         """

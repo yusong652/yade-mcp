@@ -9,7 +9,6 @@ from yade_mcp_bridge.runtime.signals import (
     clear_interrupt,
     get_current_task,
     get_exec_thread,
-    is_current_interrupt_requested,
     is_task_interrupt_requested,
     register_exec_thread,
     request_interrupt,
@@ -44,16 +43,6 @@ class TestSignals:
         request_interrupt("task-1")
         assert is_task_interrupt_requested("task-1")
         assert not is_task_interrupt_requested("task-2")
-
-    def test_is_current_interrupt_requested_uses_current_task(self):
-        set_current_task("task-1")
-        assert not is_current_interrupt_requested()
-
-        request_interrupt("task-1")
-        assert is_current_interrupt_requested()
-
-    def test_is_current_interrupt_requested_no_current_task(self):
-        assert not is_current_interrupt_requested()
 
     def test_clear_interrupt(self):
         request_interrupt("task-1")
@@ -143,36 +132,36 @@ class TestExecThreadRegistry:
         assert get_exec_thread("new-req") == live_ident  # just added
 
 
-class TestSimPauseRendezvous:
+class TestSimHoldRendezvous:
     """The execute_code consistent-snapshot window: a handshake between the
     snippet (pump thread) and the PyRunner tick (sim thread). Exercised here
     with a fake cycle thread — no YADE needed."""
 
     def setup_method(self):
         from yade_mcp_bridge.runtime.signals import (
-            _cycle_parked,
-            _pause_wanted,
+            _cycle_held,
+            _hold_wanted,
             _snippet_released,
             _window_local,
         )
 
-        _pause_wanted.clear()
-        _cycle_parked.clear()
+        _hold_wanted.clear()
+        _cycle_held.clear()
         _snippet_released.clear()
         if getattr(_window_local, "active", False):
             _window_local.active = False
 
     def _spawn_cycle(self):
         """Fake sim-cycle thread: bumps ``state['count']`` each iteration
-        and calls the cooperative brake ``park_if_pause_wanted``."""
-        from yade_mcp_bridge.runtime.signals import park_if_pause_wanted
+        and calls the cooperative brake ``hold_if_wanted``."""
+        from yade_mcp_bridge.runtime.signals import hold_if_wanted
 
         state = {"count": 0, "stop": False}
 
         def _cycle():
             while not state["stop"]:
                 state["count"] += 1
-                park_if_pause_wanted()
+                hold_if_wanted()
                 time.sleep(0.001)
 
         t = threading.Thread(target=_cycle, name="fake-cycle", daemon=True)
@@ -184,40 +173,40 @@ class TestSimPauseRendezvous:
         t.join(timeout=2.0)
 
     def test_window_freezes_cycle_then_resumes(self):
-        from yade_mcp_bridge.runtime.signals import sim_paused_window
+        from yade_mcp_bridge.runtime.signals import sim_hold_window
 
         state, t = self._spawn_cycle()
         try:
             time.sleep(0.05)  # let the cycle advance
-            with sim_paused_window() as parked:
-                assert parked is True
+            with sim_hold_window() as held:
+                assert held is True
                 c1 = state["count"]
-                time.sleep(0.05)  # cycle is parked → count must NOT advance
+                time.sleep(0.05)  # cycle is held → count must NOT advance
                 c2 = state["count"]
-                assert c1 == c2, f"cycle advanced while parked: {c1} -> {c2}"
+                assert c1 == c2, f"cycle advanced while held: {c1} -> {c2}"
             time.sleep(0.05)  # released → cycle advances again
             assert state["count"] > c2
         finally:
             self._stop_cycle(state, t)
 
     def test_snippet_holds_sim_only_inside_window(self):
-        from yade_mcp_bridge.runtime.signals import sim_paused_window, snippet_holds_sim
+        from yade_mcp_bridge.runtime.signals import sim_hold_window, snippet_holds_sim
 
         assert snippet_holds_sim() is False
-        # No cycle thread → won't park; short acquire timeout keeps it fast.
-        with sim_paused_window(acquire_timeout_s=0.05) as parked:
-            assert parked is False  # nothing to park
+        # No cycle thread → won't hold; short acquire timeout keeps it fast.
+        with sim_hold_window(acquire_timeout_s=0.05) as held:
+            assert held is False  # nothing to hold
             assert snippet_holds_sim() is True
         assert snippet_holds_sim() is False
 
     def test_window_releases_cycle_on_exception(self):
-        from yade_mcp_bridge.runtime.signals import sim_paused_window
+        from yade_mcp_bridge.runtime.signals import sim_hold_window
 
         state, t = self._spawn_cycle()
         try:
             time.sleep(0.05)
-            with pytest.raises(ValueError), sim_paused_window() as parked:
-                assert parked is True
+            with pytest.raises(ValueError), sim_hold_window() as held:
+                assert held is True
                 raise ValueError("boom")
             # the window's finally must have resumed the cycle
             time.sleep(0.05)
@@ -227,20 +216,20 @@ class TestSimPauseRendezvous:
         finally:
             self._stop_cycle(state, t)
 
-    def test_park_max_hold_returns_without_release(self):
+    def test_hold_max_hold_returns_without_release(self):
         """If the snippet never releases, the brake still returns after
         ``max_hold_s`` so a hung snippet cannot freeze the sim forever."""
-        from yade_mcp_bridge.runtime.signals import _pause_wanted, park_if_pause_wanted
+        from yade_mcp_bridge.runtime.signals import _hold_wanted, hold_if_wanted
 
-        _pause_wanted.set()
+        _hold_wanted.set()
         done = threading.Event()
 
-        def _park():
-            park_if_pause_wanted(max_hold_s=0.05)
+        def _hold():
+            hold_if_wanted(max_hold_s=0.05)
             done.set()
 
-        t = threading.Thread(target=_park, name="park-maxhold", daemon=True)
+        t = threading.Thread(target=_hold, name="hold-maxhold", daemon=True)
         t.start()
         assert done.wait(timeout=2.0) is True  # returned despite no release
-        _pause_wanted.clear()
+        _hold_wanted.clear()
         t.join(timeout=1.0)

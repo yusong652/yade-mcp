@@ -5,7 +5,7 @@
 The bridge's only foothold inside a running simulation: a self-identifying
 PyRunner engine at ``O.engines[0]`` that, while ``O.run()`` is live, lets
 YADE's C++ sim loop call back into Python each step (interrupt checks and
-snapshot-window parking). A hook around ``O.run()`` re-injects and
+snapshot-window pausing). A hook around ``O.run()`` re-injects and
 normalizes the engine before every run, surviving ``O.reset()`` and user
 scripts that reassign ``O.engines``.
 """
@@ -34,9 +34,10 @@ def install_pyrunner(logger):
     import sys as _sys
 
     from .signals import (
-        is_current_interrupt_requested,
+        get_current_task,
+        hold_if_wanted,
+        is_task_interrupt_requested,
         mark_async_cycling,
-        park_if_pause_wanted,
         snippet_holds_sim,
     )
 
@@ -47,16 +48,19 @@ def install_pyrunner(logger):
         # Interrupt path: never raise here (sim thread → C++ FATAL; see
         # install_pyrunner). Set a flag + O.pause(); the O.run() hook
         # raises InterruptedError at the Python level once O.run() returns.
-        if is_current_interrupt_requested():
+        # The tick has no handle on its own task id, so discover the active
+        # one from the ambient _current_task_id.
+        task_id = get_current_task()
+        if task_id and is_task_interrupt_requested(task_id):
             _interrupt_triggered["value"] = True
             try:
                 O.pause()
             except Exception:
                 pass
-        # Cooperative pause point. If an execute_code snippet has asked for
-        # a consistent-snapshot window, park here (GIL released) at this
-        # engine boundary until it releases — see signals.sim_paused_window.
-        park_if_pause_wanted()
+        # Cooperative hold point. If an execute_code snippet has asked for
+        # a consistent-snapshot window, hold here (GIL released) at this
+        # engine boundary until it releases — see signals.sim_hold_window.
+        hold_if_wanted()
 
     def _ensure_tick_in_main():
         # YADE's PyRunner evaluates its command via boost::python::exec with
@@ -162,14 +166,14 @@ def install_pyrunner(logger):
 
         def _hooked_run(*args, **kwargs):
             # Refuse driving the cycle from a snippet that is holding a
-            # sim-pause snapshot window: the cycle is frozen (parked in the
+            # sim-hold snapshot window: the cycle is frozen (held in the
             # PyRunner tick), so this O.run()'s O.wait() would block on an
             # iteration the cycle can never reach → deadlock. The task's own
             # O.run runs on its companion thread (never inside a window), so
             # snippet_holds_sim() is False there and the task is unaffected.
             if snippet_holds_sim():
                 raise RuntimeError(
-                    "O.run() refused: execute_code is holding a paused-snapshot "
+                    "O.run() refused: execute_code is holding a sim-hold "
                     "window (the simulation cycle is frozen for a consistent "
                     "read/edit). A snippet must not drive the cycle here. Use "
                     "yade_execute_task for simulation runs."
