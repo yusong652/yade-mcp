@@ -24,9 +24,9 @@ _current_task_id = None
 _current_task_lock = threading.Lock()
 _interrupt_requested = {}  # task_id -> bool
 
-# Maps a task's task_id / an execute_code's request_id to its worker thread, so
-# a Python exception can be injected as a fallback interrupt when execution is
-# not in a running step.
+# Thread registry for the fallback interrupt: maps a task's task_id / an
+# execute_code's request_id to its worker thread, so a Python exception can be
+# injected when execution is not in a running step.
 _exec_thread_ids: dict[str, int] = {}
 _exec_thread_lock = threading.Lock()
 
@@ -67,34 +67,29 @@ def clear_interrupt(task_id):
     _interrupt_requested.pop(task_id, None)
 
 
-def register_exec_thread(request_id: str, thread_id: int) -> None:
-    """Record which OS thread is currently running ``request_id``.
-
-    As a cheap leak-defense, scrubs any pre-existing entries whose
-    recorded thread is no longer alive. Leaks would only occur if
-    ``_run_code`` exited through a path that skipped its
-    ``finally`` — vanishingly rare, but the scrub keeps the registry
-    from growing unboundedly over a long-lived bridge session.
-    """
+def register_exec_thread(exec_id: str, thread_id: int) -> None:
+    """Map a task_id / execute_code request_id to its worker thread."""
     with _exec_thread_lock:
+        # Drop entries whose thread has died — defensive, in case a caller
+        # ever skips its unregister.
         if _exec_thread_ids:
             alive = {t.ident for t in threading.enumerate() if t.is_alive()}
-            stale = [rid for rid, tid in _exec_thread_ids.items() if tid not in alive]
-            for rid in stale:
-                _exec_thread_ids.pop(rid, None)
-        _exec_thread_ids[request_id] = thread_id
+            stale = [eid for eid, tid in _exec_thread_ids.items() if tid not in alive]
+            for eid in stale:
+                _exec_thread_ids.pop(eid, None)
+        _exec_thread_ids[exec_id] = thread_id
 
 
-def unregister_exec_thread(request_id: str) -> None:
-    """Drop the thread record for ``request_id``. Idempotent."""
+def unregister_exec_thread(exec_id: str) -> None:
+    """Drop the thread record for ``exec_id``. Idempotent."""
     with _exec_thread_lock:
-        _exec_thread_ids.pop(request_id, None)
+        _exec_thread_ids.pop(exec_id, None)
 
 
-def get_exec_thread(request_id: str) -> int | None:
-    """Return the recorded thread id for ``request_id``, or None."""
+def get_exec_thread(exec_id: str) -> int | None:
+    """Return the recorded thread id for ``exec_id``, or None."""
     with _exec_thread_lock:
-        return _exec_thread_ids.get(request_id)
+        return _exec_thread_ids.get(exec_id)
 
 
 # ---------------------------------------------------------------------------
