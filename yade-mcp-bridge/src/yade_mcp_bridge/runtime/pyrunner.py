@@ -1,42 +1,28 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""YADE simulation-side integration: PyRunner injection and the O.run() hook.
+"""The bridge's foothold inside a running simulation.
 
-The bridge's only foothold inside a running simulation: a self-identifying
-PyRunner engine at ``O.engines[0]`` that, while ``O.run()`` is live, lets
-YADE's C++ sim loop call back into Python each step (interrupt checks and
-snapshot-window pausing). A hook around ``O.run()`` re-injects and
-normalizes the engine before every run, surviving ``O.reset()`` and user
-scripts that reassign ``O.engines``.
+A PyRunner engine registered in ``O.engines`` so that, while a task runs, YADE
+calls back into Python each step to check:
+
+1. whether the running task was asked to interrupt;
+2. whether an execute_code snippet wants to hold the cycle for a consistent
+   snapshot.
+
+A hook around ``O.run()`` keeps the engine installed, re-injecting it before
+every run so it survives ``O.reset()`` and user scripts that reassign
+``O.engines``.
 """
 
 import threading
 
-# PyRunner check cadence (iterPeriod): how many simulation iterations pass
-# between interrupt-flag checks. Fixed at 1 (every step), not a tunable — the
-# execute_code cycle-interrupt grace (_CYCLE_INTERRUPT_GRACE_S) assumes
-# O.pause() lands within ~one step, so a larger period would silently break
-# it. Per-step cost is one trivial flag check, negligible against a DEM step.
-_INTERRUPT_CHECK_PERIOD = 1
-
-
-# ---------------------------------------------------------------------------
-# Fire-and-forget cycling marker (per thread).
-#
-# ``O.run(wait=False)`` returns before the C++ sim thread flips ``O.running``
-# True, so just after a script's ``exec`` "about to cycle" and "not cycling"
-# both read ``O.running == False``. The ``O.run`` hook below records per thread
-# whether the last run was such a dispatch; the task drain reads its own
-# thread's flag to decide whether to wait. ``threading.local`` keeps a
-# pump-thread ``execute_code`` run from bleeding into a task's drain.
-# ---------------------------------------------------------------------------
+_INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
 
 _async_cycling = threading.local()
 
 
 def mark_async_cycling(pending):
-    """Record whether the calling thread's last ``O.run`` left undrained
-    fire-and-forget cycling (``wait=False``)."""
+    """Set this thread's flag for whether its last ``O.run`` left cycling undrained."""
     _async_cycling.pending = pending
 
 
@@ -46,18 +32,22 @@ def async_cycling_pending():
     return getattr(_async_cycling, "pending", False)
 
 
+def _is_async_run(args, kwargs) -> bool:
+    """True if this ``O.run`` was dispatched ``wait=False`` (returns while its
+    cycling continues). ``wait`` is ``O.run``'s 2nd positional or its ``wait``
+    keyword; default False."""
+    wait = kwargs["wait"] if "wait" in kwargs else (args[1] if len(args) >= 2 else False)
+    return not wait
+
+
 def install_pyrunner(logger):
     """Install the interrupt/snapshot PyRunner at ``O.engines[0]`` and hook
     ``O.run()`` to re-inject it. Returns True on success."""
     try:
-        from yade import O
-        from yade._utils import PyRunner  # noqa: F811
+        from yade import O, PyRunner
     except ImportError:
-        try:
-            from yade import PyRunner  # type: ignore
-        except ImportError:
-            logger.warning("PyRunner not available, interrupt checking during simulation disabled")
-            return False
+        logger.warning("PyRunner not available, interrupt checking during simulation disabled")
+        return False
 
     import sys as _sys
 
@@ -72,11 +62,9 @@ def install_pyrunner(logger):
     _interrupt_triggered = {"value": False}
 
     def _mcp_pyrunner_tick():
-        # Interrupt path: never raise here (sim thread → C++ FATAL; see
-        # install_pyrunner). Set a flag + O.pause(); the O.run() hook
-        # raises InterruptedError at the Python level once O.run() returns.
-        # The tick has no handle on its own task id, so discover the active
-        # one from the ambient _current_task_id.
+        # Never raise on the sim thread (→ C++ FATAL). Set a flag + O.pause();
+        # the O.run() hook raises InterruptedError to interrupt the task once
+        # O.run() returns.
         task_id = get_current_task()
         if task_id and is_task_interrupt_requested(task_id):
             _interrupt_triggered["value"] = True
@@ -102,13 +90,6 @@ def install_pyrunner(logger):
 
     _ensure_tick_in_main()
 
-    # Store config for re-injection
-    _pyrunner_config = {
-        "period": _INTERRUPT_CHECK_PERIOD,
-        "PyRunner": PyRunner,
-        "O": O,
-    }
-
     # Identify our PyRunner by its command string, not by engine label.
     # YADE's labeled-entity auto-injection runs `__builtins__.<label>=...`
     # on every `O.engines=[...]` assignment, which crashes with
@@ -122,9 +103,9 @@ def install_pyrunner(logger):
 
     def _make_pyrunner():
         """Create a fresh PyRunner instance."""
-        return _pyrunner_config["PyRunner"](
+        return PyRunner(
             command=_PYRUNNER_COMMAND,
-            iterPeriod=_pyrunner_config["period"],
+            iterPeriod=_INTERRUPT_CHECK_PERIOD,
             dead=False,
         )
 
@@ -142,7 +123,7 @@ def install_pyrunner(logger):
         O.engines[-1].iterPeriod = ...), or (c) left us somewhere in the
         middle. Warns on tamper so the cause of any interrupt-latency bug is
         visible in the log."""
-        expected_period = _pyrunner_config["period"]
+        expected_period = _INTERRUPT_CHECK_PERIOD
         existing = _find_our_pyrunner()
 
         if existing is None:
@@ -211,12 +192,9 @@ def install_pyrunner(logger):
             _normalize_pyrunner()
             _interrupt_triggered["value"] = False
             result = _original_run(*args, **kwargs)
-            # Record fire-and-forget cycling so the task drain knows to wait
-            # for the C++ sim thread to pick it up. wait=True already drained
-            # synchronously. Signature: O.run(nSteps=-1, wait=False), so wait
-            # is the 2nd positional or the "wait" keyword.
-            wait = kwargs["wait"] if "wait" in kwargs else (args[1] if len(args) >= 2 else False)
-            mark_async_cycling(not wait)
+            # A wait=False run returns before its cycling finishes; flag it for
+            # the task drain (wait=True already drained synchronously).
+            mark_async_cycling(_is_async_run(args, kwargs))
             # After O.run() returns (possibly due to O.pause() from interrupt),
             # check if interrupt was the reason and raise at Python level.
             # This avoids the FATAL ERROR from YADE's C++ exception handling.
