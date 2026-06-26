@@ -28,11 +28,31 @@ from .errors import TaskInterrupt, format_execution_error
 
 logger = logging.getLogger("MCP-Bridge")
 
-# Max time the task drain waits for YADE's C++ sim thread to flip O.running
-# True after a just-dispatched O.run(wait=False), before concluding no
-# cycling actually started. The pickup gap is normally sub-millisecond; this
-# bound only caps the rare stall on a contended sim thread.
-_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5
+_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5  # max wait for the cycle to start (pickup gap)
+
+
+def _drain_async_cycling() -> None:
+    """Block until any ``O.run(wait=False)`` cycling the task dispatched
+    finishes, so it never reports success while the sim still cycles (an orphan
+    session hides errors and evades interrupts). Defensive: agents rarely call
+    ``O.run(wait=False)``.
+
+    ``wait=False`` returns before ``O.running`` flips True, so poll for the
+    cycle to start (bounded) then ``O.wait()`` for the run itself (unbounded).
+    The bound caps only the pickup gap, not run length; ``wait=True`` drains
+    inside YADE and never reaches here.
+    """
+    try:
+        from yade import O as _O
+    except ImportError:
+        return
+    if not async_cycling_pending():
+        return
+    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
+    while not _O.running and time.monotonic() < deadline:
+        time.sleep(0.005)
+    if _O.running:
+        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
 
 class ScriptRunner:
@@ -79,31 +99,10 @@ class ScriptRunner:
                 exec(code_obj, exec_globals, exec_globals)
                 result = exec_globals.get("result", None)
 
-            # Drain any fire-and-forget cycling (O.run wait=False) before
-            # reporting task success. Aligns task lifetime with cycling
-            # lifetime, matching PFC's synchronous SDK semantics. Without
-            # this, a wait=False O.run creates an orphan cycling session
-            # that outlives the task, hiding errors and evading interrupts.
-            try:
-                from yade import O as _O
+            _drain_async_cycling()
 
-                # Only wait when this task actually dispatched fire-and-forget
-                # cycling (O.run(wait=False), tracked per thread by the O.run
-                # hook). A wait=False call returns before the C++ sim thread
-                # flips O.running True, so poll briefly until it picks the
-                # cycling up, then drain. wait=True runs already drained
-                # synchronously; non-cycling scripts never enter here at all.
-                if async_cycling_pending():
-                    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
-                    while not _O.running and time.monotonic() < deadline:
-                        time.sleep(0.005)
-                    if _O.running:
-                        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
-
-                if is_task_interrupt_requested(task_id):
-                    raise InterruptedError("Interrupted by MCP bridge")
-            except ImportError:
-                pass
+            if is_task_interrupt_requested(task_id):
+                raise InterruptedError("Interrupted by MCP bridge")
 
             output_text = output_buffer.getvalue()
             serialized_result = self._serialize_result(result)
