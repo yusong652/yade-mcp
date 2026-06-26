@@ -8,7 +8,8 @@ from unittest.mock import MagicMock
 
 import pytest
 from yade_mcp_bridge.execution.script_runner import ScriptRunner
-from yade_mcp_bridge.runtime.signals import clear_interrupt, mark_async_cycling, request_interrupt
+from yade_mcp_bridge.runtime.pyrunner import mark_async_cycling
+from yade_mcp_bridge.runtime.signals import clear_interrupt, request_interrupt
 
 
 @pytest.fixture

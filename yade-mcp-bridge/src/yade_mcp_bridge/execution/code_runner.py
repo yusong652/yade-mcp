@@ -25,7 +25,7 @@ from ..runtime.signals import (
     register_exec_thread,
     request_interrupt,
     set_current_task,
-    sim_paused_window,
+    sim_hold_window,
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
@@ -85,9 +85,9 @@ def _run_code(request_id, code_str):
                 return exec_globals.get("result", None)
 
         if _sim_running():
-            # A task owns the live cycle: pause it so the snippet reads a
+            # A task owns the live cycle: hold it so the snippet reads a
             # consistent snapshot and does not race the task. Resumes on exit.
-            with sim_paused_window():
+            with sim_hold_window():
                 result = _do_exec()
         else:
             result = _do_exec()
