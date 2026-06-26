@@ -14,8 +14,8 @@ import time
 from concurrent.futures import Future
 
 from ..paths import LOGS_DIR
+from ..runtime.pyrunner import async_cycling_pending
 from ..runtime.signals import (
-    async_cycling_pending,
     clear_current_task,
     clear_interrupt,
     is_task_interrupt_requested,

@@ -10,12 +10,40 @@ normalizes the engine before every run, surviving ``O.reset()`` and user
 scripts that reassign ``O.engines``.
 """
 
+import threading
+
 # PyRunner check cadence (iterPeriod): how many simulation iterations pass
 # between interrupt-flag checks. Fixed at 1 (every step), not a tunable — the
 # execute_code cycle-interrupt grace (_CYCLE_INTERRUPT_GRACE_S) assumes
 # O.pause() lands within ~one step, so a larger period would silently break
 # it. Per-step cost is one trivial flag check, negligible against a DEM step.
 _INTERRUPT_CHECK_PERIOD = 1
+
+
+# ---------------------------------------------------------------------------
+# Fire-and-forget cycling marker (per thread).
+#
+# ``O.run(wait=False)`` returns before the C++ sim thread flips ``O.running``
+# True, so just after a script's ``exec`` "about to cycle" and "not cycling"
+# both read ``O.running == False``. The ``O.run`` hook below records per thread
+# whether the last run was such a dispatch; the task drain reads its own
+# thread's flag to decide whether to wait. ``threading.local`` keeps a
+# pump-thread ``execute_code`` run from bleeding into a task's drain.
+# ---------------------------------------------------------------------------
+
+_async_cycling = threading.local()
+
+
+def mark_async_cycling(pending):
+    """Record whether the calling thread's last ``O.run`` left undrained
+    fire-and-forget cycling (``wait=False``)."""
+    _async_cycling.pending = pending
+
+
+def async_cycling_pending():
+    """True if THIS thread's last ``O.run`` was a ``wait=False`` dispatch
+    whose cycling has not been drained yet."""
+    return getattr(_async_cycling, "pending", False)
 
 
 def install_pyrunner(logger):
@@ -37,7 +65,6 @@ def install_pyrunner(logger):
         get_current_task,
         hold_if_wanted,
         is_task_interrupt_requested,
-        mark_async_cycling,
         snippet_holds_sim,
     )
 
