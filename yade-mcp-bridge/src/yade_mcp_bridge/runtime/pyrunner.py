@@ -180,7 +180,9 @@ def install_pyrunner(logger):
         O.run = _hooked_run
 
     try:
-        O.engines = [_make_pyrunner()] + list(O.engines)
+        # Idempotent inject: add-if-missing (a second install_pyrunner won't
+        # duplicate the engine), then restore config and move to front.
+        _normalize_pyrunner()
         logger.info(f"PyRunner installed at O.engines[0] (iterPeriod={_INTERRUPT_CHECK_PERIOD}) — interrupt check")
         return True
     except Exception as e:
