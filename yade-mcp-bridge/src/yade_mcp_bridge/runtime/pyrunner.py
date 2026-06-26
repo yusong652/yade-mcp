@@ -78,28 +78,17 @@ def install_pyrunner(logger):
         hold_if_wanted()
 
     def _ensure_tick_in_main():
-        # YADE's PyRunner evaluates its command via boost::python::exec with
-        # globals = sys.modules['__main__'].__dict__, re-resolved each call.
-        # IPython's %run (and similar) temporarily replaces __main__ with the
-        # script's module, hiding _mcp_pyrunner_tick and causing
-        # "name '_mcp_pyrunner_tick' is not defined" once PyRunner fires.
-        # Idempotently re-inject into whichever module is currently __main__.
+        # PyRunner resolves its command name against the live __main__, which
+        # %run can swap mid-run; (re-)bind the tick into whatever is __main__ now.
         main_mod = _sys.modules.get("__main__")
         if main_mod is not None and getattr(main_mod, "_mcp_pyrunner_tick", None) is not _mcp_pyrunner_tick:
             main_mod._mcp_pyrunner_tick = _mcp_pyrunner_tick
 
     _ensure_tick_in_main()
 
-    # Identify our PyRunner by its command string, not by engine label.
-    # YADE's labeled-entity auto-injection runs `__builtins__.<label>=...`
-    # on every `O.engines=[...]` assignment, which crashes with
-    # "AttributeError: 'dict' object has no attribute '<label>'" in any
-    # non-__main__ namespace (e.g. inside `%run script.py`) because
-    # __builtins__ is the dict there, not the module.
-    #
-    # The inline marker comment makes the engine self-identifying when users
-    # print(O.engines) — hopefully discouraging them from mutating it.
-    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()  # yade-mcp-bridge: DO NOT MODIFY"
+    # Identify the MCP bridge PyRunner by its command string, not an engine label —
+    # auto-injected labels break outside __main__ (e.g. inside %run).
+    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()  # mcp bridge: DO NOT MODIFY"
 
     def _make_pyrunner():
         """Create a fresh PyRunner instance."""
@@ -110,23 +99,20 @@ def install_pyrunner(logger):
         )
 
     def _find_our_pyrunner():
-        """Return our PyRunner engine if present, else None."""
+        """Return the MCP bridge PyRunner engine if present, else None."""
         for e in O.engines:
             if getattr(e, "command", None) == _PYRUNNER_COMMAND:
                 return e
         return None
 
     def _normalize_pyrunner():
-        """Ensure our PyRunner is present at O.engines[0] and has the
-        canonical config. Self-heals against user scripts that (a) reassigned
-        O.engines (wiping us), (b) mutated our iterPeriod/dead (e.g. via
-        O.engines[-1].iterPeriod = ...), or (c) left us somewhere in the
-        middle. Warns on tamper so the cause of any interrupt-latency bug is
-        visible in the log."""
+        """Ensure the MCP bridge PyRunner is still present, live, and at O.engines[0],
+        restoring it if a user script wiped, disabled, or moved it."""
         expected_period = _INTERRUPT_CHECK_PERIOD
         existing = _find_our_pyrunner()
 
         if existing is None:
+            # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
                 O.engines = [_make_pyrunner()] + list(O.engines)
                 logger.info("PyRunner auto-injected at O.engines[0] before O.run()")
@@ -134,17 +120,12 @@ def install_pyrunner(logger):
                 logger.warning(f"PyRunner auto-injection failed: {e}")
             return
 
-        # Detect tamper before restoring so the user sees why their
-        # interrupt might have been delayed on the previous run.
+        # Read the changed values before restoring, so the warning logs them.
         actual_period = getattr(existing, "iterPeriod", expected_period)
         actual_dead = getattr(existing, "dead", False)
         if actual_period != expected_period or actual_dead:
             logger.warning(
-                "MCP PyRunner was tampered with (iterPeriod=%r, dead=%r); "
-                "restoring to iterPeriod=%d, dead=False. "
-                "Likely cause: user script modified O.engines[-1] or similar — "
-                "our PyRunner sits at O.engines[0], prefer naming or positive "
-                "indices for your own engines.",
+                "MCP PyRunner config changed (iterPeriod=%r, dead=%r); restoring iterPeriod=%d, dead=False.",
                 actual_period,
                 actual_dead,
                 expected_period,
@@ -156,8 +137,8 @@ def install_pyrunner(logger):
         except Exception as e:
             logger.warning(f"Failed to normalize PyRunner config: {e}")
 
-        # If we're not at index 0, move there. Negative indexing from user
-        # scripts is the common failure mode we're defending against.
+        # Move back to index 0 if a user script (e.g. negative indexing) pushed
+        # the engine out of front.
         try:
             if O.engines[0] is not existing:
                 new_engines = [existing] + [e for e in O.engines if e is not existing]
@@ -166,7 +147,7 @@ def install_pyrunner(logger):
             logger.warning(f"Failed to move PyRunner to front: {e}")
 
     # Hook O.run() to auto-inject PyRunner before each simulation run.
-    # This handles O.reset() clearing engines — our PyRunner gets
+    # This handles O.reset() clearing engines — the MCP bridge PyRunner gets
     # re-added transparently before simulation starts.
     # Guard against double-hooking if start() is called multiple times.
     if not getattr(O.run, "_mcp_hooked", False):
