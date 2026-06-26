@@ -91,7 +91,7 @@ def install_pyrunner(logger):
     _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()  # mcp bridge: DO NOT MODIFY"
 
     def _make_pyrunner():
-        """Create a fresh PyRunner instance."""
+        """Build the bridge's PyRunner engine."""
         return PyRunner(
             command=_PYRUNNER_COMMAND,
             iterPeriod=_INTERRUPT_CHECK_PERIOD,
@@ -108,9 +108,9 @@ def install_pyrunner(logger):
     def _normalize_pyrunner():
         """Ensure the MCP bridge PyRunner is still present, live, and at O.engines[0],
         restoring it if a user script wiped, disabled, or moved it."""
-        existing = _find_our_pyrunner()
+        pyrunner = _find_our_pyrunner()
 
-        if existing is None:
+        if pyrunner is None:
             # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
                 O.engines = [_make_pyrunner()] + list(O.engines)
@@ -122,18 +122,18 @@ def install_pyrunner(logger):
         # Restore config in case a user script changed it (e.g. a negative index
         # landing on the engine at O.engines[0]).
         try:
-            if existing.iterPeriod != _INTERRUPT_CHECK_PERIOD or existing.dead:
+            if pyrunner.iterPeriod != _INTERRUPT_CHECK_PERIOD or pyrunner.dead:
                 logger.debug("MCP bridge PyRunner iterPeriod/dead changed; restoring")
-                existing.iterPeriod = _INTERRUPT_CHECK_PERIOD
-                existing.dead = False
+                pyrunner.iterPeriod = _INTERRUPT_CHECK_PERIOD
+                pyrunner.dead = False
         except Exception as e:
             logger.warning(f"Failed to normalize PyRunner config: {e}")
 
         # Move back to index 0 if a user script (e.g. negative indexing) pushed
         # the engine out of front.
         try:
-            if O.engines[0] is not existing:
-                new_engines = [existing] + [e for e in O.engines if e is not existing]
+            if O.engines[0] is not pyrunner:
+                new_engines = [pyrunner] + [e for e in O.engines if e is not pyrunner]
                 O.engines = new_engines
         except Exception as e:
             logger.warning(f"Failed to move PyRunner to front: {e}")
@@ -146,12 +146,13 @@ def install_pyrunner(logger):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
-            # Refuse driving the cycle from a snippet that is holding a
-            # sim-hold snapshot window: the cycle is frozen (held in the
-            # PyRunner tick), so this O.run()'s O.wait() would block on an
-            # iteration the cycle can never reach → deadlock. The task's own
-            # O.run runs on its companion thread (never inside a window), so
-            # snippet_holds_sim() is False there and the task is unaffected.
+            # A snippet holding a sim-hold window must not drive the cycle: the
+            # cycle is frozen for its snapshot, so O.run() here would wait on a
+            # step that can never come → deadlock. No syntax parsing — the
+            # snippet's own O.run() routes through this hook, where
+            # snippet_holds_sim() catches it at runtime and refuses cleanly.
+            # (The task's own O.run is on the companion thread, never in a
+            # window, so this never fires for it.)
             if snippet_holds_sim():
                 raise RuntimeError(
                     "O.run() refused: execute_code is holding a sim-hold "
@@ -159,8 +160,6 @@ def install_pyrunner(logger):
                     "read/edit). A snippet must not drive the cycle here. Use "
                     "yade_execute_task for simulation runs."
                 )
-            # Defend against __main__ replacement (e.g. IPython %run) between
-            # bridge start and this O.run() call.
             _ensure_tick_in_main()
             _normalize_pyrunner()
             _interrupt_triggered["value"] = False
@@ -170,7 +169,6 @@ def install_pyrunner(logger):
             mark_async_cycling(_is_async_run(args, kwargs))
             # After O.run() returns (possibly due to O.pause() from interrupt),
             # check if interrupt was the reason and raise at Python level.
-            # This avoids the FATAL ERROR from YADE's C++ exception handling.
             if _interrupt_triggered["value"]:
                 _interrupt_triggered["value"] = False
                 raise InterruptedError("Interrupted by MCP bridge")
