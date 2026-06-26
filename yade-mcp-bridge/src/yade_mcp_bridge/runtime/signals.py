@@ -93,54 +93,28 @@ def get_exec_thread(exec_id: str) -> int | None:
 
 
 # ---------------------------------------------------------------------------
-# Sim-hold rendezvous: execute_code consistent-snapshot window.
+# Sim-hold: a consistent snapshot for execute_code.
 #
-# NOTE: this is NOT ``O.pause()``. YADE's loop keeps "running" (O.running stays
-# True); the snippet just holds the PyRunner tick inside one engine slot so the
-# scene stops advancing for the duration of the window, then releases it.
+# While a task drives the cycle, an execute_code snippet must read the scene
+# without spanning steps. The snippet raises a cross-thread signal and the
+# PyRunner tick (registered in O.engines) waits on it, holding the cycle at a
+# clean engine boundary until the snippet is done, then resuming.
 #
-# Lets an execute_code snippet (running on the pump thread) freeze YADE's
-# simulation cycle at a clean engine boundary, so it sees a CONSISTENT scene
-# (no torn/mid-step reads) and can mutate without racing the cycle, then
-# resume — while the snippet itself keeps running on the pump thread, so
-# async-abort on timeout still works (the alternative, running the snippet
-# ON the sim thread, is un-abortable: Dummy-N → boost::python → C++ FATAL).
-#
-# It is a two-way handshake between the snippet (pump thread) and the PyRunner
-# tick (YADE's C++ sim thread, a Dummy-N boost::python thread). The tick
-# NEVER receives an injected exception — it holds the cycle COOPERATIVELY on an
-# Event (GIL released), so the snippet can run while it waits:
-#
-#   snippet: set _hold_wanted -> wait _cycle_held -> <work> -> clear + set _snippet_released
-#   tick:    see _hold_wanted -> set _cycle_held -> wait _snippet_released -> continue
-#
-# Events (not Conditions) are used deliberately: a set() persists, so there
-# is no lost-wakeup risk regardless of which side reaches its wait first.
+# NOT O.pause(): O.running stays True; only the tick blocks, on an Event.
 # ---------------------------------------------------------------------------
 
-_hold_lock = threading.Lock()  # one window at a time. The serial pump never
-# contends today; kept as a defensive guard so the Event handshake can't corrupt
-# if a second thread ever opens a window.
-_hold_wanted = threading.Event()  # snippet -> cycle: please hold
-_cycle_held = threading.Event()  # cycle -> snippet: held, scene is frozen
-_snippet_released = threading.Event()  # snippet -> cycle: done, resume
-_window_local = threading.local()  # marks the thread currently holding a window
+_hold_lock = threading.Lock()  # only one thread touches the hold state at a time
+_hold_wanted = threading.Event()  # execute_code wants to hold the task
+_cycle_held = threading.Event()  # task is held, scene frozen
+_snippet_released = threading.Event()  # execute_code done, task resumes
+_window_local = threading.local()  # marks the thread currently holding the task
 
-# Max time the cycle will stay held waiting for the snippet to finish. Bounds
-# the damage if the snippet hangs (e.g. stuck C-level I/O) while holding the
-# window: the sim resumes instead of freezing forever.
-_MAX_HOLD_S = 30.0
+_MAX_HOLD_S = 30.0  # max hold; past it the cycle resumes even if not released
 
 
 def hold_if_wanted(max_hold_s: float = _MAX_HOLD_S) -> None:
-    """Cooperative brake, called by the PyRunner tick on YADE's sim thread.
-
-    If an execute_code snippet has requested a snapshot window, hold here
-    (GIL released, so the snippet can run) until it releases — or until
-    ``max_hold_s`` elapses, after which we resume anyway so a hung snippet
-    can't freeze the sim indefinitely. The scene is quiescent at the
-    PyRunner's engine slot, so the snippet gets a consistent view.
-    """
+    """Called by the PyRunner tick each step: if a hold is wanted, hold the
+    task here until the snippet releases (or ``max_hold_s`` elapses)."""
     if not _hold_wanted.is_set():
         return
     _snippet_released.clear()
@@ -155,29 +129,15 @@ def hold_if_wanted(max_hold_s: float = _MAX_HOLD_S) -> None:
 
 
 def snippet_holds_sim() -> bool:
-    """True if the CURRENT thread is inside a sim-hold window.
-
-    Read by the ``O.run`` hook to refuse driving the cycle from a snippet
-    that is holding the cycle frozen — that would deadlock: the snippet's
-    ``O.wait()`` would block on an iteration count the held cycle can
-    never reach, and ``wait()`` sits in released-GIL C code where async
-    abort cannot fire. The task's own ``O.run`` runs on its companion
-    thread (never inside a window), so it is unaffected.
-    """
+    """True if the current thread (a snippet) is currently holding the task."""
     return bool(getattr(_window_local, "active", False))
 
 
 @contextlib.contextmanager
 def sim_hold_window(acquire_timeout_s: float = 2.0):
-    """Snippet side: freeze the sim cycle for an exclusive snapshot window.
+    """Snippet side: hold the sim cycle for a consistent snapshot.
 
-    Yields ``True`` if the cycle actually held (snapshot is consistent),
-    ``False`` if it did not hold within ``acquire_timeout_s`` (a single
-    step longer than the timeout, or the cycle ended meanwhile) — in which
-    case the caller's reads are best-effort/concurrent, as before.
-
-    Always releases the cycle on exit, including on exception / async
-    abort, so the sim never stays frozen because a snippet raised.
+    Always releases the task on exit (incl. exception / async abort).
     """
     with _hold_lock:
         _cycle_held.clear()
