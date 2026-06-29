@@ -132,11 +132,6 @@ def handle_interrupt_task(ctx, data):
         "task_id": task_id,
         "interrupt_requested": True,
         "method": method,
-        # Continuation hint: the YADE __main__ namespace is shared
-        # between execute_code and tasks (see CLAUDE.md "Bridge
-        # namespace sharing"). Variables defined by the interrupted
-        # script — including O's state — survive the interrupt, so
-        # there's no need to re-run the whole script to pick up.
         "namespace_preserved": True,
         "continuation_hint": (
             "Task variables and YADE state are preserved in __main__. "
