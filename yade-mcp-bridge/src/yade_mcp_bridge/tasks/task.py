@@ -121,8 +121,8 @@ class ScriptTask:
         """Return (output_text, pagination) paginating the task log on the bridge side.
 
         Reads the complete log file, optionally filters by substring, then
-        extracts a tail-biased window: skip `skip_newest` lines from the end,
-        then take up to `limit` lines backwards from there. Pagination metadata
+        extracts a tail-biased window: skip ``skip_newest`` lines from the end,
+        then take up to ``limit`` lines backwards from there. Pagination metadata
         reflects the full log (or the filtered view), so MCP can trust it.
         """
         if self.output_buffer:

@@ -113,7 +113,7 @@ def install_pyrunner(logger):
         if pyrunner is None:
             # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
-                O.engines = [_make_pyrunner()] + list(O.engines)  # O.engines += [LLM()] # Yet another engine! - Yusong
+                O.engines = [_make_pyrunner()] + list(O.engines)  # O.engines += [LLM()] # Yet another engine! - Yusong with Nagisa
                 logger.debug("PyRunner auto-injected at O.engines[0] before O.run()")
             except Exception as e:
                 logger.warning(f"PyRunner auto-injection failed: {e}")
