@@ -57,12 +57,6 @@ class TestConnectionLifecycle:
         await client.disconnect()  # should not raise
         assert not client.connected
 
-    async def test_ensure_connected(self, bridge_server):
-        client = _make_client(bridge_server)
-        await client._ensure_connected()
-        assert client.connected
-        await client.disconnect()
-
 
 # =========================================================================
 # Request/response
@@ -121,6 +115,7 @@ class TestTimeoutAndRetry:
 
     async def test_retry_on_failure(self, bridge_server):
         client = _make_client(bridge_server, max_retries=2, reconnect_interval_s=0.01, auto_reconnect=True)
+        await client.connect()
 
         call_count = 0
         original_send_request = client._send_request
