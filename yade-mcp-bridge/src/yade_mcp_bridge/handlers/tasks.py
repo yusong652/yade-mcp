@@ -16,7 +16,7 @@ _DEFAULT_LIMIT = 64
 
 
 def handle_execute_task(ctx, data):
-    """Handle execute_task message - execute Python script from file path."""
+    """Run a Python script from a file path as a tracked task."""
     request_id = data.get("request_id", "unknown")
 
     script_path, err = require_field(data, "script_path", request_id)
@@ -35,7 +35,7 @@ def handle_execute_task(ctx, data):
 
 
 def handle_check_task_status(ctx, data):
-    """Handle check_task_status message with bridge-side output pagination."""
+    """Return a task's current status with a page of its captured output."""
     request_id = data.get("request_id", "unknown")
 
     task_id, err = require_field(data, "task_id", request_id)
@@ -57,7 +57,7 @@ def handle_check_task_status(ctx, data):
 
 
 def handle_list_tasks(ctx, data):
-    """Handle list_tasks message."""
+    """List all tracked tasks, newest first."""
     request_id = data.get("request_id", "unknown")
     offset = data.get("offset", 0)
     # An explicit null means "use the default" too; clients page through
@@ -72,26 +72,7 @@ def handle_list_tasks(ctx, data):
 
 
 def handle_interrupt_task(ctx, data):
-    """Handle interrupt_task message.
-
-    Two cancellation paths, applied together:
-
-    1. **Flag path** — sets ``_interrupt_requested[task_id]=True``. The
-       bridge's PyRunner tick (on YADE's sim thread) sees the flag at
-       the next iteration and calls ``O.pause()``; ``ScriptRunner._execute``
-       then raises ``InterruptedError`` after ``O.run`` returns. This is
-       the graceful path for simulation-bound tasks.
-
-    2. **Async-exc path** — injects ``TaskInterrupt`` into the script
-       thread via ``PyThreadState_SetAsyncExc``. Covers the case the
-       flag path cannot reach: pure-Python deadloops with no ``O.run``
-       on the stack, so no PyRunner tick ever fires.
-
-    Both are safe to apply together. The async-exc injection
-    ``unregister_exec_thread`` atomically *before* firing — any
-    duplicate interrupt call sees ``tid=None`` and becomes a no-op,
-    so the script thread's cleanup runs without being re-interrupted.
-    """
+    """Interrupt a running task."""
     from ..execution.errors import TaskInterrupt
     from ..execution.termination import inject_async_exception
     from ..runtime.signals import (
