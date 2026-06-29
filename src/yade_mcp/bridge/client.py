@@ -84,11 +84,6 @@ class YADEBridgeClient:
             except Exception:
                 pass
 
-    async def _ensure_connected(self) -> None:
-        if self.connected:
-            return
-        await self.connect()
-
     async def _sse_loop(self) -> None:
         """Consume the server's SSE doorbell stream.
 
@@ -132,7 +127,7 @@ class YADEBridgeClient:
             await asyncio.sleep(self.reconnect_interval_s)
 
     async def _send_request(self, message: dict[str, Any], timeout_s: float) -> dict[str, Any]:
-        await self._ensure_connected()
+        # Connection is established by get_bridge_client() before any request.
         assert self._client is not None
 
         request_id = message.get("request_id") or str(uuid4())

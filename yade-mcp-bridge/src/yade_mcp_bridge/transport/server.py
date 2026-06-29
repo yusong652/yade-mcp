@@ -1,13 +1,9 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""MCP bridge HTTP + SSE server - runs inside the YADE Python environment.
+"""MCP bridge HTTP + SSE server.
 
-The transport is stdlib only (``http.server`` + Server-Sent Events): no
-third-party dependency and no asyncio. Each request is served on its own
-thread (``ThreadingMixIn``), so a long-blocking ``execute_code`` never stalls
-a concurrent status query. Request/response is plain ``POST /<command>``;
-the two server->client doorbells (``task_status_changed``, ``console_entry``)
-are pushed over a single long-lived ``GET /events`` SSE stream.
+Stdlib only (``http.server`` + Server-Sent Events): request/response over
+HTTP POST, server push over an SSE stream.
 """
 
 import http.server
@@ -34,13 +30,10 @@ from ..tasks import TaskManager
 logger = logging.getLogger("MCP-Bridge")
 
 # SSE keepalive: how long an idle /events stream waits before emitting a
-# comment line. Keeps the connection (and any intermediary proxy) alive and
-# replaces WebSocket ping/pong.
+# comment line. Keeps the connection (and any intermediary proxy) alive.
 _SSE_KEEPALIVE_S = 15.0
 
-# Per-client doorbell queue depth. Doorbells are payload-free signals and the
-# client always re-polls status, so a bounded queue that drops on overflow is
-# safe: it can never block the simulation thread or a script thread.
+# Bounded depth for each connected client's doorbell queue.
 _SSE_QUEUE_MAXSIZE = 256
 
 
@@ -225,12 +218,12 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 class BridgeServer:
     """HTTP + SSE bridge for executing code and running script tasks inside a YADE process."""
 
-    _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB output safety net
+    # Once a serialized response crosses this size it is truncated to its tail
+    # (below). Guards the unbounded ``execute_code`` path; task output is
+    # already paginated upstream, so it rarely reaches here.
+    _MAX_RESPONSE_BYTES = 40 * 2**20  # 40 MB
 
-    # Tail of ``data["output"]`` kept when a response blows past the byte cap.
-    # ~10k chars is a few thousand LLM tokens: enough to show the most recent
-    # progress/error, small enough not to flood the agent's context.
-    _TRUNCATED_TAIL_CHARS = 10000
+    _TRUNCATED_TAIL_CHARS = 10000  # ~a few thousand LLM tokens of recent output
 
     def __init__(
         self,

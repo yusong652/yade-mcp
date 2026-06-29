@@ -8,11 +8,7 @@ logger = logging.getLogger("MCP-Bridge")
 
 
 def handle_console_history(ctx, data):
-    """Handle console_history message.
-
-    Returns undelivered entries and advances the bridge-side delivery cursor;
-    the MCP client stays stateless (it sends no cursor, just consumes).
-    """
+    """Return the user's latest console input from the live YADE session."""
     request_id = data.get("request_id", "unknown")
     limit = data.get("limit", 20)
 
