@@ -11,8 +11,6 @@ Three jobs:
    sees a consistent scene whose values do not span a running step.
 """
 
-from __future__ import annotations
-
 import contextlib
 import logging
 import threading
@@ -27,7 +25,7 @@ _interrupt_requested = {}  # task_id -> bool
 # Thread registry for the fallback interrupt: maps a task's task_id / an
 # execute_code's request_id to its worker thread, so a Python exception can be
 # injected when execution is not in a running step.
-_exec_thread_ids: dict[str, int] = {}
+_exec_thread_ids = {}
 _exec_thread_lock = threading.Lock()
 
 
@@ -67,7 +65,7 @@ def clear_interrupt(task_id):
     _interrupt_requested.pop(task_id, None)
 
 
-def register_exec_thread(exec_id: str, thread_id: int) -> None:
+def register_exec_thread(exec_id, thread_id):
     """Map a task_id / execute_code request_id to its worker thread."""
     with _exec_thread_lock:
         # Drop entries whose thread has died — defensive, in case a caller
@@ -80,13 +78,13 @@ def register_exec_thread(exec_id: str, thread_id: int) -> None:
         _exec_thread_ids[exec_id] = thread_id
 
 
-def unregister_exec_thread(exec_id: str) -> None:
+def unregister_exec_thread(exec_id):
     """Drop the thread record for ``exec_id``. Idempotent."""
     with _exec_thread_lock:
         _exec_thread_ids.pop(exec_id, None)
 
 
-def get_exec_thread(exec_id: str) -> int | None:
+def get_exec_thread(exec_id):
     """Return the recorded thread id for ``exec_id``, or None."""
     with _exec_thread_lock:
         return _exec_thread_ids.get(exec_id)
@@ -112,7 +110,7 @@ _window_local = threading.local()  # marks the thread currently holding the task
 _MAX_HOLD_S = 30.0  # max hold; past it the cycle resumes even if not released
 
 
-def hold_if_wanted(max_hold_s: float = _MAX_HOLD_S) -> None:
+def hold_if_wanted(max_hold_s=_MAX_HOLD_S):
     """Called by the PyRunner tick each step: if a hold is wanted, hold the
     task here until the snippet releases (or ``max_hold_s`` elapses)."""
     if not _hold_wanted.is_set():
@@ -128,13 +126,13 @@ def hold_if_wanted(max_hold_s: float = _MAX_HOLD_S) -> None:
     _cycle_held.clear()
 
 
-def snippet_holds_sim() -> bool:
+def snippet_holds_sim():
     """True if the current thread (a snippet) is currently holding the task."""
     return bool(getattr(_window_local, "active", False))
 
 
 @contextlib.contextmanager
-def sim_hold_window(acquire_timeout_s: float = 2.0):
+def sim_hold_window(acquire_timeout_s=2.0):
     """Snippet side: hold the sim cycle for a consistent snapshot.
 
     Always releases the task on exit (incl. exception / async abort).

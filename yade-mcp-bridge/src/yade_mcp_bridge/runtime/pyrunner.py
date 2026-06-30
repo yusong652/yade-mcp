@@ -32,7 +32,7 @@ def async_cycling_pending():
     return getattr(_async_cycling, "pending", False)
 
 
-def _is_async_run(args, kwargs) -> bool:
+def _is_async_run(args, kwargs):
     """True if this ``O.run`` was dispatched ``wait=False`` (returns while its
     cycling continues). ``wait`` is ``O.run``'s 2nd positional or its ``wait``
     keyword; default False."""

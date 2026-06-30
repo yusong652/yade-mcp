@@ -42,7 +42,7 @@ _CYCLE_INTERRUPT_GRACE_S = 2.0
 _TERMINATION_GRACE_S = 0.5
 
 
-def _sim_running() -> bool:
+def _sim_running():
     """True if YADE's simulation loop is live (``O.running``)."""
     try:
         from yade import O
@@ -113,7 +113,7 @@ def _run_code(request_id, code_str):
         # preamble — pure plumbing.
         e.__suppress_context__ = True
 
-        def _overflow_writer(full_tb: str) -> str:
+        def _overflow_writer(full_tb):
             # Only on truncation. Fresh timestamped file per error: execute_code
             # runs synchronously one-at-a-time, so a rolling file would race a
             # concurrent call.
@@ -137,7 +137,7 @@ def _run_code(request_id, code_str):
         unregister_exec_thread(request_id)
 
 
-def _terminate_stuck_execution(request_id: str, future) -> dict:
+def _terminate_stuck_execution(request_id, future):
     """Terminate a timed-out ``execute_code`` submission."""
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
@@ -188,7 +188,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
         return {"method": "stuck_in_c", "result": None}
 
 
-def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> dict:
+def _timeout_response(request_id, timeout_ms, termination):
     """Build the wire response for an ``execute_code`` that timed out."""
     method = termination["method"]
     result = termination.get("result")
@@ -260,7 +260,7 @@ class CodeRunner:
 
             # ``status`` is _run_code's internal marker; translate it to the envelope.
             if result.get("status") == "error":
-                details: dict = {}
+                details = {}
                 for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):
                     if key in result:
                         details[key] = result[key]
