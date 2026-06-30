@@ -3,9 +3,8 @@
 """Async exception injection for terminating stuck code execution.
 
 Used by ``code_runner.py`` (and the task-interrupt handler) when a timeout
-or interrupt fires: inject a ``BridgeTimeout`` / ``TaskInterrupt`` into the
-thread running user code so it unwinds at the next Python bytecode edge,
-freeing the pump thread.
+or interrupt fires: inject an ``AsyncAbort`` into the thread running user
+code so it unwinds at the next Python bytecode edge, freeing the pump thread.
 
 Last-resort only. The standard path is ``signals.request_interrupt`` + the
 PyRunner tick, which pauses ``O.run`` but cannot break a pure-Python loop;

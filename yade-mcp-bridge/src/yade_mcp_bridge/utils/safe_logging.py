@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Gap-free logging handlers.
 
-The L2 timeout path async-raises ``BridgeTimeout`` into the running
+The L2 timeout path async-raises ``AsyncAbort`` into the running
 thread via ``PyThreadState_SetAsyncExc``, which fires at an arbitrary
 bytecode edge. CPython's stdlib ``Handler.handle`` (Python <= 3.10)
 acquires the handler lock and registers its release in two separate

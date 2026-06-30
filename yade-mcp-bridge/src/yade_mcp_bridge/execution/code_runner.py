@@ -2,10 +2,8 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Synchronous code executor for the bridge.
 
-``CodeRunner`` runs an ``execute_code`` snippet on the pump thread and
-returns the wire response. Eval-then-exec semantics: a bare expression is
-evaluated and its value returned, otherwise the snippet is exec'd against
-the persistent ``__main__`` namespace, stdout captured, last value returned.
+``CodeRunner`` submits an ``execute_code`` snippet to the executor queue and
+blocks until it produces the response to send back to the client.
 """
 
 import concurrent.futures
@@ -29,7 +27,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
-from .errors import BridgeTimeout, format_execution_error
+from .errors import AsyncAbort, CycleInterrupt, format_execution_error
 from .termination import inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
@@ -40,7 +38,7 @@ logger = logging.getLogger("MCP-Bridge")
 _CYCLE_INTERRUPT_GRACE_S = 2.0
 
 # Grace for the thread-injection path: how long we wait for the pump thread to
-# unwind after we async-inject BridgeTimeout, before giving up as "stuck in C".
+# unwind after we async-inject AsyncAbort, before giving up as "stuck in C".
 _TERMINATION_GRACE_S = 0.5
 
 
@@ -62,7 +60,7 @@ def _run_code(request_id, code_str):
     old_stdout = sys.stdout
 
     # Record the pump thread so the timeout caller can async-inject
-    # BridgeTimeout to abort us.
+    # AsyncAbort to abort us.
     register_exec_thread(request_id, threading.get_ident())
 
     try:
@@ -101,18 +99,15 @@ def _run_code(request_id, code_str):
             if result is not None
             else None,
         }
-    except InterruptedError:
-        # Cycle-interrupt SUCCEEDED: the tick paused our O.run at a cycle
-        # boundary and _hooked_run raised here. Marker → status="interrupted".
+    except CycleInterrupt:
+        # Timed out: the PyRunner started by the cycle paused our O.run at a
+        # cycle boundary and raised here. Marker → status="interrupted".
         return {"status": "interrupted", "output": output_buffer.getvalue()}
-    except BridgeTimeout:
-        # Async-injection SUCCEEDED: our BridgeTimeout reached code stuck in a
-        # pure-Python loop and aborted it. Return a marker, not a raise — see
-        # BridgeTimeout's BaseException rationale in errors.py.
+    except AsyncAbort:
+        # Timed out: terminated by async exception injection into this thread.
         return {"status": "terminated", "output": output_buffer.getvalue()}
     except Exception as e:
-        # The agent's own code raised — a real execution error, not a bridge
-        # cancellation. Format it into an agent-facing error response.
+        # Returned successfully: the code raised an exception of its own.
         output_text = output_buffer.getvalue()
         # Drop the compile(eval)->compile(exec) fallback's chained-SyntaxError
         # preamble — pure plumbing.
@@ -143,12 +138,7 @@ def _run_code(request_id, code_str):
 
 
 def _terminate_stuck_execution(request_id: str, future) -> dict:
-    """Terminate a timed-out ``execute_code`` submission.
-
-    Returns an outcome dict for ``_timeout_response``: ``method`` (which
-    cancellation outcome occurred) and ``result`` (the future's result dict,
-    carried for its stdout, or None when no result was retrieved).
-    """
+    """Terminate a timed-out ``execute_code`` submission."""
     # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
     # (PyRunner tick → O.pause → O.run returns).
     request_interrupt(request_id)
@@ -189,7 +179,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
         # future's result yet (it sets it after _run_code returns).
         return {"method": "unsettled", "result": None}
 
-    inject_async_exception(tid, BridgeTimeout)
+    inject_async_exception(tid, AsyncAbort)
 
     try:
         result = future.result(timeout=_TERMINATION_GRACE_S)
@@ -199,19 +189,7 @@ def _terminate_stuck_execution(request_id: str, future) -> dict:
 
 
 def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> dict:
-    """Build the wire response for an ``execute_code`` that timed out.
-
-    Each cancellation ``method`` maps to exactly one wire outcome
-    (``error.code`` + message) — there is no separate resolved/unresolved axis:
-
-    * ``cycle_interrupt`` → ``interrupted`` (a standalone O.run was paused)
-    * ``async_exc`` / ``finished`` / ``cycle_finished`` → ``terminated``
-    * ``stuck_in_c`` / ``cycle_stuck`` / ``unsettled`` → ``timeout``
-
-    Messages state only what the bridge observed/did — no client-tool names or
-    agent guidance. The MCP layer maps ``code`` + ``details.method`` to
-    agent-facing advice (which tool to use, when to restart).
-    """
+    """Build the wire response for an ``execute_code`` that timed out."""
     method = termination["method"]
     result = termination.get("result")
 
@@ -268,11 +246,7 @@ def _timeout_response(request_id: str, timeout_ms: int, termination: dict) -> di
 
 
 class CodeRunner:
-    """Run ``execute_code`` snippets synchronously on the pump thread.
-
-    Submits each snippet to the serial executor and blocks the calling request
-    thread until it resolves or the timeout fires.
-    """
+    """Submit ``execute_code`` snippets to the executor and block for the result."""
 
     def __init__(self, executor):
         self.executor = executor

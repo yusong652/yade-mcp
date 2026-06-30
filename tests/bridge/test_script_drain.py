@@ -83,7 +83,7 @@ class TestDrain:
         assert result["exception_type"] == "RuntimeError"
 
     def test_interrupt_flag_after_wait_marks_interrupted(self, fake_yade, runner, scratch_script):
-        """Flag set during/after O.wait() → drain raises InterruptedError → task interrupted."""
+        """Flag set during/after O.wait() → drain raises CycleInterrupt → task interrupted."""
         fake_yade.running = True
         mark_async_cycling(True)  # simulate the script's O.run(wait=False) dispatch
         fake_yade.wait.side_effect = lambda: request_interrupt("t4")

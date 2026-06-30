@@ -174,11 +174,11 @@ class TestHandleInterruptTask:
     def test_interrupt_running_task_with_registered_thread_fires_async_exc(self):
         """When ScriptRunner has registered a live script thread for
         the task, the handler atomically unregisters and injects
-        TaskInterrupt. The test stands up a real thread to validate
+        AsyncAbort. The test stands up a real thread to validate
         the end-to-end SetAsyncExc injection."""
         import threading
 
-        from yade_mcp_bridge.execution.errors import TaskInterrupt
+        from yade_mcp_bridge.execution.errors import AsyncAbort
         from yade_mcp_bridge.runtime.signals import (
             clear_interrupt,
             get_exec_thread,
@@ -222,7 +222,7 @@ class TestHandleInterruptTask:
             assert resp["data"]["method"] == "flag_and_async_exc"
             assert not t.is_alive()
             assert len(got_exception) == 1
-            assert isinstance(got_exception[0], TaskInterrupt)
+            assert isinstance(got_exception[0], AsyncAbort)
             # Atomicity check: registry must be cleared so a second
             # interrupt call can't re-inject during cleanup.
             assert get_exec_thread("t2") is None

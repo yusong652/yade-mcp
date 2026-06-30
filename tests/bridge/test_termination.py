@@ -4,7 +4,7 @@ import threading
 import time
 
 import pytest
-from yade_mcp_bridge.execution.errors import BridgeTimeout
+from yade_mcp_bridge.execution.errors import AsyncAbort
 from yade_mcp_bridge.execution.termination import inject_async_exception
 
 
@@ -26,13 +26,13 @@ class TestInjectAsyncException:
         t.start()
         time.sleep(0.05)  # let the loop get running
 
-        affected = inject_async_exception(t.ident, BridgeTimeout)
+        affected = inject_async_exception(t.ident, AsyncAbort)
         assert affected == 1
 
         t.join(timeout=1.0)
         assert not t.is_alive(), "thread should have been terminated by async exc"
         assert len(caught) == 1
-        assert isinstance(caught[0], BridgeTimeout)
+        assert isinstance(caught[0], AsyncAbort)
 
     def test_sleep_in_c_blocks_until_return(self):
         """``time.sleep`` holds in a C call that does not poll for
@@ -52,18 +52,18 @@ class TestInjectAsyncException:
         t.start()
         time.sleep(0.05)
 
-        affected = inject_async_exception(t.ident, BridgeTimeout)
+        affected = inject_async_exception(t.ident, AsyncAbort)
         assert affected == 1
 
         # Must wait longer than sleep(0.5) — sleep blocks the exception.
         t.join(timeout=1.5)
         assert not t.is_alive()
         assert len(caught) == 1
-        assert isinstance(caught[0], BridgeTimeout)
+        assert isinstance(caught[0], AsyncAbort)
 
     def test_returns_zero_for_nonexistent_thread_id(self):
         """Invalid tids yield 0 (no matching PyThreadState)."""
-        affected = inject_async_exception(0xDEADBEEF, BridgeTimeout)
+        affected = inject_async_exception(0xDEADBEEF, AsyncAbort)
         assert affected == 0
 
     def test_refuses_dummy_thread_target(self):
@@ -80,17 +80,17 @@ class TestInjectAsyncException:
         t = threading.Thread(target=target, name="Dummy-7", daemon=True)
         t.start()
         try:
-            affected = inject_async_exception(t.ident, BridgeTimeout)
+            affected = inject_async_exception(t.ident, AsyncAbort)
             assert affected == 0  # refused, no injection
         finally:
             stop.set()
             t.join(timeout=1.0)
 
 
-@pytest.mark.parametrize("exc_cls", [BridgeTimeout, InterruptedError])
+@pytest.mark.parametrize("exc_cls", [AsyncAbort, InterruptedError])
 def test_inject_async_with_different_exception_classes(exc_cls):
     """The helper doesn't care about the exception class — confirm it
-    works for both our custom ``BridgeTimeout`` and a stock exception."""
+    works for both our custom ``AsyncAbort`` and a stock exception."""
 
     def target():
         try:
