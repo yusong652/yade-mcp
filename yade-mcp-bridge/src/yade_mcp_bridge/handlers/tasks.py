@@ -73,8 +73,7 @@ def handle_list_tasks(ctx, data):
 
 def handle_interrupt_task(ctx, data):
     """Interrupt a running task."""
-    from ..execution.errors import AsyncAbort
-    from ..execution.termination import inject_async_exception
+    from ..execution.termination import AsyncAbort, inject_async_exception
     from ..runtime.signals import (
         clear_interrupt,
         get_exec_thread,

@@ -178,7 +178,7 @@ class TestHandleInterruptTask:
         the end-to-end SetAsyncExc injection."""
         import threading
 
-        from yade_mcp_bridge.execution.errors import AsyncAbort
+        from yade_mcp_bridge.execution.termination import AsyncAbort
         from yade_mcp_bridge.runtime.signals import (
             clear_interrupt,
             get_exec_thread,

@@ -51,7 +51,7 @@ def install_pyrunner(logger):
 
     import sys as _sys
 
-    from ..execution.errors import CycleInterrupt
+    from ..execution.termination import CycleInterrupt
     from .signals import (
         get_current_task,
         hold_if_wanted,
