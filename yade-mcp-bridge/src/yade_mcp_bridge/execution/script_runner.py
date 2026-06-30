@@ -24,7 +24,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
-from .errors import TaskInterrupt, format_execution_error
+from .errors import AsyncAbort, format_execution_error
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -77,7 +77,7 @@ class ScriptRunner:
 
         set_current_task(task_id)
         # Advertise this thread to handle_interrupt_task so it can
-        # async-inject TaskInterrupt for the pure-Python deadloop case.
+        # async-inject AsyncAbort for the pure-Python deadloop case.
         register_exec_thread(task_id, threading.get_ident())
 
         try:
@@ -130,7 +130,7 @@ class ScriptRunner:
                 "output": output_text,
             }
 
-        except TaskInterrupt:
+        except AsyncAbort:
             # Async-injected by handle_interrupt_task as a last-resort
             # abort for pure-Python deadloops that never hit a PyRunner
             # tick. The handler already ``unregister_exec_thread(task_id)``
@@ -153,7 +153,7 @@ class ScriptRunner:
             except ImportError:
                 pass
             except Exception as cleanup_exc:  # noqa: BLE001
-                logger.warning("Sim cleanup after TaskInterrupt failed: %s", cleanup_exc)
+                logger.warning("Sim cleanup after AsyncAbort failed: %s", cleanup_exc)
             return {
                 "status": "interrupted",
                 "message": "Task force-interrupted by user (async abort)",

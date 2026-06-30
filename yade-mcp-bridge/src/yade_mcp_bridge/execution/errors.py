@@ -1,29 +1,6 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Shared error formatting for user-code execution paths.
-
-Both ``execute_code`` (synchronous snippet) and ``execute_task`` (async
-script) catch user-code exceptions and need the same treatment:
-
-* Filter the traceback to **user frames only** (YADE/bridge internals
-  are noise to the LLM).
-* Build a concise human message pinpointing file + line.
-* Carry the full traceback, but bounded — truncate to the most recent
-  N lines and fall back to a log-file pointer for the rest.
-
-This module owns those decisions so the two execution paths stay
-consistent. Each caller provides:
-
-* ``is_user_frame``: predicate on a frame's filename — true when the
-  frame belongs to user code (not YADE / bridge internals).
-* ``display_path``: how user files should be rendered in the message
-  (e.g. YADE's ``path_to_llm_format`` for scripts, ``<execute_code>``
-  for execute_code snippets).
-* ``overflow_writer``: optional callable invoked only when the
-  traceback exceeds the inline cap. It receives the full traceback
-  text, persists it, and returns an absolute path. Callers that do
-  not want to persist anything can omit it.
-"""
+"""Shared error formatting for code run via ``execute_code`` / ``execute_task``."""
 
 from __future__ import annotations
 
@@ -32,36 +9,16 @@ import traceback
 from typing import Any, Callable
 
 
-class BridgeTimeout(BaseException):
-    """Injected via PyThreadState_SetAsyncExc to terminate a timed-out
-    execute_code body.
+class AsyncAbort(BaseException):
+    """Async-injected (PyThreadState_SetAsyncExc) to force-terminate a stuck
+    pure-Python body the cycle-interrupt path cannot reach — e.g. a
+    ``while True`` with no ``O.run`` on the stack, so no PyRunner tick fires to
+    observe the interrupt flag.
 
-    Inherits ``BaseException`` (not ``Exception``) so user-code handlers
-    of the form ``except Exception:`` cannot swallow it. ``code_runner.py``'s
-    ``_run_code`` catches it explicitly and returns a
-    ``status="terminated"`` marker — this exception must never escape
-    ``_run_code``, or ``SerialExecutor.run_next``'s
-    ``except Exception`` (which does NOT catch BaseException) will let
-    it kill the pump thread permanently.
-    """
-
-
-class TaskInterrupt(BaseException):
-    """Injected via PyThreadState_SetAsyncExc to force-terminate a
-    script task that the flag-based interrupt path cannot reach —
-    e.g. a pure-Python ``while True`` loop with no ``O.run`` on the
-    stack, so no PyRunner tick ever fires to observe the flag.
-
-    Inherits ``BaseException`` (not ``Exception``) so ``except
-    Exception:`` in user code will NOT swallow it. ``ScriptRunner._execute``
-    catches it explicitly and returns ``status="interrupted"`` with a
-    sim-state cleanup (``O.pause`` + ``O.wait``) so the next task
-    inherits a clean YADE state.
-
-    Must never escape ``_execute`` — the script thread is a
-    ``threading.Thread`` with no default ``except BaseException``
-    barrier, so a leak would terminate the thread and leave the
-    task future in an exception state instead of ``interrupted``.
+    Inherits ``BaseException`` (not ``Exception``) so a user ``except
+    Exception:`` cannot swallow it. Each catcher (``_run_code`` for
+    execute_code, ``_execute`` for tasks) handles it explicitly and must never
+    let it escape, or it would kill the worker thread.
     """
 
 

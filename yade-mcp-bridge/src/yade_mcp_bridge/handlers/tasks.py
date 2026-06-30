@@ -73,7 +73,7 @@ def handle_list_tasks(ctx, data):
 
 def handle_interrupt_task(ctx, data):
     """Interrupt a running task."""
-    from ..execution.errors import TaskInterrupt
+    from ..execution.errors import AsyncAbort
     from ..execution.termination import inject_async_exception
     from ..runtime.signals import (
         clear_interrupt,
@@ -112,15 +112,15 @@ def handle_interrupt_task(ctx, data):
     logger.info("Interrupt flag set for task: %s", task_id)
 
     # Best-effort async injection. Atomic unregister-then-inject prevents
-    # a re-entrant interrupt from landing a second TaskInterrupt in the
+    # a re-entrant interrupt from landing a second AsyncAbort in the
     # middle of the script thread's except-block cleanup.
     method = "flag_only"
     tid = get_exec_thread(task_id)
     if tid is not None:
         unregister_exec_thread(task_id)
-        inject_async_exception(tid, TaskInterrupt)
+        inject_async_exception(tid, AsyncAbort)
         method = "flag_and_async_exc"
-        logger.info("Async TaskInterrupt injected into task %s (tid=%s)", task_id, tid)
+        logger.info("AsyncAbort injected into task %s (tid=%s)", task_id, tid)
 
     # Defend against TOCTOU: task may have finished between the status check
     # above and request_interrupt. script_runner.py's finally clears the flag on exit,
