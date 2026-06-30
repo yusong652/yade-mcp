@@ -24,7 +24,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
-from .errors import AsyncAbort, format_execution_error
+from .errors import AsyncAbort, CycleInterrupt, format_execution_error
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -102,7 +102,7 @@ class ScriptRunner:
             _drain_async_cycling()
 
             if is_task_interrupt_requested(task_id):
-                raise InterruptedError("Interrupted by MCP bridge")
+                raise CycleInterrupt("Interrupted by MCP bridge")
 
             output_text = output_buffer.getvalue()
             serialized_result = self._serialize_result(result)
@@ -120,7 +120,7 @@ class ScriptRunner:
                 "output": output_text,
             }
 
-        except InterruptedError as e:
+        except CycleInterrupt as e:
             output_text = output_buffer.getvalue()
             logger.info(f"Script interrupted: {script_path} - {str(e)}")
             return {
@@ -172,9 +172,9 @@ class ScriptRunner:
             # the raw traceback.
             e.__suppress_context__ = True
 
-            # Detect InterruptedError wrapped by YADE's PyRunner as RuntimeError
+            # Detect a CycleInterrupt wrapped by YADE's PyRunner as RuntimeError
             error_str = str(e)
-            if "InterruptedError" in error_str and "Interrupted by MCP bridge" in error_str:
+            if "CycleInterrupt" in error_str:
                 logger.info(f"Script interrupted (via PyRunner): {script_path}")
                 return {
                     "status": "interrupted",

@@ -51,6 +51,7 @@ def install_pyrunner(logger):
 
     import sys as _sys
 
+    from ..execution.errors import CycleInterrupt
     from .signals import (
         get_current_task,
         hold_if_wanted,
@@ -63,7 +64,7 @@ def install_pyrunner(logger):
 
     def _mcp_pyrunner_tick():
         # Never raise on the sim thread (→ C++ FATAL). Set a flag + O.pause();
-        # the O.run() hook raises InterruptedError to interrupt the task once
+        # the O.run() hook raises CycleInterrupt to interrupt the task once
         # O.run() returns.
         task_id = get_current_task()
         if task_id and is_task_interrupt_requested(task_id):
@@ -172,7 +173,7 @@ def install_pyrunner(logger):
             # check if interrupt was the reason and raise at Python level.
             if _interrupt_triggered["value"]:
                 _interrupt_triggered["value"] = False
-                raise InterruptedError("Interrupted by MCP bridge")
+                raise CycleInterrupt("Interrupted by MCP bridge")
             return result
 
         _hooked_run._mcp_hooked = True

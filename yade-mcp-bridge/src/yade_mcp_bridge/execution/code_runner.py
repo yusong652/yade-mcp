@@ -27,7 +27,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
-from .errors import AsyncAbort, format_execution_error
+from .errors import AsyncAbort, CycleInterrupt, format_execution_error
 from .termination import inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
@@ -99,7 +99,7 @@ def _run_code(request_id, code_str):
             if result is not None
             else None,
         }
-    except InterruptedError:
+    except CycleInterrupt:
         # Timed out: the PyRunner started by the cycle paused our O.run at a
         # cycle boundary and raised here. Marker → status="interrupted".
         return {"status": "interrupted", "output": output_buffer.getvalue()}

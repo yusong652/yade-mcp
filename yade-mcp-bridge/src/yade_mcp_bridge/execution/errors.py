@@ -9,6 +9,17 @@ import traceback
 from typing import Any, Callable
 
 
+class CycleInterrupt(BaseException):
+    """Cooperative interrupt at a cycle boundary: the PyRunner tick sets a flag
+    and ``O.pause()``s, then the ``O.run`` hook raises this once the run returns.
+
+    Inherits ``BaseException`` (not ``Exception``) so a user ``except
+    Exception:`` around their ``O.run`` cannot swallow it and defeat the
+    interrupt. ``_run_code`` (execute_code) and ``_execute`` (tasks) catch it
+    explicitly.
+    """
+
+
 class AsyncAbort(BaseException):
     """Async-injected (PyThreadState_SetAsyncExc) to force-terminate a stuck
     pure-Python body the cycle-interrupt path cannot reach — e.g. a
