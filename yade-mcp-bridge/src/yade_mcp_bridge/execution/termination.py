@@ -8,8 +8,6 @@ These are control flow, not errors — hence ``BaseException``, so a user
 ``except Exception:`` cannot swallow them.
 """
 
-from __future__ import annotations
-
 import ctypes
 import threading
 
@@ -38,7 +36,7 @@ class AsyncAbort(BaseException):
     """
 
 
-def inject_async_exception(thread_id: int, exc_type: type[BaseException]) -> int:
+def inject_async_exception(thread_id, exc_type):
     """Inject ``exc_type`` into the target thread via CPython's async
     exception API. Returns the number of threads affected: 0 = no matching
     thread, 1 = queued, -1 = API misuse (undone immediately, per the docs).

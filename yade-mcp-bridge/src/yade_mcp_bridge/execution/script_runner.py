@@ -32,7 +32,7 @@ logger = logging.getLogger("MCP-Bridge")
 _ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5  # max wait for the cycle to start (pickup gap)
 
 
-def _drain_async_cycling() -> None:
+def _drain_async_cycling():
     """Block until any ``O.run(wait=False)`` cycling the task dispatched
     finishes, so it never reports success while the sim still cycles (an orphan
     session hides errors and evades interrupts). Defensive: agents rarely call
@@ -186,12 +186,12 @@ class ScriptRunner:
 
             normalized_script_path = os.path.normpath(script_path)
 
-            def _is_user_frame(filename: str) -> bool:
+            def _is_user_frame(filename):
                 return os.path.normpath(filename) == normalized_script_path or filename == "<string>"
 
             task_log_path = output_buffer.get_path() if hasattr(output_buffer, "get_path") else None
 
-            def _overflow_writer(full_tb: str) -> str:
+            def _overflow_writer(full_tb):
                 # Append the full traceback to the task's own log so the
                 # LLM can retrieve it via check_task_status pagination or
                 # direct file read. Returns the abs path so the response
@@ -259,7 +259,7 @@ class ScriptRunner:
             # Own thread, not the shared executor pump (unlike execute_code):
             # a long O.run(wait=True) here would otherwise block the pump and
             # starve execute_code for the task's whole lifetime.
-            future: Future = Future()
+            future = Future()
 
             def _script_runner():
                 if not future.set_running_or_notify_cancel():

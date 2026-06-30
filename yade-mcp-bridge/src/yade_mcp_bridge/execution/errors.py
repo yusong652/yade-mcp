@@ -2,11 +2,8 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared error formatting for code run via ``execute_code`` / ``execute_task``."""
 
-from __future__ import annotations
-
 import sys
 import traceback
-from typing import Any, Callable
 
 # Cap the inline traceback excerpt. 80 lines comfortably covers most
 # user-code stacks (incl. YADE's boost-Python wrappers, which
@@ -15,13 +12,11 @@ from typing import Any, Callable
 TRACEBACK_MAX_LINES = 80
 
 
-def _extract_user_frames(
-    is_user_frame: Callable[[str], bool],
-) -> list[tuple[int, str]]:
+def _extract_user_frames(is_user_frame):
     """Walk the current exception traceback, returning (lineno, name)
     tuples for frames accepted by ``is_user_frame``.
     """
-    frames: list[tuple[int, str]] = []
+    frames = []
     tb = sys.exc_info()[2]
     while tb is not None:
         code = tb.tb_frame.f_code
@@ -31,12 +26,7 @@ def _extract_user_frames(
     return frames
 
 
-def _build_user_message(
-    exc: BaseException,
-    frames: list[tuple[int, str]],
-    display_path: str,
-    prefix: str,
-) -> str:
+def _build_user_message(exc, frames, display_path, prefix):
     """Render the multi-line pseudo-traceback shown to the LLM.
 
     Consecutive identical frames (recursion) collapse into a single
@@ -62,7 +52,7 @@ def _build_user_message(
     return "".join(parts)
 
 
-def _cap_traceback(full_tb: str) -> tuple[str, bool]:
+def _cap_traceback(full_tb):
     """Truncate to the last ``TRACEBACK_MAX_LINES`` lines.
 
     Keeps the tail because Python's ``format_exc()`` puts the innermost
@@ -78,14 +68,14 @@ def _cap_traceback(full_tb: str) -> tuple[str, bool]:
 
 
 def format_execution_error(
-    exc: BaseException,
-    output_text: str,
+    exc,
+    output_text,
     *,
-    is_user_frame: Callable[[str], bool],
-    display_path: str = "<code>",
-    message_prefix: str = "Execution failed",
-    overflow_writer: Callable[[str], str] | None = None,
-) -> dict[str, Any]:
+    is_user_frame,
+    display_path="<code>",
+    message_prefix="Execution failed",
+    overflow_writer=None,
+):
     """Build a uniform error response for user-code execution failures.
 
     Returns a dict with:
@@ -105,7 +95,7 @@ def format_execution_error(
     message = _build_user_message(exc, frames, display_path, message_prefix)
     excerpt, truncated = _cap_traceback(full_tb)
 
-    payload: dict[str, Any] = {
+    payload = {
         "status": "error",
         "output": output_text,
         "message": message,
