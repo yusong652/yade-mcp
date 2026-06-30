@@ -4,8 +4,7 @@ import threading
 import time
 
 import pytest
-from yade_mcp_bridge.execution.errors import AsyncAbort
-from yade_mcp_bridge.execution.termination import inject_async_exception
+from yade_mcp_bridge.execution.termination import AsyncAbort, inject_async_exception
 
 
 class TestInjectAsyncException:

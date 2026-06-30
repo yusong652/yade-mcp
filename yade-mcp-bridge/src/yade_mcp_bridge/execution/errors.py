@@ -8,31 +8,6 @@ import sys
 import traceback
 from typing import Any, Callable
 
-
-class CycleInterrupt(BaseException):
-    """Cooperative interrupt at a cycle boundary: the PyRunner tick sets a flag
-    and ``O.pause()``s, then the ``O.run`` hook raises this once the run returns.
-
-    Inherits ``BaseException`` (not ``Exception``) so a user ``except
-    Exception:`` around their ``O.run`` cannot swallow it and defeat the
-    interrupt. ``_run_code`` (execute_code) and ``_execute`` (tasks) catch it
-    explicitly.
-    """
-
-
-class AsyncAbort(BaseException):
-    """Async-injected (PyThreadState_SetAsyncExc) to force-terminate a stuck
-    pure-Python body the cycle-interrupt path cannot reach — e.g. a
-    ``while True`` with no ``O.run`` on the stack, so no PyRunner tick fires to
-    observe the interrupt flag.
-
-    Inherits ``BaseException`` (not ``Exception``) so a user ``except
-    Exception:`` cannot swallow it. Each catcher (``_run_code`` for
-    execute_code, ``_execute`` for tasks) handles it explicitly and must never
-    let it escape, or it would kill the worker thread.
-    """
-
-
 # Cap the inline traceback excerpt. 80 lines comfortably covers most
 # user-code stacks (incl. YADE's boost-Python wrappers, which
 # occasionally produce 30-50 frame chains). Anything longer is

@@ -1,20 +1,41 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Async exception injection for terminating stuck code execution.
+"""Interrupt/termination control-flow signals and the async-injection mechanism.
 
-Used by ``code_runner.py`` (and the task-interrupt handler) when a timeout
-or interrupt fires: inject an ``AsyncAbort`` into the thread running user
-code so it unwinds at the next Python bytecode edge, freeing the pump thread.
-
-Last-resort only. The standard path is ``signals.request_interrupt`` + the
-PyRunner tick, which pauses ``O.run`` but cannot break a pure-Python loop;
-``inject_async_exception`` fills that gap.
+Two ``BaseException`` signals carry an interrupt out to its catcher, plus the
+``inject_async_exception`` helper that delivers the forced one across threads.
+These are control flow, not errors — hence ``BaseException``, so a user
+``except Exception:`` cannot swallow them.
 """
 
 from __future__ import annotations
 
 import ctypes
 import threading
+
+
+class CycleInterrupt(BaseException):
+    """Cooperative interrupt at a cycle boundary: the PyRunner tick sets a flag
+    and ``O.pause()``s, then the ``O.run`` hook raises this once the run returns.
+
+    Inherits ``BaseException`` (not ``Exception``) so a user ``except
+    Exception:`` around their ``O.run`` cannot swallow it and defeat the
+    interrupt. ``_run_code`` (execute_code) and ``_execute`` (tasks) catch it
+    explicitly.
+    """
+
+
+class AsyncAbort(BaseException):
+    """Async-injected (PyThreadState_SetAsyncExc) to force-terminate a stuck
+    pure-Python body the cycle-interrupt path cannot reach — e.g. a
+    ``while True`` with no ``O.run`` on the stack, so no PyRunner tick fires to
+    observe the interrupt flag.
+
+    Inherits ``BaseException`` (not ``Exception``) so a user ``except
+    Exception:`` cannot swallow it. Each catcher (``_run_code`` for
+    execute_code, ``_execute`` for tasks) handles it explicitly and must never
+    let it escape, or it would kill the worker thread.
+    """
 
 
 def inject_async_exception(thread_id: int, exc_type: type[BaseException]) -> int:
