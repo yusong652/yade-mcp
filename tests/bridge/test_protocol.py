@@ -514,7 +514,10 @@ class TestExecuteCodeTimeoutTermination:
         url, _ = bridge_server_with_pump
         from yade_mcp_bridge.runtime.signals import clear_current_task, get_current_task, set_current_task
 
-        # Simulate a running task by setting the sentinel outer task.
+        # Simulate a running task by setting the sentinel outer task. With a task
+        # registered, execute_code enters the sim-hold window; this harness has
+        # no live O.run cycle, so no PyRunner tick releases the hold and it waits
+        # out the full acquire timeout (~2s). Both timeouts below clear that.
         clear_current_task()
         set_current_task("outer-task")
         try:
@@ -525,7 +528,7 @@ class TestExecuteCodeTimeoutTermination:
                     "type": "execute_code",
                     "request_id": "nested-ok",
                     "code": "1 + 1",
-                    "timeout_ms": 2000,
+                    "timeout_ms": 3000,
                 },
             )
             assert ok["ok"] is True
@@ -543,7 +546,7 @@ class TestExecuteCodeTimeoutTermination:
                     "type": "execute_code",
                     "request_id": "nested-timeout",
                     "code": "while True:\n    pass",
-                    "timeout_ms": 500,
+                    "timeout_ms": 3000,
                 },
             )
             assert terminated["error"]["code"] == "terminated"

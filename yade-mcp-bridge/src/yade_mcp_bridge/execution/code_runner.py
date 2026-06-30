@@ -84,9 +84,9 @@ def _run_code(request_id, code_str):
                 exec(code_obj, exec_globals, exec_globals)
                 return exec_globals.get("result", None)
 
-        if _sim_running():
-            # A task owns the live cycle: hold it so the snippet reads a
-            # consistent snapshot and does not race the task. Resumes on exit.
+        if get_current_task() is not None or _sim_running():
+            # a task is running, or user ran O.run() in console.
+            # Hold the sim so that the code can read a snapshot.
             with sim_hold_window():
                 result = _do_exec()
         else:
