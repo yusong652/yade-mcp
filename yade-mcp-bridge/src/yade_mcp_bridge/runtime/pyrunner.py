@@ -15,8 +15,10 @@ every run so it survives ``O.reset()`` and user scripts that reassign
 """
 
 import threading
+import time
 
 _INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
+_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5  # max wait for the cycle to start (pickup gap)
 
 _async_cycling = threading.local()
 
@@ -26,7 +28,7 @@ def mark_async_cycling(pending):
     _async_cycling.pending = pending
 
 
-def async_cycling_pending():
+def _async_cycling_pending():
     """True if THIS thread's last ``O.run`` was a ``wait=False`` dispatch
     whose cycling has not been drained yet."""
     return getattr(_async_cycling, "pending", False)
@@ -38,6 +40,26 @@ def _is_async_run(args, kwargs):
     keyword; default False."""
     wait = kwargs["wait"] if "wait" in kwargs else (args[1] if len(args) >= 2 else False)
     return not wait
+
+
+def drain_async_cycling():
+    """Block until the cycling a pending ``O.run(wait=False)`` dispatched
+    finishes, so the caller does not report success while the sim still cycles
+    (orphan cycling hides errors and evades interrupts).
+    """
+    try:
+        from yade import O as _O
+    except ImportError:
+        return
+    if not _async_cycling_pending():
+        return
+    # wait=False returns before O.running flips True: poll for the cycle to
+    # start (bounded), then O.wait() for the run itself (unbounded).
+    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
+    while not _O.running and time.monotonic() < deadline:
+        time.sleep(0.005)
+    if _O.running:
+        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
 
 def install_pyrunner(logger):

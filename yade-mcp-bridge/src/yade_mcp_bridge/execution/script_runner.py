@@ -15,7 +15,7 @@ from concurrent.futures import Future
 from functools import partial
 
 from ..paths import LOGS_DIR
-from ..runtime.pyrunner import async_cycling_pending
+from ..runtime.pyrunner import drain_async_cycling
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
@@ -29,32 +29,6 @@ from .errors import format_execution_error, log_execute_task_overflow, script_fr
 from .termination import AsyncAbort, CycleInterrupt
 
 logger = logging.getLogger("MCP-Bridge")
-
-_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5  # max wait for the cycle to start (pickup gap)
-
-
-def _drain_async_cycling():
-    """Block until any ``O.run(wait=False)`` cycling the task dispatched
-    finishes, so it never reports success while the sim still cycles (an orphan
-    session hides errors and evades interrupts). Defensive: agents rarely call
-    ``O.run(wait=False)``.
-
-    ``wait=False`` returns before ``O.running`` flips True, so poll for the
-    cycle to start (bounded) then ``O.wait()`` for the run itself (unbounded).
-    The bound caps only the pickup gap, not run length; ``wait=True`` drains
-    inside YADE and never reaches here.
-    """
-    try:
-        from yade import O as _O
-    except ImportError:
-        return
-    if not async_cycling_pending():
-        return
-    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
-    while not _O.running and time.monotonic() < deadline:
-        time.sleep(0.005)
-    if _O.running:
-        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
 
 class ScriptRunner:
@@ -101,7 +75,7 @@ class ScriptRunner:
                 exec(code_obj, exec_globals, exec_globals)
                 result = exec_globals.get("result", None)
 
-            _drain_async_cycling()
+            drain_async_cycling()
 
             if is_task_interrupt_requested(task_id):
                 raise CycleInterrupt("Interrupted by MCP bridge")
