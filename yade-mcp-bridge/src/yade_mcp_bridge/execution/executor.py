@@ -1,22 +1,9 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Executor that runs ``execute_code`` submissions on the pump thread.
+"""Queue and execution mechanism for ``execute_code``.
 
 ``submit()`` enqueues code; a single pump drains the FIFO queue via
-``run_next()``. The queue is a safety net: should two submissions ever
-overlap, they run serially instead of racing on YADE engine state.
-
-Which thread the pump runs on depends on the runtime mode (see pump.py):
-
-* gui mode: the Qt event loop ticks ``run_next()`` on the main thread.
-  This is mandatory — Qt objects have thread affinity, so anything touching
-  the GUI (``yade.qt.View()`` etc.) must run on the main thread.
-* console mode: a background daemon thread ticks ``run_next()``. There are
-  no live Qt objects to violate affinity with, so any thread is safe (the
-  GIL and the thread-safe queue keep it correct).
-
-The executor itself only guarantees serial FIFO execution; the owning
-thread is a property of the pump, not of this class.
+``run_next()``.
 """
 
 import logging
