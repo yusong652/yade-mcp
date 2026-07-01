@@ -6,7 +6,7 @@ from .helpers import require_field
 
 
 def handle_execute_code(ctx, data):
-    """Run a code snippet synchronously in the YADE process."""
+    """Run a code snippet synchronously, blocking for its result."""
     request_id = data.get("request_id", "unknown")
 
     code, err = require_field(data, "code", request_id, "execute_code_result")
