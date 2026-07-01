@@ -107,19 +107,12 @@ class ScriptRunner:
             }
 
         except AsyncAbort:
-            # Async-injected by handle_interrupt_task as a last-resort
-            # abort for pure-Python deadloops that never hit a PyRunner
-            # tick. The handler already ``unregister_exec_thread(task_id)``
-            # before injecting, so any re-injection attempt is a no-op —
-            # this cleanup path runs without risk of being re-interrupted.
+            # Last-resort abort injected by handle_interrupt_task for a
+            # pure-Python deadloop that never hit a PyRunner tick.
             output_text = output_buffer.getvalue()
             logger.info(f"Script force-interrupted (async_exc): {script_path}")
-            # Best-effort sim cleanup: if the interrupt fired while the
-            # user code had started an O.run, make sure the sim thread is
-            # paused and fully drained before returning. Without this,
-            # ``O.running`` may stay True and the NEXT task's ``_O.wait()``
-            # drain (see below) will block on a zombie cycling session,
-            # preventing recovery.
+            # Best-effort: pause and drain the sim so a live O.run doesn't
+            # leak O.running=True into the next task.
             try:
                 from yade import O as _O
 
@@ -142,22 +135,9 @@ class ScriptRunner:
 
         except BaseException as e:
             output_text = output_buffer.getvalue()
-            # Mirror execute_code: suppress the compile(eval)->compile(exec)
-            # fallback chain that otherwise prepends a misleading
-            # "SyntaxError / During handling of the above" preamble to
-            # the raw traceback.
+            # Suppress the compile(eval)->compile(exec) fallback's chained
+            # SyntaxError preamble from the traceback.
             e.__suppress_context__ = True
-
-            # Detect a CycleInterrupt wrapped by YADE's PyRunner as RuntimeError
-            error_str = str(e)
-            if "CycleInterrupt" in error_str:
-                logger.info(f"Script interrupted (via PyRunner): {script_path}")
-                return {
-                    "status": "interrupted",
-                    "message": "Script interrupted by user",
-                    "result": None,
-                    "output": output_text,
-                }
 
             task_log_path = output_buffer.get_path() if hasattr(output_buffer, "get_path") else None
 
@@ -179,11 +159,8 @@ class ScriptRunner:
             # Idempotent — handler may have already unregistered to
             # guard against double-injection.
             unregister_exec_thread(task_id)
-            # Release the log file handle now that execution is terminal
-            # and stdout is restored (no more writes land here). Later
-            # check_task_status reads re-open the log by path, so closing
-            # frees the fd without losing readability. Last in finally so
-            # a close error can't skip the signal cleanup above.
+            # Release the log fd; check_task_status re-opens by path. Last so a
+            # close error can't skip the signal cleanup above.
             output_buffer.close()
 
     def run(self, script_path, description, task_id):
