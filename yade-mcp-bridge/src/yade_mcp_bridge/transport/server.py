@@ -216,7 +216,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
 class BridgeServer:
-    """HTTP + SSE bridge for executing code and running script tasks inside a YADE process."""
+    """HTTP + SSE bridge for executing code and running script tasks."""
 
     # Once a serialized response crosses this size it is truncated to its tail
     # (below). Guards the unbounded ``execute_code`` path; task output is

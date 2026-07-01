@@ -10,7 +10,7 @@ modules.
 
 import os
 
-# Bridge working directory, created in the YADE process CWD.
+# Bridge working directory.
 DATA_DIR = ".yade-mcp"
 
 # Per-run and per-task logs.
