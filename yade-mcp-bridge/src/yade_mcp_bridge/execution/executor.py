@@ -30,14 +30,7 @@ class SerialExecutor:
         return future
 
     def run_next(self):
-        """Run the next queued callable, if any.
-
-        Returns True if one was dequeued (ran, failed, or was already
-        cancelled), False if the queue was empty. The pump calls this once
-        per tick (see pump.py): handling a single callable per tick hands
-        control back to the Qt event loop between calls, keeping the GUI
-        responsive.
-        """
+        """Run the next queued callable, if any. Returns False when the queue is empty."""
         try:
             func, args, kwargs, future = self._queue.get_nowait()
         except queue.Empty:
