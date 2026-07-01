@@ -14,4 +14,4 @@ def handle_execute_code(ctx, data):
         return err
 
     timeout_ms = data.get("timeout_ms", 10000)
-    return ctx.code_runner.execute(request_id, code, timeout_ms)
+    return ctx.code_runner.run(request_id, code, timeout_ms)

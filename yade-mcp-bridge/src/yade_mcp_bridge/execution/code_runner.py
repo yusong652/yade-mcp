@@ -52,7 +52,7 @@ def _sim_running():
         return False
 
 
-def _run_code(request_id, code_str):
+def _execute(request_id, code_str):
     """Run a snippet on the pump thread, capturing stdout. Returns an internal
     status dict (success / error / terminated / interrupted).
     """
@@ -170,13 +170,13 @@ def _terminate_stuck_execution(request_id, future):
 
     tid = get_exec_thread(request_id)
 
-    # Registry already cleared → _run_code's finally ran → the pump is free.
+    # Registry already cleared → _execute's finally ran → the pump is free.
     if tid is None:
         if future.done():
             # The code raced the timeout and settled before we could inject.
             return {"method": "finished", "result": future.result()}
         # Ultra-narrow window: registry cleared but the executor hasn't set the
-        # future's result yet (it sets it after _run_code returns).
+        # future's result yet (it sets it after _execute returns).
         return {"method": "unsettled", "result": None}
 
     inject_async_exception(tid, AsyncAbort)
@@ -251,14 +251,14 @@ class CodeRunner:
     def __init__(self, executor):
         self.executor = executor
 
-    def execute(self, request_id, code, timeout_ms):
+    def run(self, request_id, code, timeout_ms):
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
             # Submit to the pump and block until it resolves or times out.
-            future = self.executor.submit(_run_code, request_id, code)
+            future = self.executor.submit(_execute, request_id, code)
             result = future.result(timeout=timeout_ms / 1000.0)
 
-            # ``status`` is _run_code's internal marker; translate it to the envelope.
+            # ``status`` is _execute's internal marker; translate it to the envelope.
             if result.get("status") == "error":
                 details = {}
                 for key in ("exception_type", "traceback", "traceback_truncated", "log_file"):

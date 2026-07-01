@@ -18,8 +18,8 @@ class CycleInterrupt(BaseException):
 
     Inherits ``BaseException`` (not ``Exception``) so a user ``except
     Exception:`` around their ``O.run`` cannot swallow it and defeat the
-    interrupt. ``_run_code`` (execute_code) and ``_execute`` (tasks) catch it
-    explicitly.
+    interrupt. Both ``_execute`` runners — code_runner (execute_code) and
+    script_runner (tasks) — catch it explicitly.
     """
 
 
@@ -30,9 +30,9 @@ class AsyncAbort(BaseException):
     observe the interrupt flag.
 
     Inherits ``BaseException`` (not ``Exception``) so a user ``except
-    Exception:`` cannot swallow it. Each catcher (``_run_code`` for
-    execute_code, ``_execute`` for tasks) handles it explicitly and must never
-    let it escape, or it would kill the worker thread.
+    Exception:`` cannot swallow it. Each catcher — ``_execute`` in code_runner
+    (execute_code) and in script_runner (tasks) — handles it explicitly and must
+    never let it escape, or it would kill the worker thread.
     """
 
 
