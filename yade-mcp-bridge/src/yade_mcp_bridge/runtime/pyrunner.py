@@ -43,15 +43,9 @@ def _is_async_run(args, kwargs):
 
 
 def drain_async_cycling():
-    """Block until any ``O.run(wait=False)`` cycling the current thread dispatched
-    finishes, so a caller never reports success while the sim still cycles (an
-    orphan session hides errors and evades interrupts). Defensive: agents rarely
-    call ``O.run(wait=False)``.
-
-    ``wait=False`` returns before ``O.running`` flips True, so poll for the
-    cycle to start (bounded) then ``O.wait()`` for the run itself (unbounded).
-    The bound caps only the pickup gap, not run length; ``wait=True`` drains
-    inside YADE and never sets the flag.
+    """Block until the cycling a pending ``O.run(wait=False)`` dispatched
+    finishes, so the caller does not report success while the sim still cycles
+    (orphan cycling hides errors and evades interrupts).
     """
     try:
         from yade import O as _O
@@ -59,6 +53,8 @@ def drain_async_cycling():
         return
     if not _async_cycling_pending():
         return
+    # wait=False returns before O.running flips True: poll for the cycle to
+    # start (bounded), then O.wait() for the run itself (unbounded).
     deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
     while not _O.running and time.monotonic() < deadline:
         time.sleep(0.005)
