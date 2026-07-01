@@ -28,7 +28,7 @@ from .errors import (
     EXECUTE_CODE_TAG,
     format_execution_error,
     is_execute_code_frame,
-    write_code_overflow,
+    log_execute_code_overflow,
 )
 from .termination import AsyncAbort, CycleInterrupt, inject_async_exception
 
@@ -120,7 +120,7 @@ def _execute(request_id, code_str):
             output_text,
             keep_frame=is_execute_code_frame,
             display_path=EXECUTE_CODE_TAG,
-            overflow_writer=write_code_overflow,
+            overflow_writer=log_execute_code_overflow,
         )
     finally:
         sys.stdout = old_stdout
