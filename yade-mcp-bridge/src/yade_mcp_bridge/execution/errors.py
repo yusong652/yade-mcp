@@ -99,9 +99,6 @@ def format_execution_error(
     return response
 
 
-# --- per-caller frame predicates (fed to ``keep_frame``) ---
-
-
 def is_execute_code_frame(filename):
     """Keep only the execute_code snippet's own frames, dropping bridge and
     boost-Python internals.
@@ -118,10 +115,7 @@ def script_frame_filter(script_path):
     return lambda filename: os.path.normpath(filename) == normalized or filename == "<string>"
 
 
-# --- per-caller overflow writers (fed to ``overflow_writer``) ---
-
-
-def write_code_overflow(full_tb):
+def log_execute_code_overflow(full_tb):
     """Persist a full traceback to its own log file."""
     os.makedirs(LOGS_DIR, exist_ok=True)
     # Fresh timestamped file per error keeps this side-channel simple.
@@ -131,22 +125,18 @@ def write_code_overflow(full_tb):
     return os.path.abspath(path)
 
 
-def task_overflow_writer(task_log_path, task_id):
-    """Build an overflow writer that appends the traceback to the task's log."""
-
-    def _write(full_tb):
-        # Append to the task's own log so it lands with stdout for paginated
-        # check_task_status reads.
-        if task_log_path and os.path.isfile(task_log_path):
-            with open(task_log_path, "a", encoding="utf-8") as f:
-                f.write("\n--- traceback ---\n")
-                f.write(full_tb)
-            return os.path.abspath(task_log_path)
-        # Fallback: dedicated error log if the task log is gone.
-        fallback = os.path.join(LOGS_DIR, f"task_{task_id}_error.log")
-        os.makedirs(os.path.dirname(fallback), exist_ok=True)
-        with open(fallback, "w", encoding="utf-8") as f:
+def log_execute_task_overflow(full_tb, task_log_path, task_id):
+    """Append a full traceback to the task's log file."""
+    # Append to the task's own log so it lands with stdout for paginated
+    # check_task_status reads.
+    if task_log_path and os.path.isfile(task_log_path):
+        with open(task_log_path, "a", encoding="utf-8") as f:
+            f.write("\n--- traceback ---\n")
             f.write(full_tb)
-        return os.path.abspath(fallback)
-
-    return _write
+        return os.path.abspath(task_log_path)
+    # Fallback: dedicated error log if the task log is gone.
+    fallback = os.path.join(LOGS_DIR, f"task_{task_id}_error.log")
+    os.makedirs(os.path.dirname(fallback), exist_ok=True)
+    with open(fallback, "w", encoding="utf-8") as f:
+        f.write(full_tb)
+    return os.path.abspath(fallback)

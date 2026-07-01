@@ -12,6 +12,7 @@ import sys
 import threading
 import time
 from concurrent.futures import Future
+from functools import partial
 
 from ..paths import LOGS_DIR
 from ..runtime.pyrunner import async_cycling_pending
@@ -24,7 +25,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
-from .errors import format_execution_error, script_frame_filter, task_overflow_writer
+from .errors import format_execution_error, log_execute_task_overflow, script_frame_filter
 from .termination import AsyncAbort, CycleInterrupt
 
 logger = logging.getLogger("MCP-Bridge")
@@ -191,7 +192,7 @@ class ScriptRunner:
                 output_text,
                 keep_frame=script_frame_filter(script_path),
                 display_path=path_to_llm_format(script_path),
-                overflow_writer=task_overflow_writer(task_log_path, task_id),
+                overflow_writer=partial(log_execute_task_overflow, task_log_path=task_log_path, task_id=task_id),
             )
             logger.error(f"Script execution failed:\n{payload['message']}")
             payload["result"] = None
