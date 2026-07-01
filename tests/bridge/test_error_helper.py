@@ -37,7 +37,7 @@ def test_user_frames_only_in_message():
         payload = format_execution_error(
             e,
             output_text="",
-            is_user_frame=lambda fn: fn == "my_script.py",
+            keep_frame=lambda fn: fn == "my_script.py",
             display_path="my_script.py",
         )
     assert payload["status"] == "error"
@@ -55,7 +55,7 @@ def test_short_traceback_not_truncated():
         payload = format_execution_error(
             e,
             output_text="before crash\n",
-            is_user_frame=lambda fn: True,
+            keep_frame=lambda fn: True,
         )
     assert "traceback_truncated" not in payload
     assert "log_file" not in payload
@@ -80,7 +80,7 @@ def test_long_traceback_truncated_and_writes_log(tmp_path):
         payload = format_execution_error(
             e,
             output_text="",
-            is_user_frame=lambda fn: fn == "deep.py",
+            keep_frame=lambda fn: fn == "deep.py",
             overflow_writer=writer,
         )
 
@@ -104,7 +104,7 @@ def test_overflow_writer_failure_is_swallowed():
         payload = format_execution_error(
             e,
             output_text="",
-            is_user_frame=lambda fn: fn == "deep.py",
+            keep_frame=lambda fn: fn == "deep.py",
             overflow_writer=broken,
         )
 
@@ -130,7 +130,7 @@ def test_recursion_frames_collapsed_in_message():
         payload = format_execution_error(
             e,
             output_text="",
-            is_user_frame=lambda fn: __file__ == fn,
+            keep_frame=lambda fn: __file__ == fn,
             display_path="test.py",
         )
     finally:
@@ -150,7 +150,6 @@ def test_no_user_frames_falls_back_to_short_message():
         payload = format_execution_error(
             e,
             output_text="",
-            is_user_frame=lambda fn: False,  # nothing counts as user code
-            message_prefix="Execution failed",
+            keep_frame=lambda fn: False,  # no frame is kept
         )
-    assert payload["message"] == "Execution failed: RuntimeError: opaque"
+    assert payload["message"] == "RuntimeError: opaque"

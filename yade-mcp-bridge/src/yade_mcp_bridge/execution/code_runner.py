@@ -8,13 +8,10 @@ blocks until it produces the response to send back to the client.
 
 import concurrent.futures
 import logging
-import os
 import sys
 import threading
-import time
 from io import StringIO
 
-from ..paths import LOGS_DIR
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
@@ -27,7 +24,12 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
-from .errors import format_execution_error
+from .errors import (
+    EXECUTE_CODE_TAG,
+    format_execution_error,
+    is_execute_code_frame,
+    write_code_overflow,
+)
 from .termination import AsyncAbort, CycleInterrupt, inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
@@ -75,10 +77,10 @@ def _execute(request_id, code_str):
         def _do_exec():
             # eval first (bare expression returns a value); fall back to exec.
             try:
-                code_obj = compile(code_str, "<execute_code>", "eval")
+                code_obj = compile(code_str, EXECUTE_CODE_TAG, "eval")
                 return eval(code_obj, exec_globals, exec_globals)
             except SyntaxError:
-                code_obj = compile(code_str, "<execute_code>", "exec")
+                code_obj = compile(code_str, EXECUTE_CODE_TAG, "exec")
                 exec(code_obj, exec_globals, exec_globals)
                 return exec_globals.get("result", None)
 
@@ -113,23 +115,12 @@ def _execute(request_id, code_str):
         # preamble — pure plumbing.
         e.__suppress_context__ = True
 
-        def _overflow_writer(full_tb):
-            # Only on truncation. Fresh timestamped file per error: execute_code
-            # runs synchronously one-at-a-time, so a rolling file would race a
-            # concurrent call.
-            os.makedirs(LOGS_DIR, exist_ok=True)
-            path = os.path.join(LOGS_DIR, f"exec_code_error_{int(time.time() * 1000)}.log")
-            with open(path, "w", encoding="utf-8") as f:
-                f.write(full_tb)
-            return os.path.abspath(path)
-
         return format_execution_error(
             e,
             output_text,
-            is_user_frame=lambda fn: fn == "<execute_code>",
-            display_path="<execute_code>",
-            message_prefix="Code execution failed",
-            overflow_writer=_overflow_writer,
+            keep_frame=is_execute_code_frame,
+            display_path=EXECUTE_CODE_TAG,
+            overflow_writer=write_code_overflow,
         )
     finally:
         sys.stdout = old_stdout

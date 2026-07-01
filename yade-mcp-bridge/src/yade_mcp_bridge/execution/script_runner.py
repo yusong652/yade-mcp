@@ -24,7 +24,7 @@ from ..runtime.signals import (
     unregister_exec_thread,
 )
 from ..utils import FileBuffer, TaskDataBuilder, TeeBuffer, error_body, ok_body, path_to_llm_format
-from .errors import format_execution_error
+from .errors import format_execution_error, script_frame_filter, task_overflow_writer
 from .termination import AsyncAbort, CycleInterrupt
 
 logger = logging.getLogger("MCP-Bridge")
@@ -184,37 +184,14 @@ class ScriptRunner:
                     "output": output_text,
                 }
 
-            normalized_script_path = os.path.normpath(script_path)
-
-            def _is_user_frame(filename):
-                return os.path.normpath(filename) == normalized_script_path or filename == "<string>"
-
             task_log_path = output_buffer.get_path() if hasattr(output_buffer, "get_path") else None
-
-            def _overflow_writer(full_tb):
-                # Append the full traceback to the task's own log so the
-                # LLM can retrieve it via check_task_status pagination or
-                # direct file read. Returns the abs path so the response
-                # can point the agent at it.
-                if task_log_path and os.path.isfile(task_log_path):
-                    with open(task_log_path, "a", encoding="utf-8") as f:
-                        f.write("\n--- traceback ---\n")
-                        f.write(full_tb)
-                    return os.path.abspath(task_log_path)
-                # Fallback: dedicated task error log next to the task log.
-                fallback = os.path.join(LOGS_DIR, f"task_{task_id}_error.log")
-                os.makedirs(os.path.dirname(fallback), exist_ok=True)
-                with open(fallback, "w", encoding="utf-8") as f:
-                    f.write(full_tb)
-                return os.path.abspath(fallback)
 
             payload = format_execution_error(
                 e,
                 output_text,
-                is_user_frame=_is_user_frame,
+                keep_frame=script_frame_filter(script_path),
                 display_path=path_to_llm_format(script_path),
-                message_prefix="Script execution failed",
-                overflow_writer=_overflow_writer,
+                overflow_writer=task_overflow_writer(task_log_path, task_id),
             )
             logger.error(f"Script execution failed:\n{payload['message']}")
             payload["result"] = None
