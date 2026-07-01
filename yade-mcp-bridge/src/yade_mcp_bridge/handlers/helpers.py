@@ -10,8 +10,8 @@ def require_field(data, field_name, request_id, response_type="result"):
 
     On failure returns ``(None, error_envelope)`` where the envelope carries a
     machine-readable ``error.code == "missing_field"`` and the offending field
-    name in ``details.field`` — so the MCP server lifts a structured error
-    instead of pattern-matching a free-form ``status``/``message``.
+    name in ``details.field`` — a structured error rather than a free-form
+    ``status``/``message`` to pattern-match.
     """
     value = data.get(field_name, "")
     if not value:
