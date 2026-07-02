@@ -33,49 +33,49 @@ class ConsoleHistory:
     reconnects.
     """
 
-    def __init__(self, max_entries=DEFAULT_MAX_ENTRIES, path=None):
-        self._max_entries = max_entries
+    def __init__(self, maxEntries=DEFAULT_MAX_ENTRIES, path=None):
+        self._maxEntries = maxEntries
         self._path = path or HISTORY_FILENAME
-        self._cursor_path = CURSOR_FILENAME
+        self._cursorPath = CURSOR_FILENAME
         self._entries = []
-        self._next_id = 1
-        self._last_delivered_id = 0
-        self.on_new_entry = None  # callback for push notification
+        self._nextId = 1
+        self._lastDeliveredId = 0
+        self.onNewEntry = None  # callback for push notification
 
         if not os.path.exists(DATA_DIR):
             os.makedirs(DATA_DIR)
 
         self._load()
-        self._load_cursor()
+        self._loadCursor()
         logger.info(
             "ConsoleHistory initialized (%d entries, cursor=%d)",
             len(self._entries),
-            self._last_delivered_id,
+            self._lastDeliveredId,
         )
 
-    def add(self, input_text, output="", result=None, success=True):
+    def add(self, inputText, output="", result=None, success=True):
         """Record a console entry and return it.
 
-        ``input_text`` is the code the user typed, ``output`` the captured
+        ``inputText`` is the code the user typed, ``output`` the captured
         stdout, ``result`` the expression result (if any), and ``success``
         whether execution succeeded.
         """
         entry = {
-            "id": self._next_id,
-            "input": input_text,
+            "id": self._nextId,
+            "input": inputText,
             "output": output,
             "result": _serialize(result),
             "success": success,
             "timestamp": time.time(),
         }
-        self._next_id += 1
+        self._nextId += 1
         self._entries.append(entry)
-        self._append_to_file(entry)
+        self._appendToFile(entry)
         self._prune()
 
-        if self.on_new_entry:
+        if self.onNewEntry:
             try:
-                self.on_new_entry(entry)
+                self.onNewEntry(entry)
             except Exception as e:
                 logger.error("Console history callback failed: %s", e)
 
@@ -88,22 +88,22 @@ class ConsoleHistory:
         is new since the last call. At most ``limit`` entries are returned;
         the result dict carries the entries list and cursor metadata.
         """
-        entries = [e for e in self._entries if e["id"] > self._last_delivered_id]
+        entries = [e for e in self._entries if e["id"] > self._lastDeliveredId]
 
         if len(entries) > limit:
             entries = entries[-limit:]
 
         if entries:
-            self._last_delivered_id = entries[-1]["id"]
-            self._save_cursor()
+            self._lastDeliveredId = entries[-1]["id"]
+            self._saveCursor()
 
         return {
             "entries": entries,
-            "cursor": self._last_delivered_id,
-            "has_more": any(e["id"] > self._last_delivered_id for e in self._entries),
+            "cursor": self._lastDeliveredId,
+            "has_more": any(e["id"] > self._lastDeliveredId for e in self._entries),
         }
 
-    def _append_to_file(self, entry):
+    def _appendToFile(self, entry):
         try:
             with open(self._path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
@@ -116,7 +116,7 @@ class ConsoleHistory:
             return
 
         entries = []
-        max_id = 0
+        maxId = 0
         try:
             with open(self._path, encoding="utf-8") as f:
                 for line in f:
@@ -126,49 +126,49 @@ class ConsoleHistory:
                     try:
                         entry = json.loads(line)
                         entries.append(entry)
-                        entry_id = entry.get("id", 0)
-                        if entry_id > max_id:
-                            max_id = entry_id
+                        entryId = entry.get("id", 0)
+                        if entryId > maxId:
+                            maxId = entryId
                     except json.JSONDecodeError:
                         continue  # skip corrupted lines
         except OSError as e:
             logger.warning("Failed to load console history: %s", e)
             return
 
-        if len(entries) > self._max_entries:
-            entries = entries[-self._max_entries :]
+        if len(entries) > self._maxEntries:
+            entries = entries[-self._maxEntries :]
 
         self._entries = entries
-        self._next_id = max_id + 1
+        self._nextId = maxId + 1
 
-    def _load_cursor(self):
+    def _loadCursor(self):
         """Load delivery cursor from disk."""
-        if not os.path.exists(self._cursor_path):
+        if not os.path.exists(self._cursorPath):
             return
         try:
-            with open(self._cursor_path, encoding="utf-8") as f:
+            with open(self._cursorPath, encoding="utf-8") as f:
                 data = json.load(f)
-                self._last_delivered_id = data.get("last_delivered_id", 0)
+                self._lastDeliveredId = data.get("last_delivered_id", 0)
         except (OSError, json.JSONDecodeError, ValueError):
             pass
 
-    def _save_cursor(self):
+    def _saveCursor(self):
         """Persist delivery cursor to disk."""
         try:
-            with open(self._cursor_path, "w", encoding="utf-8") as f:
-                json.dump({"last_delivered_id": self._last_delivered_id}, f)
+            with open(self._cursorPath, "w", encoding="utf-8") as f:
+                json.dump({"last_delivered_id": self._lastDeliveredId}, f)
         except OSError as e:
             logger.error("Failed to save console cursor: %s", e)
 
     def _prune(self):
         """Remove oldest entries if over limit and rewrite file."""
-        if len(self._entries) <= self._max_entries:
+        if len(self._entries) <= self._maxEntries:
             return
 
-        self._entries = self._entries[-self._max_entries :]
-        self._rewrite_file()
+        self._entries = self._entries[-self._maxEntries :]
+        self._rewriteFile()
 
-    def _rewrite_file(self):
+    def _rewriteFile(self):
         try:
             with open(self._path, "w", encoding="utf-8") as f:
                 for entry in self._entries:

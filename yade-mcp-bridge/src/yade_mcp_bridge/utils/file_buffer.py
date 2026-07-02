@@ -20,16 +20,16 @@ class FileBuffer:
     Uses Python's file buffering to batch writes efficiently.
     """
 
-    def __init__(self, log_path, buffer_size=8192):
-        self._path = log_path
+    def __init__(self, logPath, bufferSize=8192):
+        self._path = logPath
         self._closed = False
 
-        log_dir = os.path.dirname(log_path)
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+        logDir = os.path.dirname(logPath)
+        if logDir and not os.path.exists(logDir):
+            os.makedirs(logDir)
 
-        self._file = open(log_path, "w", encoding="utf-8", buffering=buffer_size)
-        logger.debug(f"FileBuffer created: {log_path}")
+        self._file = open(logPath, "w", encoding="utf-8", buffering=bufferSize)
+        logger.debug(f"FileBuffer created: {logPath}")
 
     def write(self, s):
         if self._closed or not s:
@@ -38,7 +38,7 @@ class FileBuffer:
         return len(s)
 
     def getvalue(self):
-        self._ensure_flushed()
+        self._ensureFlushed()
 
         if not os.path.exists(self._path):
             return ""
@@ -50,7 +50,7 @@ class FileBuffer:
             logger.warning(f"Failed to read output file: {e}")
             return ""
 
-    def get_path(self):
+    def getPath(self):
         return self._path
 
     def flush(self):
@@ -62,7 +62,7 @@ class FileBuffer:
             self._file.close()
             self._closed = True
 
-    def _ensure_flushed(self):
+    def _ensureFlushed(self):
         if not self._closed and self._file:
             try:
                 self._file.flush()
@@ -77,14 +77,14 @@ class TeeBuffer:
     AND is captured to disk for polling via check_task_status.
     """
 
-    def __init__(self, terminal, file_buffer):
+    def __init__(self, terminal, fileBuffer):
         self._terminal = terminal
-        self._file_buffer = file_buffer
+        self._fileBuffer = fileBuffer
 
     def write(self, s):
         if not s:
             return 0
-        self._file_buffer.write(s)
+        self._fileBuffer.write(s)
         if self._terminal is not None:
             try:
                 self._terminal.write(s)
@@ -94,7 +94,7 @@ class TeeBuffer:
         return len(s)
 
     def flush(self):
-        self._file_buffer.flush()
+        self._fileBuffer.flush()
         if self._terminal is not None:
             try:
                 self._terminal.flush()

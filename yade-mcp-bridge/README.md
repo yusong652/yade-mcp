@@ -28,7 +28,7 @@ thread — a long `O.run()` then never blocks the server or live code.
 flowchart TD
     C[MCP client] -->|POST /command| S[HTTP + SSE server<br/>background thread]
     C -.->|GET /events| S
-    S -->|execute_code → queue| Q[SerialExecutor<br/>one at a time]
+    S -->|execute_code → queue| Q[CodeExecutor<br/>one at a time]
     Q -->|Qt timer GUI / daemon console| P[pump thread]
     S -->|execute_task| T[ScriptRunner<br/>one thread per task]
     T -->|O.run| Y[YADE C++ sim loop]

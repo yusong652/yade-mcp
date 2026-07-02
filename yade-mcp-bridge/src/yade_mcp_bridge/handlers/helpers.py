@@ -2,10 +2,10 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Shared helper functions for message handlers."""
 
-from ..utils import error_response
+from ..utils import errorResponse
 
 
-def require_field(data, field_name, request_id, response_type="result"):
+def requireField(data, fieldName, requestId, responseType="result"):
     """Validate that a required field exists and is non-empty.
 
     On failure returns ``(None, error_envelope)`` where the envelope carries a
@@ -13,20 +13,20 @@ def require_field(data, field_name, request_id, response_type="result"):
     name in ``details.field`` — a structured error rather than a free-form
     ``status``/``message`` to pattern-match.
     """
-    value = data.get(field_name, "")
+    value = data.get(fieldName, "")
     if not value:
-        return None, error_response(
-            response_type,
-            request_id,
+        return None, errorResponse(
+            responseType,
+            requestId,
             "missing_field",
-            f"{field_name} required",
-            details={"field": field_name},
+            f"{fieldName} required",
+            details={"field": fieldName},
         )
     return value, None
 
 
-def truncate_message(message, max_length=5000):
+def truncateMessage(message, maxLength=5000):
     """Truncate message if too long."""
-    if len(message) <= max_length:
+    if len(message) <= maxLength:
         return message
-    return message[:max_length] + f"\n... (truncated from {len(message)} chars)"
+    return message[:maxLength] + f"\n... (truncated from {len(message)} chars)"

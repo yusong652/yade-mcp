@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Pump strategies that drive the execute_code queue.
 
-A pump ticks ``CodeExecutor.run_next`` to process queued execute_code
+A pump ticks ``CodeExecutor.runNext`` to process queued execute_code
 requests one at a time. Long-running tasks bypass it — they run on their
 own daemon thread (see execution/script_runner.py) — so a task can't
 starve the pump.
@@ -19,15 +19,15 @@ import threading
 import time
 
 # Keep a global reference to avoid Qt timer garbage collection.
-_qt_pump_timer = None
+_qtPumpTimer = None
 
-# Pump tick cadence in milliseconds: how often run_next() is invoked.
+# Pump tick cadence in milliseconds: how often runNext() is invoked.
 _TICK_INTERVAL_MS = 20
 
 
-def start_qt_pump(executor, logger):
+def startQtPump(executor, logger):
     """Drive the execute_code pump from the Qt event loop. Returns True on success."""
-    global _qt_pump_timer
+    global _qtPumpTimer
 
     # Qt5-first matches YADE's current default GUI; PyQt6 covers Qt6 builds
     try:
@@ -43,45 +43,45 @@ def start_qt_pump(executor, logger):
         return False
 
     # Stop previous timer if start() is called multiple times.
-    if _qt_pump_timer is not None:
+    if _qtPumpTimer is not None:
         try:
-            _qt_pump_timer.stop()
+            _qtPumpTimer.stop()
         except RuntimeError:
             pass
 
-    def _pump_tick():
+    def _pumpTick():
         try:
-            executor.run_next()
+            executor.runNext()
         except Exception as e:  # pump must not crash the event loop
             logger.error(f"execute_code pump tick failed: {e}")
 
     timer = QtCore.QTimer()
     timer.setInterval(_TICK_INTERVAL_MS)
-    timer.timeout.connect(_pump_tick)
+    timer.timeout.connect(_pumpTick)
     timer.start()
 
-    _qt_pump_timer = timer
+    _qtPumpTimer = timer
     return True
 
 
-def start_background_pump(executor, logger):
+def startBackgroundPump(executor, logger):
     """Start a daemon thread that polls the executor queue."""
-    pump_thread = threading.Thread(
-        target=_background_pump_loop,
+    pumpThread = threading.Thread(
+        target=_backgroundPumpLoop,
         args=(executor, logger),
         daemon=True,
         name="mcp-exec-pump",
     )
-    pump_thread.start()
+    pumpThread.start()
     return True
 
 
-def _background_pump_loop(executor, logger):
+def _backgroundPumpLoop(executor, logger):
     """Poll the execute_code queue in a loop. Runs in a background daemon thread."""
-    sleep_s = _TICK_INTERVAL_MS / 1000.0
+    sleepS = _TICK_INTERVAL_MS / 1000.0
     while True:
         try:
-            executor.run_next()
+            executor.runNext()
         except Exception as e:  # pump must not crash
             logger.error(f"execute_code pump tick failed: {e}")
-        time.sleep(sleep_s)
+        time.sleep(sleepS)

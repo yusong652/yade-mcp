@@ -3,7 +3,7 @@
 """Queue and execution mechanism for ``execute_code``.
 
 ``submit()`` enqueues code; a single pump processes the FIFO queue via
-``run_next()``.
+``runNext()``.
 """
 
 import logging
@@ -26,10 +26,10 @@ class CodeExecutor:
         """
         future = Future()
         self._queue.put((func, args, kwargs, future))
-        logger.debug("Callable submitted: %s (queue_size=%d)", func.__name__, self._queue.qsize())
+        logger.debug("Callable submitted: %s (queueSize=%d)", func.__name__, self._queue.qsize())
         return future
 
-    def run_next(self):
+    def runNext(self):
         """Run the next queued callable, if any. Returns False when the queue is empty."""
         try:
             func, args, kwargs, future = self._queue.get_nowait()
@@ -49,5 +49,5 @@ class CodeExecutor:
             logger.error("Callable failed: %s - %s", func.__name__, e)
         return True
 
-    def queue_size(self):
+    def queueSize(self):
         return self._queue.qsize()

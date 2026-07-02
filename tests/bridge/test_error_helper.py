@@ -1,6 +1,6 @@
 """Tests for the shared execution error formatter.
 
-`format_execution_error` is the one-and-only truth about how user-code
+`formatExecutionError` is the one-and-only truth about how user-code
 exceptions get packaged for the LLM — filtering out YADE/bridge frames,
 capping the inline traceback, and handing off to an overflow log when
 the excerpt is truncated. Both execute_code and execute_task depend on
@@ -9,7 +9,7 @@ it, so the behaviour gets exercised independently here.
 
 from yade_mcp_bridge.execution.errors import (
     TRACEBACK_MAX_LINES,
-    format_execution_error,
+    formatExecutionError,
 )
 
 
@@ -34,11 +34,11 @@ def test_user_frames_only_in_message():
     try:
         _raise_at(3, filename="my_script.py")
     except NameError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="",
-            keep_frame=lambda fn: fn == "my_script.py",
-            display_path="my_script.py",
+            outputText="",
+            keepFrame=lambda fn: fn == "my_script.py",
+            displayPath="my_script.py",
         )
     assert payload["status"] == "error"
     assert payload["exception_type"] == "NameError"
@@ -52,10 +52,10 @@ def test_short_traceback_not_truncated():
     try:
         raise ValueError("boom")
     except ValueError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="before crash\n",
-            keep_frame=lambda fn: True,
+            outputText="before crash\n",
+            keepFrame=lambda fn: True,
         )
     assert "traceback_truncated" not in payload
     assert "log_file" not in payload
@@ -67,21 +67,21 @@ def test_short_traceback_not_truncated():
 def test_long_traceback_truncated_and_writes_log(tmp_path):
     written = {}
 
-    def writer(full_tb: str) -> str:
+    def writer(fullTb: str) -> str:
         path = tmp_path / "tb.log"
-        path.write_text(full_tb)
-        written["full"] = full_tb
+        path.write_text(fullTb)
+        written["full"] = fullTb
         return str(path)
 
     # Synthesize a traceback taller than the cap.
     try:
         _raise_at(TRACEBACK_MAX_LINES + 5, filename="deep.py")
     except NameError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="",
-            keep_frame=lambda fn: fn == "deep.py",
-            overflow_writer=writer,
+            outputText="",
+            keepFrame=lambda fn: fn == "deep.py",
+            overflowWriter=writer,
         )
 
     assert payload.get("traceback_truncated") is True
@@ -101,11 +101,11 @@ def test_overflow_writer_failure_is_swallowed():
     try:
         _raise_at(TRACEBACK_MAX_LINES + 5, filename="deep.py")
     except NameError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="",
-            keep_frame=lambda fn: fn == "deep.py",
-            overflow_writer=broken,
+            outputText="",
+            keepFrame=lambda fn: fn == "deep.py",
+            overflowWriter=broken,
         )
 
     # Excerpt must survive even when the overflow writer blows up;
@@ -127,11 +127,11 @@ def test_recursion_frames_collapsed_in_message():
     try:
         rec()
     except RecursionError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="",
-            keep_frame=lambda fn: __file__ == fn,
-            display_path="test.py",
+            outputText="",
+            keepFrame=lambda fn: __file__ == fn,
+            displayPath="test.py",
         )
     finally:
         _sys.setrecursionlimit(1000)
@@ -147,9 +147,9 @@ def test_no_user_frames_falls_back_to_short_message():
     try:
         raise RuntimeError("opaque")
     except RuntimeError as e:
-        payload = format_execution_error(
+        payload = formatExecutionError(
             e,
-            output_text="",
-            keep_frame=lambda fn: False,  # no frame is kept
+            outputText="",
+            keepFrame=lambda fn: False,  # no frame is kept
         )
     assert payload["message"] == "RuntimeError: opaque"

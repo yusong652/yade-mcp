@@ -9,19 +9,19 @@ import httpx
 import pytest
 from yade_mcp_bridge.execution.executor import CodeExecutor
 from yade_mcp_bridge.tasks.task import ScriptTask
-from yade_mcp_bridge.transport.server import create_server
+from yade_mcp_bridge.transport.server import createServer
 
 
 def _start_bridge():
     """Create a bridge server on an ephemeral port, serving in a background
     thread with a real execute_code pump.
 
-    The pump matters for HTTP: ``handle_execute_code`` blocks the request
+    The pump matters for HTTP: ``handleExecuteCode`` blocks the request
     thread on the main-thread future, so a background pump must run the
     submitted code (just like Mode 1 in production) for the POST to resolve.
     """
     executor = CodeExecutor()
-    server = create_server(executor=executor, host="127.0.0.1", port=0, runtime_mode="test")
+    server = createServer(executor=executor, host="127.0.0.1", port=0, runtimeMode="test")
     url = f"http://127.0.0.1:{server._httpd.server_address[1]}"
 
     serve_thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -31,22 +31,22 @@ def _start_bridge():
 
     def pump_loop():
         while not stop_pump.is_set():
-            executor.run_next()
+            executor.runNext()
             time.sleep(0.005)
 
-    pump_thread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
-    pump_thread.start()
+    pumpThread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
+    pumpThread.start()
 
     def stop():
         stop_pump.set()
-        pump_thread.join(timeout=1.0)
+        pumpThread.join(timeout=1.0)
         server.shutdown()
 
     return server, executor, url, stop
 
 
 @pytest.fixture()
-def bridge_server():
+def bridgeServer():
     """A real bridge server (HTTP + SSE) with a background execute_code pump."""
     server, executor, url, stop = _start_bridge()
     try:
@@ -60,7 +60,7 @@ def bridge_server_with_tasks(tmp_path):
     """Bridge server that exposes the task_manager for direct task injection."""
     server, executor, url, stop = _start_bridge()
     try:
-        yield url, server.context.task_manager, tmp_path
+        yield url, server.context.taskManager, tmp_path
     finally:
         stop()
 
@@ -89,8 +89,8 @@ async def _send_recv(url, message, timeout=10.0):
 
 
 class TestHealthEndpoint:
-    async def test_health_response_shape(self, bridge_server):
-        url, _ = bridge_server
+    async def test_health_response_shape(self, bridgeServer):
+        url, _ = bridgeServer
         async with httpx.AsyncClient(base_url=url) as client:
             resp = await client.get("/health")
         assert resp.status_code == 200
@@ -106,8 +106,8 @@ class TestHealthEndpoint:
 
 
 class TestExecuteCodeProtocol:
-    async def test_success(self, bridge_server):
-        url, _ = bridge_server
+    async def test_success(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "execute_code", "request_id": "e1", "code": "print('hello')"})
 
         assert resp["type"] == "execute_code_result"
@@ -116,23 +116,23 @@ class TestExecuteCodeProtocol:
         assert "status" not in resp
         assert "hello" in resp["data"]["output"]
 
-    async def test_syntax_error(self, bridge_server):
-        url, _ = bridge_server
+    async def test_syntax_error(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "execute_code", "request_id": "e2", "code": "def ("})
 
         assert resp["ok"] is False
         assert "SyntaxError" in resp["error"]["message"]
 
-    async def test_missing_code_field(self, bridge_server):
-        url, _ = bridge_server
+    async def test_missing_code_field(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "execute_code", "request_id": "e3"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert resp["error"]["details"]["field"] == "code"
         assert "code required" in resp["error"]["message"]
 
-    async def test_eval_result_returned(self, bridge_server):
-        url, _ = bridge_server
+    async def test_eval_result_returned(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "execute_code", "request_id": "e4", "code": "1 + 2"})
 
         assert resp["ok"] is True
@@ -145,8 +145,8 @@ class TestExecuteCodeProtocol:
 
 
 class TestTaskProtocol:
-    async def test_check_nonexistent_task(self, bridge_server):
-        url, _ = bridge_server
+    async def test_check_nonexistent_task(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(
             url,
             {
@@ -158,27 +158,27 @@ class TestTaskProtocol:
         assert resp["ok"] is False
         assert resp["error"]["code"] == "not_found"
 
-    async def test_list_tasks_empty(self, bridge_server):
-        url, _ = bridge_server
+    async def test_list_tasks_empty(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "list_tasks", "request_id": "l1"})
         assert resp["ok"] is True
         assert isinstance(resp["data"], list)
 
-    async def test_execute_task_routes(self, bridge_server):
+    async def test_execute_task_routes(self, bridgeServer):
         # Missing script_path proves routing without running a script.
-        url, _ = bridge_server
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "execute_task", "request_id": "x1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
 
-    async def test_yade_task_legacy_alias_routes(self, bridge_server):
-        url, _ = bridge_server
+    async def test_yade_task_legacy_alias_routes(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "yade_task", "request_id": "x2"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
 
-    async def test_interrupt_nonexistent_task(self, bridge_server):
-        url, _ = bridge_server
+    async def test_interrupt_nonexistent_task(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(
             url,
             {
@@ -190,8 +190,8 @@ class TestTaskProtocol:
         assert resp["ok"] is False
         assert resp["error"]["code"] == "not_found"
 
-    async def test_missing_task_id_returns_error(self, bridge_server):
-        url, _ = bridge_server
+    async def test_missing_task_id_returns_error(self, bridgeServer):
+        url, _ = bridgeServer
         resp = await _send_recv(url, {"type": "check_task_status", "request_id": "t2"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
@@ -212,27 +212,27 @@ class TestCheckTaskStatusPagination:
     the pagination metadata reflect the full log (not a pre-truncated view).
     """
 
-    def _inject_task(self, task_manager, tmp_path, task_id, lines):
-        log_path = str(tmp_path / f"{task_id}.log")
-        with open(log_path, "w", encoding="utf-8") as fh:
+    def _inject_task(self, taskManager, tmp_path, taskId, lines):
+        logPath = str(tmp_path / f"{taskId}.log")
+        with open(logPath, "w", encoding="utf-8") as fh:
             fh.write("\n".join(lines))
 
         future = Future()
         future.set_result({"status": "success"})
         task = ScriptTask(
-            task_id,
+            taskId,
             future,
-            f"{task_id}.py",
-            f"/tmp/{task_id}.py",
-            description=f"task {task_id}",
+            f"{taskId}.py",
+            f"/tmp/{taskId}.py",
+            description=f"task {taskId}",
         )
-        task.log_path = log_path
-        task_manager.tasks[task_id] = task
-        return log_path
+        task.logPath = logPath
+        taskManager.tasks[taskId] = task
+        return logPath
 
     async def test_default_pagination_returns_tail_window(self, bridge_server_with_tasks):
-        url, task_manager, tmp_path = bridge_server_with_tasks
-        self._inject_task(task_manager, tmp_path, "tail1", [f"line {i}" for i in range(200)])
+        url, taskManager, tmp_path = bridge_server_with_tasks
+        self._inject_task(taskManager, tmp_path, "tail1", [f"line {i}" for i in range(200)])
 
         resp = await _send_recv(
             url,
@@ -254,8 +254,8 @@ class TestCheckTaskStatusPagination:
         assert "line 135" not in data["output"]
 
     async def test_skip_newest_and_limit(self, bridge_server_with_tasks):
-        url, task_manager, tmp_path = bridge_server_with_tasks
-        self._inject_task(task_manager, tmp_path, "skip1", [f"line {i}" for i in range(100)])
+        url, taskManager, tmp_path = bridge_server_with_tasks
+        self._inject_task(taskManager, tmp_path, "skip1", [f"line {i}" for i in range(100)])
 
         resp = await _send_recv(
             url,
@@ -279,7 +279,7 @@ class TestCheckTaskStatusPagination:
         assert "line 90" not in data["output"]
 
     async def test_filter_text_applies_to_full_log(self, bridge_server_with_tasks):
-        url, task_manager, tmp_path = bridge_server_with_tasks
+        url, taskManager, tmp_path = bridge_server_with_tasks
         # Interleave error lines throughout a 300-line log — some are past
         # any naive head-truncation window, which is exactly the bug we
         # are guarding against.
@@ -289,7 +289,7 @@ class TestCheckTaskStatusPagination:
                 lines.append(f"error at step {i}")
             else:
                 lines.append(f"ok {i}")
-        self._inject_task(task_manager, tmp_path, "filter1", lines)
+        self._inject_task(taskManager, tmp_path, "filter1", lines)
 
         resp = await _send_recv(
             url,
@@ -310,8 +310,8 @@ class TestCheckTaskStatusPagination:
         assert "ok " not in data["output"]
 
     async def test_empty_log_returns_empty_pagination(self, bridge_server_with_tasks):
-        url, task_manager, tmp_path = bridge_server_with_tasks
-        self._inject_task(task_manager, tmp_path, "empty1", [])
+        url, taskManager, tmp_path = bridge_server_with_tasks
+        self._inject_task(taskManager, tmp_path, "empty1", [])
 
         resp = await _send_recv(
             url,
@@ -333,8 +333,8 @@ class TestCheckTaskStatusPagination:
 
 
 class TestErrorHandling:
-    async def test_invalid_json(self, bridge_server):
-        url, _ = bridge_server
+    async def test_invalid_json(self, bridgeServer):
+        url, _ = bridgeServer
         # POST a malformed body to a valid command path -> 400 invalid_json.
         async with httpx.AsyncClient(base_url=url) as client:
             resp = await client.post("/list_tasks", content=b"not json{{{")
@@ -344,17 +344,17 @@ class TestErrorHandling:
         assert body["error"]["code"] == "invalid_json"
         assert "Invalid JSON" in body["error"]["message"]
 
-    async def test_unknown_command_returns_404(self, bridge_server):
-        url, _ = bridge_server
+    async def test_unknown_command_returns_404(self, bridgeServer):
+        url, _ = bridgeServer
         async with httpx.AsyncClient(base_url=url) as client:
             resp = await client.post("/unknown_type", json={"type": "unknown_type", "request_id": "u1"})
         assert resp.status_code == 404
         assert resp.json()["error"]["code"] == "unknown_command"
 
-    async def test_unknown_command_lists_available_commands(self, bridge_server):
+    async def test_unknown_command_lists_available_commands(self, bridgeServer):
         # Self-correction loop: a caller that guesses a wrong command gets
         # the canonical command list back — legacy aliases excluded.
-        url, _ = bridge_server
+        url, _ = bridgeServer
         async with httpx.AsyncClient(base_url=url) as client:
             resp = await client.post("/run_script", json={"type": "run_script", "request_id": "u2"})
         available = resp.json()["error"]["details"]["available_commands"]
@@ -369,8 +369,8 @@ class TestErrorHandling:
 
 
 class TestConnectionManagement:
-    async def test_multiple_requests_on_same_connection(self, bridge_server):
-        url, _ = bridge_server
+    async def test_multiple_requests_on_same_connection(self, bridgeServer):
+        url, _ = bridgeServer
         async with httpx.AsyncClient(base_url=url) as client:
             for i in range(3):
                 resp = await client.post("/list_tasks", json={"type": "list_tasks", "request_id": f"m{i}"})
@@ -378,8 +378,8 @@ class TestConnectionManagement:
                 assert body["request_id"] == f"m{i}"
                 assert body["type"] == "result"
 
-    async def test_concurrent_connections(self, bridge_server):
-        url, _ = bridge_server
+    async def test_concurrent_connections(self, bridgeServer):
+        url, _ = bridgeServer
 
         async def list_tasks(client_id):
             async with httpx.AsyncClient(base_url=url) as client:
@@ -503,23 +503,23 @@ class TestExecuteCodeTimeoutTermination:
         assert follow["ok"] is True
 
     async def test_execute_code_does_not_clobber_current_task_id(self, bridge_server_with_pump):
-        """Regression: _execute must NOT set_current_task(request_id).
+        """Regression: _execute must NOT setCurrentTask(request_id).
 
-        If it did, a subsequent execute_code timeout's request_interrupt() would
+        If it did, a subsequent execute_code timeout's requestInterrupt() would
         set a flag that the PyRunner tick reads via the ambient _current_task_id
-        → O.pause() fires → _hooked_run raises
+        → O.pause() fires → _hookedRun raises
         CycleInterrupt → the enclosing script task gets spuriously
         marked ``interrupted``. The fix: leave _current_task_id alone.
         """
         url, _ = bridge_server_with_pump
-        from yade_mcp_bridge.runtime.signals import clear_current_task, get_current_task, set_current_task
+        from yade_mcp_bridge.runtime.signals import clearCurrentTask, getCurrentTask, setCurrentTask
 
         # Simulate a running task by setting the sentinel outer task. With a task
         # registered, execute_code holds the sim; this harness has
         # no live O.run cycle, so no PyRunner tick releases the hold and it waits
         # out the full acquire timeout (~2s). Both timeouts below clear that.
-        clear_current_task()
-        set_current_task("outer-task")
+        clearCurrentTask()
+        setCurrentTask("outer-task")
         try:
             # Normal, successful execute_code.
             ok = await _send_recv(
@@ -534,10 +534,10 @@ class TestExecuteCodeTimeoutTermination:
             assert ok["ok"] is True
             # After execute_code completes, the outer task must still
             # be the current one — not None, not request_id.
-            assert get_current_task() == "outer-task"
+            assert getCurrentTask() == "outer-task"
 
             # Timed-out execute_code: the termination path calls
-            # request_interrupt(request_id) on the execute_code's own id.
+            # requestInterrupt(request_id) on the execute_code's own id.
             # That flag must not leak into any PyRunner tick reading
             # _current_task_id.
             terminated = await _send_recv(
@@ -550,6 +550,6 @@ class TestExecuteCodeTimeoutTermination:
                 },
             )
             assert terminated["error"]["code"] == "terminated"
-            assert get_current_task() == "outer-task"
+            assert getCurrentTask() == "outer-task"
         finally:
-            clear_current_task()
+            clearCurrentTask()

@@ -4,8 +4,8 @@
 
 import logging
 
-from ..utils import error_response, ok_response
-from .helpers import require_field
+from ..utils import errorResponse, okResponse
+from .helpers import requireField
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -13,46 +13,46 @@ logger = logging.getLogger("MCP-Bridge")
 _DEFAULT_LIMIT = 64
 
 
-def handle_execute_task(ctx, data):
+def handleExecuteTask(ctx, data):
     """Run a Python script from a file path as a tracked task."""
-    request_id = data.get("request_id", "unknown")
+    requestId = data.get("request_id", "unknown")
 
-    script_path, err = require_field(data, "script_path", request_id)
+    scriptPath, err = requireField(data, "script_path", requestId)
     if err:
         return err
 
     description = data.get("description", "")
 
-    result = ctx.script_runner.run(script_path, description)
+    result = ctx.scriptRunner.run(scriptPath, description)
 
-    return {"type": "result", "request_id": request_id, **result}
+    return {"type": "result", "request_id": requestId, **result}
 
 
-def handle_check_task_status(ctx, data):
+def handleCheckTaskStatus(ctx, data):
     """Return a task's current status with a page of its captured output."""
-    request_id = data.get("request_id", "unknown")
+    requestId = data.get("request_id", "unknown")
 
-    task_id, err = require_field(data, "task_id", request_id)
+    taskId, err = requireField(data, "task_id", requestId)
     if err:
         return err
 
-    skip_newest = data.get("skip_newest", 0)
+    skipNewest = data.get("skip_newest", 0)
     limit = data.get("limit", _DEFAULT_LIMIT)
-    filter_text = data.get("filter_text")
+    filterText = data.get("filter_text")
 
-    result = ctx.task_manager.get_task_status(
-        task_id,
-        skip_newest=skip_newest,
+    result = ctx.taskManager.getTaskStatus(
+        taskId,
+        skipNewest=skipNewest,
         limit=limit,
-        filter_text=filter_text,
+        filterText=filterText,
     )
 
-    return {"type": "result", "request_id": request_id, **result}
+    return {"type": "result", "request_id": requestId, **result}
 
 
-def handle_list_tasks(ctx, data):
+def handleListTasks(ctx, data):
     """List all tracked tasks, newest first."""
-    request_id = data.get("request_id", "unknown")
+    requestId = data.get("request_id", "unknown")
     offset = data.get("offset", 0)
     # An explicit null means "use the default" too; clients page through
     # via offset + pagination.total_count when they want the full history.
@@ -60,70 +60,70 @@ def handle_list_tasks(ctx, data):
     if limit is None:
         limit = _DEFAULT_LIMIT
 
-    result = ctx.task_manager.list_all_tasks(offset=offset, limit=limit)
+    result = ctx.taskManager.listAllTasks(offset=offset, limit=limit)
 
-    return {"type": "result", "request_id": request_id, **result}
+    return {"type": "result", "request_id": requestId, **result}
 
 
-def handle_interrupt_task(ctx, data):
+def handleInterruptTask(ctx, data):
     """Interrupt a running task."""
-    from ..execution.termination import AsyncAbort, inject_async_exception
+    from ..execution.termination import AsyncAbort, injectAsyncException
     from ..runtime.signals import (
-        clear_interrupt,
-        get_exec_thread,
-        request_interrupt,
-        unregister_exec_thread,
+        clearInterrupt,
+        getExecThread,
+        requestInterrupt,
+        unregisterExecThread,
     )
 
-    request_id = data.get("request_id", "unknown")
+    requestId = data.get("request_id", "unknown")
 
-    task_id, err = require_field(data, "task_id", request_id)
+    taskId, err = requireField(data, "task_id", requestId)
     if err:
         return err
 
-    task = ctx.task_manager.tasks.get(task_id)
+    task = ctx.taskManager.tasks.get(taskId)
     if not task:
-        return error_response(
+        return errorResponse(
             "result",
-            request_id,
+            requestId,
             "not_found",
-            f"Task not found: {task_id}",
-            data={"task_id": task_id, "interrupt_requested": False},
+            f"Task not found: {taskId}",
+            data={"task_id": taskId, "interrupt_requested": False},
         )
 
-    task_status = task.status
-    if task_status not in ("pending", "running"):
-        return error_response(
+    taskStatus = task.status
+    if taskStatus not in ("pending", "running"):
+        return errorResponse(
             "result",
-            request_id,
+            requestId,
             "already_terminal",
-            f"Task already in terminal state: {task_id} (status: {task_status})",
-            data={"task_id": task_id, "status": task_status, "interrupt_requested": False},
+            f"Task already in terminal state: {taskId} (status: {taskStatus})",
+            data={"task_id": taskId, "status": taskStatus, "interrupt_requested": False},
         )
 
-    request_interrupt(task_id)
-    logger.info("Interrupt flag set for task: %s", task_id)
+    requestInterrupt(taskId)
+    logger.info("Interrupt flag set for task: %s", taskId)
 
     # The flag interrupts a task inside O.run (PyRunner tick → CycleInterrupt);
     # injecting AsyncAbort also covers pure-Python code with no O.run on the
     # stack. Unregister first so a second interrupt cannot inject again.
     method = "flag_only"
-    tid = get_exec_thread(task_id)
+    tid = getExecThread(taskId)
     if tid is not None:
-        unregister_exec_thread(task_id)
-        inject_async_exception(tid, AsyncAbort)
+        unregisterExecThread(taskId)
+        injectAsyncException(tid, AsyncAbort)
         method = "flag_and_async_exc"
-        logger.info("AsyncAbort injected into task %s (tid=%s)", task_id, tid)
+        logger.info("AsyncAbort injected into task %s (tid=%s)", taskId, tid)
 
     # The task may have finished while we set the flag; re-check so the
     # flag cannot leak.
     if task.status not in ("pending", "running"):
-        clear_interrupt(task_id)
+        clearInterrupt(taskId)
 
-    data_payload = {
-        "task_id": task_id,
+    dataPayload = {
+        "task_id": taskId,
         "interrupt_requested": True,
         "method": method,
     }
 
-    return ok_response("result", request_id, data=data_payload)
+    return okResponse("result", requestId, data=dataPayload)

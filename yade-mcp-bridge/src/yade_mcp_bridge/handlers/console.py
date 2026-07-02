@@ -7,25 +7,25 @@ import logging
 logger = logging.getLogger("MCP-Bridge")
 
 
-def handle_console_history(ctx, data):
+def handleConsoleHistory(ctx, data):
     """Return the user's latest console input from the live YADE session."""
-    request_id = data.get("request_id", "unknown")
+    requestId = data.get("request_id", "unknown")
     limit = data.get("limit", 20)
 
-    if ctx.console_history is None:
+    if ctx.consoleHistory is None:
         return {
             "type": "console_history_result",
-            "request_id": request_id,
+            "request_id": requestId,
             "status": "error",
             "message": "Console history not available",
             "data": None,
         }
 
-    result = ctx.console_history.consume(limit=limit)
+    result = ctx.consoleHistory.consume(limit=limit)
 
     return {
         "type": "console_history_result",
-        "request_id": request_id,
+        "request_id": requestId,
         "status": "success",
         "message": "OK",
         "data": result,

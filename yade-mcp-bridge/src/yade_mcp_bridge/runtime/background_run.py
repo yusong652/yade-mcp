@@ -5,7 +5,7 @@
 ``O.run(wait=False)`` returns immediately — usually before the background
 run has even started (``O.running`` still False). The ``O.run`` hook (see
 pyrunner) records each call here; a task calls
-``wait_for_background_run()`` before reporting, so its result covers the
+``waitForBackgroundRun()`` before reporting, so its result covers the
 whole run.
 """
 
@@ -14,10 +14,10 @@ import time
 
 _RUN_START_TIMEOUT_S = 0.5  # max wait for the background run to start
 
-_background_run = threading.local()
+_backgroundRun = threading.local()
 
 
-def is_background_run(args, kwargs):
+def isBackgroundRun(args, kwargs):
     """True if this ``O.run`` call returns while its cycling continues
     (``wait=False`` — the 2nd positional or the ``wait`` keyword; default False).
     """
@@ -25,22 +25,22 @@ def is_background_run(args, kwargs):
     return not wait
 
 
-def mark_background_run(pending):
+def markBackgroundRun(pending):
     """Set this thread's flag: did its last ``O.run`` leave cycling unfinished?"""
-    _background_run.pending = pending
+    _backgroundRun.pending = pending
 
 
-def _background_run_pending():
-    return getattr(_background_run, "pending", False)
+def _backgroundRunPending():
+    return getattr(_backgroundRun, "pending", False)
 
 
-def wait_for_background_run():
+def waitForBackgroundRun():
     """Block until the pending background run finishes."""
     try:
         from yade import O as _O
     except ImportError:
         return
-    if not _background_run_pending():
+    if not _backgroundRunPending():
         return
     # Poll (bounded) until the background run starts, then O.wait() for it
     # to finish (unbounded).

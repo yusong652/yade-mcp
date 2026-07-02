@@ -21,14 +21,14 @@ import traceback
 from .console import ConsoleCapture
 from .execution import CodeExecutor
 from .paths import DATA_DIR
-from .runtime import install_pyrunner, start_background_pump, start_qt_pump
-from .transport import create_server
+from .runtime import installPyrunner, startBackgroundPump, startQtPump
+from .transport import createServer
 from .utils.safe_logging import GapFreeFileHandler, GapFreeStreamHandler
 
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
 
-def _check_port_free(host, port):
+def _checkPortFree(host, port):
     """Fail fast on the main thread if the port is taken."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -40,19 +40,19 @@ def _check_port_free(host, port):
         sock.close()
 
 
-def _setup_logging():
-    """Configure the bridge's own logger and return (logger, log_file path)."""
-    bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
-    if not os.path.exists(bridge_dir):
-        os.makedirs(bridge_dir)
-    log_file = os.path.join(bridge_dir, "bridge.log")
+def _setupLogging():
+    """Configure the bridge's own logger and return (logger, log file path)."""
+    bridgeDir = os.path.join(os.getcwd(), DATA_DIR)
+    if not os.path.exists(bridgeDir):
+        os.makedirs(bridgeDir)
+    logFile = os.path.join(bridgeDir, "bridge.log")
 
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
-    stdout_handler = GapFreeStreamHandler(sys.stdout)
-    stdout_handler.setLevel(logging.WARNING)
-    stdout_handler.setFormatter(formatter)
-    file_handler = GapFreeFileHandler(log_file, mode="w", encoding="utf-8")
-    file_handler.setFormatter(formatter)
+    stdoutHandler = GapFreeStreamHandler(sys.stdout)
+    stdoutHandler.setLevel(logging.WARNING)
+    stdoutHandler.setFormatter(formatter)
+    fileHandler = GapFreeFileHandler(logFile, mode="w", encoding="utf-8")
+    fileHandler.setFormatter(formatter)
 
     # Only the bridge's named logger — the root logger belongs to the host
     # process (user scripts, IPython).
@@ -60,18 +60,18 @@ def _setup_logging():
     logger.setLevel(logging.INFO)
     logger.propagate = False
     logger.handlers.clear()  # start() called again: replace our handlers, not stack them
-    logger.addHandler(stdout_handler)
-    logger.addHandler(file_handler)
+    logger.addHandler(stdoutHandler)
+    logger.addHandler(fileHandler)
 
-    return logger, log_file
+    return logger, logFile
 
 
-def _start_server_thread(bridge_server, logger):
+def _startServerThread(bridgeServer, logger):
     """Serve the bridge on a daemon thread."""
 
     def run():
         try:
-            bridge_server.serve_forever()
+            bridgeServer.serve_forever()
         except Exception as e:
             logger.error(f"Server error: {e}")
             traceback.print_exc()
@@ -82,7 +82,7 @@ def _start_server_thread(bridge_server, logger):
         raise RuntimeError("Bridge server thread failed to start")
 
 
-def _install_shutdown(bridge_server, logger):
+def _installShutdown(bridgeServer, logger):
     """Register idempotent shutdown on atexit and SIGTERM."""
     done = {"value": False}
 
@@ -91,7 +91,7 @@ def _install_shutdown(bridge_server, logger):
             return
         done["value"] = True
         logger.info("Bridge shutting down...")
-        bridge_server.shutdown()
+        bridgeServer.shutdown()
 
     atexit.register(shutdown)
 
@@ -106,18 +106,18 @@ def _install_shutdown(bridge_server, logger):
     signal.signal(signal.SIGTERM, handler)
 
 
-def _start_pump(executor, bridge_server, logger, mode):
+def _startPump(executor, bridgeServer, logger, mode):
     """Start the execute_code pump and record the resolved runtime mode."""
-    if mode in ("auto", "gui") and start_qt_pump(executor, logger):
-        bridge_server.set_runtime_mode("gui")
+    if mode in ("auto", "gui") and startQtPump(executor, logger):
+        bridgeServer.setRuntimeMode("gui")
         logger.info("execute_code pump running via Qt timer")
         return
 
     if mode == "gui":
         raise RuntimeError("Qt is not available; cannot start in gui mode")
 
-    if mode in ("auto", "console") and start_background_pump(executor, logger):
-        bridge_server.set_runtime_mode("console")
+    if mode in ("auto", "console") and startBackgroundPump(executor, logger):
+        bridgeServer.setRuntimeMode("console")
         logger.info("execute_code pump running via background thread")
 
 
@@ -139,20 +139,20 @@ def start(
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
 
-    _check_port_free(host, port)
+    _checkPortFree(host, port)
 
-    logger, log_file = _setup_logging()
+    logger, logFile = _setupLogging()
 
-    # install_pyrunner logs its own failure warning; ignore the return value.
-    install_pyrunner(logger)
+    # installPyrunner logs its own failure warning; ignore the return value.
+    installPyrunner(logger)
 
     executor = CodeExecutor()
-    bridge_server = create_server(executor=executor, host=host, port=port, runtime_mode=mode)
-    ConsoleCapture(bridge_server.context.console_history).install()
+    bridgeServer = createServer(executor=executor, host=host, port=port, runtimeMode=mode)
+    ConsoleCapture(bridgeServer.context.consoleHistory).install()
 
-    _start_server_thread(bridge_server, logger)
-    _install_shutdown(bridge_server, logger)
+    _startServerThread(bridgeServer, logger)
+    _installShutdown(bridgeServer, logger)
 
-    print(f"YADE MCP Bridge on http://{host}:{port}, log: {log_file}")
+    print(f"YADE MCP Bridge on http://{host}:{port}, log: {logFile}")
 
-    _start_pump(executor, bridge_server, logger, mode)
+    _startPump(executor, bridgeServer, logger, mode)

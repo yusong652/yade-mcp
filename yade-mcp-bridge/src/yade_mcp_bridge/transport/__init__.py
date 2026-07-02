@@ -6,9 +6,9 @@ Maps the request/response handler dict onto ``POST /<command>`` and serves the
 server-push notification stream on ``GET /events``.
 """
 
-from .server import BridgeServer, create_server
+from .server import BridgeServer, createServer
 
 __all__ = [
     "BridgeServer",
-    "create_server",
+    "createServer",
 ]

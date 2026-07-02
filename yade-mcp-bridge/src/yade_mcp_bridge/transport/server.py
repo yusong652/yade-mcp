@@ -18,12 +18,12 @@ from ..console import ConsoleHistory
 from ..execution import CodeRunner, ScriptRunner
 from ..handlers import (
     ServerContext,
-    handle_check_task_status,
-    handle_console_history,
-    handle_execute_code,
-    handle_execute_task,
-    handle_interrupt_task,
-    handle_list_tasks,
+    handleCheckTaskStatus,
+    handleConsoleHistory,
+    handleExecuteCode,
+    handleExecuteTask,
+    handleInterruptTask,
+    handleListTasks,
 )
 from ..tasks import TaskManager
 
@@ -37,7 +37,7 @@ _SSE_KEEPALIVE_S = 15.0
 _SSE_QUEUE_MAXSIZE = 256
 
 
-def _json_bytes(obj):
+def _jsonBytes(obj):
     return json.dumps(obj).encode("utf-8")
 
 
@@ -73,17 +73,17 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
     def _bridge(self):
         return self.server.bridge
 
-    def _write_json(self, status, payload_bytes):
+    def _writeJson(self, status, payloadBytes):
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload_bytes)))
+        self.send_header("Content-Length", str(len(payloadBytes)))
         self.end_headers()
         try:
-            self.wfile.write(payload_bytes)
+            self.wfile.write(payloadBytes)
         except (BrokenPipeError, ConnectionResetError):
             pass
 
-    def _read_body(self):
+    def _readBody(self):
         try:
             length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
@@ -92,20 +92,20 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self):
         command = self.path.split("?", 1)[0].strip("/")
-        raw = self._read_body()
+        raw = self._readBody()
 
         handler = self._bridge.handlers.get(command)
         if handler is None:
-            self._write_json(
+            self._writeJson(
                 404,
-                _json_bytes(
+                _jsonBytes(
                     {
                         "type": "error",
                         "ok": False,
                         "error": {
                             "code": "unknown_command",
                             "message": f"Unknown command: {command}",
-                            "details": {"available_commands": self._bridge.public_commands},
+                            "details": {"available_commands": self._bridge.publicCommands},
                         },
                     }
                 ),
@@ -115,9 +115,9 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
         try:
             data = json.loads(raw.decode("utf-8")) if raw else {}
         except (ValueError, UnicodeDecodeError) as exc:
-            self._write_json(
+            self._writeJson(
                 400,
-                _json_bytes(
+                _jsonBytes(
                     {
                         "type": "error",
                         "ok": False,
@@ -131,21 +131,21 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
             )
             return
 
-        request_id = data.get("request_id", "unknown")
-        summary = self._bridge.summarize_request(command, data)
-        logger.info("[%s] >> %s %s", str(request_id)[:8], command, summary)
+        requestId = data.get("request_id", "unknown")
+        summary = self._bridge.summarizeRequest(command, data)
+        logger.info("[%s] >> %s %s", str(requestId)[:8], command, summary)
 
         t0 = time.time()
         try:
             response = handler(self._bridge.context, data)
         except Exception as exc:  # last-resort safety net; handlers build their own error envelopes
-            logger.error("[%s] handler error: %s", str(request_id)[:8], exc)
-            self._write_json(
+            logger.error("[%s] handler error: %s", str(requestId)[:8], exc)
+            self._writeJson(
                 500,
-                _json_bytes(
+                _jsonBytes(
                     {
                         "type": "error",
-                        "request_id": request_id,
+                        "request_id": requestId,
                         "ok": False,
                         "error": {
                             "code": "internal_error",
@@ -156,7 +156,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
                 ),
             )
             return
-        elapsed_ms = (time.time() - t0) * 1000
+        elapsedMs = (time.time() - t0) * 1000
 
         # Task/console handlers still carry a lifecycle ``status``; the
         # execute_code path signals via ``ok``. Derive a log token from
@@ -164,32 +164,32 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
         status = response.get("status")
         if status is None:
             status = "ok" if response.get("ok") else "error"
-        logger.info("[%s] << %s status=%s (%.0fms)", str(request_id)[:8], command, status, elapsed_ms)
+        logger.info("[%s] << %s status=%s (%.0fms)", str(requestId)[:8], command, status, elapsedMs)
 
-        self._write_json(200, self._bridge.serialize_response(response, request_id))
+        self._writeJson(200, self._bridge.serializeResponse(response, requestId))
 
     def do_GET(self):
         path = self.path.split("?", 1)[0]
         if path == "/events":
-            self._serve_sse()
+            self._serveSse()
         elif path == "/health":
-            self._serve_health()
+            self._serveHealth()
         else:
-            self._write_json(404, _json_bytes({"ok": False, "error": {"code": "not_found", "message": "Not found"}}))
+            self._writeJson(404, _jsonBytes({"ok": False, "error": {"code": "not_found", "message": "Not found"}}))
 
-    def _serve_health(self):
+    def _serveHealth(self):
         """Liveness probe for curl / Docker HEALTHCHECK / pre-flight checks."""
         from .. import __version__  # lazy: the package __init__ imports this module
 
         payload = {
             "ok": True,
             "version": __version__,
-            "runtime_mode": self._bridge.context.runtime_mode,
+            "runtime_mode": self._bridge.context.runtimeMode,
         }
-        self._write_json(200, _json_bytes(payload))
+        self._writeJson(200, _jsonBytes(payload))
 
-    def _serve_sse(self):
-        q = self._bridge.register_sse_client()
+    def _serveSse(self):
+        q = self._bridge.registerSseClient()
         try:
             self.send_response(200)
             self.send_header("Content-Type", "text/event-stream")
@@ -212,7 +212,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
             # Client went away; fall through to deregister.
             pass
         finally:
-            self._bridge.unregister_sse_client(q)
+            self._bridge.unregisterSseClient(q)
 
 
 class BridgeServer:
@@ -228,7 +228,7 @@ class BridgeServer:
     def __init__(
         self,
         executor,
-        runtime_mode,
+        runtimeMode,
         host="localhost",
         port=9002,
     ):
@@ -238,38 +238,38 @@ class BridgeServer:
         # Registry of connected SSE clients: one bounded queue per client.
         # Mutated from SSE request threads (connect/disconnect) and snapshotted
         # by the broadcast path, so all access is guarded by ``_conn_lock``.
-        self.active_connections = set()
-        self._conn_lock = threading.Lock()
+        self.activeConnections = set()
+        self._connLock = threading.Lock()
 
-        task_manager = TaskManager(on_task_terminal=self._broadcast_task_status)
+        taskManager = TaskManager(onTaskTerminal=self._broadcastTaskStatus)
 
-        console_history = ConsoleHistory()
-        console_history.on_new_entry = self._broadcast_console_entry
+        consoleHistory = ConsoleHistory()
+        consoleHistory.onNewEntry = self._broadcastConsoleEntry
 
         # Single home for handler dependencies; handlers and external callers
         # reach them via ``self.context``, never as server attributes.
         self.context = ServerContext(
-            task_manager=task_manager,
-            script_runner=ScriptRunner(task_manager),
-            code_runner=CodeRunner(executor),
+            taskManager=taskManager,
+            scriptRunner=ScriptRunner(taskManager),
+            codeRunner=CodeRunner(executor),
             executor=executor,
-            runtime_mode=runtime_mode,
-            console_history=console_history,
+            runtimeMode=runtimeMode,
+            consoleHistory=consoleHistory,
         )
 
         self.handlers = {
-            "execute_task": handle_execute_task,
-            "check_task_status": handle_check_task_status,
-            "list_tasks": handle_list_tasks,
-            "interrupt_task": handle_interrupt_task,
-            "execute_code": handle_execute_code,
-            "console_history": handle_console_history,
+            "execute_task": handleExecuteTask,
+            "check_task_status": handleCheckTaskStatus,
+            "list_tasks": handleListTasks,
+            "interrupt_task": handleInterruptTask,
+            "execute_code": handleExecuteCode,
+            "console_history": handleConsoleHistory,
         }
         # Canonical command names advertised to callers (unknown_command
         # errors). Snapshot before aliases so legacy names aren't taught
         # to new clients.
-        self.public_commands = sorted(self.handlers)
-        self.handlers["yade_task"] = handle_execute_task  # legacy wire name (pre-0.6 clients)
+        self.publicCommands = sorted(self.handlers)
+        self.handlers["yade_task"] = handleExecuteTask  # legacy wire name (pre-0.6 clients)
 
         # Bind eagerly so a port conflict surfaces on the calling (main)
         # thread, before the serving thread starts.
@@ -278,18 +278,18 @@ class BridgeServer:
 
     # -- SSE client registry -------------------------------------------------
 
-    def register_sse_client(self):
+    def registerSseClient(self):
         q = queue.Queue(maxsize=_SSE_QUEUE_MAXSIZE)
-        with self._conn_lock:
-            self.active_connections.add(q)
-            total = len(self.active_connections)
+        with self._connLock:
+            self.activeConnections.add(q)
+            total = len(self.activeConnections)
         logger.info("SSE client connected (total=%d)", total)
         return q
 
-    def unregister_sse_client(self, q):
-        with self._conn_lock:
-            self.active_connections.discard(q)
-            total = len(self.active_connections)
+    def unregisterSseClient(self, q):
+        with self._connLock:
+            self.activeConnections.discard(q)
+            total = len(self.activeConnections)
         logger.info("SSE client disconnected (total=%d)", total)
 
     # -- Server->client notifications -------------------------------------------
@@ -304,10 +304,10 @@ class BridgeServer:
         ``queue.Queue`` is thread-safe; on overflow the notification is dropped
         because the client always re-polls status.
         """
-        with self._conn_lock:
-            if not self.active_connections:
+        with self._connLock:
+            if not self.activeConnections:
                 return
-            queues = list(self.active_connections)
+            queues = list(self.activeConnections)
         msg = json.dumps(payload)
         for q in queues:
             try:
@@ -315,24 +315,24 @@ class BridgeServer:
             except queue.Full:
                 pass
 
-    def _broadcast_task_status(self, task_id, status):
-        self._broadcast({"type": "task_status_changed", "task_id": task_id, "status": status})
+    def _broadcastTaskStatus(self, taskId, status):
+        self._broadcast({"type": "task_status_changed", "task_id": taskId, "status": status})
 
-    def _broadcast_console_entry(self, entry):
+    def _broadcastConsoleEntry(self, entry):
         self._broadcast({"type": "console_entry", "entry_id": entry.get("id")})
 
     # -- Response serialization ---------------------------------------------
 
-    def serialize_response(self, response, request_id="unknown"):
+    def serializeResponse(self, response, requestId="unknown"):
         payload = json.dumps(response)
         if len(payload) > self._MAX_RESPONSE_BYTES:
-            logger.warning("[%s] Response too large (%d bytes), truncating output", str(request_id)[:8], len(payload))
-            response = self._truncate_response(response)
+            logger.warning("[%s] Response too large (%d bytes), truncating output", str(requestId)[:8], len(payload))
+            response = self._truncateResponse(response)
             payload = json.dumps(response)
         return payload.encode("utf-8")
 
     @classmethod
-    def _truncate_response(cls, response):
+    def _truncateResponse(cls, response):
         """Truncate large response data to fit within transport limits.
 
         Keeps the TAIL of output (most recent content), since monitoring
@@ -357,7 +357,7 @@ class BridgeServer:
                 response["data"] = data
         return response
 
-    def summarize_request(self, command, data):
+    def summarizeRequest(self, command, data):
         """Build a short log summary for an incoming request."""
         if command == "execute_code":
             code = data.get("code", "")
@@ -386,7 +386,7 @@ class BridgeServer:
         one running ``serve_forever`` - here the main-thread atexit/signal
         handler, while serving runs on a daemon thread.
         """
-        self.context.task_manager.shutdown()
+        self.context.taskManager.shutdown()
         try:
             self._httpd.shutdown()
         except Exception:
@@ -397,19 +397,19 @@ class BridgeServer:
             pass
         logger.info("Server shutdown complete")
 
-    def set_runtime_mode(self, runtime_mode):
-        self.context.runtime_mode = runtime_mode
+    def setRuntimeMode(self, runtimeMode):
+        self.context.runtimeMode = runtimeMode
 
 
-def create_server(
+def createServer(
     executor,
-    runtime_mode,
+    runtimeMode,
     host="localhost",
     port=9002,
 ):
     return BridgeServer(
         executor,
-        runtime_mode,
+        runtimeMode,
         host=host,
         port=port,
     )

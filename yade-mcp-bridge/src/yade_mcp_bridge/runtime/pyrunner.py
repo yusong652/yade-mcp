@@ -14,12 +14,12 @@ every run so it survives ``O.reset()`` and user scripts that reassign
 ``O.engines``.
 """
 
-from .background_run import is_background_run, mark_background_run
+from .background_run import isBackgroundRun, markBackgroundRun
 
 _INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
 
 
-def install_pyrunner(logger):
+def installPyrunner(logger):
     """Install the interrupt/snapshot PyRunner at ``O.engines[0]`` and hook
     ``O.run()`` to re-inject it. Returns True on success."""
     try:
@@ -32,45 +32,45 @@ def install_pyrunner(logger):
 
     from ..execution.termination import CycleInterrupt
     from .signals import (
-        get_current_task,
-        hold_if_wanted,
-        is_task_interrupt_requested,
-        snippet_holds_sim,
+        getCurrentTask,
+        holdIfWanted,
+        isTaskInterruptRequested,
+        snippetHoldsSim,
     )
 
     # Flag checked after O.run() returns
-    _interrupt_triggered = {"value": False}
+    _interruptTriggered = {"value": False}
 
-    def _mcp_pyrunner_tick():
+    def _mcpPyrunnerTick():
         # Never raise on the sim thread (→ C++ FATAL). Set a flag + O.pause();
         # the O.run() hook raises CycleInterrupt to interrupt the task once
         # O.run() returns.
-        task_id = get_current_task()
-        if task_id and is_task_interrupt_requested(task_id):
-            _interrupt_triggered["value"] = True
+        taskId = getCurrentTask()
+        if taskId and isTaskInterruptRequested(taskId):
+            _interruptTriggered["value"] = True
             try:
                 O.pause()
             except Exception:
                 pass
         # Cooperative hold point. If an execute_code snippet has asked for
         # a consistent snapshot, hold here (GIL released) at this engine
-        # boundary until it releases — see signals.hold_sim.
-        hold_if_wanted()
+        # boundary until it releases — see signals.holdSim.
+        holdIfWanted()
 
-    def _ensure_tick_in_main():
+    def _ensureTickInMain():
         # PyRunner resolves its command name against the live __main__, which
         # %run can swap mid-run; (re-)bind the tick into whatever is __main__ now.
-        main_mod = _sys.modules.get("__main__")
-        if main_mod is not None and getattr(main_mod, "_mcp_pyrunner_tick", None) is not _mcp_pyrunner_tick:
-            main_mod._mcp_pyrunner_tick = _mcp_pyrunner_tick
+        mainMod = _sys.modules.get("__main__")
+        if mainMod is not None and getattr(mainMod, "_mcpPyrunnerTick", None) is not _mcpPyrunnerTick:
+            mainMod._mcpPyrunnerTick = _mcpPyrunnerTick
 
-    _ensure_tick_in_main()
+    _ensureTickInMain()
 
     # Identify the MCP bridge PyRunner by its command string, not an engine label —
     # auto-injected labels break outside __main__ (e.g. inside %run).
-    _PYRUNNER_COMMAND = "_mcp_pyrunner_tick()  # mcp bridge: DO NOT MODIFY"
+    _PYRUNNER_COMMAND = "_mcpPyrunnerTick()  # mcp bridge: DO NOT MODIFY"
 
-    def _make_pyrunner():
+    def _makePyrunner():
         """Build the bridge's PyRunner engine."""
         return PyRunner(
             command=_PYRUNNER_COMMAND,
@@ -78,23 +78,23 @@ def install_pyrunner(logger):
             dead=False,
         )
 
-    def _find_our_pyrunner():
+    def _findOurPyrunner():
         """Return the MCP bridge PyRunner engine if present, else None."""
         for e in O.engines:
             if getattr(e, "command", None) == _PYRUNNER_COMMAND:
                 return e
         return None
 
-    def _normalize_pyrunner():
+    def _normalizePyrunner():
         """Ensure the MCP bridge PyRunner is still present, live, and at O.engines[0],
         restoring it if a user script wiped, disabled, or moved it."""
-        pyrunner = _find_our_pyrunner()
+        pyrunner = _findOurPyrunner()
 
         if pyrunner is None:
             # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
                 # O.engines += [LLM()] # Yet another engine!
-                O.engines = [_make_pyrunner()] + list(O.engines)
+                O.engines = [_makePyrunner()] + list(O.engines)
                 logger.debug("PyRunner auto-injected at O.engines[0] before O.run()")
             except Exception as e:
                 logger.warning(f"PyRunner auto-injection failed: {e}")
@@ -114,8 +114,8 @@ def install_pyrunner(logger):
         # the engine out of front.
         try:
             if O.engines[0] is not pyrunner:
-                new_engines = [pyrunner] + [e for e in O.engines if e is not pyrunner]
-                O.engines = new_engines
+                newEngines = [pyrunner] + [e for e in O.engines if e is not pyrunner]
+                O.engines = newEngines
         except Exception as e:
             logger.warning(f"Failed to move PyRunner to front: {e}")
 
@@ -124,40 +124,40 @@ def install_pyrunner(logger):
     # re-added transparently before simulation starts.
     # Guard against double-hooking if start() is called multiple times.
     if not getattr(O.run, "_mcp_hooked", False):
-        _original_run = O.run
+        _originalRun = O.run
 
-        def _hooked_run(*args, **kwargs):
+        def _hookedRun(*args, **kwargs):
             # While a task runs, an execute_code snippet holds the cycle
             # frozen; an O.run() inside that snippet is refused here. The
             # task's own O.run (on its own thread, never holds) is unaffected.
-            if snippet_holds_sim():
+            if snippetHoldsSim():
                 raise RuntimeError(
                     "O.run() refused: execute_code is holding the simulation "
                     "cycle frozen for a consistent read/edit, so it must not "
                     "drive the cycle at the same time. Use yade_execute_task "
                     "for simulation runs."
                 )
-            _ensure_tick_in_main()
-            _normalize_pyrunner()
-            _interrupt_triggered["value"] = False
-            result = _original_run(*args, **kwargs)
+            _ensureTickInMain()
+            _normalizePyrunner()
+            _interruptTriggered["value"] = False
+            result = _originalRun(*args, **kwargs)
             # A wait=False run returns before its cycling finishes; flag it so
             # the task waits for it before reporting (wait=True already has).
-            mark_background_run(is_background_run(args, kwargs))
+            markBackgroundRun(isBackgroundRun(args, kwargs))
             # After O.run() returns (possibly due to O.pause() from interrupt),
             # check if interrupt was the reason and raise at Python level.
-            if _interrupt_triggered["value"]:
-                _interrupt_triggered["value"] = False
+            if _interruptTriggered["value"]:
+                _interruptTriggered["value"] = False
                 raise CycleInterrupt("Interrupted by MCP bridge")
             return result
 
-        _hooked_run._mcp_hooked = True
-        O.run = _hooked_run
+        _hookedRun._mcp_hooked = True
+        O.run = _hookedRun
 
     try:
-        # Idempotent inject: add-if-missing (a second install_pyrunner won't
+        # Idempotent inject: add-if-missing (a second installPyrunner won't
         # duplicate the engine), then restore config and move to front.
-        _normalize_pyrunner()
+        _normalizePyrunner()
         logger.info(f"PyRunner installed at O.engines[0] (iterPeriod={_INTERRUPT_CHECK_PERIOD}) — interrupt check")
         return True
     except Exception as e:

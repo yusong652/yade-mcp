@@ -9,7 +9,7 @@ import time
 import uuid
 
 from ..paths import DATA_DIR, LOGS_DIR
-from ..utils import error_body, ok_body
+from ..utils import errorBody, okBody
 from .task import DEFAULT_PAGINATION_LIMIT, ScriptTask
 
 logger = logging.getLogger("MCP-Bridge")
@@ -23,74 +23,74 @@ DEFAULT_MAX_TASKS = 1024
 class TaskManager:
     """Manage long-running task tracking, status queries, and disk persistence."""
 
-    def __init__(self, max_tasks=DEFAULT_MAX_TASKS, on_task_terminal=None):
+    def __init__(self, maxTasks=DEFAULT_MAX_TASKS, onTaskTerminal=None):
         self.tasks = {}
-        self._max_tasks = max_tasks
-        self.on_task_terminal = on_task_terminal
+        self._maxTasks = maxTasks
+        self.onTaskTerminal = onTaskTerminal
 
         for d in (DATA_DIR, LOGS_DIR):
             if not os.path.exists(d):
                 os.makedirs(d)
 
-        self._load_historical_tasks()
-        self._prune_old_tasks()
+        self._loadHistoricalTasks()
+        self._pruneOldTasks()
         logger.info("TaskManager initialized")
 
-    def create_script_task(self, future, script_name, script_path, output_buffer=None, description=None, task_id=None):
-        if task_id is None:
-            task_id = uuid.uuid4().hex[:8]
+    def createScriptTask(self, future, scriptName, scriptPath, outputBuffer=None, description=None, taskId=None):
+        if taskId is None:
+            taskId = uuid.uuid4().hex[:8]
         task = ScriptTask(
-            task_id,
+            taskId,
             future,
-            script_name,
-            script_path,
-            output_buffer,
+            scriptName,
+            scriptPath,
+            outputBuffer,
             description,
-            on_status_change=self._on_task_status_change,
+            onStatusChange=self._onTaskStatusChange,
         )
-        self.tasks[task_id] = task
-        self._prune_old_tasks()
-        self._save_tasks()
-        return task_id
+        self.tasks[taskId] = task
+        self._pruneOldTasks()
+        self._saveTasks()
+        return taskId
 
-    def has_running_tasks(self):
+    def hasRunningTasks(self):
         for task in self.tasks.values():
-            self._refresh_runtime_status(task)
+            self._refreshRuntimeStatus(task)
             if task.status == "running":
                 return True
         return False
 
-    def get_task_status(self, task_id, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
-        task = self.tasks.get(task_id)
+    def getTaskStatus(self, taskId, skipNewest=0, limit=DEFAULT_PAGINATION_LIMIT, filterText=None):
+        task = self.tasks.get(taskId)
         if not task:
-            return error_body("not_found", f"Task ID not found: {task_id}")
-        self._refresh_runtime_status(task)
-        return task.get_status_response(skip_newest=skip_newest, limit=limit, filter_text=filter_text)
+            return errorBody("not_found", f"Task ID not found: {taskId}")
+        self._refreshRuntimeStatus(task)
+        return task.getStatusResponse(skipNewest=skipNewest, limit=limit, filterText=filterText)
 
-    def list_all_tasks(self, offset=0, limit=None):
+    def listAllTasks(self, offset=0, limit=None):
         for task in self.tasks.values():
-            self._refresh_runtime_status(task)
+            self._refreshRuntimeStatus(task)
 
-        sorted_tasks = sorted(self.tasks.values(), key=lambda t: t.start_time, reverse=True)
+        sortedTasks = sorted(self.tasks.values(), key=lambda t: t.startTime, reverse=True)
 
-        total_count = len(sorted_tasks)
-        end_idx = offset + limit if limit else total_count
-        paginated_tasks = sorted_tasks[offset:end_idx]
-        tasks_info = [task.get_task_info() for task in paginated_tasks]
+        totalCount = len(sortedTasks)
+        endIdx = offset + limit if limit else totalCount
+        paginatedTasks = sortedTasks[offset:endIdx]
+        tasksInfo = [task.getTaskInfo() for task in paginatedTasks]
 
         # total_count + offset/limit are the primitives; a consumer derives
         # displayed_count (len of data) and has_more (offset + len < total),
         # so we don't emit those derived fields.
         return {
-            **ok_body(data=tasks_info),
+            **okBody(data=tasksInfo),
             "pagination": {
-                "total_count": total_count,
+                "total_count": totalCount,
                 "offset": offset,
                 "limit": limit,
             },
         }
 
-    def _refresh_runtime_status(self, task):
+    def _refreshRuntimeStatus(self, task):
         if task.status != "pending":
             return
         future = getattr(task, "future", None)
@@ -99,104 +99,104 @@ class TaskManager:
         try:
             if future.running():
                 task.status = "running"
-                if task.on_status_change:
-                    task.on_status_change(task)
+                if task.onStatusChange:
+                    task.onStatusChange(task)
         except RuntimeError:
             return
 
     def shutdown(self):
         """Flush output buffers and mark active tasks before exit."""
-        n_flushed = 0
-        n_interrupted = 0
+        nFlushed = 0
+        nInterrupted = 0
         for task in self.tasks.values():
-            if task.output_buffer:
+            if task.outputBuffer:
                 try:
-                    task.output_buffer.flush()
-                    n_flushed += 1
+                    task.outputBuffer.flush()
+                    nFlushed += 1
                 except (ValueError, OSError):
                     pass
             if task.status in ("pending", "running"):
                 task.status = "interrupted"
-                task.end_time = time.time()
+                task.endTime = time.time()
                 task.error = "Bridge shutdown"
-                n_interrupted += 1
-        self._save_tasks()
-        if n_flushed or n_interrupted:
-            logger.info("Shutdown: flushed %d buffer(s), interrupted %d task(s)", n_flushed, n_interrupted)
+                nInterrupted += 1
+        self._saveTasks()
+        if nFlushed or nInterrupted:
+            logger.info("Shutdown: flushed %d buffer(s), interrupted %d task(s)", nFlushed, nInterrupted)
 
-    def _prune_old_tasks(self):
-        """Remove oldest tasks when count exceeds max_tasks, and delete their log files."""
-        if len(self.tasks) <= self._max_tasks:
+    def _pruneOldTasks(self):
+        """Remove oldest tasks when count exceeds ``_maxTasks``, and delete their log files."""
+        if len(self.tasks) <= self._maxTasks:
             return
-        sorted_tasks = sorted(self.tasks.values(), key=lambda t: t.start_time)
-        n_remove = len(self.tasks) - self._max_tasks
-        removed = sorted_tasks[:n_remove]
+        sortedTasks = sorted(self.tasks.values(), key=lambda t: t.startTime)
+        nRemove = len(self.tasks) - self._maxTasks
+        removed = sortedTasks[:nRemove]
         for task in removed:
-            if task.log_path:
+            if task.logPath:
                 try:
-                    os.remove(task.log_path)
+                    os.remove(task.logPath)
                 except OSError:
                     pass
-            del self.tasks[task.task_id]
-        logger.info("Pruned %d old task(s), keeping %d", n_remove, len(self.tasks))
-        self._save_tasks()
+            del self.tasks[task.taskId]
+        logger.info("Pruned %d old task(s), keeping %d", nRemove, len(self.tasks))
+        self._saveTasks()
 
-    def _on_task_status_change(self, task):
-        logger.debug(f"Task {task.task_id} status changed to: {task.status}")
-        self._save_tasks()
+    def _onTaskStatusChange(self, task):
+        logger.debug(f"Task {task.taskId} status changed to: {task.status}")
+        self._saveTasks()
 
-        if task.status in ("completed", "failed", "interrupted") and self.on_task_terminal:
+        if task.status in ("completed", "failed", "interrupted") and self.onTaskTerminal:
             try:
-                self.on_task_terminal(task.task_id, task.status)
+                self.onTaskTerminal(task.taskId, task.status)
             except Exception as e:
                 logger.warning(f"Failed to broadcast task status: {e}")
 
-    def _save_tasks(self):
+    def _saveTasks(self):
         try:
-            tasks_data = [self._serialize_task(task) for task in self.tasks.values()]
+            tasksData = [self._serializeTask(task) for task in self.tasks.values()]
             temp = TASKS_FILENAME + ".tmp"
             with open(temp, "w") as f:
-                json.dump(tasks_data, f, indent=2)
+                json.dump(tasksData, f, indent=2)
             os.replace(temp, TASKS_FILENAME)
         except OSError as e:
             logger.error(f"Failed to save tasks: {e}")
 
-    def _load_historical_tasks(self):
+    def _loadHistoricalTasks(self):
         if not os.path.exists(TASKS_FILENAME):
             return
         try:
             with open(TASKS_FILENAME) as f:
-                all_data = json.load(f)
-            for task_data in all_data:
-                task = self._restore_task(task_data)
+                allData = json.load(f)
+            for taskData in allData:
+                task = self._restoreTask(taskData)
                 if task:
-                    self.tasks[task.task_id] = task
-            logger.info("Loaded %d historical task(s)", len(all_data))
+                    self.tasks[task.taskId] = task
+            logger.info("Loaded %d historical task(s)", len(allData))
         except (OSError, json.JSONDecodeError, KeyError) as e:
             logger.error(f"Failed to load historical tasks: {e}")
 
     @staticmethod
-    def _serialize_task(task):
+    def _serializeTask(task):
         return {
-            "task_id": task.task_id,
+            "task_id": task.taskId,
             "task_type": "script",
             "description": task.description,
             "status": task.status,
-            "start_time": task.start_time,
-            "end_time": task.end_time,
-            "script_name": task.script_name,
-            "script_path": task.script_path,
-            "log_path": task.log_path,
+            "start_time": task.startTime,
+            "end_time": task.endTime,
+            "script_name": task.scriptName,
+            "script_path": task.scriptPath,
+            "log_path": task.logPath,
             "error": task.error,
-            "error_details": getattr(task, "error_details", None),
+            "error_details": getattr(task, "errorDetails", None),
         }
 
     @staticmethod
-    def _restore_task(task_data):
+    def _restoreTask(taskData):
         try:
-            if task_data.get("status") == "running":
-                task_data["status"] = "failed"
-            return ScriptTask.from_persisted(task_data)
+            if taskData.get("status") == "running":
+                taskData["status"] = "failed"
+            return ScriptTask.fromPersisted(taskData)
         except (KeyError, TypeError) as e:
-            logger.error(f"Failed to restore task {task_data.get('task_id')}: {e}")
+            logger.error(f"Failed to restore task {taskData.get('task_id')}: {e}")
             return None

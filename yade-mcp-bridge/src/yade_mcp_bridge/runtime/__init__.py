@@ -8,11 +8,11 @@
 - ``signals`` holds the cross-thread interrupt and sim-hold primitives
 """
 
-from .pump import start_background_pump, start_qt_pump
-from .pyrunner import install_pyrunner
+from .pump import startBackgroundPump, startQtPump
+from .pyrunner import installPyrunner
 
 __all__ = [
-    "start_background_pump",
-    "start_qt_pump",
-    "install_pyrunner",
+    "startBackgroundPump",
+    "startQtPump",
+    "installPyrunner",
 ]
