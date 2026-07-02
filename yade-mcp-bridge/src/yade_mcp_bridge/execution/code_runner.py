@@ -34,13 +34,11 @@ from .termination import AsyncAbort, CycleInterrupt, inject_async_exception
 
 logger = logging.getLogger("MCP-Bridge")
 
-# Grace for the cycle-interrupt (PyRunner) path: how long we wait for O.pause()
-# to land after arming the flag. The tick runs every iteration, so only a step
-# longer than this can exceed it.
+# How long we wait for the PyRunner tick to interrupt a running cycle.
 _CYCLE_INTERRUPT_GRACE_S = 2.0
 
-# Grace for the thread-injection path: how long we wait for the pump thread to
-# unwind after we async-inject AsyncAbort, before giving up as "stuck in C".
+# How long we wait for the code to die after injecting AsyncAbort into its
+# thread, before giving up as "stuck in a C call".
 _TERMINATION_GRACE_S = 0.5
 
 
@@ -86,9 +84,7 @@ def _execute(request_id, code_str, timeout_ms):
 
         if get_current_task() is not None or _sim_running():
             # a task is running, or user ran O.run() in console.
-            # Hold the sim so that the code can read a snapshot. The hold
-            # outlives the timeout kill chain by a margin, so it only expires
-            # for a snippet the abort could not reach (stuck in a C call).
+            # Hold the sim so that the code can read a snapshot.
             max_hold_s = timeout_ms / 1000.0 + _CYCLE_INTERRUPT_GRACE_S + _TERMINATION_GRACE_S + 1.0
             with hold_sim(max_hold_s=max_hold_s):
                 result = _do_exec()
@@ -133,15 +129,13 @@ def _execute(request_id, code_str, timeout_ms):
 
 def _terminate_stuck_execution(request_id, future):
     """Terminate a timed-out ``execute_code`` submission."""
-    # Fire the flag first — cheap, helps if code is inside ``O.run(wait=True)``
-    # (PyRunner tick → O.pause → O.run returns).
+    # Set the interrupt flag first: if the code is inside ``O.run(wait=True)``,
+    # the PyRunner tick sees the flag and pauses the cycle, so O.run returns.
     request_interrupt(request_id)
 
-    # Cycle-interrupt path: no task owns the sim yet ``O.running`` is True, so the
-    # live ``O.run`` must be this execute_code's own — safe to arm ``_current_task_id``
-    # (normally avoided: it would mask a concurrent task).
+    # Temporarily set the current task id to this request_id, so the next
+    # PyRunner tick picks up the interrupt flag and O.pause()s the run.
     if get_current_task() is None and _sim_running():
-        # Arming our id makes the PyRunner tick honor the flag and O.pause() the run.
         set_current_task(request_id)
         try:
             result = future.result(timeout=_CYCLE_INTERRUPT_GRACE_S)
@@ -157,8 +151,6 @@ def _terminate_stuck_execution(request_id, future):
             clear_interrupt(request_id)
 
         status = result.get("status") if isinstance(result, dict) else None
-        # ``interrupted`` means the tick paused our O.run as intended; any other
-        # status means the cycle finished on its own within the grace window.
         method = "cycle_interrupt" if status == "interrupted" else "cycle_finished"
         return {"method": method, "result": result}
 
@@ -200,14 +192,20 @@ def _timeout_response(request_id, timeout_ms, termination):
             f"{timeout_ms}ms timeout and was paused cleanly at an iteration "
             "boundary."
         )
-    elif method in ("async_exc", "finished", "cycle_finished"):
-        # Aborted by async exception, or the code finished on its own racing
-        # the timeout — either way the pump is free.
+    elif method == "async_exc":
         error_code = "terminated"
         message = (
             f"Execution exceeded the {timeout_ms}ms timeout and was aborted. "
             "YADE state may be partially modified by code that ran before the "
             "abort."
+        )
+    elif method in ("finished", "cycle_finished"):
+        # The code raced the abort and completed first.
+        error_code = "terminated"
+        message = (
+            f"Execution exceeded the {timeout_ms}ms timeout but finished on "
+            "its own before the abort landed; its result was discarded. Any "
+            "state changes it made are fully in effect."
         )
     elif method == "stuck_in_c":
         error_code = "timeout"
@@ -219,9 +217,10 @@ def _timeout_response(request_id, timeout_ms, termination):
     elif method == "cycle_stuck":
         error_code = "timeout"
         message = (
-            f"A simulation cycle (O.run) exceeded the {timeout_ms}ms timeout; a "
-            "pause was requested but the cycle did not yield within the grace "
-            "period."
+            f"A simulation cycle (O.run) exceeded the {timeout_ms}ms timeout; "
+            f"a pause was requested, but the cycle is too heavy to reach an "
+            f"iteration boundary within {_CYCLE_INTERRUPT_GRACE_S:.0f}s. The "
+            "pause is sticky — the run stops at the next boundary."
         )
     else:  # "unsettled" — defensive: registry cleared but future not yet set.
         error_code = "timeout"
