@@ -33,7 +33,7 @@ logger = logging.getLogger("MCP-Bridge")
 # comment line. Keeps the connection (and any intermediary proxy) alive.
 _SSE_KEEPALIVE_S = 15.0
 
-# Bounded depth for each connected client's doorbell queue.
+# Bounded depth for each connected client's notification queue.
 _SSE_QUEUE_MAXSIZE = 256
 
 
@@ -58,7 +58,7 @@ class _BridgeRequestHandler(http.server.BaseHTTPRequestHandler):
     """Maps HTTP requests onto the transport-agnostic handler dict.
 
     ``POST /<command>`` dispatches to the request/response handler;
-    ``GET /events`` serves the SSE doorbell stream. The owning
+    ``GET /events`` serves the SSE notification stream. The owning
     ``BridgeServer`` is reachable via ``self.server.bridge``.
     """
 
@@ -292,16 +292,16 @@ class BridgeServer:
             total = len(self.active_connections)
         logger.info("SSE client disconnected (total=%d)", total)
 
-    # -- Server->client doorbells -------------------------------------------
+    # -- Server->client notifications -------------------------------------------
 
     def _broadcast(self, payload):
-        """Push a payload-free doorbell to every connected SSE client.
+        """Push a payload-free notification to every connected SSE client.
 
         Snapshot the queue set under the lock, then ``put_nowait`` outside it
         (never hold the lock across a put). Called from several threads: the
         ``script-<id>`` daemon thread and POST worker threads
         (``task_status_changed``) and the main thread (``console_entry``).
-        ``queue.Queue`` is thread-safe; on overflow the doorbell is dropped
+        ``queue.Queue`` is thread-safe; on overflow the notification is dropped
         because the client always re-polls status.
         """
         with self._conn_lock:

@@ -3,7 +3,7 @@
 """HTTP + SSE transport: the bridge's outward protocol surface.
 
 Maps the request/response handler dict onto ``POST /<command>`` and serves the
-server-push doorbell stream on ``GET /events``.
+server-push notification stream on ``GET /events``.
 """
 
 from .server import BridgeServer, create_server

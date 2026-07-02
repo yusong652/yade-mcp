@@ -161,7 +161,7 @@ def _terminate_stuck_execution(request_id, future):
         if future.done():
             # The code raced the timeout and settled before we could inject.
             return {"method": "finished", "result": future.result()}
-        # Ultra-narrow window: registry cleared but the executor hasn't set the
+        # Narrow race: registry cleared but the executor hasn't set the
         # future's result yet (it sets it after _execute returns).
         return {"method": "unsettled", "result": None}
 

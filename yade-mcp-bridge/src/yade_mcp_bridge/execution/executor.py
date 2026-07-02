@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Queue and execution mechanism for ``execute_code``.
 
-``submit()`` enqueues code; a single pump drains the FIFO queue via
+``submit()`` enqueues code; a single pump processes the FIFO queue via
 ``run_next()``.
 """
 

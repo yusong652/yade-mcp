@@ -50,7 +50,7 @@ def inject_async_exception(thread_id, exc_type):
     would unwind out of Python back into boost::python and trip YADE's C++
     FATAL handler. By construction we only ever target threads we registered
     (the pump and task threads, all real), so this never fires in practice;
-    it is a guardrail on the ctypes footgun, not a reachable branch.
+    it is a guardrail on the raw ctypes call, not a reachable branch.
     """
     for t in threading.enumerate():
         if t.ident == thread_id and t.name.startswith("Dummy-"):
