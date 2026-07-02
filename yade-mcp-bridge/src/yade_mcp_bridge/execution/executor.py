@@ -13,12 +13,12 @@ from concurrent.futures import Future
 logger = logging.getLogger("MCP-Bridge")
 
 
-class SerialExecutor:
+class CodeExecutor:
     """Run ``execute_code`` submissions serially via a FIFO queue."""
 
     def __init__(self):
         self._queue = queue.Queue()
-        logger.info("SerialExecutor initialized")
+        logger.info("CodeExecutor initialized")
 
     def submit(self, func, *args, **kwargs):
         """Queue code to run on the pump thread. Returns a ``Future`` to

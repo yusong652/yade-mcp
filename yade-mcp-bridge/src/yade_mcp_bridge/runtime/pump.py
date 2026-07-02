@@ -2,7 +2,7 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Pump strategies that drive the execute_code queue.
 
-A pump ticks ``SerialExecutor.run_next`` to drain execute_code requests one
+A pump ticks ``CodeExecutor.run_next`` to drain execute_code requests one
 at a time. Long-running tasks bypass it — they run on their own daemon
 thread (see execution/script_runner.py) — so a task can't starve the pump.
 

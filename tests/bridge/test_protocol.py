@@ -7,7 +7,7 @@ from concurrent.futures import Future
 
 import httpx
 import pytest
-from yade_mcp_bridge.execution.executor import SerialExecutor
+from yade_mcp_bridge.execution.executor import CodeExecutor
 from yade_mcp_bridge.tasks.task import ScriptTask
 from yade_mcp_bridge.transport.server import create_server
 
@@ -20,7 +20,7 @@ def _start_bridge():
     thread on the main-thread future, so a background pump must run the
     submitted code (just like Mode 1 in production) for the POST to resolve.
     """
-    executor = SerialExecutor()
+    executor = CodeExecutor()
     server = create_server(executor=executor, host="127.0.0.1", port=0, runtime_mode="test")
     url = f"http://127.0.0.1:{server._httpd.server_address[1]}"
 

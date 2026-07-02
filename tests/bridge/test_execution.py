@@ -1,14 +1,14 @@
-"""Tests for SerialExecutor queue."""
+"""Tests for CodeExecutor queue."""
 
 import threading
 from concurrent.futures import Future
 
-from yade_mcp_bridge.execution.executor import SerialExecutor
+from yade_mcp_bridge.execution.executor import CodeExecutor
 
 
-class TestSerialExecutor:
+class TestCodeExecutor:
     def test_submit_and_process(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         future = executor.submit(lambda: 42)
         assert isinstance(future, Future)
         assert executor.queue_size() == 1
@@ -17,11 +17,11 @@ class TestSerialExecutor:
         assert future.result(timeout=1) == 42
 
     def test_process_empty_queue(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         assert executor.run_next() is False
 
     def test_processes_one_call_per_invocation(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         executor.submit(lambda: 1)
         executor.submit(lambda: 2)
         executor.submit(lambda: 3)
@@ -38,7 +38,7 @@ class TestSerialExecutor:
         assert executor.run_next() is False
 
     def test_exception_captured(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
 
         def fail():
             raise ValueError("boom")
@@ -51,19 +51,19 @@ class TestSerialExecutor:
             future.result()
 
     def test_submit_with_args(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         future = executor.submit(lambda x, y: x + y, 3, 4)
         executor.run_next()
         assert future.result(timeout=1) == 7
 
     def test_submit_with_kwargs(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         future = executor.submit(lambda x, y=10: x + y, 5, y=20)
         executor.run_next()
         assert future.result(timeout=1) == 25
 
     def test_queue_size(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         assert executor.queue_size() == 0
         executor.submit(lambda: None)
         assert executor.queue_size() == 1
@@ -75,7 +75,7 @@ class TestSerialExecutor:
         assert executor.queue_size() == 0
 
     def test_cross_thread_submit(self):
-        executor = SerialExecutor()
+        executor = CodeExecutor()
         future = None
 
         def background():

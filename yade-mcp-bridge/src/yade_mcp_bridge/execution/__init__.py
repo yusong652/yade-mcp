@@ -3,11 +3,11 @@
 """YADE Script Execution Engine."""
 
 from .code_runner import CodeRunner
-from .executor import SerialExecutor
+from .executor import CodeExecutor
 from .script_runner import ScriptRunner
 
 __all__ = [
     "CodeRunner",
     "ScriptRunner",
-    "SerialExecutor",
+    "CodeExecutor",
 ]
