@@ -7,7 +7,7 @@ import types
 from unittest.mock import MagicMock
 
 import pytest
-from yade_mcp_bridge.execution.script_runner import ScriptRunner
+from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
 from yade_mcp_bridge.runtime.signals import (
     _execThreadIds,
     clearInterrupt,

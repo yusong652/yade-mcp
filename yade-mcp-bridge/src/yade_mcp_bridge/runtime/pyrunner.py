@@ -14,7 +14,7 @@ every run so it survives ``O.reset()`` and user scripts that reassign
 ``O.engines``.
 """
 
-from .background_run import isBackgroundRun, markBackgroundRun
+from .backgroundRun import isBackgroundRun, markBackgroundRun
 
 _INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
 

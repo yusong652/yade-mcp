@@ -23,7 +23,7 @@ from .execution import CodeExecutor
 from .paths import DATA_DIR
 from .runtime import installPyrunner, startBackgroundPump, startQtPump
 from .transport import createServer
-from .utils.safe_logging import GapFreeFileHandler, GapFreeStreamHandler
+from .utils.safeLogging import GapFreeFileHandler, GapFreeStreamHandler
 
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 

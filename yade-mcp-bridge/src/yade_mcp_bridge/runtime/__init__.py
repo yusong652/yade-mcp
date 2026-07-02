@@ -4,7 +4,7 @@
 
 - ``pump`` chooses the thread that processes the execute_code queue
 - ``pyrunner`` injects the interrupt/hold tick into ``O.run()``
-- ``background_run`` tracks ``O.run(wait=False)`` so tasks wait for it
+- ``backgroundRun`` tracks ``O.run(wait=False)`` so tasks wait for it
 - ``signals`` holds the cross-thread interrupt and sim-hold primitives
 """
 

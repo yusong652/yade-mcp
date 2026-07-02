@@ -7,14 +7,14 @@ import types
 from unittest.mock import MagicMock
 
 import pytest
-from yade_mcp_bridge.execution.script_runner import ScriptRunner
-from yade_mcp_bridge.runtime.background_run import markBackgroundRun
+from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
+from yade_mcp_bridge.runtime.backgroundRun import markBackgroundRun
 from yade_mcp_bridge.runtime.signals import clearInterrupt, requestInterrupt
 
 
 @pytest.fixture
 def fake_yade(monkeypatch):
-    """Install a fake `yade` module in sys.modules so script_runner.py's
+    """Install a fake `yade` module in sys.modules so scriptRunner.py's
     `from yade import O as _O` resolves to our mock."""
     module = types.ModuleType("yade")
     module.O = MagicMock()

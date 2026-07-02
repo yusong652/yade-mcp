@@ -3,8 +3,8 @@
 import os
 import tempfile
 
-from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
-from yade_mcp_bridge.utils.path_utils import pathToLlmFormat
+from yade_mcp_bridge.utils.fileBuffer import FileBuffer, TeeBuffer
+from yade_mcp_bridge.utils.pathUtils import pathToLlmFormat
 from yade_mcp_bridge.utils.response import TaskDataBuilder
 
 

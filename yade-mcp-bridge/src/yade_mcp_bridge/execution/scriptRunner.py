@@ -16,7 +16,7 @@ from concurrent.futures import Future
 from functools import partial
 
 from ..paths import LOGS_DIR
-from ..runtime.background_run import waitForBackgroundRun
+from ..runtime.backgroundRun import waitForBackgroundRun
 from ..runtime.signals import (
     clearCurrentTask,
     clearInterrupt,

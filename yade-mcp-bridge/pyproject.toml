@@ -33,6 +33,7 @@ ignore = [
     "N803",  # lowerCamelCase parameters, same convention
     "N815",  # lowerCamelCase class-scope variables, same convention
     "N816",  # lowerCamelCase module-scope variables, same convention
+    "N999",  # camelCase module filenames (yade trunk precedent: libVersions.py)
     "B008",
     "B905",
     "SIM115", # FileBuffer manages its own file handle lifecycle
