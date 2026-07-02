@@ -59,8 +59,8 @@ class ConsoleCapture:
 
     def __init__(self, history):
         self._history = history
-        self._capture_buffer = None
-        self._old_stdout = None
+        self._captureBuffer = None
+        self._oldStdout = None
 
     def install(self):
         """Register IPython event hooks.
@@ -68,7 +68,7 @@ class ConsoleCapture:
         YADE creates its shell after start() returns, so we poll
         in a background thread until the shell appears.
         """
-        ip = _find_ipython_shell()
+        ip = _findIpythonShell()
         if ip is not None:
             self._register(ip)
             return
@@ -78,7 +78,7 @@ class ConsoleCapture:
 
             for _ in range(120):
                 time.sleep(0.5)
-                ip = _find_ipython_shell()
+                ip = _findIpythonShell()
                 if ip is not None:
                     self._register(ip)
                     return
@@ -88,30 +88,30 @@ class ConsoleCapture:
         logger.info("Waiting for IPython shell to initialize...")
 
     def _register(self, ip):
-        ip.events.register("pre_run_cell", self._pre_run_cell)
-        ip.events.register("post_run_cell", self._post_run_cell)
+        ip.events.register("pre_run_cell", self._preRunCell)
+        ip.events.register("post_run_cell", self._postRunCell)
         logger.info("Console capture hooks installed on %s", type(ip).__name__)
 
-    def _pre_run_cell(self, info):
+    def _preRunCell(self, info):
         """Start capturing stdout before cell execution."""
-        self._old_stdout = sys.stdout
-        terminal = sys.__stdout__ if sys.__stdout__ is not None else self._old_stdout
-        self._capture_buffer = CaptureBuffer(terminal)
-        sys.stdout = self._capture_buffer
+        self._oldStdout = sys.stdout
+        terminal = sys.__stdout__ if sys.__stdout__ is not None else self._oldStdout
+        self._captureBuffer = CaptureBuffer(terminal)
+        sys.stdout = self._captureBuffer
 
-    def _post_run_cell(self, result):
+    def _postRunCell(self, result):
         """Record entry after cell execution."""
         output = ""
-        if self._capture_buffer is not None:
-            output = self._capture_buffer.getvalue()
-        if self._old_stdout is not None:
-            sys.stdout = self._old_stdout
-        self._capture_buffer = None
-        self._old_stdout = None
+        if self._captureBuffer is not None:
+            output = self._captureBuffer.getvalue()
+        if self._oldStdout is not None:
+            sys.stdout = self._oldStdout
+        self._captureBuffer = None
+        self._oldStdout = None
 
         try:
             self._history.add(
-                input_text=result.info.raw_cell,
+                inputText=result.info.raw_cell,
                 output=output,
                 result=result.result,
                 success=result.success,
@@ -120,7 +120,7 @@ class ConsoleCapture:
             logger.error("Failed to record console entry: %s", e)
 
 
-def _find_ipython_shell():
+def _findIpythonShell():
     """Find the active IPython shell instance.
 
     YADE uses InteractiveShellEmbed without registering get_ipython()

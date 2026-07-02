@@ -4,7 +4,7 @@ import threading
 import time
 
 import pytest
-from yade_mcp_bridge.execution.termination import AsyncAbort, inject_async_exception
+from yade_mcp_bridge.execution.termination import AsyncAbort, injectAsyncException
 
 
 class TestInjectAsyncException:
@@ -25,7 +25,7 @@ class TestInjectAsyncException:
         t.start()
         time.sleep(0.05)  # let the loop get running
 
-        affected = inject_async_exception(t.ident, AsyncAbort)
+        affected = injectAsyncException(t.ident, AsyncAbort)
         assert affected == 1
 
         t.join(timeout=1.0)
@@ -51,7 +51,7 @@ class TestInjectAsyncException:
         t.start()
         time.sleep(0.05)
 
-        affected = inject_async_exception(t.ident, AsyncAbort)
+        affected = injectAsyncException(t.ident, AsyncAbort)
         assert affected == 1
 
         # Must wait longer than sleep(0.5) — sleep blocks the exception.
@@ -62,7 +62,7 @@ class TestInjectAsyncException:
 
     def test_returns_zero_for_nonexistent_thread_id(self):
         """Invalid tids yield 0 (no matching PyThreadState)."""
-        affected = inject_async_exception(0xDEADBEEF, AsyncAbort)
+        affected = injectAsyncException(0xDEADBEEF, AsyncAbort)
         assert affected == 0
 
     def test_refuses_dummy_thread_target(self):
@@ -79,7 +79,7 @@ class TestInjectAsyncException:
         t = threading.Thread(target=target, name="Dummy-7", daemon=True)
         t.start()
         try:
-            affected = inject_async_exception(t.ident, AsyncAbort)
+            affected = injectAsyncException(t.ident, AsyncAbort)
             assert affected == 0  # refused, no injection
         finally:
             stop.set()
@@ -102,6 +102,6 @@ def test_inject_async_with_different_exception_classes(exc_cls):
     t.start()
     time.sleep(0.05)
 
-    inject_async_exception(t.ident, exc_cls)
+    injectAsyncException(t.ident, exc_cls)
     t.join(timeout=1.0)
     assert not t.is_alive()

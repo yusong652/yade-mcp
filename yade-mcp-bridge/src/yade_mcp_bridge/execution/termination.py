@@ -3,7 +3,7 @@
 """Interrupt/termination control-flow signals and the async-injection mechanism.
 
 Two ``BaseException`` signals carry an interrupt out to its catcher, plus the
-``inject_async_exception`` helper that delivers the forced one across threads.
+``injectAsyncException`` helper that delivers the forced one across threads.
 These are control flow, not errors — hence ``BaseException``, so a user
 ``except Exception:`` cannot swallow them.
 """
@@ -36,7 +36,7 @@ class AsyncAbort(BaseException):
     """
 
 
-def inject_async_exception(thread_id, exc_type):
+def injectAsyncException(threadId, excType):
     """Inject ``exc_type`` into the target thread via CPython's async
     exception API. Returns the number of threads affected: 0 = no matching
     thread, 1 = queued, -1 = API misuse (undone immediately, per the docs).
@@ -53,11 +53,11 @@ def inject_async_exception(thread_id, exc_type):
     it is a guardrail on the raw ctypes call, not a reachable branch.
     """
     for t in threading.enumerate():
-        if t.ident == thread_id and t.name.startswith("Dummy-"):
+        if t.ident == threadId and t.name.startswith("Dummy-"):
             return 0
 
-    exc = ctypes.py_object(exc_type)
-    tid = ctypes.c_ulong(thread_id)
+    exc = ctypes.py_object(excType)
+    tid = ctypes.c_ulong(threadId)
     affected = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, exc)
     if affected > 1:
         ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.c_void_p())

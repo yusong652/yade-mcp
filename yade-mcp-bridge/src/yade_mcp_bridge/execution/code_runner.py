@@ -13,24 +13,24 @@ import threading
 from io import StringIO
 
 from ..runtime.signals import (
-    clear_current_task,
-    clear_interrupt,
-    get_current_task,
-    get_exec_thread,
-    hold_sim,
-    register_exec_thread,
-    request_interrupt,
-    set_current_task,
-    unregister_exec_thread,
+    clearCurrentTask,
+    clearInterrupt,
+    getCurrentTask,
+    getExecThread,
+    holdSim,
+    registerExecThread,
+    requestInterrupt,
+    setCurrentTask,
+    unregisterExecThread,
 )
-from ..utils import TeeBuffer, error_response, ok_response
+from ..utils import TeeBuffer, errorResponse, okResponse
 from .errors import (
     EXECUTE_CODE_TAG,
-    format_execution_error,
-    is_execute_code_frame,
-    log_execute_code_overflow,
+    formatExecutionError,
+    isExecuteCodeFrame,
+    logExecuteCodeOverflow,
 )
-from .termination import AsyncAbort, CycleInterrupt, inject_async_exception
+from .termination import AsyncAbort, CycleInterrupt, injectAsyncException
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -42,7 +42,7 @@ _CYCLE_INTERRUPT_GRACE_S = 2.0
 _TERMINATION_GRACE_S = 0.5
 
 
-def _sim_running():
+def _simRunning():
     """True if YADE's simulation loop is live (``O.running``)."""
     try:
         from yade import O
@@ -52,48 +52,48 @@ def _sim_running():
         return False
 
 
-def _execute(request_id, code_str, timeout_ms):
+def _execute(requestId, codeStr, timeoutMs):
     """Run a snippet on the pump thread, capturing stdout. Returns an internal
     status dict (success / error / terminated / interrupted).
     """
-    output_buffer = StringIO()
-    old_stdout = sys.stdout
+    outputBuffer = StringIO()
+    oldStdout = sys.stdout
 
     # Record the pump thread so the timeout caller can async-inject
     # AsyncAbort to abort us.
-    register_exec_thread(request_id, threading.get_ident())
+    registerExecThread(requestId, threading.get_ident())
 
     try:
-        terminal = sys.__stdout__ if sys.__stdout__ is not None else old_stdout
-        sys.stdout = TeeBuffer(terminal, output_buffer)
+        terminal = sys.__stdout__ if sys.__stdout__ is not None else oldStdout
+        sys.stdout = TeeBuffer(terminal, outputBuffer)
 
         import __main__
 
-        exec_globals = __main__.__dict__
-        exec_globals.pop("result", None)
+        execGlobals = __main__.__dict__
+        execGlobals.pop("result", None)
 
-        def _do_exec():
+        def _doExec():
             # eval first (bare expression returns a value); fall back to exec.
             try:
-                code_obj = compile(code_str, EXECUTE_CODE_TAG, "eval")
-                return eval(code_obj, exec_globals, exec_globals)
+                codeObj = compile(codeStr, EXECUTE_CODE_TAG, "eval")
+                return eval(codeObj, execGlobals, execGlobals)
             except SyntaxError:
-                code_obj = compile(code_str, EXECUTE_CODE_TAG, "exec")
-                exec(code_obj, exec_globals, exec_globals)
-                return exec_globals.get("result", None)
+                codeObj = compile(codeStr, EXECUTE_CODE_TAG, "exec")
+                exec(codeObj, execGlobals, execGlobals)
+                return execGlobals.get("result", None)
 
-        if get_current_task() is not None or _sim_running():
+        if getCurrentTask() is not None or _simRunning():
             # a task is running, or user ran O.run() in console.
             # Hold the sim so that the code can read a snapshot.
-            max_hold_s = timeout_ms / 1000.0 + _CYCLE_INTERRUPT_GRACE_S + _TERMINATION_GRACE_S + 1.0
-            with hold_sim(max_hold_s=max_hold_s):
-                result = _do_exec()
+            maxHoldS = timeoutMs / 1000.0 + _CYCLE_INTERRUPT_GRACE_S + _TERMINATION_GRACE_S + 1.0
+            with holdSim(maxHoldS=maxHoldS):
+                result = _doExec()
         else:
-            result = _do_exec()
+            result = _doExec()
 
         return {
             "status": "success",
-            "output": output_buffer.getvalue(),
+            "output": outputBuffer.getvalue(),
             "result": result
             if isinstance(result, (str, int, float, bool, list, dict, type(None)))
             else str(result)
@@ -103,40 +103,40 @@ def _execute(request_id, code_str, timeout_ms):
     except CycleInterrupt:
         # Timed out: the PyRunner started by the cycle paused our O.run at a
         # cycle boundary and raised here. Marker → status="interrupted".
-        return {"status": "interrupted", "output": output_buffer.getvalue()}
+        return {"status": "interrupted", "output": outputBuffer.getvalue()}
     except AsyncAbort:
         # Timed out: terminated by async exception injection into this thread.
-        return {"status": "terminated", "output": output_buffer.getvalue()}
+        return {"status": "terminated", "output": outputBuffer.getvalue()}
     except Exception as e:
         # Returned successfully: the code raised an exception of its own.
-        output_text = output_buffer.getvalue()
+        outputText = outputBuffer.getvalue()
         # Drop the compile(eval)->compile(exec) fallback's chained-SyntaxError
         # preamble — pure plumbing.
         e.__suppress_context__ = True
 
-        return format_execution_error(
+        return formatExecutionError(
             e,
-            output_text,
-            keep_frame=is_execute_code_frame,
-            display_path=EXECUTE_CODE_TAG,
-            overflow_writer=log_execute_code_overflow,
+            outputText,
+            keepFrame=isExecuteCodeFrame,
+            displayPath=EXECUTE_CODE_TAG,
+            overflowWriter=logExecuteCodeOverflow,
         )
     finally:
-        sys.stdout = old_stdout
-        clear_interrupt(request_id)
-        unregister_exec_thread(request_id)
+        sys.stdout = oldStdout
+        clearInterrupt(requestId)
+        unregisterExecThread(requestId)
 
 
-def _terminate_stuck_execution(request_id, future):
+def _terminateStuckExecution(requestId, future):
     """Terminate a timed-out ``execute_code`` submission."""
     # Set the interrupt flag first: if the code is inside ``O.run(wait=True)``,
     # the PyRunner tick sees the flag and pauses the cycle, so O.run returns.
-    request_interrupt(request_id)
+    requestInterrupt(requestId)
 
     # Temporarily set the current task id to this request_id, so the next
     # PyRunner tick picks up the interrupt flag and O.pause()s the run.
-    if get_current_task() is None and _sim_running():
-        set_current_task(request_id)
+    if getCurrentTask() is None and _simRunning():
+        setCurrentTask(requestId)
         try:
             result = future.result(timeout=_CYCLE_INTERRUPT_GRACE_S)
         except concurrent.futures.TimeoutError:
@@ -146,15 +146,15 @@ def _terminate_stuck_execution(request_id, future):
             return {"method": "cycle_stuck", "result": None}
         finally:
             # CAS: don't wipe a task that claimed the slot mid-grace.
-            if get_current_task() == request_id:
-                clear_current_task()
-            clear_interrupt(request_id)
+            if getCurrentTask() == requestId:
+                clearCurrentTask()
+            clearInterrupt(requestId)
 
         status = result.get("status") if isinstance(result, dict) else None
         method = "cycle_interrupt" if status == "interrupted" else "cycle_finished"
         return {"method": method, "result": result}
 
-    tid = get_exec_thread(request_id)
+    tid = getExecThread(requestId)
 
     # Registry already cleared → _execute's finally ran → the pump is free.
     if tid is None:
@@ -165,7 +165,7 @@ def _terminate_stuck_execution(request_id, future):
         # future's result yet (it sets it after _execute returns).
         return {"method": "unsettled", "result": None}
 
-    inject_async_exception(tid, AsyncAbort)
+    injectAsyncException(tid, AsyncAbort)
 
     try:
         result = future.result(timeout=_TERMINATION_GRACE_S)
@@ -174,7 +174,7 @@ def _terminate_stuck_execution(request_id, future):
         return {"method": "stuck_in_c", "result": None}
 
 
-def _timeout_response(request_id, timeout_ms, termination):
+def _timeoutResponse(requestId, timeoutMs, termination):
     """Build the wire response for an ``execute_code`` that timed out."""
     method = termination["method"]
     result = termination.get("result")
@@ -186,52 +186,52 @@ def _timeout_response(request_id, timeout_ms, termination):
         output = result.get("output", "") or ""
 
     if method == "cycle_interrupt":
-        error_code = "interrupted"
+        errorCode = "interrupted"
         message = (
             f"A simulation cycle (O.run) inside execute_code exceeded the "
-            f"{timeout_ms}ms timeout and was paused cleanly at an iteration "
+            f"{timeoutMs}ms timeout and was paused cleanly at an iteration "
             "boundary."
         )
     elif method == "async_exc":
-        error_code = "terminated"
+        errorCode = "terminated"
         message = (
-            f"Execution exceeded the {timeout_ms}ms timeout and was aborted. "
+            f"Execution exceeded the {timeoutMs}ms timeout and was aborted. "
             "YADE state may be partially modified by code that ran before the "
             "abort."
         )
     elif method in ("finished", "cycle_finished"):
         # The code raced the abort and completed first.
-        error_code = "terminated"
+        errorCode = "terminated"
         message = (
-            f"Execution exceeded the {timeout_ms}ms timeout but finished on "
+            f"Execution exceeded the {timeoutMs}ms timeout but finished on "
             "its own before the abort landed; its result was discarded. Any "
             "state changes it made are fully in effect."
         )
     elif method == "stuck_in_c":
-        error_code = "timeout"
+        errorCode = "timeout"
         message = (
-            f"Execution exceeded the {timeout_ms}ms timeout; the abort "
+            f"Execution exceeded the {timeoutMs}ms timeout; the abort "
             "exception was queued but the code has not yielded — likely "
             "blocked in a C extension."
         )
     elif method == "cycle_stuck":
-        error_code = "timeout"
+        errorCode = "timeout"
         message = (
-            f"A simulation cycle (O.run) exceeded the {timeout_ms}ms timeout; "
+            f"A simulation cycle (O.run) exceeded the {timeoutMs}ms timeout; "
             f"a pause was requested, but the cycle is too heavy to reach an "
             f"iteration boundary within {_CYCLE_INTERRUPT_GRACE_S:.0f}s. The "
             "pause is sticky — the run stops at the next boundary."
         )
     else:  # "unsettled" — defensive: registry cleared but future not yet set.
-        error_code = "timeout"
-        message = f"Execution exceeded the {timeout_ms}ms timeout."
+        errorCode = "timeout"
+        message = f"Execution exceeded the {timeoutMs}ms timeout."
 
     details = {"method": method}
 
-    return error_response(
+    return errorResponse(
         "execute_code_result",
-        request_id,
-        error_code,
+        requestId,
+        errorCode,
         message,
         details=details,
         data={"output": output},
@@ -244,12 +244,12 @@ class CodeRunner:
     def __init__(self, executor):
         self.executor = executor
 
-    def run(self, request_id, code, timeout_ms):
+    def run(self, requestId, code, timeoutMs):
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
             # Submit to the pump and block until it resolves or times out.
-            future = self.executor.submit(_execute, request_id, code, timeout_ms)
-            result = future.result(timeout=timeout_ms / 1000.0)
+            future = self.executor.submit(_execute, requestId, code, timeoutMs)
+            result = future.result(timeout=timeoutMs / 1000.0)
 
             # ``status`` is _execute's internal marker; translate it to the envelope.
             if result.get("status") == "error":
@@ -258,18 +258,18 @@ class CodeRunner:
                     if key in result:
                         details[key] = result[key]
                 # User code raised: an execution error, not a bridge fault.
-                return error_response(
+                return errorResponse(
                     "execute_code_result",
-                    request_id,
+                    requestId,
                     "execution_error",
                     result.get("message", ""),
                     details=details or None,
                     data={"output": result.get("output", "")},
                 )
 
-            return ok_response(
+            return okResponse(
                 "execute_code_result",
-                request_id,
+                requestId,
                 data={
                     "output": result.get("output", ""),
                     "result": result.get("result"),
@@ -277,12 +277,12 @@ class CodeRunner:
             )
 
         except concurrent.futures.TimeoutError:
-            termination = _terminate_stuck_execution(request_id, future)
-            return _timeout_response(request_id, timeout_ms, termination)
+            termination = _terminateStuckExecution(requestId, future)
+            return _timeoutResponse(requestId, timeoutMs, termination)
 
         except Exception as e:
             # Bridge-side fault (executor submission, result plumbing) — the
             # user's code never ran or its outcome was lost. Same code the
             # transport layer uses for handler crashes.
             logger.error(f"Code execution failed: {e}")
-            return error_response("execute_code_result", request_id, "internal_error", str(e))
+            return errorResponse("execute_code_result", requestId, "internal_error", str(e))

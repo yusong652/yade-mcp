@@ -74,6 +74,10 @@ ignore = [
     "B905",
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# tests/bridge mirrors the bridge's lowerCamelCase convention (yade trunk style)
+"tests/bridge/*" = ["N802", "N803", "N815", "N816"]
+
 [tool.mypy]
 python_version = "3.10"
 strict = true

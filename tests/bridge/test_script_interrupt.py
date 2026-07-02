@@ -9,9 +9,9 @@ from unittest.mock import MagicMock
 import pytest
 from yade_mcp_bridge.execution.script_runner import ScriptRunner
 from yade_mcp_bridge.runtime.signals import (
-    _exec_thread_ids,
-    clear_interrupt,
-    get_exec_thread,
+    _execThreadIds,
+    clearInterrupt,
+    getExecThread,
 )
 
 
@@ -26,33 +26,33 @@ def fake_yade(monkeypatch):
 
 @pytest.fixture
 def runner():
-    task_manager = MagicMock()
-    task_manager.tasks = {}
-    return ScriptRunner(task_manager=task_manager)
+    taskManager = MagicMock()
+    taskManager.tasks = {}
+    return ScriptRunner(taskManager=taskManager)
 
 
 @pytest.fixture
 def scratch(tmp_path):
     def make(content):
-        script_path = tmp_path / "s.py"
-        script_path.write_text(content, encoding="utf-8")
+        scriptPath = tmp_path / "s.py"
+        scriptPath.write_text(content, encoding="utf-8")
         from yade_mcp_bridge.utils import FileBuffer
 
         buffer = FileBuffer(str(tmp_path / "task.log"))
-        return str(script_path), buffer
+        return str(scriptPath), buffer
 
     return make
 
 
 @pytest.fixture(autouse=True)
 def _cleanup():
-    _exec_thread_ids.clear()
+    _execThreadIds.clear()
     for tid in ("ti-1", "ti-2", "ti-3", "ti-reg"):
-        clear_interrupt(tid)
+        clearInterrupt(tid)
     yield
-    _exec_thread_ids.clear()
+    _execThreadIds.clear()
     for tid in ("ti-1", "ti-2", "ti-3", "ti-reg"):
-        clear_interrupt(tid)
+        clearInterrupt(tid)
 
 
 class TestAsyncAbort:
@@ -60,8 +60,8 @@ class TestAsyncAbort:
         """User script directly raising AsyncAbort mirrors what the
         async-exc injection does from the outside."""
         code = "from yade_mcp_bridge.execution.termination import AsyncAbort\nraise AsyncAbort()\n"
-        script_path, buffer = scratch(code)
-        result = runner._execute(script_path, code, buffer, task_id="ti-1")
+        scriptPath, buffer = scratch(code)
+        result = runner._execute(scriptPath, code, buffer, taskId="ti-1")
 
         assert result["status"] == "interrupted"
         assert "force-interrupted" in result["message"].lower()
@@ -73,8 +73,8 @@ class TestAsyncAbort:
         linger and poison the next task's drain check."""
         fake_yade.running = True
         code = "from yade_mcp_bridge.execution.termination import AsyncAbort\nraise AsyncAbort()\n"
-        script_path, buffer = scratch(code)
-        result = runner._execute(script_path, code, buffer, task_id="ti-2")
+        scriptPath, buffer = scratch(code)
+        result = runner._execute(scriptPath, code, buffer, taskId="ti-2")
 
         assert result["status"] == "interrupted"
         fake_yade.pause.assert_called_once()
@@ -83,8 +83,8 @@ class TestAsyncAbort:
     def test_sim_cleanup_skipped_when_not_running(self, fake_yade, runner, scratch):
         fake_yade.running = False
         code = "from yade_mcp_bridge.execution.termination import AsyncAbort\nraise AsyncAbort()\n"
-        script_path, buffer = scratch(code)
-        result = runner._execute(script_path, code, buffer, task_id="ti-3")
+        scriptPath, buffer = scratch(code)
+        result = runner._execute(scriptPath, code, buffer, taskId="ti-3")
 
         assert result["status"] == "interrupted"
         fake_yade.pause.assert_not_called()
@@ -97,8 +97,8 @@ class TestAsyncAbort:
         fake_yade.running = True
         fake_yade.wait.side_effect = RuntimeError("sim zombie")
         code = "from yade_mcp_bridge.execution.termination import AsyncAbort\nraise AsyncAbort()\n"
-        script_path, buffer = scratch(code)
-        result = runner._execute(script_path, code, buffer, task_id="ti-4")
+        scriptPath, buffer = scratch(code)
+        result = runner._execute(scriptPath, code, buffer, taskId="ti-4")
 
         assert result["status"] == "interrupted"
 
@@ -110,11 +110,11 @@ class TestRegistryLifecycle:
         after the task returns."""
         code = (
             "import threading\n"
-            "from yade_mcp_bridge.runtime.signals import get_exec_thread\n"
-            "result = (get_exec_thread('ti-reg'), threading.get_ident())\n"
+            "from yade_mcp_bridge.runtime.signals import getExecThread\n"
+            "result = (getExecThread('ti-reg'), threading.get_ident())\n"
         )
-        script_path, buffer = scratch(code)
-        result = runner._execute(script_path, code, buffer, task_id="ti-reg")
+        scriptPath, buffer = scratch(code)
+        result = runner._execute(scriptPath, code, buffer, taskId="ti-reg")
 
         assert result["status"] == "success"
         # The script captured (registered_tid, actual_tid) — they must match.
@@ -122,4 +122,4 @@ class TestRegistryLifecycle:
         assert registered is not None
         assert registered == actual
         # Post-return the registry must be clean.
-        assert get_exec_thread("ti-reg") is None
+        assert getExecThread("ti-reg") is None

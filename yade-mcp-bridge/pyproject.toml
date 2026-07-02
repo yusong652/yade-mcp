@@ -29,6 +29,10 @@ ignore = [
     "SIM103",
     "SIM108",
     "N806",
+    "N802",  # lowerCamelCase functions/methods, matching yade trunk's convention (prog.rst)
+    "N803",  # lowerCamelCase parameters, same convention
+    "N815",  # lowerCamelCase class-scope variables, same convention
+    "N816",  # lowerCamelCase module-scope variables, same convention
     "B008",
     "B905",
     "SIM115", # FileBuffer manages its own file handle lifecycle

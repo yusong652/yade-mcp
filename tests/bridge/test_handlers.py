@@ -4,39 +4,39 @@ from concurrent.futures import Future
 from unittest.mock import MagicMock, patch
 
 from yade_mcp_bridge.execution.code_runner import (
-    _terminate_stuck_execution,
-    _timeout_response,
+    _terminateStuckExecution,
+    _timeoutResponse,
 )
 from yade_mcp_bridge.handlers.context import ServerContext
 from yade_mcp_bridge.handlers.tasks import (
-    handle_check_task_status,
-    handle_execute_task,
-    handle_interrupt_task,
-    handle_list_tasks,
+    handleCheckTaskStatus,
+    handleExecuteTask,
+    handleInterruptTask,
+    handleListTasks,
 )
 from yade_mcp_bridge.runtime.signals import (
-    _exec_thread_ids,
-    _interrupt_requested,
-    clear_current_task,
-    get_current_task,
-    register_exec_thread,
-    set_current_task,
+    _execThreadIds,
+    _interruptRequested,
+    clearCurrentTask,
+    getCurrentTask,
+    registerExecThread,
+    setCurrentTask,
 )
 
 
-def _make_ctx(runtime_mode="console", tasks=None):
+def _make_ctx(runtimeMode="console", tasks=None):
     """Create a ServerContext with mock dependencies."""
-    task_manager = MagicMock()
-    task_manager.tasks = tasks or {}
-    script_runner = MagicMock()
-    code_runner = MagicMock()
+    taskManager = MagicMock()
+    taskManager.tasks = tasks or {}
+    scriptRunner = MagicMock()
+    codeRunner = MagicMock()
     executor = MagicMock()
     return ServerContext(
-        task_manager=task_manager,
-        script_runner=script_runner,
-        code_runner=code_runner,
+        taskManager=taskManager,
+        scriptRunner=scriptRunner,
+        codeRunner=codeRunner,
         executor=executor,
-        runtime_mode=runtime_mode,
+        runtimeMode=runtimeMode,
     )
 
 
@@ -48,23 +48,23 @@ def _make_ctx(runtime_mode="console", tasks=None):
 class TestHandleCheckTaskStatus:
     def test_missing_task_id(self):
         ctx = _make_ctx()
-        resp = handle_check_task_status(ctx, {"request_id": "r1"})
+        resp = handleCheckTaskStatus(ctx, {"request_id": "r1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert "task_id required" in resp["error"]["message"]
 
     def test_delegates_to_task_manager(self):
         ctx = _make_ctx()
-        ctx.task_manager.get_task_status.return_value = {
+        ctx.taskManager.getTaskStatus.return_value = {
             "ok": True,
             "data": {"status": "completed"},
         }
-        resp = handle_check_task_status(ctx, {"request_id": "r1", "task_id": "t1"})
-        ctx.task_manager.get_task_status.assert_called_once_with(
+        resp = handleCheckTaskStatus(ctx, {"request_id": "r1", "task_id": "t1"})
+        ctx.taskManager.getTaskStatus.assert_called_once_with(
             "t1",
-            skip_newest=0,
+            skipNewest=0,
             limit=64,
-            filter_text=None,
+            filterText=None,
         )
         assert resp["ok"] is True
         assert resp["data"]["status"] == "completed"
@@ -72,8 +72,8 @@ class TestHandleCheckTaskStatus:
 
     def test_forwards_pagination_params(self):
         ctx = _make_ctx()
-        ctx.task_manager.get_task_status.return_value = {"ok": True, "data": {"status": "running"}}
-        handle_check_task_status(
+        ctx.taskManager.getTaskStatus.return_value = {"ok": True, "data": {"status": "running"}}
+        handleCheckTaskStatus(
             ctx,
             {
                 "request_id": "r1",
@@ -83,11 +83,11 @@ class TestHandleCheckTaskStatus:
                 "filter_text": "error",
             },
         )
-        ctx.task_manager.get_task_status.assert_called_once_with(
+        ctx.taskManager.getTaskStatus.assert_called_once_with(
             "t1",
-            skip_newest=10,
+            skipNewest=10,
             limit=32,
-            filter_text="error",
+            filterText="error",
         )
 
 
@@ -99,25 +99,25 @@ class TestHandleCheckTaskStatus:
 class TestHandleListTasks:
     def test_delegates_to_task_manager(self):
         ctx = _make_ctx()
-        ctx.task_manager.list_all_tasks.return_value = {
+        ctx.taskManager.listAllTasks.return_value = {
             "ok": True,
             "data": [],
         }
-        resp = handle_list_tasks(ctx, {"request_id": "r1"})
-        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=64)
+        resp = handleListTasks(ctx, {"request_id": "r1"})
+        ctx.taskManager.listAllTasks.assert_called_once_with(offset=0, limit=64)
         assert resp["ok"] is True
 
     def test_explicit_null_limit_uses_default(self):
         ctx = _make_ctx()
-        ctx.task_manager.list_all_tasks.return_value = {"ok": True, "data": []}
-        handle_list_tasks(ctx, {"request_id": "r1", "limit": None})
-        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=0, limit=64)
+        ctx.taskManager.listAllTasks.return_value = {"ok": True, "data": []}
+        handleListTasks(ctx, {"request_id": "r1", "limit": None})
+        ctx.taskManager.listAllTasks.assert_called_once_with(offset=0, limit=64)
 
     def test_passes_pagination(self):
         ctx = _make_ctx()
-        ctx.task_manager.list_all_tasks.return_value = {"ok": True, "data": []}
-        handle_list_tasks(ctx, {"request_id": "r1", "offset": 5, "limit": 10})
-        ctx.task_manager.list_all_tasks.assert_called_once_with(offset=5, limit=10)
+        ctx.taskManager.listAllTasks.return_value = {"ok": True, "data": []}
+        handleListTasks(ctx, {"request_id": "r1", "offset": 5, "limit": 10})
+        ctx.taskManager.listAllTasks.assert_called_once_with(offset=5, limit=10)
 
 
 # =========================================================================
@@ -128,14 +128,14 @@ class TestHandleListTasks:
 class TestHandleInterruptTask:
     def test_missing_task_id(self):
         ctx = _make_ctx()
-        resp = handle_interrupt_task(ctx, {"request_id": "r1"})
+        resp = handleInterruptTask(ctx, {"request_id": "r1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert "task_id required" in resp["error"]["message"]
 
     def test_task_not_found(self):
         ctx = _make_ctx(tasks={})
-        resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "nope"})
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "nope"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "not_found"
         assert "not found" in resp["error"]["message"].lower()
@@ -144,28 +144,28 @@ class TestHandleInterruptTask:
         task = MagicMock()
         task.status = "completed"
         ctx = _make_ctx(tasks={"t1": task})
-        resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "already_terminal"
         assert "terminal state" in resp["error"]["message"].lower()
 
     def test_interrupt_running_task(self):
-        from yade_mcp_bridge.runtime.signals import clear_interrupt, is_task_interrupt_requested
+        from yade_mcp_bridge.runtime.signals import clearInterrupt, isTaskInterruptRequested
 
         task = MagicMock()
         task.status = "running"
         ctx = _make_ctx(tasks={"t1": task})
-        clear_interrupt("t1")
-        resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
+        clearInterrupt("t1")
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t1"})
         try:
             assert resp["ok"] is True
             assert resp["data"]["interrupt_requested"] is True
-            assert is_task_interrupt_requested("t1") is True
+            assert isTaskInterruptRequested("t1") is True
             # No thread registered for "t1" → async-exc path must skip,
             # flag-only method reported.
             assert resp["data"]["method"] == "flag_only"
         finally:
-            clear_interrupt("t1")
+            clearInterrupt("t1")
 
     def test_interrupt_running_task_with_registered_thread_fires_async_exc(self):
         """When ScriptRunner has registered a live script thread for
@@ -176,17 +176,17 @@ class TestHandleInterruptTask:
 
         from yade_mcp_bridge.execution.termination import AsyncAbort
         from yade_mcp_bridge.runtime.signals import (
-            clear_interrupt,
-            get_exec_thread,
-            register_exec_thread,
-            unregister_exec_thread,
+            clearInterrupt,
+            getExecThread,
+            registerExecThread,
+            unregisterExecThread,
         )
 
         task = MagicMock()
         task.status = "running"
         ctx = _make_ctx(tasks={"t2": task})
-        clear_interrupt("t2")
-        unregister_exec_thread("t2")
+        clearInterrupt("t2")
+        unregisterExecThread("t2")
 
         got_exception: list[BaseException] = []
         started: list[bool] = []
@@ -208,10 +208,10 @@ class TestHandleInterruptTask:
             import time as _time
 
             _time.sleep(0.01)
-        register_exec_thread("t2", t.ident)
+        registerExecThread("t2", t.ident)
 
         try:
-            resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t2"})
+            resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t2"})
             t.join(timeout=2.0)
 
             assert resp["ok"] is True
@@ -221,48 +221,48 @@ class TestHandleInterruptTask:
             assert isinstance(got_exception[0], AsyncAbort)
             # Atomicity check: registry must be cleared so a second
             # interrupt call can't re-inject during cleanup.
-            assert get_exec_thread("t2") is None
+            assert getExecThread("t2") is None
         finally:
             t.join(timeout=1.0)
-            clear_interrupt("t2")
-            unregister_exec_thread("t2")
+            clearInterrupt("t2")
+            unregisterExecThread("t2")
 
     def test_second_interrupt_is_noop_on_async_exc_path(self):
         """Re-entrancy guard: once handler unregisters the thread on
         first interrupt, a second handler call must NOT re-inject
         (which would interrupt the script's except-block cleanup)."""
         from yade_mcp_bridge.runtime.signals import (
-            clear_interrupt,
-            unregister_exec_thread,
+            clearInterrupt,
+            unregisterExecThread,
         )
 
         task = MagicMock()
         task.status = "running"
         ctx = _make_ctx(tasks={"t3": task})
-        clear_interrupt("t3")
+        clearInterrupt("t3")
 
         # Simulate: script thread already exited its body, registry cleared
         # by prior interrupt. A second call here should be flag-only.
-        unregister_exec_thread("t3")
-        resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t3"})
+        unregisterExecThread("t3")
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t3"})
         try:
             assert resp["ok"] is True
             assert resp["data"]["method"] == "flag_only"
         finally:
-            clear_interrupt("t3")
+            clearInterrupt("t3")
 
     def test_interrupt_pending_task(self):
-        from yade_mcp_bridge.runtime.signals import clear_interrupt
+        from yade_mcp_bridge.runtime.signals import clearInterrupt
 
         task = MagicMock()
         task.status = "pending"
         ctx = _make_ctx(tasks={"t1": task})
-        clear_interrupt("t1")
-        resp = handle_interrupt_task(ctx, {"request_id": "r1", "task_id": "t1"})
+        clearInterrupt("t1")
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t1"})
         try:
             assert resp["ok"] is True
         finally:
-            clear_interrupt("t1")
+            clearInterrupt("t1")
 
 
 # =========================================================================
@@ -273,15 +273,15 @@ class TestHandleInterruptTask:
 class TestHandleExecuteTask:
     def test_missing_script_path(self):
         ctx = _make_ctx()
-        resp = handle_execute_task(ctx, {"request_id": "r1", "task_id": "t1"})
+        resp = handleExecuteTask(ctx, {"request_id": "r1", "task_id": "t1"})
         assert resp["ok"] is False
         assert resp["error"]["code"] == "missing_field"
         assert "script_path required" in resp["error"]["message"]
 
     def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
-        ctx.script_runner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
-        handle_execute_task(
+        ctx.scriptRunner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
+        handleExecuteTask(
             ctx,
             {
                 "request_id": "r1",
@@ -289,7 +289,7 @@ class TestHandleExecuteTask:
                 "description": "my task",
             },
         )
-        ctx.script_runner.run.assert_called_once_with("/tmp/test.py", "my task")
+        ctx.scriptRunner.run.assert_called_once_with("/tmp/test.py", "my task")
 
     def test_run_assigns_task_id(self, tmp_path, monkeypatch):
         """ScriptRunner.run assigns the task_id and returns it in the data."""
@@ -302,10 +302,10 @@ class TestHandleExecuteTask:
         os.makedirs(LOGS_DIR)
         script = tmp_path / "s.py"
         script.write_text("x = 1\n")
-        task_manager = MagicMock()
-        task_manager.tasks = {}
+        taskManager = MagicMock()
+        taskManager.tasks = {}
 
-        result = ScriptRunner(task_manager=task_manager).run(str(script), "desc")
+        result = ScriptRunner(taskManager=taskManager).run(str(script), "desc")
 
         assert result["ok"] is True
         assert result["data"]["task_id"]
@@ -318,29 +318,29 @@ class TestHandleExecuteTask:
 
 class TestTerminateStuckExecution:
     def setup_method(self):
-        _exec_thread_ids.clear()
-        _interrupt_requested.clear()
-        clear_current_task()
+        _execThreadIds.clear()
+        _interruptRequested.clear()
+        clearCurrentTask()
 
     def test_no_thread_registered_resolved_future(self):
         """Registry empty + future already done → 'finished' path, resolved."""
         future = Future()
         future.set_result({"status": "success", "output": "hi"})
 
-        result = _terminate_stuck_execution("req-1", future)
+        result = _terminateStuckExecution("req-1", future)
 
         assert result["result"] is not None
         assert result["method"] == "finished"
         assert result["result"]["status"] == "success"
-        # request_interrupt still fires, even on the finished path
-        assert _interrupt_requested.get("req-1") is True
+        # requestInterrupt still fires, even on the finished path
+        assert _interruptRequested.get("req-1") is True
 
     def test_no_thread_registered_pending_future(self):
         """Registry empty + future pending → 'unsettled'.
         Defensive: the ultra-narrow window where the registry is cleared but
         the executor hasn't set the future's result yet."""
         future = Future()
-        result = _terminate_stuck_execution("req-1", future)
+        result = _terminateStuckExecution("req-1", future)
         assert result["result"] is None
         assert result["method"] == "unsettled"
 
@@ -348,15 +348,15 @@ class TestTerminateStuckExecution:
         """SetAsyncExc succeeds → future resolves → method=async_exc."""
         future = Future()
 
-        register_exec_thread("req-3", 77777)
+        registerExecThread("req-3", 77777)
         # Resolve future BEFORE calling — grace wait_for will see it immediately
         future.set_result({"status": "terminated", "output": "partial"})
 
         with patch(
-            "yade_mcp_bridge.execution.code_runner.inject_async_exception",
+            "yade_mcp_bridge.execution.code_runner.injectAsyncException",
             return_value=1,
         ):
-            result = _terminate_stuck_execution("req-3", future)
+            result = _terminateStuckExecution("req-3", future)
 
         assert result["result"] is not None
         assert result["method"] == "async_exc"
@@ -366,11 +366,11 @@ class TestTerminateStuckExecution:
         """SetAsyncExc called but future never resolves → stuck_in_c."""
         future = Future()  # never resolved
 
-        register_exec_thread("req-4", 88888)
+        registerExecThread("req-4", 88888)
 
         with (
             patch(
-                "yade_mcp_bridge.execution.code_runner.inject_async_exception",
+                "yade_mcp_bridge.execution.code_runner.injectAsyncException",
                 return_value=1,
             ),
             patch(
@@ -378,7 +378,7 @@ class TestTerminateStuckExecution:
                 0.05,  # short grace to keep test fast
             ),
         ):
-            result = _terminate_stuck_execution("req-4", future)
+            result = _terminateStuckExecution("req-4", future)
 
         assert result["result"] is None
         assert result["method"] == "stuck_in_c"
@@ -393,17 +393,17 @@ class TestTerminateStuckExecution:
 
         # No task owns the sim (setup cleared _current_task_id).
         with patch(
-            "yade_mcp_bridge.execution.code_runner._sim_running",
+            "yade_mcp_bridge.execution.code_runner._simRunning",
             return_value=True,
         ):
-            result = _terminate_stuck_execution("cyc-1", future)
+            result = _terminateStuckExecution("cyc-1", future)
 
         assert result["result"] is not None
         assert result["method"] == "cycle_interrupt"
         assert result["result"]["output"] == "paused"
         # CAS-cleared on the way out; interrupt flag cleared too.
-        assert get_current_task() is None
-        assert _interrupt_requested.get("cyc-1") is None
+        assert getCurrentTask() is None
+        assert _interruptRequested.get("cyc-1") is None
 
     def test_cycle_stuck_when_future_never_resolves(self):
         """Sim running, no task, but O.pause doesn't free O.run within
@@ -412,7 +412,7 @@ class TestTerminateStuckExecution:
 
         with (
             patch(
-                "yade_mcp_bridge.execution.code_runner._sim_running",
+                "yade_mcp_bridge.execution.code_runner._simRunning",
                 return_value=True,
             ),
             patch(
@@ -420,30 +420,30 @@ class TestTerminateStuckExecution:
                 0.05,  # short grace to keep test fast
             ),
         ):
-            result = _terminate_stuck_execution("cyc-2", future)
+            result = _terminateStuckExecution("cyc-2", future)
 
         assert result["result"] is None
         assert result["method"] == "cycle_stuck"
-        assert get_current_task() is None
-        assert _interrupt_requested.get("cyc-2") is None
+        assert getCurrentTask() is None
+        assert _interruptRequested.get("cyc-2") is None
 
     def test_cycle_gate_skipped_when_task_owns_sim(self):
         """A task owns the sim (peek != None) → cycle gate skipped, the
         task's _current_task_id is never touched, async/self path runs."""
         future = Future()
         future.set_result({"status": "success", "output": "hi"})
-        set_current_task("owner-task")
+        setCurrentTask("owner-task")
 
         with patch(
-            "yade_mcp_bridge.execution.code_runner._sim_running",
+            "yade_mcp_bridge.execution.code_runner._simRunning",
             return_value=True,
         ):
-            result = _terminate_stuck_execution("cyc-3", future)
+            result = _terminateStuckExecution("cyc-3", future)
 
         # Falls through to the non-cycle path; no exec thread registered
         # → 'finished'. The task's slot is untouched.
         assert result["method"] == "finished"
-        assert get_current_task() == "owner-task"
+        assert getCurrentTask() == "owner-task"
 
     def test_cycle_gate_skipped_when_sim_not_running(self):
         """O not running (e.g. no YADE / pure-Python stuck) → cycle gate
@@ -451,12 +451,12 @@ class TestTerminateStuckExecution:
         future = Future()
         future.set_result({"status": "terminated", "output": ""})
 
-        # _sim_running defaults to False without YADE; assert explicitly.
+        # _simRunning defaults to False without YADE; assert explicitly.
         with patch(
-            "yade_mcp_bridge.execution.code_runner._sim_running",
+            "yade_mcp_bridge.execution.code_runner._simRunning",
             return_value=False,
         ):
-            result = _terminate_stuck_execution("cyc-4", future)
+            result = _terminateStuckExecution("cyc-4", future)
 
         assert result["method"] == "finished"
         assert result["result"] is not None
@@ -468,7 +468,7 @@ class TestTimeoutResponse:
             "method": "async_exc",
             "result": {"status": "terminated", "output": "hello"},
         }
-        resp = _timeout_response("req-1", 3000, termination)
+        resp = _timeoutResponse("req-1", 3000, termination)
         assert resp["ok"] is False
         assert "status" not in resp
         assert resp["type"] == "execute_code_result"
@@ -483,7 +483,7 @@ class TestTimeoutResponse:
             "method": "stuck_in_c",
             "result": None,
         }
-        resp = _timeout_response("req-3", 3000, termination)
+        resp = _timeoutResponse("req-3", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "timeout"
         assert "C extension" in resp["error"]["message"]
@@ -494,7 +494,7 @@ class TestTimeoutResponse:
             "method": "cycle_interrupt",
             "result": {"status": "interrupted", "output": "iter=500"},
         }
-        resp = _timeout_response("req-5", 3000, termination)
+        resp = _timeoutResponse("req-5", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "interrupted"
         # Bridge states the fact (paused at a boundary); no client-tool names —
@@ -509,7 +509,7 @@ class TestTimeoutResponse:
             "method": "cycle_stuck",
             "result": None,
         }
-        resp = _timeout_response("req-6", 3000, termination)
+        resp = _timeoutResponse("req-6", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "timeout"
         assert "O.run" in resp["error"]["message"]
@@ -521,7 +521,7 @@ class TestTimeoutResponse:
             "method": "unsettled",
             "result": None,
         }
-        resp = _timeout_response("req-7", 3000, termination)
+        resp = _timeoutResponse("req-7", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "timeout"
         assert resp["error"]["details"]["method"] == "unsettled"
@@ -532,7 +532,7 @@ class TestTimeoutResponse:
             "method": "finished",
             "result": {"status": "success", "output": "done"},
         }
-        resp = _timeout_response("req-8", 3000, termination)
+        resp = _timeoutResponse("req-8", 3000, termination)
         assert resp["ok"] is False
         assert resp["error"]["code"] == "terminated"
         assert resp["data"]["output"] == "done"
@@ -556,14 +556,14 @@ class TestExecuteHoldLimit:
         captured = {}
 
         @contextlib.contextmanager
-        def fake_hold(max_hold_s=None):
-            captured["max_hold_s"] = max_hold_s
+        def fake_hold(maxHoldS=None):
+            captured["max_hold_s"] = maxHoldS
             yield True
 
-        monkeypatch.setattr(code_runner, "hold_sim", fake_hold)
-        monkeypatch.setattr(code_runner, "_sim_running", lambda: True)
+        monkeypatch.setattr(code_runner, "holdSim", fake_hold)
+        monkeypatch.setattr(code_runner, "_simRunning", lambda: True)
 
-        result = code_runner._execute("req-hold", "1 + 1", timeout_ms=5000)
+        result = code_runner._execute("req-hold", "1 + 1", timeoutMs=5000)
 
         assert result["status"] == "success"
         expected = 5.0 + code_runner._CYCLE_INTERRUPT_GRACE_S + code_runner._TERMINATION_GRACE_S + 1.0
@@ -578,10 +578,10 @@ class TestExecuteHoldLimit:
         def fake_hold(**kwargs):
             called["hold"] = True
 
-        monkeypatch.setattr(code_runner, "hold_sim", fake_hold)
-        monkeypatch.setattr(code_runner, "_sim_running", lambda: False)
+        monkeypatch.setattr(code_runner, "holdSim", fake_hold)
+        monkeypatch.setattr(code_runner, "_simRunning", lambda: False)
 
-        result = code_runner._execute("req-nohold", "2 + 2", timeout_ms=5000)
+        result = code_runner._execute("req-nohold", "2 + 2", timeoutMs=5000)
 
         assert result["status"] == "success"
         assert called["hold"] is False

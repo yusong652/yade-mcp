@@ -6,43 +6,43 @@
 class TaskDataBuilder:
     """Builder for task response data dictionaries."""
 
-    def __init__(self, task_id, task_type, script_path, description):
+    def __init__(self, taskId, taskType, scriptPath, description):
         self._data = {
-            "task_id": task_id,
-            "task_type": task_type,
-            "script_path": script_path,
+            "task_id": taskId,
+            "task_type": taskType,
+            "script_path": scriptPath,
             "description": description,
         }
 
-    def with_status(self, status):
+    def withStatus(self, status):
         # status: pending / running / completed / failed / interrupted
         self._data["status"] = status
         return self
 
-    def with_timing(self, start_time, end_time=None, elapsed_time=None):
-        self._data["start_time"] = start_time
-        if end_time is not None:
-            self._data["end_time"] = end_time
-        if elapsed_time is not None:
-            self._data["elapsed_time"] = elapsed_time
+    def withTiming(self, startTime, endTime=None, elapsedTime=None):
+        self._data["start_time"] = startTime
+        if endTime is not None:
+            self._data["end_time"] = endTime
+        if elapsedTime is not None:
+            self._data["elapsed_time"] = elapsedTime
         return self
 
-    def with_output(self, output):
+    def withOutput(self, output):
         if output is not None:
             self._data["output"] = output
         return self
 
-    def with_pagination(self, pagination):
+    def withPagination(self, pagination):
         if pagination is not None:
             self._data["pagination"] = pagination
         return self
 
-    def with_result(self, result):
+    def withResult(self, result):
         if result is not None:
             self._data["result"] = result
         return self
 
-    def with_error(self, error):
+    def withError(self, error):
         if error is not None:
             self._data["error"] = error
         return self
@@ -51,7 +51,7 @@ class TaskDataBuilder:
         return self._data.copy()
 
 
-def ok_body(data=None):
+def okBody(data=None):
     """Build the business half of a success envelope: ``{ok: True, data?}``.
 
     ``data`` is the handler's business payload, omitted when there is none.
@@ -62,7 +62,7 @@ def ok_body(data=None):
     return body
 
 
-def error_body(code, message, *, details=None, data=None):
+def errorBody(code, message, *, details=None, data=None):
     """Build the business half of an error envelope.
 
     ``{ok: False, error: {code, message, details?}, data?}``
@@ -78,18 +78,18 @@ def error_body(code, message, *, details=None, data=None):
     return body
 
 
-def ok_response(response_type, request_id, data=None):
+def okResponse(responseType, requestId, data=None):
     """Full success wire message: ``{type, request_id, ok: True, data?}``.
 
-    Transport header (``type`` + ``request_id``) wrapping an ``ok_body``.
+    Transport header (``type`` + ``request_id``) wrapping an ``okBody``.
     """
-    return {"type": response_type, "request_id": request_id, **ok_body(data=data)}
+    return {"type": responseType, "request_id": requestId, **okBody(data=data)}
 
 
-def error_response(response_type, request_id, code, message, *, details=None, data=None):
-    """Full failure wire message: transport header wrapping an ``error_body``."""
+def errorResponse(responseType, requestId, code, message, *, details=None, data=None):
+    """Full failure wire message: transport header wrapping an ``errorBody``."""
     return {
-        "type": response_type,
-        "request_id": request_id,
-        **error_body(code, message, details=details, data=data),
+        "type": responseType,
+        "request_id": requestId,
+        **errorBody(code, message, details=details, data=data),
     }

@@ -3,6 +3,6 @@
 """Path normalization utilities for MCP bridge server."""
 
 
-def path_to_llm_format(path):
+def pathToLlmFormat(path):
     """Convert a path to LLM-friendly format (forward slashes)."""
     return path.replace("\\", "/")

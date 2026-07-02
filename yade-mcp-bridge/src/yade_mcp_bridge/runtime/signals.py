@@ -18,76 +18,76 @@ import threading
 logger = logging.getLogger("MCP-Bridge")
 
 # Global state for interrupt signaling
-_current_task_id = None
-_current_task_lock = threading.Lock()
-_interrupt_requested = {}  # task_id -> bool
+_currentTaskId = None
+_currentTaskLock = threading.Lock()
+_interruptRequested = {}  # task_id -> bool
 
 # Thread registry for the fallback interrupt: maps a task's task_id / an
 # execute_code's request_id to its worker thread, so a Python exception can be
 # injected when execution is not in a running step.
-_exec_thread_ids = {}
-_exec_thread_lock = threading.Lock()
+_execThreadIds = {}
+_execThreadLock = threading.Lock()
 
 
-def set_current_task(task_id):
+def setCurrentTask(taskId):
     """Set the currently executing task ID."""
-    global _current_task_id
-    with _current_task_lock:
-        _current_task_id = task_id
+    global _currentTaskId
+    with _currentTaskLock:
+        _currentTaskId = taskId
 
 
-def clear_current_task():
+def clearCurrentTask():
     """Clear the currently executing task ID."""
-    global _current_task_id
-    with _current_task_lock:
-        _current_task_id = None
+    global _currentTaskId
+    with _currentTaskLock:
+        _currentTaskId = None
 
 
-def get_current_task():
+def getCurrentTask():
     """Return the currently-set task/request id, or None."""
-    with _current_task_lock:
-        return _current_task_id
+    with _currentTaskLock:
+        return _currentTaskId
 
 
-def request_interrupt(task_id):
+def requestInterrupt(taskId):
     """Set the interrupt flag for an id (opaque: a task_id or a request_id)."""
-    _interrupt_requested[task_id] = True
-    logger.info(f"Interrupt requested for task: {task_id}")
+    _interruptRequested[taskId] = True
+    logger.info(f"Interrupt requested for task: {taskId}")
 
 
-def is_task_interrupt_requested(task_id):
+def isTaskInterruptRequested(taskId):
     """Check if interruption was requested for a specific task."""
-    return _interrupt_requested.get(task_id, False)
+    return _interruptRequested.get(taskId, False)
 
 
-def clear_interrupt(task_id):
+def clearInterrupt(taskId):
     """Clear interrupt flag for a task."""
-    _interrupt_requested.pop(task_id, None)
+    _interruptRequested.pop(taskId, None)
 
 
-def register_exec_thread(exec_id, thread_id):
+def registerExecThread(execId, threadId):
     """Map a task_id / execute_code request_id to its worker thread."""
-    with _exec_thread_lock:
+    with _execThreadLock:
         # Drop entries whose thread has died — defensive, in case a caller
         # ever skips its unregister.
-        if _exec_thread_ids:
+        if _execThreadIds:
             alive = {t.ident for t in threading.enumerate() if t.is_alive()}
-            stale = [eid for eid, tid in _exec_thread_ids.items() if tid not in alive]
+            stale = [eid for eid, tid in _execThreadIds.items() if tid not in alive]
             for eid in stale:
-                _exec_thread_ids.pop(eid, None)
-        _exec_thread_ids[exec_id] = thread_id
+                _execThreadIds.pop(eid, None)
+        _execThreadIds[execId] = threadId
 
 
-def unregister_exec_thread(exec_id):
-    """Drop the thread record for ``exec_id``. Idempotent."""
-    with _exec_thread_lock:
-        _exec_thread_ids.pop(exec_id, None)
+def unregisterExecThread(execId):
+    """Drop the thread record for ``execId``. Idempotent."""
+    with _execThreadLock:
+        _execThreadIds.pop(execId, None)
 
 
-def get_exec_thread(exec_id):
-    """Return the recorded thread id for ``exec_id``, or None."""
-    with _exec_thread_lock:
-        return _exec_thread_ids.get(exec_id)
+def getExecThread(execId):
+    """Return the recorded thread id for ``execId``, or None."""
+    with _execThreadLock:
+        return _execThreadIds.get(execId)
 
 
 # ---------------------------------------------------------------------------
@@ -101,61 +101,61 @@ def get_exec_thread(exec_id):
 # NOT O.pause(): O.running stays True; only the tick blocks, on an Event.
 # ---------------------------------------------------------------------------
 
-_hold_lock = threading.Lock()  # only one thread touches the hold state at a time
-_hold_wanted = threading.Event()  # execute_code wants to hold the task
-_cycle_held = threading.Event()  # task is held, scene frozen
-_snippet_released = threading.Event()  # execute_code done, task resumes
-_hold_local = threading.local()  # marks the thread currently holding the task
+_holdLock = threading.Lock()  # only one thread touches the hold state at a time
+_holdWanted = threading.Event()  # execute_code wants to hold the task
+_cycleHeld = threading.Event()  # task is held, scene frozen
+_snippetReleased = threading.Event()  # execute_code done, task resumes
+_holdLocal = threading.local()  # marks the thread currently holding the task
 
-_MAX_HOLD_S = 30.0  # fallback hold limit, for holds that set no max_hold_s
-_hold_max_s = None  # per-hold limit, set by hold_sim from the request timeout
+_MAX_HOLD_S = 30.0  # fallback hold limit, for holds that set no maxHoldS
+_holdMaxS = None  # per-hold limit, set by holdSim from the request timeout
 
 
-def hold_if_wanted(max_hold_s=None):
+def holdIfWanted(maxHoldS=None):
     """Called by the PyRunner tick each step: if a hold is wanted, hold the
     task here until the snippet releases (or the hold limit elapses).
 
-    The limit is ``max_hold_s`` if given, else the holding snippet's
-    (``hold_sim(max_hold_s=...)``), else ``_MAX_HOLD_S``."""
-    if not _hold_wanted.is_set():
+    The limit is ``maxHoldS`` if given, else the holding snippet's
+    (``holdSim(maxHoldS=...)``), else ``_MAX_HOLD_S``."""
+    if not _holdWanted.is_set():
         return
-    if max_hold_s is None:
-        max_hold_s = _hold_max_s if _hold_max_s is not None else _MAX_HOLD_S
-    _snippet_released.clear()
-    _cycle_held.set()
-    if not _snippet_released.wait(timeout=max_hold_s):
+    if maxHoldS is None:
+        maxHoldS = _holdMaxS if _holdMaxS is not None else _MAX_HOLD_S
+    _snippetReleased.clear()
+    _cycleHeld.set()
+    if not _snippetReleased.wait(timeout=maxHoldS):
         logger.warning(
             "execute_code held the cycle past %.0fs; resuming sim (snippet may be stuck in a C call while holding)",
-            max_hold_s,
+            maxHoldS,
         )
-    _cycle_held.clear()
+    _cycleHeld.clear()
 
 
-def snippet_holds_sim():
+def snippetHoldsSim():
     """True if the current thread (a snippet) is currently holding the task."""
-    return bool(getattr(_hold_local, "active", False))
+    return bool(getattr(_holdLocal, "active", False))
 
 
 @contextlib.contextmanager
-def hold_sim(acquire_timeout_s=2.0, max_hold_s=None):
+def holdSim(acquireTimeoutS=2.0, maxHoldS=None):
     """Snippet side: hold the sim cycle for a consistent snapshot.
 
-    ``max_hold_s`` bounds how long the cycle may stay held (None →
+    ``maxHoldS`` bounds how long the cycle may stay held (None →
     ``_MAX_HOLD_S``). Always releases the task on exit (incl. exception /
     async abort).
     """
-    global _hold_max_s
-    with _hold_lock:
-        _cycle_held.clear()
-        _snippet_released.clear()
-        _hold_max_s = max_hold_s
-        _hold_wanted.set()
-        _hold_local.active = True
+    global _holdMaxS
+    with _holdLock:
+        _cycleHeld.clear()
+        _snippetReleased.clear()
+        _holdMaxS = maxHoldS
+        _holdWanted.set()
+        _holdLocal.active = True
         try:
-            held = _cycle_held.wait(timeout=acquire_timeout_s)
+            held = _cycleHeld.wait(timeout=acquireTimeoutS)
             yield held
         finally:
-            _hold_local.active = False
-            _hold_wanted.clear()
-            _hold_max_s = None
-            _snippet_released.set()
+            _holdLocal.active = False
+            _holdWanted.clear()
+            _holdMaxS = None
+            _snippetReleased.set()

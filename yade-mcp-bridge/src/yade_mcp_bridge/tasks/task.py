@@ -6,7 +6,7 @@ import logging
 import os
 import time
 
-from ..utils import TaskDataBuilder, ok_body
+from ..utils import TaskDataBuilder, okBody
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -25,50 +25,50 @@ class ScriptTask:
     """
 
     def __init__(
-        self, task_id, future, script_name, script_path, output_buffer=None, description=None, on_status_change=None
+        self, taskId, future, scriptName, scriptPath, outputBuffer=None, description=None, onStatusChange=None
     ):
-        self.task_id = task_id
+        self.taskId = taskId
         self.future = future
         self.description = description or ""
-        self.script_name = script_name
-        self.script_path = script_path
-        self.output_buffer = output_buffer
-        self.start_time = time.time()
-        self.end_time = None
+        self.scriptName = scriptName
+        self.scriptPath = scriptPath
+        self.outputBuffer = outputBuffer
+        self.startTime = time.time()
+        self.endTime = None
         self._status = "pending"
-        self.on_status_change = on_status_change
+        self.onStatusChange = onStatusChange
         self.error = None
         # Structured error details captured from the executor (user-frame
         # traceback, exception type, overflow log path). Promoted into
         # check_task_status responses so the LLM has full debugging context
         # without chasing log files.
-        self.error_details = None
+        self.errorDetails = None
 
-        self.log_path = None
-        if output_buffer and hasattr(output_buffer, "get_path"):
-            self.log_path = output_buffer.get_path()
+        self.logPath = None
+        if outputBuffer and hasattr(outputBuffer, "getPath"):
+            self.logPath = outputBuffer.getPath()
 
-        future.add_done_callback(self._on_complete)
+        future.add_done_callback(self._onComplete)
 
-        logger.info("Script task registered: %s (id=%s)", script_name, task_id)
+        logger.info("Script task registered: %s (id=%s)", scriptName, taskId)
 
     @classmethod
-    def from_persisted(cls, task_data):
+    def fromPersisted(cls, taskData):
         """Create a task from persisted data (no Future or buffer)."""
         task = cls.__new__(cls)
-        task.task_id = task_data["task_id"]
-        task.description = task_data["description"]
-        task.script_name = task_data.get("script_name", "")
-        task.script_path = task_data.get("script_path") or task_data.get("entry_script") or ""
-        task._status = task_data["status"]
-        task.start_time = task_data["start_time"]
-        task.end_time = task_data.get("end_time")
-        task.log_path = task_data.get("log_path")
-        task.error = task_data.get("error")
-        task.error_details = task_data.get("error_details")
+        task.taskId = taskData["task_id"]
+        task.description = taskData["description"]
+        task.scriptName = taskData.get("script_name", "")
+        task.scriptPath = taskData.get("script_path") or taskData.get("entry_script") or ""
+        task._status = taskData["status"]
+        task.startTime = taskData["start_time"]
+        task.endTime = taskData.get("end_time")
+        task.logPath = taskData.get("log_path")
+        task.error = taskData.get("error")
+        task.errorDetails = taskData.get("error_details")
         task.future = None
-        task.output_buffer = None
-        task.on_status_change = None
+        task.outputBuffer = None
+        task.onStatusChange = None
         return task
 
     @property
@@ -79,13 +79,13 @@ class ScriptTask:
     def status(self, value):
         self._status = value
 
-    def _on_complete(self, f):
-        self.end_time = time.time()
+    def _onComplete(self, f):
+        self.endTime = time.time()
         try:
             result = f.result(timeout=0)
             if isinstance(result, dict):
-                result_status = result.get("status")
-                if result_status == "error":
+                resultStatus = result.get("status")
+                if resultStatus == "error":
                     self.status = "failed"
                     self.error = result.get("message", "Task execution failed")
                     diag = {
@@ -93,8 +93,8 @@ class ScriptTask:
                         for k in ("exception_type", "traceback", "traceback_truncated", "log_file")
                         if k in result
                     }
-                    self.error_details = diag or None
-                elif result_status == "interrupted":
+                    self.errorDetails = diag or None
+                elif resultStatus == "interrupted":
                     self.status = "interrupted"
                 else:
                     self.status = "completed"
@@ -104,134 +104,132 @@ class ScriptTask:
             self.status = "failed"
             self.error = str(e)
 
-        if self.on_status_change:
+        if self.onStatusChange:
             try:
-                self.on_status_change(self)
+                self.onStatusChange(self)
             except Exception as e:
                 logger.warning(f"Status change callback failed: {e}")
 
-    def get_elapsed_time(self):
-        if self.end_time is not None:
-            return self.end_time - self.start_time
+    def getElapsedTime(self):
+        if self.endTime is not None:
+            return self.endTime - self.startTime
         if self.future is None:
             return 0.0
-        return time.time() - self.start_time
+        return time.time() - self.startTime
 
-    def get_paginated_output(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
-        """Return (output_text, pagination) paginating the task log on the bridge side.
+    def getPaginatedOutput(self, skipNewest=0, limit=DEFAULT_PAGINATION_LIMIT, filterText=None):
+        """Return (outputText, pagination) paginating the task log on the bridge side.
 
         Reads the complete log file, optionally filters by substring, then
-        extracts a page from the tail: skip ``skip_newest`` lines from the end,
+        extracts a page from the tail: skip ``skipNewest`` lines from the end,
         then take up to ``limit`` lines backwards from there. Pagination metadata
         reflects the full log (or the filtered view), so MCP can trust it.
         """
-        if self.output_buffer:
+        if self.outputBuffer:
             try:
-                self.output_buffer.flush()
+                self.outputBuffer.flush()
             except (ValueError, OSError):
                 pass
 
         full = ""
-        if self.log_path and os.path.exists(self.log_path):
+        if self.logPath and os.path.exists(self.logPath):
             try:
-                with open(self.log_path, encoding="utf-8", errors="replace") as f:
+                with open(self.logPath, encoding="utf-8", errors="replace") as f:
                     full = f.read()
             except OSError as e:
                 logger.warning(f"Failed to read log file: {e}")
 
         lines = full.splitlines()
-        if filter_text:
-            lines = [line for line in lines if filter_text in line]
+        if filterText:
+            lines = [line for line in lines if filterText in line]
 
-        total_lines = len(lines)
-        start_idx = max(0, total_lines - limit - skip_newest)
-        end_idx = max(0, total_lines - skip_newest)
-        selected = lines[start_idx:end_idx]
+        totalLines = len(lines)
+        startIdx = max(0, totalLines - limit - skipNewest)
+        endIdx = max(0, totalLines - skipNewest)
+        selected = lines[startIdx:endIdx]
 
         # `line_range` against `total_lines` fully determines whether older
         # (range start > 1) or newer (range end < total) lines exist, so we
         # don't emit separate has_older/has_newer booleans.
         pagination = {
-            "total_lines": total_lines,
-            "line_range": f"{start_idx + 1}-{end_idx}" if selected else "0-0",
+            "total_lines": totalLines,
+            "line_range": f"{startIdx + 1}-{endIdx}" if selected else "0-0",
         }
 
         text = "\n".join(selected) if selected else ""
         return text, pagination
 
-    def _create_data_builder(self):
-        return TaskDataBuilder(self.task_id, "script", self.script_path, self.description)
+    def _createDataBuilder(self):
+        return TaskDataBuilder(self.taskId, "script", self.scriptPath, self.description)
 
-    def get_status_response(self, skip_newest=0, limit=DEFAULT_PAGINATION_LIMIT, filter_text=None):
-        current_status = self.status
-        elapsed_time = self.get_elapsed_time()
-        output_text, pagination = self.get_paginated_output(
-            skip_newest=skip_newest, limit=limit, filter_text=filter_text
-        )
+    def getStatusResponse(self, skipNewest=0, limit=DEFAULT_PAGINATION_LIMIT, filterText=None):
+        currentStatus = self.status
+        elapsedTime = self.getElapsedTime()
+        outputText, pagination = self.getPaginatedOutput(skipNewest=skipNewest, limit=limit, filterText=filterText)
 
-        builder = self._create_data_builder().with_status(current_status)
+        builder = self._createDataBuilder().withStatus(currentStatus)
 
-        if current_status in ("pending", "running"):
-            builder.with_timing(self.start_time, elapsed_time=elapsed_time)
-            builder.with_output(output_text)
-            builder.with_pagination(pagination)
-            return ok_body(data=builder.build())
+        if currentStatus in ("pending", "running"):
+            builder.withTiming(self.startTime, elapsedTime=elapsedTime)
+            builder.withOutput(outputText)
+            builder.withPagination(pagination)
+            return okBody(data=builder.build())
 
         # completed / failed / interrupted
-        builder.with_timing(self.start_time, self.end_time, elapsed_time)
-        builder.with_output(output_text)
-        builder.with_pagination(pagination)
+        builder.withTiming(self.startTime, self.endTime, elapsedTime)
+        builder.withOutput(outputText)
+        builder.withPagination(pagination)
 
-        if current_status == "completed":
-            result_data = None
+        if currentStatus == "completed":
+            resultData = None
             if self.future:
                 try:
                     result = self.future.result(timeout=0)
                     if isinstance(result, dict):
-                        result_data = result.get("result")
+                        resultData = result.get("result")
                 except Exception:
                     pass
-            builder.with_result(self._serialize_result(result_data))
-            return ok_body(data=builder.build())
+            builder.withResult(self._serializeResult(resultData))
+            return okBody(data=builder.build())
 
-        if current_status == "interrupted":
-            return ok_body(data=builder.build())
+        if currentStatus == "interrupted":
+            return okBody(data=builder.build())
 
         # failed — the task failed, but the *request* succeeded (ok: True).
         # The error and lifecycle status both live in task data (data.status ==
         # "failed", data.error), never as a request-level error{}.
-        error_msg = self.error or "Task execution failed"
-        builder.with_error(error_msg)
+        errorMsg = self.error or "Task execution failed"
+        builder.withError(errorMsg)
         data = builder.build()
-        if self.error_details:
-            data["error_details"] = self.error_details
-        return ok_body(data=data)
+        if self.errorDetails:
+            data["error_details"] = self.errorDetails
+        return okBody(data=data)
 
-    def get_task_info(self):
+    def getTaskInfo(self):
         info = {
-            "task_id": self.task_id,
+            "task_id": self.taskId,
             "task_type": "script",
             "description": self.description,
             "status": self.status,
-            "elapsed_time": self.get_elapsed_time(),
-            "start_time": self.start_time,
-            "script_path": self.script_path,
+            "elapsed_time": self.getElapsedTime(),
+            "start_time": self.startTime,
+            "script_path": self.scriptPath,
         }
-        if self.status in ["completed", "failed", "interrupted"] and self.end_time is not None:
-            info["end_time"] = self.end_time
+        if self.status in ["completed", "failed", "interrupted"] and self.endTime is not None:
+            info["end_time"] = self.endTime
         if self.status == "failed" and self.error:
             info["error"] = self.error
         return info
 
     @staticmethod
-    def _serialize_result(result):
+    def _serializeResult(result):
         if result is None:
             return None
         elif isinstance(result, (str, int, float, bool)):
             return result
         elif isinstance(result, (list, tuple)):
-            return [ScriptTask._serialize_result(item) for item in result]
+            return [ScriptTask._serializeResult(item) for item in result]
         elif isinstance(result, dict):
-            return {k: ScriptTask._serialize_result(v) for k, v in result.items()}
+            return {k: ScriptTask._serializeResult(v) for k, v in result.items()}
         else:
             return str(result)

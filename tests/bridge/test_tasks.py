@@ -26,8 +26,8 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="test task")
         assert task.status == "pending"
-        assert task.task_id == "t1"
-        assert task.script_name == "test.py"
+        assert task.taskId == "t1"
+        assert task.scriptName == "test.py"
         assert task.description == "test task"
 
     def test_status_completed_on_success(self):
@@ -35,7 +35,7 @@ class TestScriptTask:
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
         f.set_result({"status": "success", "result": 42})
         assert task.status == "completed"
-        assert task.end_time is not None
+        assert task.endTime is not None
 
     def test_status_failed_on_error_result(self):
         f = Future()
@@ -71,7 +71,7 @@ class TestScriptTask:
             f,
             "test.py",
             "/tmp/test.py",
-            on_status_change=lambda t: changes.append(t.status),
+            onStatusChange=lambda t: changes.append(t.status),
         )
         f.set_result({"status": "success"})
         assert "completed" in changes
@@ -80,23 +80,23 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
         time.sleep(0.01)
-        elapsed = task.get_elapsed_time()
+        elapsed = task.getElapsedTime()
         assert elapsed > 0
 
     def test_get_elapsed_time_completed(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
         f.set_result({"status": "success"})
-        elapsed = task.get_elapsed_time()
+        elapsed = task.getElapsedTime()
         assert elapsed >= 0
         # Should be stable after completion
         time.sleep(0.01)
-        assert task.get_elapsed_time() == elapsed
+        assert task.getElapsedTime() == elapsed
 
     def test_get_task_info(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="my task")
-        info = task.get_task_info()
+        info = task.getTaskInfo()
         assert info["task_id"] == "t1"
         assert info["task_type"] == "script"
         assert info["description"] == "my task"
@@ -107,7 +107,7 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
         f.set_result({"status": "success"})
-        info = task.get_task_info()
+        info = task.getTaskInfo()
         assert info["status"] == "completed"
         assert "end_time" in info
 
@@ -115,23 +115,23 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
         f.set_result({"status": "error", "message": "oops"})
-        info = task.get_task_info()
+        info = task.getTaskInfo()
         assert info["status"] == "failed"
         assert info["error"] == "oops"
 
     def test_serialize_result(self):
-        assert ScriptTask._serialize_result(None) is None
-        assert ScriptTask._serialize_result(42) == 42
-        assert ScriptTask._serialize_result("hello") == "hello"
-        assert ScriptTask._serialize_result(True) is True
-        assert ScriptTask._serialize_result([1, 2]) == [1, 2]
-        assert ScriptTask._serialize_result({"a": 1}) == {"a": 1}
+        assert ScriptTask._serializeResult(None) is None
+        assert ScriptTask._serializeResult(42) == 42
+        assert ScriptTask._serializeResult("hello") == "hello"
+        assert ScriptTask._serializeResult(True) is True
+        assert ScriptTask._serializeResult([1, 2]) == [1, 2]
+        assert ScriptTask._serializeResult({"a": 1}) == {"a": 1}
         # Non-serializable types become strings
-        assert isinstance(ScriptTask._serialize_result(object()), str)
+        assert isinstance(ScriptTask._serializeResult(object()), str)
 
     def test_from_persisted(self):
         # Uses the legacy ``entry_script`` key to exercise the back-compat
-        # read in from_persisted (``script_path or entry_script``), so already
+        # read in fromPersisted (``script_path or entry_script``), so already
         # persisted tasks.json files keep loading after the rename.
         data = {
             "task_id": "t1",
@@ -144,17 +144,17 @@ class TestScriptTask:
             "log_path": None,
             "error": None,
         }
-        task = ScriptTask.from_persisted(data)
-        assert task.task_id == "t1"
+        task = ScriptTask.fromPersisted(data)
+        assert task.taskId == "t1"
         assert task.status == "completed"
         assert task.description == "restored task"
-        assert task.script_path == "/tmp/test.py"
+        assert task.scriptPath == "/tmp/test.py"
         assert task.future is None
 
     def test_get_status_response_pending(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="pending task")
-        resp = task.get_status_response()
+        resp = task.getStatusResponse()
         assert resp["ok"] is True
         # Lifecycle status rides inside data, not at the envelope top level.
         assert resp["data"]["status"] == "pending"
@@ -166,7 +166,7 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="done task")
         f.set_result({"status": "success", "result": 99})
-        resp = task.get_status_response()
+        resp = task.getStatusResponse()
         assert resp["ok"] is True
         assert resp["data"]["status"] == "completed"
         assert resp["data"]["result"] == 99
@@ -175,7 +175,7 @@ class TestScriptTask:
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="bad task")
         f.set_result({"status": "error", "message": "kaboom"})
-        resp = task.get_status_response()
+        resp = task.getStatusResponse()
         # A failed task is still a successful request: ok stays True and the
         # failure rides in data (data.status == "failed", data.error).
         assert resp["ok"] is True
@@ -184,24 +184,24 @@ class TestScriptTask:
 
     def _make_task_with_log(self, tmp_path, lines):
         """Helper: create a task backed by a real log file containing given lines."""
-        log_path = str(tmp_path / "task.log")
-        with open(log_path, "w", encoding="utf-8") as fh:
+        logPath = str(tmp_path / "task.log")
+        with open(logPath, "w", encoding="utf-8") as fh:
             fh.write("\n".join(lines))
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
-        task.log_path = log_path
+        task.logPath = logPath
         return task
 
     def test_paginated_output_empty_log(self, tmp_path):
         task = self._make_task_with_log(tmp_path, [])
-        text, pag = task.get_paginated_output()
+        text, pag = task.getPaginatedOutput()
         assert text == ""
         assert pag["total_lines"] == 0
         assert pag["line_range"] == "0-0"
 
     def test_paginated_output_tail_window(self, tmp_path):
         task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
-        text, pag = task.get_paginated_output(skip_newest=0, limit=5)
+        text, pag = task.getPaginatedOutput(skipNewest=0, limit=5)
         assert pag["total_lines"] == 20
         # window is the last 5 lines (16-20 of 20): older lines exist, none newer
         assert pag["line_range"] == "16-20"
@@ -211,7 +211,7 @@ class TestScriptTask:
 
     def test_paginated_output_skip_newest(self, tmp_path):
         task = self._make_task_with_log(tmp_path, [f"line {i}" for i in range(20)])
-        text, pag = task.get_paginated_output(skip_newest=5, limit=5)
+        text, pag = task.getPaginatedOutput(skipNewest=5, limit=5)
         # skipping 5 newest leaves a mid-log window (11-15 of 20): newer lines exist
         assert pag["line_range"] == "11-15"
         assert "line 19" not in text
@@ -219,7 +219,7 @@ class TestScriptTask:
 
     def test_paginated_output_filter(self, tmp_path):
         task = self._make_task_with_log(tmp_path, ["error: one", "info: ok", "error: two", "debug: noise"])
-        text, pag = task.get_paginated_output(filter_text="error")
+        text, pag = task.getPaginatedOutput(filterText="error")
         assert pag["total_lines"] == 2
         assert "info" not in text
         assert "debug" not in text
@@ -228,7 +228,7 @@ class TestScriptTask:
 
     def test_paginated_output_limit_exceeds_total(self, tmp_path):
         task = self._make_task_with_log(tmp_path, ["a", "b"])
-        text, pag = task.get_paginated_output(limit=100)
+        text, pag = task.getPaginatedOutput(limit=100)
         assert pag["total_lines"] == 2
         # whole log fits in one window: no older lines
         assert pag["line_range"] == "1-2"
@@ -236,19 +236,19 @@ class TestScriptTask:
 
     def test_paginated_output_handles_bad_bytes(self, tmp_path):
         """Log with invalid UTF-8 should not crash thanks to errors='replace'."""
-        log_path = str(tmp_path / "task.log")
-        with open(log_path, "wb") as fh:
+        logPath = str(tmp_path / "task.log")
+        with open(logPath, "wb") as fh:
             fh.write(b"ok line\n\xff\xfe bad bytes\nlast line")
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
-        task.log_path = log_path
-        text, pag = task.get_paginated_output()
+        task.logPath = logPath
+        text, pag = task.getPaginatedOutput()
         assert pag["total_lines"] == 3
         assert "last line" in text
 
     def test_get_status_response_includes_pagination(self, tmp_path):
         task = self._make_task_with_log(tmp_path, ["alpha", "beta"])
-        resp = task.get_status_response()
+        resp = task.getStatusResponse()
         data = resp["data"]
         assert "pagination" in data
         assert data["pagination"]["total_lines"] == 2
@@ -276,27 +276,27 @@ class TestTaskManager:
     def test_create_task(self):
         tm = TaskManager()
         f = Future()
-        tid = tm.create_script_task(f, "test.py", "/test.py", description="test")
+        tid = tm.createScriptTask(f, "test.py", "/test.py", description="test")
         assert tid in tm.tasks
         assert tm.tasks[tid].description == "test"
 
     def test_create_task_custom_id(self):
         tm = TaskManager()
         f = Future()
-        tid = tm.create_script_task(f, "test.py", "/test.py", task_id="custom-id")
+        tid = tm.createScriptTask(f, "test.py", "/test.py", taskId="custom-id")
         assert tid == "custom-id"
 
     def test_get_task_status_found(self):
         tm = TaskManager()
         f = Future()
-        tid = tm.create_script_task(f, "test.py", "/test.py", description="desc")
-        result = tm.get_task_status(tid)
+        tid = tm.createScriptTask(f, "test.py", "/test.py", description="desc")
+        result = tm.getTaskStatus(tid)
         assert result["ok"] is True
         assert result["data"]["status"] in ("pending", "running")
 
     def test_get_task_status_not_found(self):
         tm = TaskManager()
-        result = tm.get_task_status("nonexistent")
+        result = tm.getTaskStatus("nonexistent")
         assert result["ok"] is False
         assert result["error"]["code"] == "not_found"
 
@@ -304,8 +304,8 @@ class TestTaskManager:
         tm = TaskManager()
         for i in range(3):
             f = Future()
-            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py")
-        result = tm.list_all_tasks()
+            tm.createScriptTask(f, f"s{i}.py", f"/s{i}.py")
+        result = tm.listAllTasks()
         assert result["ok"] is True
         assert len(result["data"]) == 3
 
@@ -313,8 +313,8 @@ class TestTaskManager:
         tm = TaskManager()
         for i in range(5):
             f = Future()
-            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py")
-        result = tm.list_all_tasks(offset=1, limit=2)
+            tm.createScriptTask(f, f"s{i}.py", f"/s{i}.py")
+        result = tm.listAllTasks(offset=1, limit=2)
         assert len(result["data"]) == 2
         assert result["pagination"]["total_count"] == 5
         # 2-of-5 slice → more tasks exist beyond this page
@@ -324,14 +324,14 @@ class TestTaskManager:
     def test_has_running_tasks(self):
         tm = TaskManager()
         f = Future()
-        tm.create_script_task(f, "test.py", "/test.py")
+        tm.createScriptTask(f, "test.py", "/test.py")
         # Future not started yet, so still pending
-        assert not tm.has_running_tasks()
+        assert not tm.hasRunningTasks()
 
     def test_persistence_save_and_load(self):
         tm = TaskManager()
         f = Future()
-        tm.create_script_task(f, "test.py", "/test.py", description="persist me", task_id="persist-1")
+        tm.createScriptTask(f, "test.py", "/test.py", description="persist me", taskId="persist-1")
         f.set_result({"status": "success"})
 
         # Create new manager to load from disk
@@ -343,10 +343,10 @@ class TestTaskManager:
         """Tasks that were 'running' when persisted should load as 'failed'."""
         tm = TaskManager()
         f = Future()
-        tid = tm.create_script_task(f, "test.py", "/test.py", task_id="was-running")
+        tid = tm.createScriptTask(f, "test.py", "/test.py", taskId="was-running")
         # Manually set status to running and save
         tm.tasks[tid].status = "running"
-        tm._save_tasks()
+        tm._saveTasks()
 
         tm2 = TaskManager()
         assert tm2.tasks["was-running"].status == "failed"
@@ -357,13 +357,13 @@ class TestTaskManager:
         for i in range(5):
             f = Future()
             f.set_result({"status": "success"})
-            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
+            tm.createScriptTask(f, f"s{i}.py", f"/s{i}.py", taskId=f"t{i}")
             # Space out start_time so ordering is deterministic
-            tm.tasks[f"t{i}"].start_time = 1000.0 + i
-        tm._save_tasks()
+            tm.tasks[f"t{i}"].startTime = 1000.0 + i
+        tm._saveTasks()
 
         # Reload with max_tasks=3 — oldest 2 should be pruned
-        tm2 = TaskManager(max_tasks=3)
+        tm2 = TaskManager(maxTasks=3)
         assert len(tm2.tasks) == 3
         assert "t0" not in tm2.tasks
         assert "t1" not in tm2.tasks
@@ -373,43 +373,43 @@ class TestTaskManager:
 
     def test_prune_deletes_log_files(self, tmp_path):
         """Pruning removes associated log files from disk."""
-        tm = TaskManager(max_tasks=2)
+        tm = TaskManager(maxTasks=2)
         logs_dir = tmp_path / ".yade-mcp" / "logs"
 
         for i in range(3):
             f = Future()
             f.set_result({"status": "success"})
-            log_path = str(logs_dir / f"task_t{i}.log")
+            logPath = str(logs_dir / f"task_t{i}.log")
             # Create the log file
-            with open(log_path, "w") as fh:
+            with open(logPath, "w") as fh:
                 fh.write(f"output {i}")
-            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
-            tm.tasks[f"t{i}"].log_path = log_path
-            tm.tasks[f"t{i}"].start_time = 1000.0 + i
+            tm.createScriptTask(f, f"s{i}.py", f"/s{i}.py", taskId=f"t{i}")
+            tm.tasks[f"t{i}"].logPath = logPath
+            tm.tasks[f"t{i}"].startTime = 1000.0 + i
 
         # After adding t2, max_tasks=2 should prune t0
-        tm._prune_old_tasks()
-        tm._save_tasks()
+        tm._pruneOldTasks()
+        tm._saveTasks()
         assert len(tm.tasks) == 2
         assert not os.path.exists(str(logs_dir / "task_t0.log"))
         assert os.path.exists(str(logs_dir / "task_t2.log"))
 
     def test_prune_on_create(self):
         """Creating a new task triggers pruning when limit exceeded."""
-        tm = TaskManager(max_tasks=3)
+        tm = TaskManager(maxTasks=3)
         for i in range(3):
             f = Future()
             f.set_result({"status": "success"})
-            tm.create_script_task(f, f"s{i}.py", f"/s{i}.py", task_id=f"t{i}")
-            tm.tasks[f"t{i}"].start_time = 1000.0 + i
+            tm.createScriptTask(f, f"s{i}.py", f"/s{i}.py", taskId=f"t{i}")
+            tm.tasks[f"t{i}"].startTime = 1000.0 + i
 
         assert len(tm.tasks) == 3
 
         # Adding one more should prune the oldest
         f = Future()
         f.set_result({"status": "success"})
-        tm.create_script_task(f, "s3.py", "/s3.py", task_id="t3")
-        tm.tasks["t3"].start_time = 1003.0
+        tm.createScriptTask(f, "s3.py", "/s3.py", taskId="t3")
+        tm.tasks["t3"].startTime = 1003.0
 
         assert len(tm.tasks) == 3
         assert "t0" not in tm.tasks
@@ -418,9 +418,9 @@ class TestTaskManager:
         """Shutdown flushes all active output buffers."""
         tm = TaskManager()
         f = Future()
-        tm.create_script_task(f, "test.py", "/test.py", task_id="buf-1")
+        tm.createScriptTask(f, "test.py", "/test.py", taskId="buf-1")
         mock_buffer = MagicMock()
-        tm.tasks["buf-1"].output_buffer = mock_buffer
+        tm.tasks["buf-1"].outputBuffer = mock_buffer
         tm.tasks["buf-1"].status = "running"
 
         tm.shutdown()
@@ -433,14 +433,14 @@ class TestTaskManager:
             f = Future()
             if status == "completed":
                 f.set_result({"status": "success"})
-            tm.create_script_task(f, "test.py", "/test.py", task_id=tid)
+            tm.createScriptTask(f, "test.py", "/test.py", taskId=tid)
             if status != "completed":
                 tm.tasks[tid]._status = status
 
         tm.shutdown()
 
         assert tm.tasks["r1"].status == "interrupted"
-        assert tm.tasks["r1"].end_time is not None
+        assert tm.tasks["r1"].endTime is not None
         assert tm.tasks["r1"].error == "Bridge shutdown"
         assert tm.tasks["p1"].status == "interrupted"
         assert tm.tasks["c1"].status == "completed"  # untouched
@@ -449,7 +449,7 @@ class TestTaskManager:
         """Shutdown saves updated statuses to tasks.json."""
         tm = TaskManager()
         f = Future()
-        tm.create_script_task(f, "test.py", "/test.py", task_id="persist-s")
+        tm.createScriptTask(f, "test.py", "/test.py", taskId="persist-s")
         tm.tasks["persist-s"]._status = "running"
 
         tm.shutdown()
@@ -463,7 +463,7 @@ class TestTaskManager:
         """Tasks interrupted by shutdown should NOT become 'failed' on reload."""
         tm = TaskManager()
         f = Future()
-        tm.create_script_task(f, "test.py", "/test.py", task_id="graceful-1")
+        tm.createScriptTask(f, "test.py", "/test.py", taskId="graceful-1")
         tm.tasks["graceful-1"]._status = "running"
         tm.shutdown()
 

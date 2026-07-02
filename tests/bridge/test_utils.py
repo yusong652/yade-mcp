@@ -4,19 +4,19 @@ import os
 import tempfile
 
 from yade_mcp_bridge.utils.file_buffer import FileBuffer, TeeBuffer
-from yade_mcp_bridge.utils.path_utils import path_to_llm_format
+from yade_mcp_bridge.utils.path_utils import pathToLlmFormat
 from yade_mcp_bridge.utils.response import TaskDataBuilder
 
 
 class TestPathToLlmFormat:
     def test_forward_slashes_unchanged(self):
-        assert path_to_llm_format("/home/user/script.py") == "/home/user/script.py"
+        assert pathToLlmFormat("/home/user/script.py") == "/home/user/script.py"
 
     def test_backslashes_converted(self):
-        assert path_to_llm_format("C:\\Users\\script.py") == "C:/Users/script.py"
+        assert pathToLlmFormat("C:\\Users\\script.py") == "C:/Users/script.py"
 
     def test_mixed_slashes(self):
-        assert path_to_llm_format("C:\\Users/project\\main.py") == "C:/Users/project/main.py"
+        assert pathToLlmFormat("C:\\Users/project\\main.py") == "C:/Users/project/main.py"
 
 
 class TestTaskDataBuilder:
@@ -32,55 +32,55 @@ class TestTaskDataBuilder:
     def test_with_status(self):
         # Lifecycle status rides inside the task data, not at the envelope
         # top level — the bridge wire is the bare ToolEnvelope {ok, data}.
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_status("failed").build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withStatus("failed").build()
         assert data["status"] == "failed"
 
     def test_with_timing(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_timing(100.0, end_time=110.0, elapsed_time=10.0).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withTiming(100.0, endTime=110.0, elapsedTime=10.0).build()
         assert data["start_time"] == 100.0
         assert data["end_time"] == 110.0
         assert data["elapsed_time"] == 10.0
 
     def test_with_timing_no_end(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_timing(100.0).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withTiming(100.0).build()
         assert data["start_time"] == 100.0
         assert "end_time" not in data
 
     def test_with_output(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_output("hello").build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withOutput("hello").build()
         assert data["output"] == "hello"
 
     def test_with_output_none_skipped(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_output(None).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withOutput(None).build()
         assert "output" not in data
 
     def test_with_pagination(self):
         pagination = {"total_lines": 42, "line_range": "1-42"}
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_pagination(pagination).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withPagination(pagination).build()
         assert data["pagination"] == pagination
 
     def test_with_pagination_none_skipped(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_pagination(None).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withPagination(None).build()
         assert "pagination" not in data
 
     def test_with_result(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_result(42).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withResult(42).build()
         assert data["result"] == 42
 
     def test_with_result_none_skipped(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_result(None).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withResult(None).build()
         assert "result" not in data
 
     def test_with_error(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_error("boom").build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withError("boom").build()
         assert data["error"] == "boom"
 
     def test_with_error_none_skipped(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_error(None).build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withError(None).build()
         assert "error" not in data
 
     def test_chaining(self):
-        data = TaskDataBuilder("t1", "script", "/s", "d").with_timing(1.0).with_output("out").with_result("res").build()
+        data = TaskDataBuilder("t1", "script", "/s", "d").withTiming(1.0).withOutput("out").withResult("res").build()
         assert data["start_time"] == 1.0
         assert data["output"] == "out"
         assert data["result"] == "res"
@@ -116,7 +116,7 @@ class TestFileBuffer:
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "out.log")
             buf = FileBuffer(path)
-            assert buf.get_path() == path
+            assert buf.getPath() == path
             buf.close()
 
     def test_write_after_close_returns_zero(self):
