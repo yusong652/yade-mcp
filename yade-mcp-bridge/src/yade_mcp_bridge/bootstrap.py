@@ -39,8 +39,6 @@ def _setup_logging():
         os.makedirs(bridge_dir)
     log_file = os.path.join(bridge_dir, "bridge.log")
 
-    # Gap-free handlers: the L2 timeout path can async-raise into a thread
-    # mid-handle() and orphan the stdlib handler lock; see utils/safe_logging.
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
     stdout_handler = GapFreeStreamHandler(sys.stdout)
     stdout_handler.setLevel(logging.WARNING)
