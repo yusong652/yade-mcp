@@ -42,7 +42,7 @@ class ScriptTask:
         # traceback, exception type, overflow log path). Promoted into
         # check_task_status responses so the LLM has full debugging context
         # without chasing log files.
-        self.error_details: dict | None = None
+        self.error_details = None
 
         self.log_path = None
         if output_buffer and hasattr(output_buffer, "get_path"):
