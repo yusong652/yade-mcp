@@ -15,7 +15,7 @@ from concurrent.futures import Future
 from functools import partial
 
 from ..paths import LOGS_DIR
-from ..runtime.pyrunner import drain_async_cycling
+from ..runtime.background_run import wait_for_background_run
 from ..runtime.signals import (
     clear_current_task,
     clear_interrupt,
@@ -75,7 +75,7 @@ class ScriptRunner:
                 exec(code_obj, exec_globals, exec_globals)
                 result = exec_globals.get("result", None)
 
-            drain_async_cycling()
+            wait_for_background_run()
 
             if is_task_interrupt_requested(task_id):
                 raise CycleInterrupt("Interrupted by MCP bridge")

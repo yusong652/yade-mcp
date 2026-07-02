@@ -1,9 +1,9 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""The bridge's foothold inside a running simulation.
+"""The bridge's PyRunner engine: per-step checks while a simulation runs.
 
-A PyRunner engine registered in ``O.engines`` so that, while a task runs, YADE
-calls back into Python each step to check:
+Registered in ``O.engines`` so that, while a task runs, YADE calls back
+into Python each step to check:
 
 1. whether the running task was asked to interrupt;
 2. whether an execute_code snippet wants to hold the cycle for a consistent
@@ -14,52 +14,9 @@ every run so it survives ``O.reset()`` and user scripts that reassign
 ``O.engines``.
 """
 
-import threading
-import time
+from .background_run import is_background_run, mark_background_run
 
 _INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
-_ASYNC_CYCLING_PICKUP_TIMEOUT_S = 0.5  # max wait for the cycle to start (pickup gap)
-
-_async_cycling = threading.local()
-
-
-def mark_async_cycling(pending):
-    """Set this thread's flag for whether its last ``O.run`` left cycling undrained."""
-    _async_cycling.pending = pending
-
-
-def _async_cycling_pending():
-    """True if THIS thread's last ``O.run`` was a ``wait=False`` dispatch
-    whose cycling has not been drained yet."""
-    return getattr(_async_cycling, "pending", False)
-
-
-def _is_async_run(args, kwargs):
-    """True if this ``O.run`` was dispatched ``wait=False`` (returns while its
-    cycling continues). ``wait`` is ``O.run``'s 2nd positional or its ``wait``
-    keyword; default False."""
-    wait = kwargs["wait"] if "wait" in kwargs else (args[1] if len(args) >= 2 else False)
-    return not wait
-
-
-def drain_async_cycling():
-    """Block until the cycling a pending ``O.run(wait=False)`` dispatched
-    finishes, so the caller does not report success while the sim still cycles
-    (orphan cycling hides errors and evades interrupts).
-    """
-    try:
-        from yade import O as _O
-    except ImportError:
-        return
-    if not _async_cycling_pending():
-        return
-    # wait=False returns before O.running flips True: poll for the cycle to
-    # start (bounded), then O.wait() for the run itself (unbounded).
-    deadline = time.monotonic() + _ASYNC_CYCLING_PICKUP_TIMEOUT_S
-    while not _O.running and time.monotonic() < deadline:
-        time.sleep(0.005)
-    if _O.running:
-        _O.wait()  # blocks; re-raises cycling errors as RuntimeError
 
 
 def install_pyrunner(logger):
@@ -188,9 +145,9 @@ def install_pyrunner(logger):
             _normalize_pyrunner()
             _interrupt_triggered["value"] = False
             result = _original_run(*args, **kwargs)
-            # A wait=False run returns before its cycling finishes; flag it for
-            # the task drain (wait=True already drained synchronously).
-            mark_async_cycling(_is_async_run(args, kwargs))
+            # A wait=False run returns before its cycling finishes; flag it so
+            # the task waits for it before reporting (wait=True already has).
+            mark_background_run(is_background_run(args, kwargs))
             # After O.run() returns (possibly due to O.pause() from interrupt),
             # check if interrupt was the reason and raise at Python level.
             if _interrupt_triggered["value"]:
