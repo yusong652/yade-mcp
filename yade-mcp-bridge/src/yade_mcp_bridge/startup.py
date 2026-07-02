@@ -1,12 +1,12 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Bridge startup and process lifecycle.
+"""Bridge entry point: ``start()`` brings up all components.
 
-``start()`` is the package's single entry point. It composes the helpers
-below: configure logging, install the PyRunner interrupt hook, bring up
-the HTTP + SSE server on a background thread, wire console capture and
-graceful shutdown, then start the execute_code pump that drains queued
-requests (Qt timer in gui mode, daemon thread in console mode).
+- logging (file + stdout)
+- PyRunner interrupt hook
+- HTTP + SSE server on a background thread
+- console capture and shutdown hooks
+- execute_code pump (Qt timer in gui mode, daemon thread in console mode)
 """
 
 import atexit
@@ -28,12 +28,20 @@ from .utils.safe_logging import GapFreeFileHandler, GapFreeStreamHandler
 VALID_RUNTIME_MODES = ("auto", "gui", "console")
 
 
-def _setup_logging():
-    """Configure root logging and return (logger, log_file path).
+def _check_port_free(host, port):
+    """Fail fast on the main thread if the port is taken."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        sock.bind((host, port))
+    except OSError as exc:
+        raise RuntimeError(f"Port {port} is already in use. Try: {__package__}.start(port={port + 1})") from exc
+    finally:
+        sock.close()
 
-    stdout shows WARNING+ only (keeps the interactive prompt clean); the
-    file handler keeps everything for post-mortem debugging.
-    """
+
+def _setup_logging():
+    """Configure root logging and return (logger, log_file path)."""
     bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
     if not os.path.exists(bridge_dir):
         os.makedirs(bridge_dir)
@@ -55,21 +63,6 @@ def _setup_logging():
     return logging.getLogger("MCP-Bridge"), log_file
 
 
-def _check_port_free(host, port):
-    """Fail fast on the main thread if the port is taken.
-
-    SO_REUSEADDR handles crash/restart scenarios.
-    """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    try:
-        sock.bind((host, port))
-    except OSError as exc:
-        raise RuntimeError(f"Port {port} is already in use. Try: {__package__}.start(port={port + 1})") from exc
-    finally:
-        sock.close()
-
-
 def _start_server_thread(bridge_server, logger):
     """Serve the bridge on a daemon thread."""
 
@@ -87,11 +80,7 @@ def _start_server_thread(bridge_server, logger):
 
 
 def _install_shutdown(bridge_server, logger):
-    """Register idempotent shutdown on atexit and SIGTERM/SIGINT.
-
-    atexit alone is not enough: it doesn't run while the main thread is
-    blocked (e.g. time.sleep inside a task), so signals are handled too.
-    """
+    """Register idempotent shutdown on atexit and SIGTERM/SIGINT."""
     done = {"value": False}
 
     def shutdown():
@@ -137,21 +126,23 @@ def start(
 ):
     """Start the MCP bridge server.
 
-    Brings up an HTTP + SSE server on a background thread (``host``:``port``,
-    default localhost:9002), then drains queued execute_code work via a
-    pump. ``mode`` selects the pump: "auto" tries a Qt timer and falls back
-    to a blocking background thread, "gui" forces Qt, "console" forces
-    blocking.
+    - check ``host``:``port`` is free (default localhost:9002)
+    - configure logging and install the PyRunner interrupt hook
+    - create the HTTP + SSE server and install console capture (user input)
+    - run the server on a background thread, register shutdown hooks
+    - start the execute_code pump; ``mode`` selects it: "auto" tries a
+      Qt timer and falls back to a blocking background thread, "gui"
+      forces Qt, "console" forces blocking
     """
     if mode not in VALID_RUNTIME_MODES:
         raise ValueError(f"Invalid mode '{mode}'. Expected one of: {', '.join(VALID_RUNTIME_MODES)}")
+
+    _check_port_free(host, port)
 
     logger, log_file = _setup_logging()
 
     # install_pyrunner logs its own failure warning; ignore the return value.
     install_pyrunner(logger)
-
-    _check_port_free(host, port)
 
     executor = SerialExecutor()
     bridge_server = create_server(executor=executor, host=host, port=port, runtime_mode=mode)

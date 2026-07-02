@@ -15,7 +15,7 @@ Usage (batch/console mode):
     yade_mcp_bridge.start(mode="console")
 """
 
-from .bootstrap import start
+from .startup import start
 
 __version__ = "0.7.0"
 
