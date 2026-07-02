@@ -71,12 +71,7 @@ def register(mcp: FastMCP) -> None:
             "next_action": f'call yade_check_task_status(task_id="{task_id}")',
         }
         # Surface the bridge's cancellation metadata to the agent.
-        for key in (
-            "method",
-            "async_exc_skipped_reason",
-            "namespace_preserved",
-            "continuation_hint",
-        ):
+        for key in ("method", "async_exc_skipped_reason"):
             if key in bridge_data:
                 payload[key] = bridge_data[key]
         return build_ok(payload)

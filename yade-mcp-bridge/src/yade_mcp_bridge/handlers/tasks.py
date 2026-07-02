@@ -9,9 +9,7 @@ from .helpers import require_field
 
 logger = logging.getLogger("MCP-Bridge")
 
-# Default page size for the paginated reads (check_task_status output lines,
-# list_tasks entries). Callers that omit ``limit`` get a bounded page instead
-# of the full history; ``pagination.total_count`` tells them what remains.
+# Default page size (check_task_status output lines, list_tasks entries).
 _DEFAULT_LIMIT = 64
 
 
@@ -106,9 +104,9 @@ def handle_interrupt_task(ctx, data):
     request_interrupt(task_id)
     logger.info("Interrupt flag set for task: %s", task_id)
 
-    # Best-effort async injection. Atomic unregister-then-inject prevents
-    # a re-entrant interrupt from landing a second AsyncAbort in the
-    # middle of the script thread's except-block cleanup.
+    # The flag interrupts a task inside O.run (PyRunner tick → CycleInterrupt);
+    # injecting AsyncAbort also covers pure-Python code with no O.run on the
+    # stack. Unregister first so a second interrupt cannot inject again.
     method = "flag_only"
     tid = get_exec_thread(task_id)
     if tid is not None:
@@ -117,9 +115,8 @@ def handle_interrupt_task(ctx, data):
         method = "flag_and_async_exc"
         logger.info("AsyncAbort injected into task %s (tid=%s)", task_id, tid)
 
-    # Defend against TOCTOU: task may have finished between the status check
-    # above and request_interrupt. script_runner.py's finally clears the flag on exit,
-    # but if we add it after that runs, the flag would leak. Re-check and clean.
+    # The task may have finished while we set the flag; re-check so the
+    # flag cannot leak.
     if task.status not in ("pending", "running"):
         clear_interrupt(task_id)
 
@@ -127,14 +124,6 @@ def handle_interrupt_task(ctx, data):
         "task_id": task_id,
         "interrupt_requested": True,
         "method": method,
-        "namespace_preserved": True,
-        "continuation_hint": (
-            "Task variables and YADE state are preserved in __main__. "
-            "Use yade_execute_code to inspect (e.g. O.iter, len(O.bodies), "
-            "local vars defined by the script) or to run the remaining "
-            "logic directly. If more simulation iters are needed, submit "
-            "a fresh yade_execute_task with a short continuation script."
-        ),
     }
 
     return ok_response("result", request_id, data=data_payload)

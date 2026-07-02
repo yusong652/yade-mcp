@@ -164,10 +164,6 @@ class TestHandleInterruptTask:
             # No thread registered for "t1" → async-exc path must skip,
             # flag-only method reported.
             assert resp["data"]["method"] == "flag_only"
-            # Continuation hint must be surfaced so the agent knows the
-            # YADE namespace is preserved and how to pick up work.
-            assert resp["data"]["namespace_preserved"] is True
-            assert "yade_execute_code" in resp["data"]["continuation_hint"]
         finally:
             clear_interrupt("t1")
 
