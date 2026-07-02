@@ -1,3 +1,3 @@
 """YADE MCP Server - YADE open-source DEM simulation tools via MCP."""
 
-__version__ = "0.6.0"
+__version__ = "0.8.0"
