@@ -30,10 +30,14 @@ def start_qt_pump(executor, logger):
     """Drive the execute_code pump from the Qt event loop. Returns True on success."""
     global _qt_pump_timer
 
+    # Qt5-first matches YADE's current default GUI; PyQt6 covers Qt6 builds
     try:
         from PyQt5 import QtCore
     except ImportError:
-        return False
+        try:
+            from PyQt6 import QtCore
+        except ImportError:
+            return False
 
     app = QtCore.QCoreApplication.instance()
     if app is None:
