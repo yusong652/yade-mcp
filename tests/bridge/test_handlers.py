@@ -3,7 +3,7 @@
 from concurrent.futures import Future
 from unittest.mock import MagicMock, patch
 
-from yade_mcp_bridge.execution.code_runner import (
+from yade_mcp_bridge.execution.codeRunner import (
     _terminateStuckExecution,
     _timeoutResponse,
 )
@@ -295,7 +295,7 @@ class TestHandleExecuteTask:
         """ScriptRunner.run assigns the task_id and returns it in the data."""
         import os
 
-        from yade_mcp_bridge.execution.script_runner import ScriptRunner
+        from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
         from yade_mcp_bridge.paths import LOGS_DIR
 
         monkeypatch.chdir(tmp_path)
@@ -353,7 +353,7 @@ class TestTerminateStuckExecution:
         future.set_result({"status": "terminated", "output": "partial"})
 
         with patch(
-            "yade_mcp_bridge.execution.code_runner.injectAsyncException",
+            "yade_mcp_bridge.execution.codeRunner.injectAsyncException",
             return_value=1,
         ):
             result = _terminateStuckExecution("req-3", future)
@@ -370,11 +370,11 @@ class TestTerminateStuckExecution:
 
         with (
             patch(
-                "yade_mcp_bridge.execution.code_runner.injectAsyncException",
+                "yade_mcp_bridge.execution.codeRunner.injectAsyncException",
                 return_value=1,
             ),
             patch(
-                "yade_mcp_bridge.execution.code_runner._TERMINATION_GRACE_S",
+                "yade_mcp_bridge.execution.codeRunner._TERMINATION_GRACE_S",
                 0.05,  # short grace to keep test fast
             ),
         ):
@@ -393,7 +393,7 @@ class TestTerminateStuckExecution:
 
         # No task owns the sim (setup cleared _current_task_id).
         with patch(
-            "yade_mcp_bridge.execution.code_runner._simRunning",
+            "yade_mcp_bridge.execution.codeRunner._simRunning",
             return_value=True,
         ):
             result = _terminateStuckExecution("cyc-1", future)
@@ -412,11 +412,11 @@ class TestTerminateStuckExecution:
 
         with (
             patch(
-                "yade_mcp_bridge.execution.code_runner._simRunning",
+                "yade_mcp_bridge.execution.codeRunner._simRunning",
                 return_value=True,
             ),
             patch(
-                "yade_mcp_bridge.execution.code_runner._CYCLE_INTERRUPT_GRACE_S",
+                "yade_mcp_bridge.execution.codeRunner._CYCLE_INTERRUPT_GRACE_S",
                 0.05,  # short grace to keep test fast
             ),
         ):
@@ -435,7 +435,7 @@ class TestTerminateStuckExecution:
         setCurrentTask("owner-task")
 
         with patch(
-            "yade_mcp_bridge.execution.code_runner._simRunning",
+            "yade_mcp_bridge.execution.codeRunner._simRunning",
             return_value=True,
         ):
             result = _terminateStuckExecution("cyc-3", future)
@@ -453,7 +453,7 @@ class TestTerminateStuckExecution:
 
         # _simRunning defaults to False without YADE; assert explicitly.
         with patch(
-            "yade_mcp_bridge.execution.code_runner._simRunning",
+            "yade_mcp_bridge.execution.codeRunner._simRunning",
             return_value=False,
         ):
             result = _terminateStuckExecution("cyc-4", future)
@@ -551,7 +551,7 @@ class TestExecuteHoldLimit:
         for a snippet the abort could not reach."""
         import contextlib
 
-        from yade_mcp_bridge.execution import code_runner
+        from yade_mcp_bridge.execution import codeRunner
 
         captured = {}
 
@@ -560,28 +560,28 @@ class TestExecuteHoldLimit:
             captured["max_hold_s"] = maxHoldS
             yield True
 
-        monkeypatch.setattr(code_runner, "holdSim", fake_hold)
-        monkeypatch.setattr(code_runner, "_simRunning", lambda: True)
+        monkeypatch.setattr(codeRunner, "holdSim", fake_hold)
+        monkeypatch.setattr(codeRunner, "_simRunning", lambda: True)
 
-        result = code_runner._execute("req-hold", "1 + 1", timeoutMs=5000)
+        result = codeRunner._execute("req-hold", "1 + 1", timeoutMs=5000)
 
         assert result["status"] == "success"
-        expected = 5.0 + code_runner._CYCLE_INTERRUPT_GRACE_S + code_runner._TERMINATION_GRACE_S + 1.0
+        expected = 5.0 + codeRunner._CYCLE_INTERRUPT_GRACE_S + codeRunner._TERMINATION_GRACE_S + 1.0
         assert captured["max_hold_s"] == expected
 
     def test_execute_skips_hold_when_sim_idle(self, monkeypatch):
         """No task and no running sim → no hold at all."""
-        from yade_mcp_bridge.execution import code_runner
+        from yade_mcp_bridge.execution import codeRunner
 
         called = {"hold": False}
 
         def fake_hold(**kwargs):
             called["hold"] = True
 
-        monkeypatch.setattr(code_runner, "holdSim", fake_hold)
-        monkeypatch.setattr(code_runner, "_simRunning", lambda: False)
+        monkeypatch.setattr(codeRunner, "holdSim", fake_hold)
+        monkeypatch.setattr(codeRunner, "_simRunning", lambda: False)
 
-        result = code_runner._execute("req-nohold", "2 + 2", timeoutMs=5000)
+        result = codeRunner._execute("req-nohold", "2 + 2", timeoutMs=5000)
 
         assert result["status"] == "success"
         assert called["hold"] is False

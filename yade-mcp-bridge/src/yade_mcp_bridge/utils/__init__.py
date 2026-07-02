@@ -2,8 +2,8 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Utility modules for MCP bridge server."""
 
-from .file_buffer import FileBuffer, TeeBuffer
-from .path_utils import pathToLlmFormat
+from .fileBuffer import FileBuffer, TeeBuffer
+from .pathUtils import pathToLlmFormat
 from .response import TaskDataBuilder, errorBody, errorResponse, okBody, okResponse
 
 __all__ = [
