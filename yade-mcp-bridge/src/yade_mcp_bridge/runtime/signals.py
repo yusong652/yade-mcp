@@ -105,7 +105,7 @@ _hold_lock = threading.Lock()  # only one thread touches the hold state at a tim
 _hold_wanted = threading.Event()  # execute_code wants to hold the task
 _cycle_held = threading.Event()  # task is held, scene frozen
 _snippet_released = threading.Event()  # execute_code done, task resumes
-_window_local = threading.local()  # marks the thread currently holding the task
+_hold_local = threading.local()  # marks the thread currently holding the task
 
 _MAX_HOLD_S = 30.0  # max hold; past it the cycle resumes even if not released
 
@@ -119,8 +119,7 @@ def hold_if_wanted(max_hold_s=_MAX_HOLD_S):
     _cycle_held.set()
     if not _snippet_released.wait(timeout=max_hold_s):
         logger.warning(
-            "execute_code hold window exceeded %.0fs; resuming sim "
-            "(snippet may be stuck in a C call while holding the window)",
+            "execute_code held the cycle past %.0fs; resuming sim (snippet may be stuck in a C call while holding)",
             max_hold_s,
         )
     _cycle_held.clear()
@@ -128,11 +127,11 @@ def hold_if_wanted(max_hold_s=_MAX_HOLD_S):
 
 def snippet_holds_sim():
     """True if the current thread (a snippet) is currently holding the task."""
-    return bool(getattr(_window_local, "active", False))
+    return bool(getattr(_hold_local, "active", False))
 
 
 @contextlib.contextmanager
-def sim_hold_window(acquire_timeout_s=2.0):
+def hold_sim(acquire_timeout_s=2.0):
     """Snippet side: hold the sim cycle for a consistent snapshot.
 
     Always releases the task on exit (incl. exception / async abort).
@@ -141,11 +140,11 @@ def sim_hold_window(acquire_timeout_s=2.0):
         _cycle_held.clear()
         _snippet_released.clear()
         _hold_wanted.set()
-        _window_local.active = True
+        _hold_local.active = True
         try:
             held = _cycle_held.wait(timeout=acquire_timeout_s)
             yield held
         finally:
-            _window_local.active = False
+            _hold_local.active = False
             _hold_wanted.clear()
             _snippet_released.set()

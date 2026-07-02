@@ -53,8 +53,8 @@ def install_pyrunner(logger):
             except Exception:
                 pass
         # Cooperative hold point. If an execute_code snippet has asked for
-        # a consistent-snapshot window, hold here (GIL released) at this
-        # engine boundary until it releases — see signals.sim_hold_window.
+        # a consistent snapshot, hold here (GIL released) at this engine
+        # boundary until it releases — see signals.hold_sim.
         hold_if_wanted()
 
     def _ensure_tick_in_main():
@@ -127,19 +127,18 @@ def install_pyrunner(logger):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
-            # A snippet holding a sim-hold window must not drive the cycle: the
-            # cycle is frozen for its snapshot, so O.run() here would wait on a
-            # step that can never come → deadlock. No syntax parsing — the
-            # snippet's own O.run() routes through this hook, where
-            # snippet_holds_sim() catches it at runtime and refuses cleanly.
-            # (The task's own O.run is on the companion thread, never in a
-            # window, so this never fires for it.)
+            # A snippet holding the cycle frozen must not drive the cycle:
+            # O.run() here would wait on a step that can never come →
+            # deadlock. No syntax parsing — the snippet's own O.run() routes
+            # through this hook, where snippet_holds_sim() catches it at
+            # runtime and refuses cleanly. (The task's own O.run is on the
+            # companion thread, which never holds, so this never fires for it.)
             if snippet_holds_sim():
                 raise RuntimeError(
-                    "O.run() refused: execute_code is holding a sim-hold "
-                    "window (the simulation cycle is frozen for a consistent "
-                    "read/edit). A snippet must not drive the cycle here. Use "
-                    "yade_execute_task for simulation runs."
+                    "O.run() refused: execute_code is holding the simulation "
+                    "cycle frozen for a consistent read/edit, so it must not "
+                    "drive the cycle at the same time. Use yade_execute_task "
+                    "for simulation runs."
                 )
             _ensure_tick_in_main()
             _normalize_pyrunner()

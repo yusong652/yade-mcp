@@ -515,7 +515,7 @@ class TestExecuteCodeTimeoutTermination:
         from yade_mcp_bridge.runtime.signals import clear_current_task, get_current_task, set_current_task
 
         # Simulate a running task by setting the sentinel outer task. With a task
-        # registered, execute_code enters the sim-hold window; this harness has
+        # registered, execute_code holds the sim; this harness has
         # no live O.run cycle, so no PyRunner tick releases the hold and it waits
         # out the full acquire timeout (~2s). Both timeouts below clear that.
         clear_current_task()
