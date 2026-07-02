@@ -19,7 +19,7 @@ import threading
 import traceback
 
 from .console import ConsoleCapture
-from .execution import SerialExecutor
+from .execution import CodeExecutor
 from .paths import DATA_DIR
 from .runtime import install_pyrunner, start_background_pump, start_qt_pump
 from .transport import create_server
@@ -144,7 +144,7 @@ def start(
     # install_pyrunner logs its own failure warning; ignore the return value.
     install_pyrunner(logger)
 
-    executor = SerialExecutor()
+    executor = CodeExecutor()
     bridge_server = create_server(executor=executor, host=host, port=port, runtime_mode=mode)
     ConsoleCapture(bridge_server.context.console_history).install()
 
