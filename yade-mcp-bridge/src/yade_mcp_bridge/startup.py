@@ -41,7 +41,7 @@ def _check_port_free(host, port):
 
 
 def _setup_logging():
-    """Configure root logging and return (logger, log_file path)."""
+    """Configure the bridge's own logger and return (logger, log_file path)."""
     bridge_dir = os.path.join(os.getcwd(), DATA_DIR)
     if not os.path.exists(bridge_dir):
         os.makedirs(bridge_dir)
@@ -54,13 +54,16 @@ def _setup_logging():
     file_handler = GapFreeFileHandler(log_file, mode="w", encoding="utf-8")
     file_handler.setFormatter(formatter)
 
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
-    root_logger.handlers.clear()
-    root_logger.addHandler(stdout_handler)
-    root_logger.addHandler(file_handler)
+    # Only the bridge's named logger — the root logger belongs to the host
+    # process (user scripts, IPython).
+    logger = logging.getLogger("MCP-Bridge")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    logger.handlers.clear()  # start() called again: replace our handlers, not stack them
+    logger.addHandler(stdout_handler)
+    logger.addHandler(file_handler)
 
-    return logging.getLogger("MCP-Bridge"), log_file
+    return logger, log_file
 
 
 def _start_server_thread(bridge_server, logger):
@@ -80,7 +83,7 @@ def _start_server_thread(bridge_server, logger):
 
 
 def _install_shutdown(bridge_server, logger):
-    """Register idempotent shutdown on atexit and SIGTERM/SIGINT."""
+    """Register idempotent shutdown on atexit and SIGTERM."""
     done = {"value": False}
 
     def shutdown():
@@ -101,7 +104,6 @@ def _install_shutdown(bridge_server, logger):
         os.kill(os.getpid(), signum)
 
     signal.signal(signal.SIGTERM, handler)
-    signal.signal(signal.SIGINT, handler)
 
 
 def _start_pump(executor, bridge_server, logger, mode):
