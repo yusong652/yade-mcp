@@ -17,6 +17,6 @@ Usage (batch/console mode):
 
 from .startup import start
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 __all__ = ["start"]
