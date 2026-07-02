@@ -21,8 +21,6 @@ import time
 _qt_pump_timer = None
 
 # Pump tick cadence in milliseconds: how often run_next() is invoked.
-# 20ms balances execute_code responsiveness against polling overhead and is
-# the floor on execute_code latency. A pump implementation detail, not a tunable.
 _TICK_INTERVAL_MS = 20
 
 
@@ -66,12 +64,7 @@ def start_qt_pump(executor, logger):
 
 
 def start_background_pump(executor, logger):
-    """Spawn a daemon thread that polls the executor queue. Returns True.
-
-    Returns immediately after starting the thread, mirroring
-    ``start_qt_pump``'s non-blocking contract, so the caller's thread stays
-    free (in console mode that is the YADE prompt accepting user input).
-    """
+    """Start a daemon thread that polls the executor queue."""
     pump_thread = threading.Thread(
         target=_background_pump_loop,
         args=(executor, logger),
