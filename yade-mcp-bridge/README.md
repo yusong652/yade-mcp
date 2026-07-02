@@ -63,7 +63,7 @@ client of it. A request is `POST /<command>` with a JSON body carrying a
 
 | Command | Purpose | Key fields |
 | --- | --- | --- |
-| `execute_task` | Submit a file-backed script as a tracked async task | `task_id`, `script_path`, `description` |
+| `execute_task` | Submit a file-backed script as a tracked async task; the response returns the assigned `task_id` | `script_path`, `description` |
 | `check_task_status` | Poll a task's status and paginated log | `task_id`, `skip_newest`, `limit`, `filter_text` |
 | `list_tasks` | List known tasks | `offset`, `limit` |
 | `interrupt_task` | Request a graceful interrupt of a running task | `task_id` |

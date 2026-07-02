@@ -282,13 +282,6 @@ class TestHandleExecuteTask:
         assert resp["error"]["code"] == "missing_field"
         assert "script_path required" in resp["error"]["message"]
 
-    def test_missing_task_id(self):
-        ctx = _make_ctx()
-        resp = handle_execute_task(ctx, {"request_id": "r1", "script_path": "/s.py"})
-        assert resp["ok"] is False
-        assert resp["error"]["code"] == "missing_field"
-        assert "task_id required" in resp["error"]["message"]
-
     def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
         ctx.script_runner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
@@ -297,11 +290,29 @@ class TestHandleExecuteTask:
             {
                 "request_id": "r1",
                 "script_path": "/tmp/test.py",
-                "task_id": "t1",
                 "description": "my task",
             },
         )
-        ctx.script_runner.run.assert_called_once()
+        ctx.script_runner.run.assert_called_once_with("/tmp/test.py", "my task")
+
+    def test_run_assigns_task_id(self, tmp_path, monkeypatch):
+        """ScriptRunner.run assigns the task_id and returns it in the data."""
+        import os
+
+        from yade_mcp_bridge.execution.script_runner import ScriptRunner
+        from yade_mcp_bridge.paths import LOGS_DIR
+
+        monkeypatch.chdir(tmp_path)
+        os.makedirs(LOGS_DIR)
+        script = tmp_path / "s.py"
+        script.write_text("x = 1\n")
+        task_manager = MagicMock()
+        task_manager.tasks = {}
+
+        result = ScriptRunner(task_manager=task_manager).run(str(script), "desc")
+
+        assert result["ok"] is True
+        assert result["data"]["task_id"]
 
 
 # =========================================================================

@@ -202,13 +202,11 @@ class YADEBridgeClient:
         self,
         script_path: str,
         description: str,
-        task_id: str,
         source: str = "agent",
     ) -> dict[str, Any]:
         return await self._request_with_retry(
             {
                 "type": "execute_task",
-                "task_id": task_id,
                 "script_path": script_path,
                 "description": description,
                 "source": source,
