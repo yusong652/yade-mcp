@@ -133,23 +133,23 @@ class TestExecThreadRegistry:
 
 
 class TestSimHoldRendezvous:
-    """The execute_code consistent-snapshot window: a handshake between the
+    """The execute_code consistent-snapshot hold: a handshake between the
     snippet (pump thread) and the PyRunner tick (sim thread). Exercised here
     with a fake cycle thread — no YADE needed."""
 
     def setup_method(self):
         from yade_mcp_bridge.runtime.signals import (
             _cycle_held,
+            _hold_local,
             _hold_wanted,
             _snippet_released,
-            _window_local,
         )
 
         _hold_wanted.clear()
         _cycle_held.clear()
         _snippet_released.clear()
-        if getattr(_window_local, "active", False):
-            _window_local.active = False
+        if getattr(_hold_local, "active", False):
+            _hold_local.active = False
 
     def _spawn_cycle(self):
         """Fake sim-cycle thread: bumps ``state['count']`` each iteration
@@ -172,13 +172,13 @@ class TestSimHoldRendezvous:
         state["stop"] = True
         t.join(timeout=2.0)
 
-    def test_window_freezes_cycle_then_resumes(self):
-        from yade_mcp_bridge.runtime.signals import sim_hold_window
+    def test_hold_freezes_cycle_then_resumes(self):
+        from yade_mcp_bridge.runtime.signals import hold_sim
 
         state, t = self._spawn_cycle()
         try:
             time.sleep(0.05)  # let the cycle advance
-            with sim_hold_window() as held:
+            with hold_sim() as held:
                 assert held is True
                 c1 = state["count"]
                 time.sleep(0.05)  # cycle is held → count must NOT advance
@@ -189,26 +189,26 @@ class TestSimHoldRendezvous:
         finally:
             self._stop_cycle(state, t)
 
-    def test_snippet_holds_sim_only_inside_window(self):
-        from yade_mcp_bridge.runtime.signals import sim_hold_window, snippet_holds_sim
+    def test_snippet_holds_sim_only_while_holding(self):
+        from yade_mcp_bridge.runtime.signals import hold_sim, snippet_holds_sim
 
         assert snippet_holds_sim() is False
         # No cycle thread → won't hold; short acquire timeout keeps it fast.
-        with sim_hold_window(acquire_timeout_s=0.05) as held:
+        with hold_sim(acquire_timeout_s=0.05) as held:
             assert held is False  # nothing to hold
             assert snippet_holds_sim() is True
         assert snippet_holds_sim() is False
 
-    def test_window_releases_cycle_on_exception(self):
-        from yade_mcp_bridge.runtime.signals import sim_hold_window
+    def test_hold_releases_cycle_on_exception(self):
+        from yade_mcp_bridge.runtime.signals import hold_sim
 
         state, t = self._spawn_cycle()
         try:
             time.sleep(0.05)
-            with pytest.raises(ValueError), sim_hold_window() as held:
+            with pytest.raises(ValueError), hold_sim() as held:
                 assert held is True
                 raise ValueError("boom")
-            # the window's finally must have resumed the cycle
+            # hold_sim's finally must have resumed the cycle
             time.sleep(0.05)
             c = state["count"]
             time.sleep(0.05)

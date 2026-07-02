@@ -17,10 +17,10 @@ from ..runtime.signals import (
     clear_interrupt,
     get_current_task,
     get_exec_thread,
+    hold_sim,
     register_exec_thread,
     request_interrupt,
     set_current_task,
-    sim_hold_window,
     unregister_exec_thread,
 )
 from ..utils import TeeBuffer, error_response, ok_response
@@ -87,7 +87,7 @@ def _execute(request_id, code_str):
         if get_current_task() is not None or _sim_running():
             # a task is running, or user ran O.run() in console.
             # Hold the sim so that the code can read a snapshot.
-            with sim_hold_window():
+            with hold_sim():
                 result = _do_exec()
         else:
             result = _do_exec()
