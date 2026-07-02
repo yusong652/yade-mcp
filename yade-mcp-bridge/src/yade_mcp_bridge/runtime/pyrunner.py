@@ -129,7 +129,7 @@ def install_pyrunner(logger):
         def _hooked_run(*args, **kwargs):
             # While a task runs, an execute_code snippet holds the cycle
             # frozen; an O.run() inside that snippet is refused here. The
-            # task's own O.run (companion thread, never holds) is unaffected.
+            # task's own O.run (on its own thread, never holds) is unaffected.
             if snippet_holds_sim():
                 raise RuntimeError(
                     "O.run() refused: execute_code is holding the simulation "

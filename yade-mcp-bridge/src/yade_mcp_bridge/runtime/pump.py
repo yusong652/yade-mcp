@@ -2,9 +2,10 @@
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
 """Pump strategies that drive the execute_code queue.
 
-A pump ticks ``CodeExecutor.run_next`` to drain execute_code requests one
-at a time. Long-running tasks bypass it — they run on their own daemon
-thread (see execution/script_runner.py) — so a task can't starve the pump.
+A pump ticks ``CodeExecutor.run_next`` to process queued execute_code
+requests one at a time. Long-running tasks bypass it — they run on their
+own daemon thread (see execution/script_runner.py) — so a task can't
+starve the pump.
 
 ``startup.start()`` picks one per runtime mode; both start non-blocking:
 

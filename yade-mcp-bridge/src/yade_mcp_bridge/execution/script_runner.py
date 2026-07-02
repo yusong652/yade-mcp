@@ -54,7 +54,7 @@ class ScriptRunner:
 
         set_current_task(task_id)
         # Advertise this thread to handle_interrupt_task so it can
-        # async-inject AsyncAbort for the pure-Python deadloop case.
+        # async-inject AsyncAbort for the pure-Python infinite-loop case.
         register_exec_thread(task_id, threading.get_ident())
 
         try:
@@ -109,11 +109,11 @@ class ScriptRunner:
 
         except AsyncAbort:
             # Last-resort abort injected by handle_interrupt_task for a
-            # pure-Python deadloop that never hit a PyRunner tick.
+            # pure-Python infinite loop that never hit a PyRunner tick.
             output_text = output_buffer.getvalue()
             logger.info(f"Script force-interrupted (async_exc): {script_path}")
-            # Best-effort: pause and drain the sim so a live O.run doesn't
-            # leak O.running=True into the next task.
+            # Best-effort: pause the sim and wait for it to stop, so a live
+            # O.run doesn't leak O.running=True into the next task.
             try:
                 from yade import O as _O
 
