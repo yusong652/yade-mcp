@@ -23,13 +23,9 @@ def handle_execute_task(ctx, data):
     if err:
         return err
 
-    task_id, err = require_field(data, "task_id", request_id)
-    if err:
-        return err
-
     description = data.get("description", "")
 
-    result = ctx.script_runner.run(script_path, description, task_id=task_id)
+    result = ctx.script_runner.run(script_path, description)
 
     return {"type": "result", "request_id": request_id, **result}
 

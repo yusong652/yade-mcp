@@ -153,8 +153,8 @@ class TestExecuteTask:
         bridge.execute_task.return_value = {"ok": True, "data": {"status": "pending", "task_id": "x"}}
         data = await _call("yade_execute_task", script_path="/tmp/sim.py", description="drained triaxial")
         assert data["ok"] is True
-        # task_id is generated tool-side (uuid), not echoed from the bridge.
-        assert isinstance(data["data"]["task_id"], str) and data["data"]["task_id"]
+        # The bridge assigns the task_id; the tool relays it.
+        assert data["data"]["task_id"] == "x"
         assert data["data"]["task_status"] == "pending"
         assert data["data"]["script_path"] == "/tmp/sim.py"
 

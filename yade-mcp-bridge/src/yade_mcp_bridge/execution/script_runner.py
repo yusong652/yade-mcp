@@ -11,6 +11,7 @@ import os
 import sys
 import threading
 import time
+import uuid
 from concurrent.futures import Future
 from functools import partial
 
@@ -163,11 +164,12 @@ class ScriptRunner:
             # close error can't skip the signal cleanup above.
             output_buffer.close()
 
-    def run(self, script_path, description, task_id):
-        """Spawn the script on its own daemon thread and return immediately."""
-        if not task_id:
-            # task_id keys the task's history, so it must be present.
-            return error_body("missing_field", "task_id required", details={"field": "task_id"})
+    def run(self, script_path, description):
+        """Start the script on its own daemon thread and return immediately.
+
+        Assigns the task_id; the caller gets it back in the response data.
+        """
+        task_id = uuid.uuid4().hex[:8]
 
         script_name = os.path.basename(script_path)
 

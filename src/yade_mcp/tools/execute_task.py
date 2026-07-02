@@ -1,6 +1,5 @@
 """YADE task execution tool backed by yade-mcp-bridge."""
 
-import uuid
 from typing import Any
 
 from fastmcp import FastMCP
@@ -36,20 +35,16 @@ def register(mcp: FastMCP) -> None:
         try:
             client = await get_bridge_client()
         except Exception as exc:
-            # Connection failed — no task_id generated, nothing to track
             return build_bridge_error(exc)
-
-        task_id = uuid.uuid4().hex[:6]
 
         try:
             response = await client.execute_task(
                 script_path=script_path,
                 description=description,
-                task_id=task_id,
             )
         except Exception as exc:
             # Connected but request failed — task may or may not exist on bridge
-            return build_bridge_error(exc, task_id=task_id)
+            return build_bridge_error(exc)
 
         bridge_error = response.get("error") or {}
         ok = response.get("ok")
@@ -65,13 +60,14 @@ def register(mcp: FastMCP) -> None:
             return build_operation_error(
                 bridge_error.get("code") or response.get("status") or "submission_failed",
                 bridge_error.get("message") or response.get("message") or "Task submission rejected by bridge",
-                task_id=task_id,
                 action="Check script path and bridge logs, then retry",
             )
 
+        # The bridge assigns the task_id and returns it with the submission.
+        response_data = response.get("data") or {}
         return build_ok(
             {
-                "task_id": task_id,
+                "task_id": response_data.get("task_id"),
                 "script_path": script_path,
                 "description": description,
                 "task_status": "pending",
