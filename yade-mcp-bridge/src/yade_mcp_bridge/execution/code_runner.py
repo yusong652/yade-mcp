@@ -54,7 +54,7 @@ def _sim_running():
         return False
 
 
-def _execute(request_id, code_str):
+def _execute(request_id, code_str, timeout_ms):
     """Run a snippet on the pump thread, capturing stdout. Returns an internal
     status dict (success / error / terminated / interrupted).
     """
@@ -86,8 +86,11 @@ def _execute(request_id, code_str):
 
         if get_current_task() is not None or _sim_running():
             # a task is running, or user ran O.run() in console.
-            # Hold the sim so that the code can read a snapshot.
-            with hold_sim():
+            # Hold the sim so that the code can read a snapshot. The hold
+            # outlives the timeout kill chain by a margin, so it only expires
+            # for a snippet the abort could not reach (stuck in a C call).
+            max_hold_s = timeout_ms / 1000.0 + _CYCLE_INTERRUPT_GRACE_S + _TERMINATION_GRACE_S + 1.0
+            with hold_sim(max_hold_s=max_hold_s):
                 result = _do_exec()
         else:
             result = _do_exec()
@@ -246,7 +249,7 @@ class CodeRunner:
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
             # Submit to the pump and block until it resolves or times out.
-            future = self.executor.submit(_execute, request_id, code)
+            future = self.executor.submit(_execute, request_id, code, timeout_ms)
             result = future.result(timeout=timeout_ms / 1000.0)
 
             # ``status`` is _execute's internal marker; translate it to the envelope.

@@ -530,3 +530,51 @@ class TestTimeoutResponse:
         assert resp["error"]["code"] == "terminated"
         assert resp["data"]["output"] == "done"
         assert resp["error"]["details"]["method"] == "finished"
+
+
+# =========================================================================
+# execute_code hold limit
+# =========================================================================
+
+
+class TestExecuteHoldLimit:
+    def test_execute_derives_hold_limit_from_timeout(self, monkeypatch):
+        """_execute passes the request timeout plus the kill-chain graces as
+        the hold limit, so the hold outlives the abort path and only expires
+        for a snippet the abort could not reach."""
+        import contextlib
+
+        from yade_mcp_bridge.execution import code_runner
+
+        captured = {}
+
+        @contextlib.contextmanager
+        def fake_hold(max_hold_s=None):
+            captured["max_hold_s"] = max_hold_s
+            yield True
+
+        monkeypatch.setattr(code_runner, "hold_sim", fake_hold)
+        monkeypatch.setattr(code_runner, "_sim_running", lambda: True)
+
+        result = code_runner._execute("req-hold", "1 + 1", timeout_ms=5000)
+
+        assert result["status"] == "success"
+        expected = 5.0 + code_runner._CYCLE_INTERRUPT_GRACE_S + code_runner._TERMINATION_GRACE_S + 1.0
+        assert captured["max_hold_s"] == expected
+
+    def test_execute_skips_hold_when_sim_idle(self, monkeypatch):
+        """No task and no running sim → no hold at all."""
+        from yade_mcp_bridge.execution import code_runner
+
+        called = {"hold": False}
+
+        def fake_hold(**kwargs):
+            called["hold"] = True
+
+        monkeypatch.setattr(code_runner, "hold_sim", fake_hold)
+        monkeypatch.setattr(code_runner, "_sim_running", lambda: False)
+
+        result = code_runner._execute("req-nohold", "2 + 2", timeout_ms=5000)
+
+        assert result["status"] == "success"
+        assert called["hold"] is False

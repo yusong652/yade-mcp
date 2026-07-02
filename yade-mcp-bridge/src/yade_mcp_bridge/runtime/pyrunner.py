@@ -127,12 +127,9 @@ def install_pyrunner(logger):
         _original_run = O.run
 
         def _hooked_run(*args, **kwargs):
-            # A snippet holding the cycle frozen must not drive the cycle:
-            # O.run() here would wait on a step that can never come →
-            # deadlock. No syntax parsing — the snippet's own O.run() routes
-            # through this hook, where snippet_holds_sim() catches it at
-            # runtime and refuses cleanly. (The task's own O.run is on the
-            # companion thread, which never holds, so this never fires for it.)
+            # While a task runs, an execute_code snippet holds the cycle
+            # frozen; an O.run() inside that snippet is refused here. The
+            # task's own O.run (companion thread, never holds) is unaffected.
             if snippet_holds_sim():
                 raise RuntimeError(
                     "O.run() refused: execute_code is holding the simulation "

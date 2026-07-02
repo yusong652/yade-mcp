@@ -232,4 +232,30 @@ class TestSimHoldRendezvous:
         t.start()
         assert done.wait(timeout=2.0) is True  # returned despite no release
         _hold_wanted.clear()
+
+    def test_hold_limit_follows_hold_sim(self):
+        """The tick's hold limit follows ``hold_sim(max_hold_s=...)``: with a
+        tiny limit and no release, the tick returns almost immediately."""
+        from yade_mcp_bridge.runtime.signals import hold_if_wanted, hold_sim
+
+        done = threading.Event()
+
+        def _tick():
+            hold_if_wanted()  # no explicit limit — must pick up the snippet's
+            done.set()
+
+        with hold_sim(acquire_timeout_s=0.05, max_hold_s=0.05):
+            t = threading.Thread(target=_tick, name="hold-limit", daemon=True)
+            t.start()
+            # Snippet holds (no release) — the tick must return via the
+            # snippet's 0.05s limit, far inside the 30s default.
+            assert done.wait(timeout=2.0) is True
         t.join(timeout=1.0)
+
+    def test_hold_limit_resets_after_hold_sim(self):
+        """The per-hold limit must not leak into the next hold."""
+        from yade_mcp_bridge.runtime import signals
+
+        with signals.hold_sim(acquire_timeout_s=0.01, max_hold_s=0.05):
+            assert signals._hold_max_s == 0.05
+        assert signals._hold_max_s is None

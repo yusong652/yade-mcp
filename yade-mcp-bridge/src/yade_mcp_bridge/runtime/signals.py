@@ -107,14 +107,20 @@ _cycle_held = threading.Event()  # task is held, scene frozen
 _snippet_released = threading.Event()  # execute_code done, task resumes
 _hold_local = threading.local()  # marks the thread currently holding the task
 
-_MAX_HOLD_S = 30.0  # max hold; past it the cycle resumes even if not released
+_MAX_HOLD_S = 30.0  # fallback hold limit, for holds that set no max_hold_s
+_hold_max_s = None  # per-hold limit, set by hold_sim from the request timeout
 
 
-def hold_if_wanted(max_hold_s=_MAX_HOLD_S):
+def hold_if_wanted(max_hold_s=None):
     """Called by the PyRunner tick each step: if a hold is wanted, hold the
-    task here until the snippet releases (or ``max_hold_s`` elapses)."""
+    task here until the snippet releases (or the hold limit elapses).
+
+    The limit is ``max_hold_s`` if given, else the holding snippet's
+    (``hold_sim(max_hold_s=...)``), else ``_MAX_HOLD_S``."""
     if not _hold_wanted.is_set():
         return
+    if max_hold_s is None:
+        max_hold_s = _hold_max_s if _hold_max_s is not None else _MAX_HOLD_S
     _snippet_released.clear()
     _cycle_held.set()
     if not _snippet_released.wait(timeout=max_hold_s):
@@ -131,14 +137,18 @@ def snippet_holds_sim():
 
 
 @contextlib.contextmanager
-def hold_sim(acquire_timeout_s=2.0):
+def hold_sim(acquire_timeout_s=2.0, max_hold_s=None):
     """Snippet side: hold the sim cycle for a consistent snapshot.
 
-    Always releases the task on exit (incl. exception / async abort).
+    ``max_hold_s`` bounds how long the cycle may stay held (None →
+    ``_MAX_HOLD_S``). Always releases the task on exit (incl. exception /
+    async abort).
     """
+    global _hold_max_s
     with _hold_lock:
         _cycle_held.clear()
         _snippet_released.clear()
+        _hold_max_s = max_hold_s
         _hold_wanted.set()
         _hold_local.active = True
         try:
@@ -147,4 +157,5 @@ def hold_sim(acquire_timeout_s=2.0):
         finally:
             _hold_local.active = False
             _hold_wanted.clear()
+            _hold_max_s = None
             _snippet_released.set()
