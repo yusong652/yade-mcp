@@ -23,7 +23,7 @@ def handleExecuteTask(ctx, data):
 
     description = data.get("description", "")
 
-    result = ctx.scriptRunner.run(scriptPath, description)
+    result = ctx.taskRunner.run(scriptPath, description)
 
     return {"type": "result", "request_id": requestId, **result}
 
@@ -66,7 +66,7 @@ def handleListTasks(ctx, data):
 
 
 def handleInterruptTask(ctx, data):
-    """Interrupt a running task."""
+    """Interrupt a running task, or cancel one still waiting in the queue."""
     from ..execution.termination import AsyncAbort, injectAsyncException
     from ..runtime.signals import (
         clearInterrupt,
@@ -99,6 +99,17 @@ def handleInterruptTask(ctx, data):
             "already_terminal",
             f"Task already in terminal state: {taskId} (status: {taskStatus})",
             data={"task_id": taskId, "status": taskStatus, "interrupt_requested": False},
+        )
+
+    # Still waiting in the queue: cancel instead of interrupt. If the script
+    # just started, cancel() fails and the interrupt path below takes over.
+    future = getattr(task, "future", None)
+    if taskStatus == "pending" and future is not None and future.cancel():
+        logger.info("Queued task canceled: %s", taskId)
+        return okResponse(
+            "result",
+            requestId,
+            data={"task_id": taskId, "interrupt_requested": True, "method": "canceled_while_queued"},
         )
 
     requestInterrupt(taskId)

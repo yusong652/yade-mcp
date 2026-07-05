@@ -7,7 +7,8 @@ from concurrent.futures import Future
 
 import httpx
 import pytest
-from yade_mcp_bridge.execution.executor import CodeExecutor
+from yade_mcp_bridge.execution.codeExecutor import CodeExecutor
+from yade_mcp_bridge.execution.taskExecutor import TaskExecutor
 from yade_mcp_bridge.tasks.task import ScriptTask
 from yade_mcp_bridge.transport.server import createServer
 
@@ -20,8 +21,10 @@ def _start_bridge():
     thread on the main-thread future, so a background pump must run the
     submitted code (just like Mode 1 in production) for the POST to resolve.
     """
-    executor = CodeExecutor()
-    server = createServer(executor=executor, host="127.0.0.1", port=0, runtimeMode="test")
+    codeExecutor = CodeExecutor()
+    taskExecutor = TaskExecutor()
+    taskExecutor.start()
+    server = createServer(codeExecutor=codeExecutor, taskExecutor=taskExecutor, host="127.0.0.1", port=0, runtimeMode="test")
     url = f"http://127.0.0.1:{server._httpd.server_address[1]}"
 
     serve_thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -31,7 +34,7 @@ def _start_bridge():
 
     def pump_loop():
         while not stop_pump.is_set():
-            executor.runNext()
+            codeExecutor.runNext()
             time.sleep(0.005)
 
     pumpThread = threading.Thread(target=pump_loop, name="test-task-pump", daemon=True)
@@ -42,15 +45,15 @@ def _start_bridge():
         pumpThread.join(timeout=1.0)
         server.shutdown()
 
-    return server, executor, url, stop
+    return server, codeExecutor, url, stop
 
 
 @pytest.fixture()
 def bridgeServer():
     """A real bridge server (HTTP + SSE) with a background execute_code pump."""
-    server, executor, url, stop = _start_bridge()
+    server, codeExecutor, url, stop = _start_bridge()
     try:
-        yield url, executor
+        yield url, codeExecutor
     finally:
         stop()
 
@@ -58,7 +61,7 @@ def bridgeServer():
 @pytest.fixture()
 def bridge_server_with_tasks(tmp_path):
     """Bridge server that exposes the task_manager for direct task injection."""
-    server, executor, url, stop = _start_bridge()
+    server, codeExecutor, url, stop = _start_bridge()
     try:
         yield url, server.context.taskManager, tmp_path
     finally:
@@ -69,9 +72,9 @@ def bridge_server_with_tasks(tmp_path):
 def bridge_server_with_pump():
     """Alias of ``bridge_server`` for the termination tests: a real pump on a
     non-main thread is required for the SetAsyncExc path to abort live code."""
-    server, executor, url, stop = _start_bridge()
+    server, codeExecutor, url, stop = _start_bridge()
     try:
-        yield url, executor
+        yield url, codeExecutor
     finally:
         stop()
 

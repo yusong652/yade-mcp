@@ -1,9 +1,8 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""YADE Script Executor - Executes Python scripts in YADE environment.
+"""YADE Task Runner - Executes Python scripts.
 
-Runs each script as a background task on its own thread, with stdout
-capture and interrupt support.
+Runs each script as a queued background task.
 """
 
 import logging
@@ -32,11 +31,12 @@ from .termination import AsyncAbort, CycleInterrupt
 logger = logging.getLogger("MCP-Bridge")
 
 
-class ScriptRunner:
-    """Run user scripts as background tasks, each on its own thread."""
+class TaskRunner:
+    """Accept user scripts as background tasks and queue them for execution."""
 
-    def __init__(self, taskManager):
+    def __init__(self, taskManager, taskExecutor):
         self.taskManager = taskManager
+        self.taskExecutor = taskExecutor
 
     def _execute(self, scriptPath, scriptContent, outputBuffer, taskId):
         """Execute the script on the task's own thread.
@@ -165,7 +165,7 @@ class ScriptRunner:
             outputBuffer.close()
 
     def run(self, scriptPath, description):
-        """Start the script on its own daemon thread and return immediately.
+        """Queue the script as a background task and return immediately.
 
         Assigns the task_id; the caller gets it back in the response data.
         """
@@ -175,8 +175,9 @@ class ScriptRunner:
 
         try:
             with open(scriptPath, encoding="utf-8") as f:
-                # Read script file content here in the handler thread,
-                # not the daemon thread, to handle file read errors
+                # Read the script at submit time: read errors are reported
+                # synchronously, and later edits to the file do not change
+                # what a queued task will run.
                 scriptContent = f.read()
         except FileNotFoundError:
             return errorBody("script_not_found", f"Script file not found: {scriptPath}")
@@ -187,12 +188,10 @@ class ScriptRunner:
             logPath = os.path.join(LOGS_DIR, f"task_{taskId}.log")
             outputBuffer = FileBuffer(logPath)
 
-            # Own thread, not the shared executor pump (unlike execute_code):
-            # a long O.run(wait=True) here would otherwise block the pump and
-            # starve execute_code for the task's whole lifetime.
             future = Future()
 
-            def _scriptRunner():
+            def _taskRunner():
+                # Canceled while still queued: nothing to run.
                 if not future.set_running_or_notify_cancel():
                     return
                 try:
@@ -201,16 +200,16 @@ class ScriptRunner:
                 except BaseException as exc:  # noqa: BLE001 — surface every failure to the future
                     future.set_exception(exc)
 
-            scriptThread = threading.Thread(
-                target=_scriptRunner,
-                name=f"script-{taskId}",
-                daemon=True,
-            )
-            scriptThread.start()
-
             submitTime = time.time()
+            # Register the task before queueing it, so it is already visible
+            # to check_task_status by the time the script can start.
             # pending -> running is promoted by _execute / the task manager.
             self.taskManager.createScriptTask(future, scriptName, scriptPath, outputBuffer, description, taskId)
+
+            # Tasks go through their own queue, never the execute_code pump:
+            # a long O.run(wait=True) here would block the pump (the Qt main
+            # thread in gui mode) for the task's whole lifetime.
+            self.taskExecutor.submit(taskId, _taskRunner)
 
             data = (
                 TaskDataBuilder(taskId, "script", scriptPath, description)

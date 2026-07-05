@@ -5,6 +5,7 @@
 import logging
 import os
 import time
+from concurrent.futures import CancelledError
 
 from ..utils import TaskDataBuilder, okBody
 
@@ -17,11 +18,12 @@ class ScriptTask:
     """Task for Python script execution with real-time output capture.
 
     Status values:
-    - "pending": Task queued, waiting for main thread
+    - "pending": Waiting in the queue; tasks run one at a time in submit order
     - "running": Task currently executing
     - "completed": Task finished successfully
     - "failed": Task finished with error
-    - "interrupted": Task was interrupted by user
+    - "interrupted": Task was interrupted by user while running
+    - "canceled": Task was taken out of the queue before it ever ran
     """
 
     def __init__(
@@ -38,7 +40,7 @@ class ScriptTask:
         self._status = "pending"
         self.onStatusChange = onStatusChange
         self.error = None
-        # Structured error details captured from the executor (user-frame
+        # Structured error details captured from the task runner (user-frame
         # traceback, exception type, overflow log path). Promoted into
         # check_task_status responses so the LLM has full debugging context
         # without chasing log files.
@@ -100,6 +102,16 @@ class ScriptTask:
                     self.status = "completed"
             else:
                 self.status = "completed"
+        except CancelledError:
+            # Canceled while still queued (a BaseException on py3.8+, so the
+            # except Exception below cannot catch it). The script never ran,
+            # so close the log buffer here — normally the task runner does it.
+            self.status = "canceled"
+            if self.outputBuffer:
+                try:
+                    self.outputBuffer.close()
+                except (ValueError, OSError):
+                    pass
         except Exception as e:
             self.status = "failed"
             self.error = str(e)
@@ -175,7 +187,7 @@ class ScriptTask:
             builder.withPagination(pagination)
             return okBody(data=builder.build())
 
-        # completed / failed / interrupted
+        # completed / failed / interrupted / canceled
         builder.withTiming(self.startTime, self.endTime, elapsedTime)
         builder.withOutput(outputText)
         builder.withPagination(pagination)
@@ -192,7 +204,7 @@ class ScriptTask:
             builder.withResult(self._serializeResult(resultData))
             return okBody(data=builder.build())
 
-        if currentStatus == "interrupted":
+        if currentStatus in ("interrupted", "canceled"):
             return okBody(data=builder.build())
 
         # failed — the task failed, but the *request* succeeded (ok: True).
@@ -215,7 +227,7 @@ class ScriptTask:
             "start_time": self.startTime,
             "script_path": self.scriptPath,
         }
-        if self.status in ["completed", "failed", "interrupted"] and self.endTime is not None:
+        if self.status in ["completed", "failed", "interrupted", "canceled"] and self.endTime is not None:
             info["end_time"] = self.endTime
         if self.status == "failed" and self.error:
             info["error"] = self.error

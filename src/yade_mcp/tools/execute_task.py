@@ -22,11 +22,15 @@ def register(mcp: FastMCP) -> None:
     ) -> dict[str, Any]:
         """Submit a Python script for asynchronous execution in YADE.
 
-        Returns a task_id immediately; the script runs in the background.
-        Use the companion tools to manage the task lifecycle:
+        Returns a task_id immediately; the script is queued and runs in
+        the background. Tasks run one at a time in submit order (they
+        share the YADE process and its single simulation state), so a
+        multi-stage pipeline can be submitted in one go — each stage
+        starts when the previous one finishes. Use the companion tools
+        to manage the task lifecycle:
         - yade_check_task_status: poll output, progress, and final status
-        - yade_interrupt_task: cancel a running task
-        - yade_list_tasks: browse task history
+        - yade_interrupt_task: stop a running task or cancel a queued one
+        - yade_list_tasks: browse task history (also shows queue order)
 
         Use this for production simulation runs, long O.run() cycles,
         and any operation that may take minutes or longer.

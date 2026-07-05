@@ -28,14 +28,14 @@ def _make_ctx(runtimeMode="console", tasks=None):
     """Create a ServerContext with mock dependencies."""
     taskManager = MagicMock()
     taskManager.tasks = tasks or {}
-    scriptRunner = MagicMock()
+    taskRunner = MagicMock()
     codeRunner = MagicMock()
-    executor = MagicMock()
+    codeExecutor = MagicMock()
     return ServerContext(
         taskManager=taskManager,
-        scriptRunner=scriptRunner,
+        taskRunner=taskRunner,
         codeRunner=codeRunner,
-        executor=executor,
+        codeExecutor=codeExecutor,
         runtimeMode=runtimeMode,
     )
 
@@ -168,7 +168,7 @@ class TestHandleInterruptTask:
             clearInterrupt("t1")
 
     def test_interrupt_running_task_with_registered_thread_fires_async_exc(self):
-        """When ScriptRunner has registered a live script thread for
+        """When TaskRunner has registered a live script thread for
         the task, the handler atomically unregisters and injects
         AsyncAbort. The test stands up a real thread to validate
         the end-to-end SetAsyncExc injection."""
@@ -251,16 +251,40 @@ class TestHandleInterruptTask:
         finally:
             clearInterrupt("t3")
 
-    def test_interrupt_pending_task(self):
-        from yade_mcp_bridge.runtime.signals import clearInterrupt
+    def test_interrupt_pending_task_cancels_it(self):
+        """A task still waiting in the queue is canceled, not interrupted:
+        its future is canceled and no interrupt flag is set."""
+        from yade_mcp_bridge.runtime.signals import isTaskInterruptRequested
 
+        future = Future()
         task = MagicMock()
         task.status = "pending"
+        task.future = future
         ctx = _make_ctx(tasks={"t1": task})
-        clearInterrupt("t1")
+
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t1"})
+
+        assert resp["ok"] is True
+        assert resp["data"]["method"] == "canceled_while_queued"
+        assert future.cancelled()
+        assert not isTaskInterruptRequested("t1")
+
+    def test_interrupt_pending_task_falls_back_when_already_started(self):
+        """If the script starts between the status read and the cancel
+        attempt, cancel() fails and the normal interrupt path takes over."""
+        from yade_mcp_bridge.runtime.signals import clearInterrupt
+
+        future = Future()
+        future.set_running_or_notify_cancel()  # the worker beat us to it
+        task = MagicMock()
+        task.status = "pending"
+        task.future = future
+        ctx = _make_ctx(tasks={"t1": task})
+
         resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t1"})
         try:
             assert resp["ok"] is True
+            assert resp["data"]["method"] in ("flag_only", "flag_and_async_exc")
         finally:
             clearInterrupt("t1")
 
@@ -280,7 +304,7 @@ class TestHandleExecuteTask:
 
     def test_delegates_to_script_runner(self):
         ctx = _make_ctx()
-        ctx.scriptRunner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
+        ctx.taskRunner.run = MagicMock(return_value={"ok": True, "data": {"status": "pending"}})
         handleExecuteTask(
             ctx,
             {
@@ -289,13 +313,13 @@ class TestHandleExecuteTask:
                 "description": "my task",
             },
         )
-        ctx.scriptRunner.run.assert_called_once_with("/tmp/test.py", "my task")
+        ctx.taskRunner.run.assert_called_once_with("/tmp/test.py", "my task")
 
     def test_run_assigns_task_id(self, tmp_path, monkeypatch):
-        """ScriptRunner.run assigns the task_id and returns it in the data."""
+        """TaskRunner.run assigns the task_id and returns it in the data."""
         import os
 
-        from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
+        from yade_mcp_bridge.execution.taskRunner import TaskRunner
         from yade_mcp_bridge.paths import LOGS_DIR
 
         monkeypatch.chdir(tmp_path)
@@ -305,10 +329,74 @@ class TestHandleExecuteTask:
         taskManager = MagicMock()
         taskManager.tasks = {}
 
-        result = ScriptRunner(taskManager=taskManager).run(str(script), "desc")
+        result = TaskRunner(taskManager=taskManager, taskExecutor=MagicMock()).run(str(script), "desc")
 
         assert result["ok"] is True
         assert result["data"]["task_id"]
+
+    def test_run_executes_through_queue(self, tmp_path, monkeypatch):
+        """A submitted script runs via the TaskExecutor worker to completion."""
+        import os
+
+        from yade_mcp_bridge.execution import TaskExecutor
+        from yade_mcp_bridge.execution.taskRunner import TaskRunner
+        from yade_mcp_bridge.paths import LOGS_DIR
+        from yade_mcp_bridge.tasks import TaskManager
+
+        monkeypatch.chdir(tmp_path)
+        os.makedirs(LOGS_DIR)
+        script = tmp_path / "s.py"
+        script.write_text("result = 41 + 1\n")
+        taskManager = TaskManager()
+        taskExecutor = TaskExecutor()
+        taskExecutor.start()
+
+        result = TaskRunner(taskManager, taskExecutor).run(str(script), "desc")
+
+        taskId = result["data"]["task_id"]
+        outcome = taskManager.tasks[taskId].future.result(timeout=5)
+        assert outcome["status"] == "success"
+        assert outcome["result"] == 42
+        assert taskManager.tasks[taskId].status == "completed"
+
+    def test_cancel_queued_task_end_to_end(self, tmp_path, monkeypatch):
+        """While the worker is busy, interrupting a queued task cancels it;
+        the queued script never runs."""
+        import os
+
+        from yade_mcp_bridge.execution import TaskExecutor
+        from yade_mcp_bridge.execution.taskRunner import TaskRunner
+        from yade_mcp_bridge.paths import LOGS_DIR
+        from yade_mcp_bridge.tasks import TaskManager
+
+        monkeypatch.chdir(tmp_path)
+        os.makedirs(LOGS_DIR)
+        release = tmp_path / "release"
+        blocker = tmp_path / "blocker.py"
+        blocker.write_text(f"import os, time\nwhile not os.path.exists({str(release)!r}):\n    time.sleep(0.01)\n")
+        marker = tmp_path / "marker"
+        queued = tmp_path / "queued.py"
+        queued.write_text(f"open({str(marker)!r}, 'w').close()\n")
+
+        taskManager = TaskManager()
+        taskExecutor = TaskExecutor()
+        taskExecutor.start()
+        runner = TaskRunner(taskManager, taskExecutor)
+
+        blockerId = runner.run(str(blocker), "blocks the worker")["data"]["task_id"]
+        queuedId = runner.run(str(queued), "waits in the queue")["data"]["task_id"]
+
+        ctx = _make_ctx(tasks=taskManager.tasks)
+        resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": queuedId})
+
+        assert resp["ok"] is True
+        assert resp["data"]["method"] == "canceled_while_queued"
+        assert taskManager.tasks[queuedId].status == "canceled"
+
+        # Unblock the worker; the canceled script must never have run.
+        release.touch()
+        taskManager.tasks[blockerId].future.result(timeout=5)
+        assert not marker.exists()
 
 
 # =========================================================================
@@ -338,7 +426,7 @@ class TestTerminateStuckExecution:
     def test_no_thread_registered_pending_future(self):
         """Registry empty + future pending → 'unsettled'.
         Defensive: the ultra-narrow window where the registry is cleared but
-        the executor hasn't set the future's result yet."""
+        the CodeExecutor hasn't set the future's result yet."""
         future = Future()
         result = _terminateStuckExecution("req-1", future)
         assert result["result"] is None

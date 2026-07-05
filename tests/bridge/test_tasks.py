@@ -50,6 +50,17 @@ class TestScriptTask:
         f.set_result({"status": "interrupted"})
         assert task.status == "interrupted"
 
+    def test_status_canceled_when_canceled_while_queued(self):
+        """Canceling the future of a still-queued task marks it canceled and
+        closes the log buffer (the script never runs, so nobody else will)."""
+        f = Future()
+        buffer = MagicMock()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py", outputBuffer=buffer)
+        assert f.cancel()
+        assert task.status == "canceled"
+        assert task.endTime is not None
+        buffer.close.assert_called_once()
+
     def test_status_failed_on_exception(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
@@ -109,6 +120,14 @@ class TestScriptTask:
         f.set_result({"status": "success"})
         info = task.getTaskInfo()
         assert info["status"] == "completed"
+        assert "end_time" in info
+
+    def test_get_task_info_canceled(self):
+        f = Future()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
+        f.cancel()
+        info = task.getTaskInfo()
+        assert info["status"] == "canceled"
         assert "end_time" in info
 
     def test_get_task_info_failed_includes_error(self):
@@ -181,6 +200,14 @@ class TestScriptTask:
         assert resp["ok"] is True
         assert resp["data"]["status"] == "failed"
         assert "kaboom" in resp["data"]["error"]
+
+    def test_get_status_response_canceled(self):
+        f = Future()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py", description="queued task")
+        f.cancel()
+        resp = task.getStatusResponse()
+        assert resp["ok"] is True
+        assert resp["data"]["status"] == "canceled"
 
     def _make_task_with_log(self, tmp_path, lines):
         """Helper: create a task backed by a real log file containing given lines."""
@@ -351,6 +378,17 @@ class TestTaskManager:
         tm2 = TaskManager()
         assert tm2.tasks["was-running"].status == "failed"
 
+    def test_pending_task_restored_as_canceled(self):
+        """The queue does not survive a restart, so a task persisted while
+        still 'pending' loads as 'canceled', not as queued-forever."""
+        tm = TaskManager()
+        f = Future()
+        tm.createScriptTask(f, "test.py", "/test.py", taskId="was-queued")
+        tm._saveTasks()
+
+        tm2 = TaskManager()
+        assert tm2.tasks["was-queued"].status == "canceled"
+
     def test_prune_on_startup(self):
         """Old tasks beyond max_tasks are pruned at startup."""
         tm = TaskManager()
@@ -426,8 +464,8 @@ class TestTaskManager:
         tm.shutdown()
         mock_buffer.flush.assert_called_once()
 
-    def test_shutdown_marks_running_as_interrupted(self):
-        """Shutdown marks running/pending tasks as interrupted with end_time."""
+    def test_shutdown_marks_active_tasks(self):
+        """Shutdown interrupts running tasks and cancels queued ones."""
         tm = TaskManager()
         for status, tid in [("running", "r1"), ("pending", "p1"), ("completed", "c1")]:
             f = Future()
@@ -442,7 +480,8 @@ class TestTaskManager:
         assert tm.tasks["r1"].status == "interrupted"
         assert tm.tasks["r1"].endTime is not None
         assert tm.tasks["r1"].error == "Bridge shutdown"
-        assert tm.tasks["p1"].status == "interrupted"
+        assert tm.tasks["p1"].status == "canceled"
+        assert tm.tasks["p1"].endTime is not None
         assert tm.tasks["c1"].status == "completed"  # untouched
 
     def test_shutdown_persists_to_disk(self, tmp_path):

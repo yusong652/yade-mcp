@@ -17,9 +17,12 @@ def register(mcp: FastMCP) -> None:
     @mcp.tool()
     @with_context
     async def yade_interrupt_task(task_id: TaskId) -> dict[str, Any]:
-        """Request interruption of a running YADE task.
+        """Stop a running YADE task, or cancel one still waiting in the queue.
 
-        Two cancellation paths are applied together by the bridge:
+        A task that has not started yet is simply removed from the queue
+        and ends in status ``canceled`` (``method`` reports
+        ``canceled_while_queued``). For a running task, two cancellation
+        paths are applied together by the bridge:
 
         - ``flag_only`` — sets an interrupt flag that YADE's PyRunner
           tick observes between simulation iterations (graceful path

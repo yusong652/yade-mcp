@@ -6,10 +6,10 @@
 class ServerContext:
     """Context object providing access to server dependencies for handlers."""
 
-    def __init__(self, taskManager, scriptRunner, codeRunner, executor, runtimeMode, consoleHistory=None):
+    def __init__(self, taskManager, taskRunner, codeRunner, codeExecutor, runtimeMode, consoleHistory=None):
         self.taskManager = taskManager
-        self.scriptRunner = scriptRunner
+        self.taskRunner = taskRunner
         self.codeRunner = codeRunner
-        self.executor = executor
+        self.codeExecutor = codeExecutor
         self.runtimeMode = runtimeMode
         self.consoleHistory = consoleHistory

@@ -1,4 +1,4 @@
-"""Tests for ScriptRunner's AsyncAbort path — the async-exc escape
+"""Tests for TaskRunner's AsyncAbort path — the async-exc escape
 hatch that handles pure-Python deadloops that the flag/PyRunner path
 cannot reach."""
 
@@ -7,7 +7,7 @@ import types
 from unittest.mock import MagicMock
 
 import pytest
-from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
+from yade_mcp_bridge.execution.taskRunner import TaskRunner
 from yade_mcp_bridge.runtime.signals import (
     _execThreadIds,
     clearInterrupt,
@@ -28,7 +28,8 @@ def fake_yade(monkeypatch):
 def runner():
     taskManager = MagicMock()
     taskManager.tasks = {}
-    return ScriptRunner(taskManager=taskManager)
+    # These tests call _execute directly; the queue is not involved.
+    return TaskRunner(taskManager=taskManager, taskExecutor=MagicMock())
 
 
 @pytest.fixture
