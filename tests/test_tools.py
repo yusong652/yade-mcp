@@ -277,6 +277,29 @@ class TestCheckTaskStatus:
         # bridge "success" → normalized "completed"
         assert data["data"]["task_status"] == "completed"
 
+    async def test_pending_includes_queue_note(self, bridge):
+        # A queued task gets a static hint pointing at the queue view.
+        bridge.check_task_status.return_value = {
+            "ok": True,
+            "data": {"status": "pending", "output": ""},
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=0)
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "pending"
+        assert "yade_list_tasks" in data["data"]["note"]
+
+    async def test_canceled_is_terminal_no_wait(self, bridge):
+        # "canceled" is a terminal state: no push-wait, no second poll.
+        bridge.check_task_status.return_value = {
+            "ok": True,
+            "data": {"status": "canceled", "output": ""},
+        }
+        data = await _call("yade_check_task_status", task_id="t1", wait_seconds=5)
+        assert data["ok"] is True
+        assert data["data"]["task_status"] == "canceled"
+        bridge.wait_for_task.assert_not_awaited()
+        bridge.check_task_status.assert_awaited_once()
+
 
 # =========================================================================
 # list_tasks
@@ -346,6 +369,15 @@ class TestInterruptTask:
         assert data["ok"] is True
         assert data["data"]["interrupt_requested"] is True
         assert data["data"]["method"] == "flag_only"
+
+    async def test_canceled_while_queued_method_surfaces(self, bridge):
+        bridge.interrupt_task.return_value = {
+            "ok": True,
+            "data": {"task_id": "t1", "interrupt_requested": True, "method": "canceled_while_queued"},
+        }
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is True
+        assert data["data"]["method"] == "canceled_while_queued"
 
     async def test_success_legacy_status_envelope(self, bridge):
         bridge.interrupt_task.return_value = {"status": "success", "message": "ok"}

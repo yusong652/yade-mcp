@@ -15,7 +15,7 @@ import threading
 import time
 
 from ..console import ConsoleHistory
-from ..execution import CodeRunner, ScriptRunner
+from ..execution import CodeRunner, TaskRunner
 from ..handlers import (
     ServerContext,
     handleCheckTaskStatus,
@@ -227,7 +227,8 @@ class BridgeServer:
 
     def __init__(
         self,
-        executor,
+        codeExecutor,
+        taskExecutor,
         runtimeMode,
         host="localhost",
         port=9002,
@@ -250,9 +251,9 @@ class BridgeServer:
         # reach them via ``self.context``, never as server attributes.
         self.context = ServerContext(
             taskManager=taskManager,
-            scriptRunner=ScriptRunner(taskManager),
-            codeRunner=CodeRunner(executor),
-            executor=executor,
+            taskRunner=TaskRunner(taskManager, taskExecutor),
+            codeRunner=CodeRunner(codeExecutor),
+            codeExecutor=codeExecutor,
             runtimeMode=runtimeMode,
             consoleHistory=consoleHistory,
         )
@@ -402,13 +403,15 @@ class BridgeServer:
 
 
 def createServer(
-    executor,
+    codeExecutor,
+    taskExecutor,
     runtimeMode,
     host="localhost",
     port=9002,
 ):
     return BridgeServer(
-        executor,
+        codeExecutor,
+        taskExecutor,
         runtimeMode,
         host=host,
         port=port,

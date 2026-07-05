@@ -107,7 +107,7 @@ class TaskManager:
     def shutdown(self):
         """Flush output buffers and mark active tasks before exit."""
         nFlushed = 0
-        nInterrupted = 0
+        nStopped = 0
         for task in self.tasks.values():
             if task.outputBuffer:
                 try:
@@ -115,14 +115,20 @@ class TaskManager:
                     nFlushed += 1
                 except (ValueError, OSError):
                     pass
-            if task.status in ("pending", "running"):
+            # A running task was cut off mid-flight (interrupted); a queued
+            # one never started (canceled).
+            if task.status == "running":
                 task.status = "interrupted"
                 task.endTime = time.time()
                 task.error = "Bridge shutdown"
-                nInterrupted += 1
+                nStopped += 1
+            elif task.status == "pending":
+                task.status = "canceled"
+                task.endTime = time.time()
+                nStopped += 1
         self._saveTasks()
-        if nFlushed or nInterrupted:
-            logger.info("Shutdown: flushed %d buffer(s), interrupted %d task(s)", nFlushed, nInterrupted)
+        if nFlushed or nStopped:
+            logger.info("Shutdown: flushed %d buffer(s), stopped %d task(s)", nFlushed, nStopped)
 
     def _pruneOldTasks(self):
         """Remove oldest tasks when count exceeds ``_maxTasks``, and delete their log files."""
@@ -145,7 +151,7 @@ class TaskManager:
         logger.debug(f"Task {task.taskId} status changed to: {task.status}")
         self._saveTasks()
 
-        if task.status in ("completed", "failed", "interrupted") and self.onTaskTerminal:
+        if task.status in ("completed", "failed", "interrupted", "canceled") and self.onTaskTerminal:
             try:
                 self.onTaskTerminal(task.taskId, task.status)
             except Exception as e:
@@ -196,6 +202,10 @@ class TaskManager:
         try:
             if taskData.get("status") == "running":
                 taskData["status"] = "failed"
+            elif taskData.get("status") == "pending":
+                # The queue does not survive a restart; a task that was
+                # still waiting in it is gone for good.
+                taskData["status"] = "canceled"
             return ScriptTask.fromPersisted(taskData)
         except (KeyError, TypeError) as e:
             logger.error(f"Failed to restore task {taskData.get('task_id')}: {e}")

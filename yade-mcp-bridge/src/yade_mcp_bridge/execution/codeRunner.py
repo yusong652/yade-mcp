@@ -1,8 +1,8 @@
 # encoding: utf-8
 # 2026 © Yusong Han <yusong.han.652@gmail.com>
-"""Synchronous code executor for the bridge.
+"""Synchronous runner for execute_code snippets.
 
-``CodeRunner`` submits an ``execute_code`` snippet to the executor queue and
+``CodeRunner`` submits an ``execute_code`` snippet to the CodeExecutor queue and
 blocks until it produces the response to send back to the client.
 """
 
@@ -161,7 +161,7 @@ def _terminateStuckExecution(requestId, future):
         if future.done():
             # The code raced the timeout and settled before we could inject.
             return {"method": "finished", "result": future.result()}
-        # Narrow race: registry cleared but the executor hasn't set the
+        # Narrow race: registry cleared but the CodeExecutor hasn't set the
         # future's result yet (it sets it after _execute returns).
         return {"method": "unsettled", "result": None}
 
@@ -239,16 +239,16 @@ def _timeoutResponse(requestId, timeoutMs, termination):
 
 
 class CodeRunner:
-    """Submit ``execute_code`` snippets to the executor and block for the result."""
+    """Submit ``execute_code`` snippets to the CodeExecutor and block for the result."""
 
-    def __init__(self, executor):
-        self.executor = executor
+    def __init__(self, codeExecutor):
+        self.codeExecutor = codeExecutor
 
     def run(self, requestId, code, timeoutMs):
         """Run ``code`` and return the full ``execute_code_result`` response."""
         try:
             # Submit to the pump and block until it resolves or times out.
-            future = self.executor.submit(_execute, requestId, code, timeoutMs)
+            future = self.codeExecutor.submit(_execute, requestId, code, timeoutMs)
             result = future.result(timeout=timeoutMs / 1000.0)
 
             # ``status`` is _execute's internal marker; translate it to the envelope.
@@ -281,7 +281,7 @@ class CodeRunner:
             return _timeoutResponse(requestId, timeoutMs, termination)
 
         except Exception as e:
-            # Bridge-side fault (executor submission, result plumbing) — the
+            # Bridge-side fault (CodeExecutor submission, result plumbing) — the
             # user's code never ran or its outcome was lost. Same code the
             # transport layer uses for handler crashes.
             logger.error(f"Code execution failed: {e}")

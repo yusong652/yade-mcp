@@ -26,7 +26,12 @@ def register(mcp: FastMCP) -> None:
         skip_newest: SkipNewestTasks = 0,
         limit: TaskListLimit = 32,
     ) -> dict[str, Any]:
-        """List tracked YADE tasks with pagination."""
+        """List tracked YADE tasks with pagination.
+
+        Tasks are listed newest first. Queued (pending) tasks run one at
+        a time in submit order, so among the pending entries the one
+        furthest down the list runs next.
+        """
         try:
             client = await get_bridge_client()
             response = await client.list_tasks(

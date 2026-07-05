@@ -7,14 +7,14 @@ import types
 from unittest.mock import MagicMock
 
 import pytest
-from yade_mcp_bridge.execution.scriptRunner import ScriptRunner
+from yade_mcp_bridge.execution.taskRunner import TaskRunner
 from yade_mcp_bridge.runtime.backgroundRun import markBackgroundRun
 from yade_mcp_bridge.runtime.signals import clearInterrupt, requestInterrupt
 
 
 @pytest.fixture
 def fake_yade(monkeypatch):
-    """Install a fake `yade` module in sys.modules so scriptRunner.py's
+    """Install a fake `yade` module in sys.modules so taskRunner.py's
     `from yade import O as _O` resolves to our mock."""
     module = types.ModuleType("yade")
     module.O = MagicMock()
@@ -28,7 +28,8 @@ def fake_yade(monkeypatch):
 def runner():
     taskManager = MagicMock()
     taskManager.tasks = {}
-    return ScriptRunner(taskManager=taskManager)
+    # These tests call _execute directly; the queue is not involved.
+    return TaskRunner(taskManager=taskManager, taskExecutor=MagicMock())
 
 
 @pytest.fixture

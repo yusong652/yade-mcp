@@ -45,7 +45,7 @@ def register(mcp: FastMCP) -> None:
         """Check status and output for a submitted YADE task."""
         try:
             client = await get_bridge_client()
-            terminal_states = {"completed", "failed", "interrupted", "not_found"}
+            terminal_states = {"completed", "failed", "interrupted", "canceled", "not_found"}
 
             # Register listener BEFORE checking status to avoid missing
             # a push notification that arrives between check and wait.
@@ -90,9 +90,10 @@ def register(mcp: FastMCP) -> None:
                 action="Verify task_id or submit a new task",
             )
 
-        # Lifecycle path (running / completed / failed / interrupted): the
-        # task's status is genuine domain info, read from data.status (bridge
-        # nests it; older bridges put it top-level — see _lifecycle_status).
+        # Lifecycle path (pending / running / completed / failed /
+        # interrupted / canceled): the task's status is genuine domain info,
+        # read from data.status (bridge nests it; older bridges put it
+        # top-level — see _lifecycle_status).
         data = response.get("data") or {}
         normalized_status = normalize_status(_lifecycle_status(response))
 
@@ -114,6 +115,14 @@ def register(mcp: FastMCP) -> None:
             "output": output_text,
             "pagination": pagination,
         }
+
+        # A pending task is waiting in the bridge's FIFO queue, not stuck;
+        # point the agent at the queue view instead of leaving it guessing.
+        if normalized_status == "pending":
+            result["note"] = (
+                "Task is queued; tasks run one at a time in submit order. "
+                "Use yade_list_tasks to see what is running ahead of it."
+            )
 
         if data.get("result") is not None:
             result["result"] = data["result"]

@@ -6,6 +6,7 @@
 - PyRunner interrupt hook
 - HTTP + SSE server on a background thread
 - console capture and shutdown hooks
+- execute_task worker (runs queued scripts one at a time)
 - execute_code pump (Qt timer in gui mode, daemon thread in console mode)
 """
 
@@ -19,7 +20,7 @@ import threading
 import traceback
 
 from .console import ConsoleCapture
-from .execution import CodeExecutor
+from .execution import CodeExecutor, TaskExecutor
 from .paths import DATA_DIR
 from .runtime import installPyrunner, startBackgroundPump, startQtPump
 from .transport import createServer
@@ -106,9 +107,9 @@ def _installShutdown(bridgeServer, logger):
     signal.signal(signal.SIGTERM, handler)
 
 
-def _startPump(executor, bridgeServer, logger, mode):
+def _startPump(codeExecutor, bridgeServer, logger, mode):
     """Start the execute_code pump and record the resolved runtime mode."""
-    if mode in ("auto", "gui") and startQtPump(executor, logger):
+    if mode in ("auto", "gui") and startQtPump(codeExecutor, logger):
         bridgeServer.setRuntimeMode("gui")
         logger.info("execute_code pump running via Qt timer")
         return
@@ -116,7 +117,7 @@ def _startPump(executor, bridgeServer, logger, mode):
     if mode == "gui":
         raise RuntimeError("Qt is not available; cannot start in gui mode")
 
-    if mode in ("auto", "console") and startBackgroundPump(executor, logger):
+    if mode in ("auto", "console") and startBackgroundPump(codeExecutor, logger):
         bridgeServer.setRuntimeMode("console")
         logger.info("execute_code pump running via background thread")
 
@@ -132,6 +133,7 @@ def start(
     - configure logging and install the PyRunner interrupt hook
     - create the HTTP + SSE server and install console capture (user input)
     - run the server on a background thread, register shutdown hooks
+    - start the execute_task worker (queued scripts, one at a time)
     - start the execute_code pump; ``mode`` selects it: "auto" tries a
       Qt timer and falls back to a blocking background thread, "gui"
       forces Qt, "console" forces blocking
@@ -146,8 +148,11 @@ def start(
     # installPyrunner logs its own failure warning; ignore the return value.
     installPyrunner(logger)
 
-    executor = CodeExecutor()
-    bridgeServer = createServer(executor=executor, host=host, port=port, runtimeMode=mode)
+    codeExecutor = CodeExecutor()
+    taskExecutor = TaskExecutor()
+    bridgeServer = createServer(
+        codeExecutor=codeExecutor, taskExecutor=taskExecutor, host=host, port=port, runtimeMode=mode
+    )
     ConsoleCapture(bridgeServer.context.consoleHistory).install()
 
     _startServerThread(bridgeServer, logger)
@@ -155,4 +160,5 @@ def start(
 
     print(f"YADE MCP Bridge on http://{host}:{port}, log: {logFile}")
 
-    _startPump(executor, bridgeServer, logger, mode)
+    taskExecutor.start()
+    _startPump(codeExecutor, bridgeServer, logger, mode)

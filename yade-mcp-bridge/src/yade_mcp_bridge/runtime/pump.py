@@ -3,11 +3,8 @@
 """Pump strategies that drive the execute_code queue.
 
 A pump ticks ``CodeExecutor.runNext`` to process queued execute_code
-requests one at a time. Long-running tasks bypass it — they run on their
-own daemon thread (see execution/scriptRunner.py) — so a task can't
-starve the pump.
-
-``startup.start()`` picks one per runtime mode; both start non-blocking:
+requests one at a time. ``startup.start()`` picks one per runtime mode;
+both start non-blocking:
 
 * Qt timer (gui): ticks on the Qt event loop, so work runs on the main
   thread between GUI events (mandatory for Qt thread affinity).
@@ -25,7 +22,7 @@ _qtPumpTimer = None
 _TICK_INTERVAL_MS = 20
 
 
-def startQtPump(executor, logger):
+def startQtPump(codeExecutor, logger):
     """Drive the execute_code pump from the Qt event loop. Returns True on success."""
     global _qtPumpTimer
 
@@ -51,7 +48,7 @@ def startQtPump(executor, logger):
 
     def _pumpTick():
         try:
-            executor.runNext()
+            codeExecutor.runNext()
         except Exception as e:  # pump must not crash the event loop
             logger.error(f"execute_code pump tick failed: {e}")
 
@@ -64,11 +61,11 @@ def startQtPump(executor, logger):
     return True
 
 
-def startBackgroundPump(executor, logger):
-    """Start a daemon thread that polls the executor queue."""
+def startBackgroundPump(codeExecutor, logger):
+    """Start a daemon thread that polls the execute_code queue."""
     pumpThread = threading.Thread(
         target=_backgroundPumpLoop,
-        args=(executor, logger),
+        args=(codeExecutor, logger),
         daemon=True,
         name="mcp-exec-pump",
     )
@@ -76,12 +73,12 @@ def startBackgroundPump(executor, logger):
     return True
 
 
-def _backgroundPumpLoop(executor, logger):
+def _backgroundPumpLoop(codeExecutor, logger):
     """Poll the execute_code queue in a loop. Runs in a background daemon thread."""
     sleepS = _TICK_INTERVAL_MS / 1000.0
     while True:
         try:
-            executor.runNext()
+            codeExecutor.runNext()
         except Exception as e:  # pump must not crash
             logger.error(f"execute_code pump tick failed: {e}")
         time.sleep(sleepS)
