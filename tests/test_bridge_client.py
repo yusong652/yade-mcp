@@ -20,9 +20,7 @@ def _make_client(url="http://localhost:9002", **overrides):
     defaults = dict(
         url=url,
         reconnect_interval_s=0.1,
-        max_retries=1,
         request_timeout_s=5.0,
-        auto_reconnect=True,
     )
     defaults.update(overrides)
     return YADEBridgeClient(**defaults)
@@ -96,52 +94,37 @@ class TestRequests:
 
 
 # =========================================================================
-# Timeout and retry
+# Failure surfacing
 # =========================================================================
 
 
-class TestTimeoutAndRetry:
+class TestFailureSurfacing:
     async def test_timeout_raises(self, bridge_server):
-        client = _make_client(bridge_server, auto_reconnect=False, max_retries=0)
+        client = _make_client(bridge_server)
         await client.connect()
 
         # Force the POST to time out; the client converts httpx timeouts to a
-        # TimeoutError, which _request_with_retry surfaces as ConnectionError.
+        # TimeoutError, which _request surfaces as ConnectionError.
         client._client.post = AsyncMock(side_effect=httpx.ReadTimeout("simulated"))
 
         with pytest.raises(ConnectionError, match="failed"):
             await client.execute_code("print('slow')", timeout_ms=1)
         await client.disconnect()
 
-    async def test_retry_on_failure(self, bridge_server):
-        client = _make_client(bridge_server, max_retries=2, reconnect_interval_s=0.01, auto_reconnect=True)
-        await client.connect()
+    async def test_failure_surfaces_without_retry(self, bridge_server):
+        client = _make_client(bridge_server)
 
         call_count = 0
-        original_send_request = client._send_request
-
-        async def flaky_send(message, timeout_s):
-            nonlocal call_count
-            call_count += 1
-            if call_count < 3:
-                raise ConnectionError("simulated failure")
-            return await original_send_request(message, timeout_s)
-
-        client._send_request = flaky_send
-        # max_retries=2 means 3 total attempts, the 3rd should succeed
-        await client.execute_code("print('recovered')")
-        assert call_count == 3
-        await client.disconnect()
-
-    async def test_retry_exhausted(self, bridge_server):
-        client = _make_client(bridge_server, max_retries=1, reconnect_interval_s=0.01, auto_reconnect=True)
 
         async def always_fail(message, timeout_s):
-            raise ConnectionError("permanent failure")
+            nonlocal call_count
+            call_count += 1
+            raise ConnectionError("simulated failure")
 
         client._send_request = always_fail
         with pytest.raises(ConnectionError, match="failed"):
             await client.execute_code("print('fail')")
+        assert call_count == 1
 
 
 # =========================================================================
