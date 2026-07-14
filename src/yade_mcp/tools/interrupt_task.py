@@ -67,7 +67,7 @@ def register(mcp: FastMCP) -> None:
                 action="Check task status and bridge logs",
             )
 
-        payload: dict[str, Any] = {
+        result: dict[str, Any] = {
             "task_id": task_id,
             "interrupt_requested": True,
             "message": "signal sent",
@@ -76,5 +76,5 @@ def register(mcp: FastMCP) -> None:
         # Surface the bridge's cancellation metadata to the agent.
         for key in ("method", "async_exc_skipped_reason"):
             if key in bridge_data:
-                payload[key] = bridge_data[key]
-        return build_ok(payload)
+                result[key] = bridge_data[key]
+        return build_ok(result)

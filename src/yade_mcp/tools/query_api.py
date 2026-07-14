@@ -32,11 +32,11 @@ def register(mcp: FastMCP) -> None:
         """
         matches = APISearch.search(query, top_k=limit)
 
-        payload = build_docs_data(
+        result = build_docs_data(
             source="python_api",
             action="query",
             entries=matches,
             summary={"count": len(matches), "query": query},
         )
 
-        return build_ok(payload)
+        return build_ok(result)
