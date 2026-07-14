@@ -19,15 +19,6 @@ from yade_mcp.config import get_bridge_config
 logger = logging.getLogger("yade-mcp.bridge")
 
 
-class BridgeResponseTooLargeError(ConnectionError):
-    """Raised when a bridge response exceeds the transport size limit.
-
-    Retained for API/error-formatting stability. The bridge now truncates
-    output to a 40 MB safety net before sending, so in practice the client
-    no longer hits this; it stays defined for ``formatting.build_bridge_error``.
-    """
-
-
 class YADEBridgeClient:
     """Async request/response client for the yade-mcp-bridge HTTP + SSE protocol."""
 
