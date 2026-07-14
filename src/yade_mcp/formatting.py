@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from yade_mcp.bridge.client import BridgeResponseTooLargeError
 from yade_mcp.config import get_bridge_config
 from yade_mcp.contracts import build_error
 
@@ -92,24 +91,14 @@ def _summarize_bridge_error(exc: Exception) -> str:
 def build_bridge_error(exc: Exception, *, task_id: str | None = None) -> dict[str, Any]:
     """Build a unified error envelope for bridge connectivity failures."""
     cfg = get_bridge_config()
-    if isinstance(exc, BridgeResponseTooLargeError):
-        reason = str(exc)
-        action = "reduce output volume (write to file instead of printing)"
-        code = "response_too_large"
-        message = "Bridge response too large"
-    else:
-        reason = _summarize_bridge_error(exc)
-        action = "start yade-mcp-bridge in YADE process, then retry"
-        code = "bridge_unavailable"
-        message = "Bridge unavailable"
     details: dict[str, Any] = {
         "bridge_url": cfg.url,
-        "reason": reason,
-        "action": action,
+        "reason": _summarize_bridge_error(exc),
+        "action": "start yade-mcp-bridge in YADE process, then retry",
     }
     if task_id:
         details["task_id"] = task_id
-    return build_error(code, message, details)
+    return build_error("bridge_unavailable", "Bridge unavailable", details)
 
 
 def build_operation_error(

@@ -43,7 +43,7 @@ Both use trusted publishing (PyPI OIDC). Version is defined in `__init__.py` of 
 
 ## Test structure
 
-- `tests/` — MCP server unit tests (config, contracts, formatting, search, response truncation)
+- `tests/` — MCP server unit tests (config, contracts, formatting, search)
 - `tests/bridge/` — Bridge unit + protocol tests (no YADE runtime needed)
   - `test_helpers.py`, `test_signals.py`, `test_utils.py`, `test_execution.py`, `test_tasks.py` — unit tests
   - `test_handlers.py` — handler tests with mock context
