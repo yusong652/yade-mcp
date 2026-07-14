@@ -95,12 +95,12 @@ def register(mcp: FastMCP) -> None:
             ok = response.get("status") == "success"
 
         if ok:
-            result_data: dict[str, Any] = {
+            result: dict[str, Any] = {
                 "output": bridge_data.get("output") or "(no output)",
             }
             if bridge_data.get("result") is not None:
-                result_data["result"] = bridge_data["result"]
-            return build_ok(result_data)
+                result["result"] = bridge_data["result"]
+            return build_ok(result)
 
         # Failure: branch on the machine-readable ``error.code``. The human
         # message lives in ``error.message``; fall back to a legacy top-level
