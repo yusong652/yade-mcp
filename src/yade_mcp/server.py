@@ -63,20 +63,20 @@ def main() -> None:
     parser.add_argument("--version", "-v", action="version", version=f"yade-mcp {__version__}")
     parser.add_argument(
         "--transport",
-        choices=["stdio", "http", "sse"],
+        choices=["stdio", "http"],
         default="stdio",
         help="Transport protocol (default: stdio)",
     )
     parser.add_argument(
         "--host",
         default="127.0.0.1",
-        help="Host to bind when using http/sse transport (default: 127.0.0.1)",
+        help="Host to bind when using http transport (default: 127.0.0.1)",
     )
     parser.add_argument(
         "--port",
         type=int,
         default=8000,
-        help="Port to bind when using http/sse transport (default: 8000)",
+        help="Port to bind when using http transport (default: 8000)",
     )
     parser.add_argument(
         "--bridge-url",
@@ -111,7 +111,7 @@ def main() -> None:
         "show_banner": False,
         "log_level": args.log_level.upper(),
     }
-    if args.transport in ("http", "sse"):
+    if args.transport == "http":
         run_kwargs["host"] = args.host
         run_kwargs["port"] = args.port
 
