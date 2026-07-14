@@ -34,11 +34,11 @@ class YADEBridgeClient:
     def __init__(
         self,
         url: str,
-        reconnect_interval_s: float,
+        sse_retry_interval_s: float,
         request_timeout_s: float,
     ) -> None:
         self.url = url
-        self.reconnect_interval_s = reconnect_interval_s
+        self.sse_retry_interval_s = sse_retry_interval_s
         self.request_timeout_s = request_timeout_s
 
         self._client: httpx.AsyncClient | None = None
@@ -120,7 +120,7 @@ class YADEBridgeClient:
 
             if self._client is None:
                 return
-            await asyncio.sleep(self.reconnect_interval_s)
+            await asyncio.sleep(self.sse_retry_interval_s)
 
     async def _send_request(self, message: dict[str, Any], timeout_s: float) -> dict[str, Any]:
         # Connection is established by get_bridge_client() before any request.
@@ -272,7 +272,7 @@ async def get_bridge_client() -> YADEBridgeClient:
             config = get_bridge_config()
             _client = YADEBridgeClient(
                 url=config.url,
-                reconnect_interval_s=config.reconnect_interval_s,
+                sse_retry_interval_s=config.sse_retry_interval_s,
                 request_timeout_s=config.request_timeout_s,
             )
         await _client.connect()

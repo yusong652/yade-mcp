@@ -17,7 +17,7 @@ def _env_float(name: str, default: float) -> float:
 @dataclass(frozen=True)
 class BridgeConfig:
     url: str
-    reconnect_interval_s: float
+    sse_retry_interval_s: float
     request_timeout_s: float
 
 
@@ -25,6 +25,6 @@ def get_bridge_config() -> BridgeConfig:
     """Load bridge config from environment variables."""
     return BridgeConfig(
         url=os.getenv("YADE_MCP_BRIDGE_URL", "http://localhost:9002"),
-        reconnect_interval_s=_env_float("YADE_MCP_RECONNECT_INTERVAL_S", 0.5),
+        sse_retry_interval_s=_env_float("YADE_MCP_SSE_RETRY_INTERVAL_S", 0.5),
         request_timeout_s=max(1.0, _env_float("YADE_MCP_REQUEST_TIMEOUT_S", 10.0)),
     )

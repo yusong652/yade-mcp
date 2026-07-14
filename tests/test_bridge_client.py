@@ -19,7 +19,7 @@ from yade_mcp.bridge.client import (
 def _make_client(url="http://localhost:9002", **overrides):
     defaults = dict(
         url=url,
-        reconnect_interval_s=0.1,
+        sse_retry_interval_s=0.1,
         request_timeout_s=5.0,
     )
     defaults.update(overrides)
