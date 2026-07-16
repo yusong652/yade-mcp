@@ -173,6 +173,5 @@ def register(mcp: FastMCP) -> None:
             data={"output": partial_output} if partial_output else None,
             exception_type=bridge_details.get("exception_type"),
             traceback=bridge_details.get("traceback"),
-            traceback_truncated=bridge_details.get("traceback_truncated"),
             log_file=bridge_details.get("log_file"),
         )
