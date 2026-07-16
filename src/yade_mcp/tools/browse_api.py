@@ -90,14 +90,7 @@ async def _browse_root() -> dict[str, Any]:
 
 
 async def _browse_tree_node(category: str, tree_path: list[str]) -> dict[str, Any]:
-    """List a tree node's contents.
-
-    The response merges:
-      * ``self_class`` — the node's own class docs (when applicable),
-        surfaced as the first entry with ``entry_type: "self"``.
-      * child entries — each either a pure leaf class or a sub-tree
-        node (marked with ``has_children: true`` + ``descendant_count``).
-    """
+    """List a tree node's contents: the node's own class docs first, then children and leaves."""
     contents = APILoader.list_node_contents(category, tree_path)
     if contents is None:
         return build_error(

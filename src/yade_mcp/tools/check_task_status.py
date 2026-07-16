@@ -18,14 +18,7 @@ from yade_mcp.utils import FilterText, OutputLimit, SkipNewestLines, TaskId, Wai
 
 
 def _lifecycle_status(response: dict[str, Any]) -> str:
-    """Read a task's lifecycle status from a bridge response.
-
-    Canonical location is ``data.status`` (the status describes the task, so
-    the bridge nests it in the task data). Older bridges put it at the
-    envelope top level, so fall back there for cross-version compatibility —
-    that fallback is transitional and can be dropped once the in-tree wire
-    floor moves past top-level status.
-    """
+    """Read a task's lifecycle status: canonical ``data.status``, legacy top-level fallback."""
     data = response.get("data") or {}
     return str(data.get("status") or response.get("status") or "unknown")
 
@@ -59,8 +52,6 @@ def register(mcp: FastMCP) -> None:
                 filter_text=filter,
             )
             # A request-level error (e.g. not_found) is terminal — never poll.
-            # Detect it via the structured error, falling back to the legacy
-            # not_found status string for older bridges.
             is_terminal = (
                 bool(response.get("error")) or normalize_status(_lifecycle_status(response)) in terminal_states
             )
@@ -78,9 +69,8 @@ def register(mcp: FastMCP) -> None:
         except Exception as exc:
             return build_bridge_error(exc, task_id=task_id)
 
-        # Request-level failure: bridge sends a structured error{}. Lift its
-        # machine-readable code; keep the MCP-composed remediation action.
-        # (Legacy bridges sent status:"not_found" with no error object.)
+        # Request-level failure: lift the bridge's machine-readable error code;
+        # legacy bridges sent status:"not_found" with no error object.
         bridge_error = response.get("error") or {}
         if bridge_error or response.get("status") == "not_found":
             return build_operation_error(
@@ -90,10 +80,7 @@ def register(mcp: FastMCP) -> None:
                 action="Verify task_id or submit a new task",
             )
 
-        # Lifecycle path (pending / running / completed / failed /
-        # interrupted / canceled): the task's status is genuine domain info,
-        # read from data.status (bridge nests it; older bridges put it
-        # top-level — see _lifecycle_status).
+        # Lifecycle path: the task's status is domain info, not a request error.
         data = response.get("data") or {}
         normalized_status = normalize_status(_lifecycle_status(response))
 
@@ -128,12 +115,8 @@ def register(mcp: FastMCP) -> None:
             result["result"] = data["result"]
         if data.get("error"):
             result["error"] = data["error"]
-        # Structured traceback / exception type / overflow log pointer
-        # for failed tasks. Surfaced as a sibling of `error` (not inside
-        # it) because check_task_status returns an ok envelope — the
-        # tool call itself succeeded; the *task* failed. Nests under a
-        # separate key so the prod-mode details strip (on tool errors)
-        # never touches it.
+        # Failed-task diagnostics ride under their own key (the tool call
+        # itself succeeded), keeping them clear of the prod-mode details strip.
         if data.get("error_details"):
             result["error_details"] = data["error_details"]
 

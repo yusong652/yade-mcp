@@ -86,10 +86,8 @@ def register(mcp: FastMCP) -> None:
         bridge_error = response.get("error") or {}
         bridge_details = bridge_error.get("details") or {}
 
-        # Success/failure axis: the bridge now signals via ``ok`` (bool).
-        # Fall back to the legacy ``status`` string for bridges that predate
-        # the ok envelope (cross-version compat, same rationale as
-        # ``normalize_status`` — see project_semver).
+        # The bridge signals success via ``ok``; fall back to the legacy
+        # ``status`` string for bridges that predate the ok envelope.
         ok = response.get("ok")
         if ok is None:
             ok = response.get("status") == "success"
@@ -102,17 +100,13 @@ def register(mcp: FastMCP) -> None:
                 result["result"] = bridge_data["result"]
             return build_ok(result)
 
-        # Failure: branch on the machine-readable ``error.code``. The human
-        # message lives in ``error.message``; fall back to a legacy top-level
-        # ``message`` for responses that don't yet carry a structured error
-        # (e.g. the missing-field request error — pending its own cleanup).
+        # Failure: branch on the machine-readable ``error.code``; fall back to
+        # a legacy top-level ``message`` for responses without a structured error.
         code = bridge_error.get("code", "execution_error")
         message = bridge_error.get("message") or response.get("message", "")
 
         if code == "interrupted":
-            # Bridge cleanly paused a standalone O.run cycle that blew the
-            # timeout. Pull the agent back to the task tool, which is built
-            # for long-running simulations.
+            # A standalone O.run cycle was cleanly paused on timeout.
             partial_output = bridge_data.get("output")
             return build_operation_error(
                 "interrupted",
@@ -131,9 +125,7 @@ def register(mcp: FastMCP) -> None:
             )
 
         if code == "terminated":
-            # Bridge successfully aborted the code. Surface the
-            # partial stdout and the termination method so the agent
-            # knows state may be partially modified.
+            # Abort succeeded; surface partial stdout and the termination method.
             partial_output = bridge_data.get("output")
             return build_operation_error(
                 "terminated",
