@@ -1,10 +1,4 @@
-"""HTTP + SSE client for communicating with the bridge.
-
-Commands are plain ``POST /<command>`` request/response. Server->client
-doorbells arrive on a single long-lived ``GET /events`` Server-Sent Events
-stream consumed in the background. The bridge speaks stdlib HTTP (no
-WebSocket, no third-party dependency on the engine side).
-"""
+"""Async HTTP + SSE client for the yade-mcp-bridge protocol."""
 
 import asyncio
 import json
@@ -72,15 +66,7 @@ class YADEBridgeClient:
                 pass
 
     async def _sse_loop(self) -> None:
-        """Consume the server's SSE doorbell stream.
-
-        Replaces the WebSocket receive loop. The only load-bearing event is
-        ``task_status_changed`` -> wake any waiter registered via
-        ``listen_for_task``. ``console_entry`` is currently ignored (console
-        history is pulled via request/response). SSE is best-effort: a missed
-        doorbell is covered by the caller's mandatory status re-poll, so the
-        stream simply reconnects on drop.
-        """
+        """Consume the SSE doorbell stream, waking waiters on ``task_status_changed``."""
         sse_timeout = httpx.Timeout(self.request_timeout_s, read=None)
         while True:
             client = self._client
@@ -107,6 +93,8 @@ class YADEBridgeClient:
             except asyncio.CancelledError:
                 raise
             except Exception as exc:
+                # Best-effort: a missed doorbell is covered by the caller's
+                # status re-poll, so just reconnect on drop.
                 logger.warning("Bridge SSE stream dropped: %s", exc)
 
             if self._client is None:
@@ -148,11 +136,7 @@ class YADEBridgeClient:
             raise ConnectionError(f"{operation_name} failed: {exc}") from exc
 
     def listen_for_task(self, task_id: str) -> None:
-        """Pre-register an event listener for task completion.
-
-        Must be called BEFORE querying task status to avoid missing
-        a push notification that arrives between the query and wait.
-        """
+        """Pre-register a completion listener; call BEFORE querying status so a doorbell can't be missed."""
         if task_id not in self._task_events:
             self._task_events[task_id] = asyncio.Event()
 
@@ -161,11 +145,7 @@ class YADEBridgeClient:
         self._task_events.pop(task_id, None)
 
     async def wait_for_task(self, task_id: str, timeout: float) -> bool:
-        """Wait for a task to reach terminal state via push notification.
-
-        Requires listen_for_task() to have been called first.
-        Returns True if notified, False on timeout.
-        """
+        """Wait for a task doorbell (requires listen_for_task first); False on timeout."""
         event = self._task_events.get(task_id)
         if event is None:
             return False

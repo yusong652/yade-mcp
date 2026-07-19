@@ -128,12 +128,7 @@ class TextTokenizer:
                 tokens.append(abbr)
 
     def _split_camel(self, word: str) -> list[str]:
-        """Split CamelCase, keeping uppercase runs together.
-
-        VTKRecorder → ['vtk', 'recorder']
-        NewtonIntegrator → ['newton', 'integrator']
-        ScGeom6D → ['sc', 'geom6d']
-        """
+        """Split CamelCase, keeping uppercase runs together (VTKRecorder → ['vtk', 'recorder'])."""
         # Insert space before uppercase-lowercase transitions and between lower-upper
         spaced = re.sub(r"([A-Z]+)(?=[A-Z][a-z])", r"\1 ", word)
         spaced = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", spaced)

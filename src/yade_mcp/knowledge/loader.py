@@ -1,23 +1,12 @@
-"""YADE API documentation loader.
-
-Loads and caches documentation from JSON resource files organised into
-an 11-top-level YADE-native tree. Each class JSON lives at
-
-    resources/python_api_docs/{category}/{class_name}.json
-
-The category is YADE's top-level subtree (engine / functor / material /
-shape / iphys / igeom / state / body / bound / runtime / misc). Within
-each category the tree structure (parent-child relationships derived
-from YADE's own class hierarchy) is stored as metadata in ``index.json``
-rather than as nested directories — filesystems stay flat, navigation
-is data-driven.
-"""
+"""YADE API documentation loader — cached JSON docs organised as a YADE-native class tree."""
 
 import json
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+# Class docs live flat at {category}/{class_name}.json; the tree structure
+# (YADE's class hierarchy) is metadata in index.json, not nested directories.
 DOCS_ROOT = Path(__file__).parent / "resources" / "python_api_docs"
 
 # Maximum description length shown in browse listings (full docstrings
@@ -45,11 +34,7 @@ class APILoader:
 
     @staticmethod
     def list_categories() -> list[dict[str, Any]]:
-        """List every top-level category with description and class counts.
-
-        Each entry also includes ``top_level_nodes`` — the direct children
-        of the category's tree root, which agents can drill into next.
-        """
+        """List top-level categories with descriptions, class counts, and top tree nodes."""
         index = APILoader.load_index()
         categories = index.get("categories", {})
         result = []
@@ -75,12 +60,7 @@ class APILoader:
 
     @staticmethod
     def get_tree_node(category: str, tree_path: list[str]) -> dict[str, Any] | None:
-        """Walk the category's tree to the node at ``tree_path``.
-
-        ``tree_path`` is a list of YADE class names (e.g.
-        ``["GlobalEngine", "PeriodicEngine"]``). An empty list returns
-        the category root. Returns ``None`` if any segment is missing.
-        """
+        """Walk the category tree to ``tree_path`` (empty = category root); None if missing."""
         index = APILoader.load_index()
         categories = index.get("categories", {})
         cat_info = categories.get(category)
@@ -104,44 +84,13 @@ class APILoader:
 
     @staticmethod
     def list_node_contents(category: str, tree_path: list[str]) -> dict[str, Any] | None:
-        """Return the contents of a tree node, ready for browse rendering.
-
-        In YADE's class tree, every internal node is itself a documented
-        class (e.g. the ``GlobalEngine`` tree node corresponds to the
-        ``GlobalEngine`` class). We surface that via ``self_class``, and
-        merge children + direct-class leaves into a unified ``entries``
-        list so callers get one flat, information-rich listing.
-
-        Output shape::
-
-            {
-                "self_class": {class entry for this node, None at category root},
-                "entries": [
-                    {
-                        "name": "GlobalEngine",
-                        "description": ...,
-                        "parent": "Engine",
-                        "attribute_count": 0,
-                        "descendant_count": 48,   # present when the entry is a sub-tree
-                        "has_children": true,     # same
-                    },
-                    {
-                        "name": "ParallelEngine",
-                        "description": ...,
-                        "parent": "Engine",
-                        "attribute_count": 0,
-                        # (no descendant_count → pure leaf)
-                    },
-                    ...
-                ],
-            }
-        """
+        """Return a tree node's contents: ``self_class`` plus a flat ``entries`` list of children and leaves."""
         node = APILoader.get_tree_node(category, tree_path)
         if node is None:
             return None
 
-        # Self class: the node itself, when we're not at the category root.
-        # Node name = last tree_path segment = the class whose subtree this is.
+        # Every internal tree node is itself a documented class; surface its
+        # own docs as self_class (None at the category root).
         self_class: dict[str, Any] | None = None
         if tree_path:
             self_class = APILoader.build_class_entry(category, tree_path[-1])
@@ -184,11 +133,7 @@ class APILoader:
 
     @staticmethod
     def load_class(category: str, class_name: str) -> dict[str, Any] | None:
-        """Load the full class documentation JSON.
-
-        Files live flat inside each category directory:
-        ``resources/python_api_docs/{category}/{class_name}.json``.
-        """
+        """Load the full class documentation JSON, or None if undocumented."""
         doc_path = DOCS_ROOT / category / f"{class_name}.json"
         if not doc_path.exists():
             return None
@@ -198,12 +143,7 @@ class APILoader:
 
     @staticmethod
     def build_class_entry(category: str, class_name: str) -> dict[str, Any] | None:
-        """Build a compact listing entry for a class.
-
-        Contains the class name plus cheap-to-derive metadata used in
-        browse listings: truncated description, YADE parent class (when
-        meaningful), attribute/method counts.
-        """
+        """Build a compact browse-listing entry: name plus cheap metadata (description, parent, counts)."""
         doc = APILoader.load_class(category, class_name)
         entry: dict[str, Any] = {
             "name": class_name,
@@ -234,12 +174,7 @@ class APILoader:
         class_name: str,
         prefix: list[str] | None = None,
     ) -> list[str] | None:
-        """Find the YADE tree path for ``class_name`` under ``node``.
-
-        Returns the full path segments from the current node down to the class.
-        This works for both leaf classes in ``direct_classes`` and classes that
-        are themselves internal tree nodes in ``children``.
-        """
+        """Return path segments from ``node`` down to ``class_name``, or None."""
         current = prefix or []
 
         if class_name in (node.get("direct_classes") or []):
@@ -260,12 +195,7 @@ class APILoader:
 
     @staticmethod
     def build_browse_path(category: str, class_name: str) -> str | None:
-        """Return a valid ``yade_browse_api`` path for a documented class.
-
-        The returned dotted path can point either to a leaf class or to a class
-        that is also an internal tree node (whose docs are surfaced via
-        ``self_class`` when browsed).
-        """
+        """Return a valid ``yade_browse_api`` dotted path for a documented class."""
         cat_info = APILoader.load_index().get("categories", {}).get(category)
         if cat_info is None:
             return None
@@ -278,26 +208,7 @@ class APILoader:
 
     @staticmethod
     def resolve_path(path: str) -> dict[str, Any]:
-        """Parse a dotted path into a structured target.
-
-        Levels returned:
-          - ``root``:      empty path
-          - ``tree_node``: category root or any internal tree node
-          - ``class``:     a leaf class (direct_class of some tree node)
-          - ``error``:     invalid path
-
-        Path grammar::
-
-            ""                                          → root
-            "engine"                                    → tree_node (tree_path=[])
-            "engine.GlobalEngine"                       → tree_node (tree_path=[GlobalEngine])
-            "engine.GlobalEngine.NewtonIntegrator"      → class
-            "functor.LawFunctor.Law2_ScGeom_FrictPhys_CundallStrack" → class
-
-        There is no class-name fallback: a leaf can only be reached via
-        its full parent chain. This keeps the tree authoritative and
-        makes paths self-documenting.
-        """
+        """Parse a dotted path into a target with level root | tree_node | class | error."""
         if not path:
             return {"level": "root"}
 
@@ -313,7 +224,8 @@ class APILoader:
                 "available": list(categories.keys()),
             }
 
-        # Walk remaining segments through the tree.
+        # Walk remaining segments through the tree. No class-name fallback:
+        # a leaf is only reachable via its full parent chain.
         rest = segments[1:]
         node = categories[category].get("tree") or {"direct_classes": [], "children": {}}
         walked: list[str] = []

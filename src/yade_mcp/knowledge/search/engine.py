@@ -74,16 +74,7 @@ class APISearch:
         top_k: int = 10,
         category: str | None = None,
     ) -> list[dict[str, Any]]:
-        """Search YADE API documentation by keywords.
-
-        Args:
-            query: Search query (e.g., "friction material", "Newton gravity")
-            top_k: Max results to return
-            category: Optional filter by category
-
-        Returns:
-            List of search results sorted by score.
-        """
+        """Search YADE API documentation by keywords; returns top_k results sorted by score."""
         documents = _load_all_documents()
 
         if category:

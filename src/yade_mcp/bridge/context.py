@@ -1,16 +1,4 @@
-"""Bridge context manager — collects runtime context from bridge.
-
-Two pieces live here:
-
-* ``fetch_bridge_context`` — pulls the current runtime signals (console
-  history today; system stats, GUI presence, warnings tomorrow) from
-  the bridge and returns a single dict.
-* ``with_context`` — decorator applied at the tool boundary that awaits
-  the tool's envelope (success OR error) and attaches ``_context`` in
-  one centralised place. Keeping this outside of ``contracts.py`` means
-  the contract layer stays pure/sync and both ok/error branches get
-  identical context treatment without duplicated logic.
-"""
+"""Runtime context collection from the bridge and injection into tool responses."""
 
 import functools
 import logging
@@ -24,11 +12,7 @@ logger = logging.getLogger("yade-mcp.context")
 
 
 async def fetch_bridge_context() -> dict[str, Any] | None:
-    """Fetch context from bridge for injection into tool responses.
-
-    Returns a dict with context sections, or None if bridge is
-    unavailable or there's nothing new.
-    """
+    """Fetch runtime context from the bridge; None if unavailable or nothing new."""
     context: dict[str, Any] = {}
 
     try:
@@ -50,25 +34,13 @@ async def fetch_bridge_context() -> dict[str, Any] | None:
 
 
 def with_context(func: Callable[..., Awaitable[dict[str, Any]]]) -> Callable[..., Awaitable[dict[str, Any]]]:
-    """Decorator that injects ``_context`` into a tool's envelope.
-
-    Wraps an async MCP tool handler. After the handler returns its
-    envelope (from ``build_ok`` or ``build_error``), fetches current
-    bridge context and attaches it as ``_context``. Applies uniformly
-    to both success and error branches — that symmetry is the whole
-    point of centralising here instead of inside the contract builders.
-
-    Failures to fetch context are swallowed: the tool's own result is
-    always returned, context is best-effort.
-    """
+    """Decorator that attaches bridge ``_context`` to a tool's envelope (success or error)."""
 
     @functools.wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> dict[str, Any]:
         envelope = await func(*args, **kwargs)
-        # Production mode: strip `error.details` before the response
-        # leaves the MCP boundary. `details` is our diagnostic tier
-        # (traceback, exception type, internal paths) — useful during
-        # development, noise/risk in deployed setups.
+        # Production mode: strip the diagnostic `error.details` tier before
+        # the response leaves the MCP boundary.
         if not is_debug_mode() and isinstance(envelope, dict) and envelope.get("ok") is False:
             error = envelope.get("error")
             if isinstance(error, dict):

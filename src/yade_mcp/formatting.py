@@ -37,12 +37,7 @@ def format_unix_timestamp(value: Any) -> str:
 
 
 def round_elapsed_seconds(value: Any) -> float | None:
-    """Round an elapsed-seconds value to 2 decimals for agent-facing output.
-
-    The bridge reports full ``time.time()``-delta precision (16 digits);
-    the agent only needs centisecond resolution, so the MCP layer trims
-    the noise tail. Missing or non-numeric values pass through as None.
-    """
+    """Round an elapsed-seconds value to 2 decimals; non-numeric values become None."""
     if value is None:
         return None
     try:
@@ -111,20 +106,7 @@ def build_operation_error(
     data: Any | None = None,
     **extras: Any,
 ) -> dict[str, Any]:
-    """Build a unified error envelope for operation failures.
-
-    ``**extras`` go straight into ``details`` as-is. Use this for
-    diagnostic fields that don't warrant a first-class parameter —
-    ``exception_type``, ``traceback``, ``log_file``, etc. Values of
-    ``None`` are dropped so callers can forward dict lookups without
-    guarding each one.
-
-    ``data`` surfaces execution artefacts even on failure — e.g. the
-    stdout captured before a crash. It lives at the envelope's top
-    level alongside ``error`` (not inside ``details``) so it survives
-    the prod-mode details strip: captured output is an execution
-    product, not debug metadata.
-    """
+    """Build a unified error envelope for operation failures."""
     details: dict[str, Any] = {}
     if reason:
         details["reason"] = reason
@@ -132,7 +114,11 @@ def build_operation_error(
         details["task_id"] = task_id
     if action:
         details["action"] = action
+    # Extra diagnostic fields go into details as-is; None values are dropped
+    # so callers can forward dict lookups unguarded.
     for key, value in extras.items():
         if value is not None:
             details[key] = value
+    # `data` rides at the envelope top level (not inside details) so captured
+    # output survives the production-mode details strip.
     return build_error(code, message, details or None, data=data)
