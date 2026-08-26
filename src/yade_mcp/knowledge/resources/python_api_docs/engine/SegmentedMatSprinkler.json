@@ -5,10 +5,35 @@
   "description": "A periodic engine distributing coating material of particles having CohFrictMatSeg. Determines the particles to cover by ray tracing algorithm.",
   "attributes": [
     {
+      "name": "pos",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,0)",
+      "description": "Origin of the sprinkling source."
+    },
+    {
+      "name": "refDir",
+      "type": "Vector3",
+      "default": "Vector3r(0,0,-1)",
+      "description": "Reference direction of SegmentedMatSprinkler (center of the stream). It should not be directly modified. When the direction of sprinkler is rotated in setVersors function, this direction is taken as reference.",
+      "read_only": true
+    },
+    {
+      "name": "feedRate",
+      "type": "float",
+      "default": "1",
+      "description": "Volume of the material distributed per second (unit is $1000^3$ smaller than volume unit of the simulation, see"
+    },
+    {
       "name": "alpha",
       "type": "float",
-      "default": "45.0",
+      "default": "45",
       "description": "Angle (degrees) defining width of the stream in the first direction."
+    },
+    {
+      "name": "beta",
+      "type": "float",
+      "default": "45",
+      "description": "Angle (degrees) defining width of the stream in the second direction."
     },
     {
       "name": "alphaResolution",
@@ -17,94 +42,188 @@
       "description": "How many searching lines scan one cross-section in first direction"
     },
     {
-      "name": "beta",
-      "type": "float",
-      "default": "45.0",
-      "description": "Angle (degrees) defining width of the stream in the second direction."
-    },
-    {
       "name": "betaResolution",
       "type": "int",
       "default": "50",
       "description": "How many searching lines scan one cross-section in first direction"
     },
     {
-      "name": "feedRate",
-      "type": "float",
-      "default": "1.0",
-      "description": "Volume of the material distributed per second (unit is $1000^3$ smaller than volume unit of the simulation, see"
-    },
-    {
-      "name": "initRun",
-      "type": "bool",
-      "default": "False",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "lostVolume",
-      "type": "float",
-      "default": "0.0",
-      "description": "Released volume that did not reach any target."
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
-    },
-    {
-      "name": "pos",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Origin of the sprinkling source."
-    },
-    {
-      "name": "prevTime",
-      "type": "float",
-      "default": "0.0",
-      "description": "Virtual time of the last run. Compared to the"
-    },
-    {
-      "name": "realPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
-    },
-    {
-      "name": "refDir",
-      "type": "Vector3",
-      "default": "Vector3(0,0,-1)",
-      "description": "Reference direction of SegmentedMatSprinkler (center of the stream). It should not be directly modified. When the direction of sprinkler is rotated in setVersors function, this direction is taken as reference."
-    },
-    {
-      "name": "releasedVolume",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volume released by the sprinkler since the begining of its work."
-    },
-    {
       "name": "versors",
-      "type": "list",
+      "type": "list[Vector3]",
       "default": "[]",
       "description": "Versors of the searching lines."
     },
     {
+      "name": "prevTime",
+      "type": "float",
+      "default": "0",
+      "description": "Virtual time of the last run. Compared to the virtLast, it is updated after the action of the engine.",
+      "read_only": true
+    },
+    {
+      "name": "releasedVolume",
+      "type": "float",
+      "default": "0",
+      "description": "Volume released by the sprinkler since the begining of its work.",
+      "read_only": true
+    },
+    {
+      "name": "lostVolume",
+      "type": "float",
+      "default": "0",
+      "description": "Released volume that did not reach any target.",
+      "read_only": true
+    },
+    {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
       "name": "setVersors",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "Quaternion"
+        }
+      ],
+      "returns": "None",
       "description": "Sets versors of lines searching for the surfaces of closest spheres. Should always be used after changing any parameters of SegmentedMatSprinkler other than feedRate."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

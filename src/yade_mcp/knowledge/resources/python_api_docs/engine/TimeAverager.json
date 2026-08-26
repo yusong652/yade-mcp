@@ -7,67 +7,198 @@
     {
       "name": "computeContactForceField",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Wether to compute and average contact force field at the surface of the particles (experimental feature). The contact force field is obtained by ditributing the contact forces on a grid at the surface of the sphere. The contact forces are spread on each point of the grid, according to the distance between the contact point and the grid point. The algorythm uses a gaussian kernel to smooth the field. If computeContactForceField is true, grid and sigma parameters must be filled in. This can significantly increase the computation time for dense grid or high number of particles."
     },
     {
       "name": "grid",
-      "type": "list",
+      "type": "list[Vector3]",
       "default": "[]",
       "description": "Grid on which to compute the contact force field. Should be a list of 3D coordinates at the surface of the particle (a simple way to generate a well distributed grid at the surface of a sphere is with the Fibonacci lattice method)."
-    },
-    {
-      "name": "ids",
-      "type": "list",
-      "default": "[]"
     },
     {
       "name": "sigma",
       "type": "float",
       "default": "0.0",
       "description": "Standard deviation of the Gaussian function, which determines how the contact forces are weighted based on their distance from a contact point. It is usually set at the order of the distance between two points in the grid."
+    },
+    {
+      "name": "ids",
+      "type": "list[int]",
+      "default": "[]",
+      "description": "Ids list of bodies affected by this PartialEngine.",
+      "inherited_from": "PartialEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
-      "name": "getAngVel",
-      "description": "Get averaged angular velocity of particle since last initialization"
-    },
-    {
-      "name": "getContactForce",
-      "description": "Get averaged resultant force computed from contact forces on particle since last initialization"
-    },
-    {
-      "name": "getContactForceField",
-      "description": "Get averaged contact force field at the surface of the particle since last initialization"
-    },
-    {
-      "name": "getContactTorque",
-      "description": "Get averaged resultant torque computed from contact forces on particle since last initialization"
-    },
-    {
-      "name": "getForce",
-      "description": "Get averaged resultant force of particle since last initialization"
-    },
-    {
-      "name": "getNbContact",
-      "description": "Get averaged number of contact points on particle since last initialization"
+      "name": "initialization",
+      "args": [],
+      "returns": "None",
+      "description": "Initialize tAccu to zero and the averaged variables to there instantaneous values. Necessary to execute before any simulation run, otherwise it crashes."
     },
     {
       "name": "getPos",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Get averaged position of particle since last initialization"
     },
     {
-      "name": "getTorque",
-      "description": "Get averaged resultant torque of particle since last initialization"
-    },
-    {
       "name": "getVel",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
       "description": "Get averaged velocity of particle since last initialization"
     },
     {
-      "name": "initialization",
-      "description": "Initialize tAccu to zero and the averaged variables to there instantaneous values. Necessary to execute before any simulation run, otherwise it crashes."
+      "name": "getAngVel",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Get averaged angular velocity of particle since last initialization"
+    },
+    {
+      "name": "getForce",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Get averaged resultant force of particle since last initialization"
+    },
+    {
+      "name": "getTorque",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Get averaged resultant torque of particle since last initialization"
+    },
+    {
+      "name": "getNbContact",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "float",
+      "description": "Get averaged number of contact points on particle since last initialization"
+    },
+    {
+      "name": "getContactForce",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Get averaged resultant force computed from contact forces on particle since last initialization"
+    },
+    {
+      "name": "getContactTorque",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Get averaged resultant torque computed from contact forces on particle since last initialization"
+    },
+    {
+      "name": "getContactForceField",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        }
+      ],
+      "returns": "object",
+      "description": "Get averaged contact force field at the surface of the particle since last initialization"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

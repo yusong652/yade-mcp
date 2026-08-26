@@ -11,12 +11,6 @@
       "description": "Power of volume used in evaluation of normal force. Default is 1.0 - normal force is linearly proportional to volume. 1.0/3.0 would mean that normal force is proportional to the cube root of volume, approximation of penetration depth."
     },
     {
-      "name": "shearForce",
-      "type": "Vector3",
-      "default": "(0, 0, 0)",
-      "description": "Shear force from last step of the interaction that has just been handled by InteractionLoop (for debugging 2 bodies simulations, mostly)"
-    },
-    {
       "name": "traceEnergy",
       "type": "bool",
       "default": "false",

@@ -61,20 +61,26 @@
       "name": "setVertices",
       "args": [
         {
-          "name": "arg2",
+          "name": "v0",
           "type": "Vector3"
         },
         {
-          "name": "arg3",
+          "name": "v1",
           "type": "Vector3"
         },
         {
-          "name": "arg4",
+          "name": "v2",
           "type": "Vector3"
         }
       ],
       "returns": "None",
-      "description": "Defines vertices<Facet.vertices>"
+      "description": "Defines vertices :param Vector3 v0: first vertex :param Vector3 v1: second vertex :param Vector3 v2: third vertex :returns: nothing"
+    },
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume (0 here)."
     },
     {
       "name": "dispHierarchy",

@@ -53,6 +53,90 @@
       "description": "Specifies the normal direction to the joint plane 3. [-]"
     },
     {
+      "name": "temp",
+      "type": "float",
+      "default": "0",
+      "description": "temperature of the body",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "oldTemp",
+      "type": "float",
+      "default": "0",
+      "description": "change of temp (for thermal expansion)",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "stepFlux",
+      "type": "float",
+      "default": "0",
+      "description": "flux during current step",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "thermalMass",
+      "type": "float",
+      "default": "0",
+      "description": "mass of the body used for thermal calculations",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "Cp",
+      "type": "float",
+      "default": "0",
+      "description": "Heat capacity of the body",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "k",
+      "type": "float",
+      "default": "0",
+      "description": "thermal conductivity of the body",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "alpha",
+      "type": "float",
+      "default": "0",
+      "description": "coefficient of thermal expansion",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "Tcondition",
+      "type": "bool",
+      "default": "false",
+      "description": "indicates if particle is assigned dirichlet (constant temp) condition",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "boundaryId",
+      "type": "int",
+      "default": "-1",
+      "description": "identifies if a particle is associated with constant temperature thrermal boundary condition",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "stabilityCoefficient",
+      "type": "float",
+      "default": "0",
+      "description": "sum of solid and fluid thermal resistivities for use in automatic timestep estimation",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "delRadius",
+      "type": "float",
+      "default": "0",
+      "description": "radius change due to thermal expansion",
+      "inherited_from": "ThermalState"
+    },
+    {
+      "name": "isCavity",
+      "type": "bool",
+      "default": "false",
+      "description": "flag used for unbounding cavity bodies",
+      "inherited_from": "ThermalState"
+    },
+    {
       "name": "se3",
       "type": "Se3r",
       "default": "Se3r((0, 0, 0),Quaternion.Identity)",
@@ -126,14 +210,14 @@
       "name": "densityScaling",
       "type": "float",
       "default": "-1",
-      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per GlobalStiffnessTimeStepper.targetDt) which NewtonIntegrator (depending on the corresponding option NewtonIntegrator.densityScaling) will reflect into linear and angular velocities (but not angular momentum that still corresponds to the unbiaised inertia tensor) as a multiplicative coefficient (auto-updated).",
       "read_only": true,
       "inherited_from": "State"
     },
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "2",
+      "default": "3",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "State"
@@ -150,7 +234,7 @@
       "name": "ori",
       "type": "Quaternion",
       "default": "Quaternion((1,0,0),0)",
-      "description": "Current orientation.",
+      "description": "Current orientation as the quaternion-form of the rotation that maps the model, i.e. global, coordinate system into an inertial, i.e. local, basis for the body.",
       "no_save": true,
       "inherited_from": "State"
     }

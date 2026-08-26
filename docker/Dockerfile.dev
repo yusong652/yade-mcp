@@ -7,7 +7,11 @@
 #   ws://localhost:9002          yade-mcp-bridge
 #   http://localhost:6080/vnc.html  noVNC view of YADE's Qt GUI
 
-FROM ubuntu:22.04
+# amd64 pinned: the yade-dem.org package repo publishes amd64 only
+# (Architectures: amd64), so on Apple Silicon this image runs via
+# Rosetta/qemu emulation. Fine for doc refresh and small verification
+# runs; GL is llvmpipe software rendering anyway.
+FROM --platform=linux/amd64 ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -16,10 +20,19 @@ ENV DEBIAN_FRONTEND=noninteractive
 # stack that exposes YADE's Qt/OpenGL window over a browser.
 # mesa-utils + libgl1-mesa-dri enable llvmpipe software rendering
 # (no GPU passthrough on Docker-on-Mac).
+# YADE comes from the upstream yadedaily repo, not the Ubuntu archive:
+# the archive's `yade` is frozen at release time (22.04 ships a 2022
+# build with no LSnodeGeom / MultiScGeom / VolumeGeom), while the doc
+# knowledge base tracks current yadedaily API.
 RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates wget && \
+    echo "deb http://www.yade-dem.org/packages/ jammy main" \
+        > /etc/apt/sources.list.d/yadedaily.list && \
+    wget -O /etc/apt/trusted.gpg.d/yadedaily.asc \
+        http://www.yade-dem.org/packages/yadedev_pub.gpg && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
-        yade \
-        python3-yade \
+        yadedaily \
         python3-pip \
         xvfb \
         x11vnc \
@@ -29,6 +42,7 @@ RUN apt-get update && \
         x11-utils \
         mesa-utils \
         libgl1-mesa-dri \
+    && ln -s /usr/bin/yadedaily /usr/local/bin/yade \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Install yade-mcp-bridge ─────────────────────────────────────

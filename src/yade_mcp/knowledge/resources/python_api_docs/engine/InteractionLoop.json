@@ -38,6 +38,12 @@
       "description": "If true, the main interaction loop will occur on a sorted list of interactions. This is SLOW but useful to workaround floating point force addition non reproducibility when debugging parallel implementations of yade."
     },
     {
+      "name": "warnRoleIg2",
+      "type": "bool",
+      "default": "true",
+      "description": "Whether warnings are output (if true) in case the IGeomFunctor would directly request for interaction removal (by returning false in its ::go function) on existing interactions. It is advised to use false only in the specific case of using Ig2_LevelSet_LevelSet_LSnodeGeom, and true otherwise."
+    },
+    {
       "name": "dead",
       "type": "bool",
       "default": "false",

@@ -64,6 +64,11 @@
         {
           "name": "pt",
           "type": "Vector3"
+        },
+        {
+          "name": "unbound",
+          "type": "bool",
+          "default": "False"
         }
       ],
       "returns": "Vector3i",

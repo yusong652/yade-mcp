@@ -48,15 +48,40 @@ def _load_all_documents() -> list[SearchDocument]:
             if method_name:
                 keywords.append(method_name)
 
+        rel_path = str(json_path.relative_to(DOCS_ROOT))
         documents.append(
             SearchDocument(
                 name=name,
                 description=description,
                 keywords=keywords,
                 category=category,
-                metadata={"path": str(json_path.relative_to(DOCS_ROOT)), "parent": parent},
+                metadata={"path": rel_path, "parent": parent},
             )
         )
+
+        # Module-level function collections (yade.utils): index each function as
+        # its own document so a single mega-doc doesn't drown under BM25 length
+        # normalization, and function names stay exact-match searchable.
+        if category == "utils":
+            parent_browse = APILoader.build_browse_path(rel_path.split("/", 1)[0], name)
+            for func in doc.get("functions", []):
+                func_name = func.get("name", "")
+                if not func_name:
+                    continue
+                documents.append(
+                    SearchDocument(
+                        name=func_name,
+                        description=func.get("description", ""),
+                        keywords=[func_name, name, category],
+                        category=category,
+                        metadata={
+                            "path": rel_path,
+                            "parent": name,
+                            "browse_path": parent_browse,
+                            "signature": func.get("signature", ""),
+                        },
+                    )
+                )
 
     return documents
 
@@ -90,16 +115,17 @@ class APISearch:
         results: list[dict[str, Any]] = []
         for doc, score, _info in scored[:top_k]:
             category_dir = str(doc.metadata.get("path", "")).split("/", 1)[0]
-            results.append(
-                {
-                    "name": doc.name,
-                    "category": doc.category,
-                    "description": doc.description[:150],
-                    "score": round(score, 3),
-                    "parent": doc.metadata.get("parent", ""),
-                    "path": doc.metadata.get("path", ""),
-                    "browse_path": APILoader.build_browse_path(category_dir, doc.name),
-                }
-            )
+            result = {
+                "name": doc.name,
+                "category": doc.category,
+                "description": doc.description[:150],
+                "score": round(score, 3),
+                "parent": doc.metadata.get("parent", ""),
+                "path": doc.metadata.get("path", ""),
+                "browse_path": doc.metadata.get("browse_path") or APILoader.build_browse_path(category_dir, doc.name),
+            }
+            if doc.metadata.get("signature"):
+                result["signature"] = doc.metadata["signature"]
+            results.append(result)
 
         return results

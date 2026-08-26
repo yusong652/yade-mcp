@@ -14,6 +14,9 @@ Strategy:
   drop stale attrs; add missing ones; refresh types/defaults from runtime.
 - Classes that can't be default-constructed are skipped (their JSONs
   remain untouched; see drift todo §Next Steps 8 for the follow-up).
+- Separately, refresh the module-level function docs (misc/utils.json)
+  from yade.utils — these are Python/boost functions, not wrapper
+  classes, so the class walk above never sees them.
 
 Invoke from a YADE console (interactive or via MCP bridge):
 
@@ -550,6 +553,82 @@ def merge(cls_name, runtime_desc, runtime_attrs, runtime_methods, existing):
     return out
 
 
+# --- module-level function extraction (yade.utils) -----------------------
+#
+# yade.utils mixes plain Python helpers with boost.python functions and
+# ~50 deprecated class-alias shims (yade.system warnWrap objects). The
+# wrapper-class walk above never sees any of this, so misc/utils.json is
+# refreshed by its own extractor here.
+
+_LIVE_REPR = re.compile(r"<[A-Za-z_]+ instance at 0x[0-9a-f]+>")
+_SIG_RETURN = re.compile(r"\s*->.*$")
+
+
+def extract_utils_functions():
+    """Return the ``functions`` list for misc/utils.json from yade.utils."""
+    import inspect
+
+    from yade import utils
+
+    entries = []
+    for name in sorted(n for n in dir(utils) if not n.startswith("_")):
+        obj = getattr(utils, name)
+        if not callable(obj) or inspect.isclass(obj):
+            continue
+        if type(obj).__name__ == "warnWrap":
+            continue  # deprecated alias shims from yade.system
+        doc = inspect.getdoc(obj) or ""
+        if "|ydeprecated|" in doc:
+            continue
+        try:
+            sig = "utils." + name + str(inspect.signature(obj))
+        except (ValueError, TypeError):
+            # boost.python: first docstring line carries the signature
+            first = doc.split("\n", 1)[0].strip()
+            if first.startswith(name):
+                sig = "utils." + _SIG_RETURN.sub("", first).strip()
+                rest = doc.split("\n", 1)
+                doc = rest[1].strip() if len(rest) > 1 else ""
+            else:
+                sig = "utils." + name + "(...)"
+        # Default values repr'd off live objects leak memory addresses.
+        sig = _LIVE_REPR.sub("...", sig)
+        entries.append(
+            {
+                "name": name,
+                "signature": sig,
+                "description": _clean_desc(doc)[:200],
+            }
+        )
+    return entries
+
+
+def refresh_utils(doc_root=None):
+    """Rewrite misc/utils.json's function list from runtime ground truth.
+
+    Preserves curated per-function descriptions via the same merge
+    heuristic as the class refresh; the top-level description is kept.
+    """
+    path = os.path.join(doc_root or DOC_ROOT, "misc", "utils.json")
+    try:
+        with open(path) as fh:
+            existing = json.load(fh)
+    except Exception:
+        existing = {"name": "utils", "category": "utils", "description": ""}
+
+    runtime = extract_utils_functions()
+    existing["functions"] = _merge_list(
+        runtime,
+        existing.get("functions", []),
+        preserve_keys=("examples", "see_also", "notes"),
+    )
+    tmp = path + ".tmp"
+    with open(tmp, "w") as fh:
+        json.dump(existing, fh, indent=2, ensure_ascii=False)
+    os.replace(tmp, path)
+    return len(runtime)
+
+
 # --- fork-isolated extraction -------------------------------------------
 #
 # Some YADE classes crash with segfaults on default construction (boundary
@@ -754,12 +833,20 @@ def main():
             os.replace(tmp, path)
             orphan_cleaned += 1
 
+    # Module-level function docs live outside the wrapper-class walk.
+    try:
+        utils_count = refresh_utils()
+    except Exception:
+        utils_count = -1
+        sys.stdout.write(f"  ERROR refresh_utils:\n{traceback.format_exc()}")
+
     sys.stdout.write(
         f"\nrefreshed:                 {refreshed}\n"
         f"orphan descriptions cleaned:{orphan_cleaned}\n"
         f"skipped (no JSON):         {skipped_no_json}\n"
         f"skipped (both forks died): {skipped_crashed}\n"
         f"errored:                   {errored}\n"
+        f"utils functions refreshed: {utils_count}\n"
     )
 
 

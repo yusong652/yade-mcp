@@ -7,34 +7,93 @@
     {
       "name": "neverErase",
       "type": "bool",
-      "default": "False",
-      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
+      "default": "false",
+      "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g.",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
     },
     {
       "name": "sphericalBodies",
       "type": "bool",
-      "default": "True",
-      "description": "If true, compute branch vectors from radii (faster), else use contactPoint-position. Turning this flag true is safe for sphere-sphere contacts and a few other specific cases. It will give wrong values of torques on facets or boxes."
+      "default": "true",
+      "description": "If true, compute branch vectors from radii (faster), else use contactPoint-position. Turning this flag true is safe for sphere-sphere contacts and a few other specific cases. It will give wrong values of torques on facets or boxes.",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
     },
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False",
-      "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing"
+      "default": "false",
+      "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['MultiScGeom', 'MultiFrictPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [
     {
       "name": "elasticEnergy",
-      "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts"
-    },
-    {
-      "name": "initPlasticDissipation",
-      "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
+      "args": [],
+      "returns": "float",
+      "description": "Compute and return the total elastic energy in all \"FrictPhys\" contacts",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
     },
     {
       "name": "plasticDissipation",
-      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true."
+      "args": [],
+      "returns": "float",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_ScGeom_FrictPhys_CundallStrack::traceEnergy is true.",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
+    },
+    {
+      "name": "initPlasticDissipation",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "Initialize cummulated plastic dissipation to a value (0 by default).",
+      "inherited_from": "Law2_ScGeom_FrictPhys_CundallStrack"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

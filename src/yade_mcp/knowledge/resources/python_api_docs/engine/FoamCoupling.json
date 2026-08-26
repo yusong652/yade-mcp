@@ -5,102 +5,216 @@
   "description": "An engine for coupling Yade with the finite volume fluid solver OpenFOAM in parallel. Requirements : Yade compiled with MPI libs, OpenFOAM-6 (openfoam is not required for compilation).Yade is executed under MPI environment with OpenFOAM simultaneously, and using MPI communication routines data...",
   "attributes": [
     {
-      "name": "comm",
-      "type": "auto",
-      "default": ""
+      "name": "numParticles",
+      "type": "int",
+      "default": "1",
+      "description": "number of particles in coupling."
     },
     {
-      "name": "dataExchangeInterval",
-      "type": "auto",
-      "default": ""
+      "name": "foamVersion",
+      "type": "int",
+      "default": "-1",
+      "description": "version of OpenFoam environment"
+    },
+    {
+      "name": "foamPath",
+      "type": "str",
+      "default": "\"\"",
+      "description": "path to OpenFoam"
+    },
+    {
+      "name": "particleDensity",
+      "type": "float",
+      "default": "1",
+      "description": "particle Density"
     },
     {
       "name": "fluidDensity",
-      "type": "auto",
-      "default": "",
+      "type": "float",
+      "default": "1",
       "description": "fluidDensity"
     },
     {
       "name": "fluidDomains",
-      "type": "auto",
-      "default": "",
+      "type": "list[Body::id_t]",
+      "default": "std::vector<Body::id_t>()",
       "description": "list of fluid domain bounding fictitious fluid bodies that has the fluid mesh bounds"
     },
     {
       "name": "foamDeltaT",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "timestep in openfoam solver from exchangeDeltaT"
     },
     {
-      "name": "foamPath",
+      "name": "dataExchangeInterval",
       "type": "auto",
       "default": "",
-      "description": "path to OpenFoam"
-    },
-    {
-      "name": "foamVersion",
-      "type": "auto",
-      "default": "",
-      "description": "version of OpenFoam environment"
+      "description": "Number of iterations/substepping : for stability and to be in sync with fluid solver calculated in exchangeDeltaT"
     },
     {
       "name": "isGaussianInterp",
       "type": "auto",
-      "default": ""
+      "default": "",
+      "description": "switch for Gaussian interpolation of field varibles in openfoam. Uses sumHydroForce to obtain hydrodynamic force"
     },
     {
-      "name": "numParticles",
-      "type": "auto",
+      "name": "comm",
+      "type": "int",
       "default": "",
-      "description": "number of particles in coupling."
+      "description": "Communicator to be used for MPI (converts mpi4py comm <-> c++ comm)"
     },
     {
-      "name": "particleDensity",
-      "type": "auto",
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "\"\"",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
       "default": "",
-      "description": "particle Density"
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "TimingDeltas",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
+      "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
+      "name": "setIdList",
+      "args": [
+        {
+          "name": "bodyIdlist",
+          "type": "object"
+        }
+      ],
+      "returns": "None",
+      "description": "list of body ids in hydroForce coupling. (links to :yref: `FoamCoupling::bodyList` vector, used to build particle data FoamCoupling::particleData. FoamCoupling::particleData contains the particle pos, vel, angvel, radius and this is sent to foam. )"
+    },
+    {
+      "name": "killMPI",
+      "args": [],
+      "returns": "None",
+      "description": "Destroy MPI, to be called at the end of the simulation, from killMPI<FoamCoupling::killMPI>"
+    },
+    {
+      "name": "setNumParticles",
+      "args": [
+        {
+          "name": "numparticles",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "number of particles in coupling"
+    },
+    {
+      "name": "insertBodyId",
+      "args": [
+        {
+          "name": "newId",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "insert a new body id for hydrodynamic force coupling"
+    },
+    {
+      "name": "eraseId",
+      "args": [
+        {
+          "name": "idToErase",
+          "type": "int"
+        }
+      ],
+      "returns": "bool",
+      "description": "remove a body from hydrodynamic force coupling"
+    },
+    {
+      "name": "getNumBodies",
+      "args": [],
+      "returns": "int",
+      "description": "get the number of bodies in the coupling"
+    },
+    {
+      "name": "getIdList",
+      "args": [],
+      "returns": "object",
+      "description": "get the ids of bodies in coupling"
+    },
+    {
+      "name": "getFluidDomainBbox",
+      "args": [],
+      "returns": "None",
+      "description": "get the fluid domain bounding boxes, called once during simulation initialization."
+    },
+    {
       "name": "SetOpenFoamSolver",
+      "args": [
+        {
+          "name": "OpenFOAMSolverName",
+          "type": "str"
+        },
+        {
+          "name": "numOpenFOAMProcesses",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
       "description": "Starts the Yade coupled OpenFOAM solver with the requested number of processes"
     },
     {
       "name": "StartFoamSolver",
+      "args": [],
+      "returns": "None",
       "description": "Starts the OpenFOAM solver"
     },
     {
-      "name": "eraseId",
-      "description": "remove a body from hydrodynamic force coupling"
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
     },
     {
-      "name": "getFluidDomainBbox",
-      "description": "get the fluid domain bounding boxes, called once during simulation initialization."
-    },
-    {
-      "name": "getIdList",
-      "description": "get the ids of bodies in coupling"
-    },
-    {
-      "name": "getNumBodies",
-      "description": "get the number of bodies in the coupling"
-    },
-    {
-      "name": "insertBodyId",
-      "description": "insert a new body id for hydrodynamic force coupling"
-    },
-    {
-      "name": "killMPI",
-      "description": "Destroy MPI, to be called at the end of the simulation, from killMPI<FoamCoupling::killMPI>"
-    },
-    {
-      "name": "setIdList",
-      "description": "list of body ids in hydroForce coupling. (links to :yref: `FoamCoupling::bodyList` vector, used to build particle data FoamCoupling::particleData. FoamCoupling::particleData contains the particle pos, vel, angvel, radius and this is sent to foam. )"
-    },
-    {
-      "name": "setNumParticles",
-      "description": "number of particles in coupling"
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

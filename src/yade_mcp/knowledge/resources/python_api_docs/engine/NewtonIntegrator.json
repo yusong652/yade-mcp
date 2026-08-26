@@ -7,7 +7,7 @@
     {
       "name": "damping",
       "type": "float",
-      "default": "0.2",
+      "default": "0.0",
       "description": "Non-viscous damping coefficient (0-1). Applies numerical damping to accelerations to help reach quasi-static equilibrium faster. 0 = no damping, typically 0.2-0.4."
     },
     {
@@ -28,6 +28,24 @@
       "type": "bool",
       "default": "true",
       "description": "Use exact aspherical body rotation integration. More accurate for non-spherical bodies (clumps)."
+    },
+    {
+      "name": "rotAlgorithm",
+      "type": "RotAlgorithm",
+      "default": "RotAlgorithm::delValle2023",
+      "description": "Which rotation algorithm to use. Options are: 'delValle2023', 'Omelyan1998', 'Fincham1992'. The choice also impacts the expected ways for defining initial angular velocities, if any, see InitialAngularVelocity."
+    },
+    {
+      "name": "normalizeEvery",
+      "type": "int",
+      "default": "5000",
+      "description": "Normalize the quaternion every normalizeEvery step. Only used in the aspherical formulations from [delValle2023]_, (Omelyan1998)."
+    },
+    {
+      "name": "niterOmelyan1998",
+      "type": "int",
+      "default": "3",
+      "description": "The number of iterations used to solve the nonlinear system of (Omelyan1998) formulation in case the latter is chosen as a rotational integration algorithm. Provided a small enough timestep, three iterations are enough to make the system converge."
     },
     {
       "name": "prevVelGrad",

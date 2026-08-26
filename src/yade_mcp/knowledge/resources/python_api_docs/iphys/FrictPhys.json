@@ -11,6 +11,13 @@
       "description": "tan of angle of friction"
     },
     {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only Law2_ScGeom_FrictPhys_CundallStrack) (auto-updated)",
+      "read_only": true
+    },
+    {
       "name": "ks",
       "type": "float",
       "default": "0",

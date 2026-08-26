@@ -46,7 +46,7 @@
       "name": "getInterfaces",
       "args": [
         {
-          "name": "CellId",
+          "name": "cellId",
           "type": "int",
           "default": "-1"
         }

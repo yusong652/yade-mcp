@@ -37,6 +37,12 @@
       "read_only": true
     },
     {
+      "name": "parallelMode",
+      "type": "bool",
+      "default": "false",
+      "description": "if parallelMode, dt is set to min of all subdomain dt."
+    },
+    {
       "name": "targetDt",
       "type": "float",
       "default": "1",

@@ -5,75 +5,16 @@
   "description": "This engine loops over interactions with physics CapillaryPhysDelaunay and it assign pendular bridges to them. It is a reimplementation of (Scholtes2009b), adding the option of imposing the bridge volume (instead of only capillary pressure) and enabling using unstructured input data by...",
   "attributes": [
     {
-      "name": "binaryFusion",
-      "type": "bool",
-      "default": "True",
-      "description": "If true, capillary forces are set to zero as soon as, at least, 1 overlap (menisci fusion) is detected"
-    },
-    {
       "name": "capillaryPressure",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Value of the capillary pressure Uc defines as Uc=Ugas-Uliquid"
     },
     {
-      "name": "createDistantMeniscii",
-      "type": "bool",
-      "default": "False",
-      "description": "Generate meniscii between distant spheres? Else only maintain the existing one. For modeling a wetting path this flag should always be false. For a drying path it should be true for one step (initialization) then false, as in the logic of (Scholtes2009c). The engine turns it off automatically after one execution."
-    },
-    {
-      "name": "disp",
+      "name": "totalVolumeofWater",
       "type": "float",
-      "default": "0.0",
-      "description": "Dispersion from the mean Value of the roughness"
-    },
-    {
-      "name": "epsilonMean",
-      "type": "float",
-      "default": "0.0",
-      "description": "Mean Value of the roughness"
-    },
-    {
-      "name": "fusionDetection",
-      "type": "bool",
-      "default": "False",
-      "description": "If true potential menisci overlaps are checked"
-    },
-    {
-      "name": "hertzInitialized",
-      "type": "bool",
-      "default": "False",
-      "description": "FIXME: replace by class index"
-    },
-    {
-      "name": "hertzOn",
-      "type": "bool",
-      "default": "False",
-      "description": "(auto-updated) true if hertz model is used"
-    },
-    {
-      "name": "imposePressure",
-      "type": "bool",
-      "default": "True",
-      "description": "If True, suction is imposed and is constant if not Volume is imposed-Undrained test"
-    },
-    {
-      "name": "initialized",
-      "type": "bool",
-      "default": "False"
-    },
-    {
-      "name": "inputFilename",
-      "type": "str",
-      "default": "'capillaryfile.txt'",
-      "description": "the file with meniscus solutions, used for interpolation."
-    },
-    {
-      "name": "interactionDetectionFactor",
-      "type": "float",
-      "default": "1.5",
-      "description": "defines critical distance for deleting interactions. Must be consistent with the Ig2 value."
+      "default": "-1.",
+      "description": "Value of imposed water volume"
     },
     {
       "name": "liquidTension",
@@ -82,38 +23,195 @@
       "description": "Value of the superficial water tension in N/m"
     },
     {
+      "name": "epsilonMean",
+      "type": "float",
+      "default": "0.",
+      "description": "Mean Value of the roughness"
+    },
+    {
+      "name": "disp",
+      "type": "float",
+      "default": "0.",
+      "description": "Dispersion from the mean Value of the roughness"
+    },
+    {
+      "name": "interactionDetectionFactor",
+      "type": "float",
+      "default": "1.5",
+      "description": "defines critical distance for deleting interactions. Must be consistent with the Ig2 value."
+    },
+    {
+      "name": "fusionDetection",
+      "type": "bool",
+      "default": "false",
+      "description": "If true potential menisci overlaps are checked"
+    },
+    {
+      "name": "initialized",
+      "type": "bool",
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "binaryFusion",
+      "type": "bool",
+      "default": "true",
+      "description": "If true, capillary forces are set to zero as soon as, at least, 1 overlap (menisci fusion) is detected"
+    },
+    {
+      "name": "hertzOn",
+      "type": "bool",
+      "default": "false",
+      "description": "(auto-updated) true if hertz model is used",
+      "read_only": true
+    },
+    {
+      "name": "inputFilename",
+      "type": "str",
+      "default": "string(\"capillaryfile.txt\")",
+      "description": "the file with meniscus solutions, used for interpolation."
+    },
+    {
+      "name": "createDistantMeniscii",
+      "type": "bool",
+      "default": "false",
+      "description": "Generate meniscii between distant spheres? Else only maintain the existing one. For modeling a wetting path this flag should always be false. For a drying path it should be true for one step (initialization) then false, as in the logic of (Scholtes2009c). The engine turns it off automatically after one execution."
+    },
+    {
+      "name": "imposePressure",
+      "type": "bool",
+      "default": "true",
+      "description": "If True, suction is imposed and is constant if not Volume is imposed-Undrained test"
+    },
+    {
       "name": "totalVolumeConstant",
       "type": "bool",
-      "default": "True",
+      "default": "true",
       "description": "in undrained test there are 2 options, If True, the total volume of water is imposed,if false the volume of each meniscus is kept constant: in this case capillary pressure can be imposed for initial distribution of meniscus or it is the total volume that can be imposed initially"
     },
     {
-      "name": "totalVolumeofWater",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Value of imposed water volume"
+      "name": "hertzInitialized",
+      "type": "bool",
+      "default": "false",
+      "description": "FIXME: replace by class index"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "TimingDeltas",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
       "name": "intEnergy",
+      "args": [],
+      "returns": "float",
       "description": "define the energy of interfaces in unsaturated pendular state"
     },
     {
-      "name": "solveStandalone",
-      "description": "Returns a CapillaryPhysDelaunay object representing a single bridge independently of the scene, using radii R1 and R2, capillary pressure, and gap between two spheres. The returned value contains internals of the interpolation process, it can be passed as an optional argument ('bridge'). If the resolution is repeated multiple times, re-using cached data will increase performance if the geometrical parameters are changing by small increments"
-    },
-    {
       "name": "swInterface",
+      "args": [],
+      "returns": "float",
       "description": "define the amount of solid-wetting interfaces in unsaturated pendular state"
     },
     {
+      "name": "wnInterface",
+      "args": [],
+      "returns": "float",
+      "description": "define the amount of wetting-non-wetiing interfaces in unsaturated pendular state"
+    },
+    {
       "name": "waterVolume",
+      "args": [],
+      "returns": "float",
       "description": "return the total value of water in the sample"
     },
     {
-      "name": "wnInterface",
-      "description": "define the amount of wetting-non-wetiing interfaces in unsaturated pendular state"
+      "name": "solveStandalone",
+      "args": [
+        {
+          "name": "R1",
+          "type": "float"
+        },
+        {
+          "name": "R2",
+          "type": "float"
+        },
+        {
+          "name": "pressure",
+          "type": "float"
+        },
+        {
+          "name": "gap",
+          "type": "float"
+        },
+        {
+          "name": "bridge",
+          "type": "CapillaryPhysDelaunay",
+          "default": "None"
+        }
+      ],
+      "returns": "CapillaryPhysDelaunay",
+      "description": "Returns a CapillaryPhysDelaunay object representing a single bridge independently of the scene, using radii R1 and R2, capillary pressure, and gap between two spheres. The returned value contains internals of the interpolation process, it can be passed as an optional argument ('bridge'). If the resolution is repeated multiple times, re-using cached data will increase performance if the geometrical parameters are changing by small increments"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

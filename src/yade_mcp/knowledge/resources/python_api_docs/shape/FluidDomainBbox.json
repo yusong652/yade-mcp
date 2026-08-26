@@ -5,52 +5,97 @@
   "description": "The bounding box of a fluid grid from one OpenFOAM/YALES2 proc",
   "attributes": [
     {
+      "name": "minMaxisSet",
+      "type": "bool",
+      "default": "false",
+      "description": "flag to check if the min max bounds of this body are set."
+    },
+    {
       "name": "bIds",
-      "type": "list",
-      "default": "[]",
+      "type": "list[Body::id_t]",
+      "default": "std::vector<Body::id_t>()",
       "description": "ids of bodies intersecting with this subdomain,"
-    },
-    {
-      "name": "color",
-      "type": "Vector3",
-      "default": "Vector3(1,1,1)",
-      "description": "Color for rendering (normalized RGB)."
-    },
-    {
-      "name": "hasIntersection",
-      "type": "bool",
-      "default": "False",
-      "description": "if this Yade subdomain has intersection with this OpenFOAM/YALES2 subdomain"
-    },
-    {
-      "name": "highlight",
-      "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape will be highlighted when rendered."
-    },
-    {
-      "name": "maxBound",
-      "type": "Vector3",
-      "default": "Vector3(nan,nan,nan)",
-      "description": "max bounds of the fluid grid"
     },
     {
       "name": "minBound",
       "type": "Vector3",
-      "default": "Vector3(-nan,-nan,-nan)",
+      "default": "Vector3r(-NaN, -NaN, -NaN)",
       "description": "min bounds of the fluid grid"
     },
     {
-      "name": "minMaxisSet",
+      "name": "maxBound",
+      "type": "Vector3",
+      "default": "Vector3r(NaN, NaN, NaN)",
+      "description": "max bounds of the fluid grid"
+    },
+    {
+      "name": "hasIntersection",
       "type": "bool",
-      "default": "False",
-      "description": "flag to check if the min max bounds of this body are set."
+      "default": "false",
+      "description": "if this Yade subdomain has intersection with this OpenFOAM/YALES2 subdomain"
+    },
+    {
+      "name": "color",
+      "type": "Vector3",
+      "default": "Vector3r(1,1,1)",
+      "description": "Color for rendering (normalized RGB).",
+      "inherited_from": "Shape"
     },
     {
       "name": "wire",
       "type": "bool",
-      "default": "False",
-      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer)."
+      "default": "false",
+      "description": "Whether this Shape is rendered using color surfaces, or only wireframe (can still be overridden by global config of the renderer).",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "highlight",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this Shape will be highlighted when rendered.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "8",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Shape"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "Shape"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

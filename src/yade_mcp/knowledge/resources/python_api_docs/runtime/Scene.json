@@ -84,9 +84,21 @@
       "description": "Id of body that is selected by the user"
     },
     {
+      "name": "subdomain",
+      "type": "int",
+      "default": "0",
+      "description": "the subdomain this scene is assigned in MPI/domain decomposition."
+    },
+    {
+      "name": "subD",
+      "type": "Shape",
+      "default": "boost::make_shared<Shape>()",
+      "description": "subdomain (shape) attached to this proc."
+    },
+    {
       "name": "tags",
       "type": "list[str]",
-      "default": "['author=root~(root@34cbb5a47fb3)', 'isoTime=20260411T103803', 'id=20260411T1...",
+      "default": "['author=root~(root@e418ad77dc9a)', 'isoTime=20260826T200639', 'id=20260826T2...",
       "description": "Arbitrary key=value associations (tags like mp3 tags: author, date, version, description etc.)"
     }
   ],

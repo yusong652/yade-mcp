@@ -130,7 +130,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "16",
+      "default": "18",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Shape"

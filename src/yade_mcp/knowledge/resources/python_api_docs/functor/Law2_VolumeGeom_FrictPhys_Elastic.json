@@ -5,32 +5,83 @@
   "description": "Contact law for elasticity, scaling exponentially with the overlap volume, with Mohr-Coulomb plastic failure without cohesion. This law implements a volumetric variant of the classical elastic-plastic law from (CundallStrack1979) (see also [Pfc3dManual30]_). The normal force is $F_n= min(k_n...",
   "attributes": [
     {
+      "name": "volumePower",
+      "type": "float",
+      "default": "1.0",
+      "description": "The exponent $a$ on the overlap volume within the contact law. Setting to 0.5 gives a near-linear relationship of force with respect to penetration distance for spheres."
+    },
+    {
       "name": "neverErase",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Keep interactions even if particles go away from each other (only useful if another contact law is used as well)."
     },
     {
       "name": "traceEnergy",
       "type": "bool",
-      "default": "False",
+      "default": "false",
       "description": "Define the total energy dissipated in plastic slips at all contacts. This will trace only plastic energy in this law, see O.trackEnergy for a more complete energies tracing."
     },
     {
-      "name": "volumePower",
-      "type": "float",
-      "default": "1.0",
-      "description": "The exponent $a$ on the overlap volume within the contact law. Setting to 0.5 gives a near-linear relationship of force with respect to penetration distance for spheres."
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['VolumeGeom', 'FrictPhys']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
     }
   ],
   "methods": [
     {
+      "name": "plasticDissipation",
+      "args": [],
+      "returns": "float",
+      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_VolumeGeom_FrictPhys_Elastic::traceEnergy is true."
+    },
+    {
       "name": "initPlasticDissipation",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
     },
     {
-      "name": "plasticDissipation",
-      "description": "Total energy dissipated in plastic slips at all FrictPhys contacts. Computed only if Law2_VolumeGeom_FrictPhys_Elastic::traceEnergy is true."
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

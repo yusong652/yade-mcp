@@ -64,6 +64,12 @@
       "read_only": true
     },
     {
+      "name": "flipFlippable",
+      "type": "bool",
+      "default": "false",
+      "description": "flip automatically as soon as a more compact geometry is possible (see trsf)"
+    },
+    {
       "name": "size",
       "type": "Vector3",
       "default": "Vector3(1,1,1)",
@@ -120,6 +126,12 @@
       "description": "Set Cell shape to be rectangular, with dimensions along axes specified by given argument. Shorthand for assigning diagonal matrix with respective entries to hSize. setBox( (Cell)arg1, (float)arg2, (float)arg3, (float)arg4) -> None : Set Cell shape to be rectangular, with dimensions along $x$, $y$, $z$ specified by arguments. Shorthand for assigning diagonal matrix with the respective entries to hSize."
     },
     {
+      "name": "flipCell",
+      "args": [],
+      "returns": "Matrix3",
+      "description": "Flip periodic cell so that angles between $R^3$ axes and transformed axes are as small as possible, using the two following facts:1. repeating in $R^3$ space the corners of a periodic cell defines a regular grid; 2. two cells leading through this process to a unique grid are equivalent and can be flipped one over another. Flipping includes adjustment of Interaction.cellDist for interactions that cross the boundary and didn't before (or vice versa), and re-initialization of collider. See also collision detection"
+    },
+    {
       "name": "wrap",
       "args": [
         {
@@ -162,6 +174,17 @@
       ],
       "returns": "Vector3",
       "description": "Wrap point inside the reference cell, assuming the cell has no skew+rot."
+    },
+    {
+      "name": "getFluctuationVelocity",
+      "args": [
+        {
+          "name": "b",
+          "type": "Body"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "get velocity fluctuation of a body, i.e. the velocity relative to mean field velocity: $ tilde{ vec{v} }= vec{v} - ( nabla vec{v}_m) cdot vec{x}$"
     },
     {
       "name": "getDefGrad",

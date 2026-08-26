@@ -6,15 +6,57 @@
   "attributes": [
     {
       "name": "contacts",
-      "type": "list",
+      "type": "list[IPhys]",
       "default": "[]",
-      "description": "The actual list of"
+      "description": "The actual list of IPhys (for the mother class, actually obtained types can be different for derived classes such as MultiFrictPhys which will include FrictPhys instances) items corresponding to the different contact points."
     },
     {
       "name": "nodesIds",
-      "type": "list",
+      "type": "list[int]",
       "default": "[]",
-      "description": "The physics counterpart of"
+      "description": "The physics counterpart of MultiScGeom.nodesIds (both should be equal by design)."
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "21",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IPhys"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

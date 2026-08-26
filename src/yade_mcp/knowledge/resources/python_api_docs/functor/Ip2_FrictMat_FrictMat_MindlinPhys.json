@@ -53,6 +53,12 @@
       "description": "Shear viscous damping ratio $ beta_s$."
     },
     {
+      "name": "vn",
+      "type": "MatchMaker",
+      "default": "None",
+      "description": "Impact velocity corresponding to the en value to calculate the dissipative constant $An$ used in the viscous damping model of (Mueller2011)."
+    },
+    {
       "name": "frictAngle",
       "type": "MatchMaker",
       "default": "None",

@@ -59,17 +59,18 @@
       "description": "Weibull Formulation, failure probability, P, (Gladky2017)."
     },
     {
-      "name": "young",
-      "type": "float",
-      "default": "1e8",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
-    },
-    {
       "name": "frictionAngle",
       "type": "float",
       "default": ".5",
       "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
       "inherited_from": "FrictMat"
+    },
+    {
+      "name": "young",
+      "type": "float",
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
     },
     {
       "name": "poisson",
@@ -103,7 +104,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "18",
+      "default": "19",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Material"

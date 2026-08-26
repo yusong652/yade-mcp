@@ -5,40 +5,10 @@
   "description": "This class provides methods for setting the coating thickness of bodies and performing the coating material transfer (both interparticle and intraparticle).",
   "attributes": [
     {
-      "name": "activateWettability",
+      "name": "thetaResolution",
       "type": "int",
-      "default": "0",
-      "description": "If true, particles are wettable (coating material is distributed over particles with time). It works only for spherical particles. For clumps of spheres it is recommended to set false."
-    },
-    {
-      "name": "initRun",
-      "type": "bool",
-      "default": "False",
-      "description": "Run the first time we are called as well."
-    },
-    {
-      "name": "interParticleExchangeCoeff",
-      "type": "float",
-      "default": "1.0",
-      "description": "Rate of coating material exchange rate coefficient between two contacting particles."
-    },
-    {
-      "name": "intraParticleExchangeCoeff",
-      "type": "float",
-      "default": "1.0",
-      "description": "Rate of coating material exchange rate coefficient between two segments of the same particle."
-    },
-    {
-      "name": "iterPeriod",
-      "type": "int",
-      "default": "0",
-      "description": "Periodicity criterion using step number (deactivated if <= 0)"
-    },
-    {
-      "name": "nDo",
-      "type": "int",
-      "default": "-1",
-      "description": "Limit number of executions by this number (deactivated if negative)"
+      "default": "2",
+      "description": "In how many regions a coating map of sphere should be divided vertically (theta is polar angle ranging from 0 to 180 degrees)."
     },
     {
       "name": "phiResolution",
@@ -47,52 +17,263 @@
       "description": "In how many regions a coating map of sphere should be divided horizontally (phi is azimuthal angle ranging from 0 to 360 degrees)."
     },
     {
+      "name": "interParticleExchangeCoeff",
+      "type": "float",
+      "default": "1",
+      "description": "Rate of coating material exchange rate coefficient between two contacting particles."
+    },
+    {
+      "name": "intraParticleExchangeCoeff",
+      "type": "float",
+      "default": "1",
+      "description": "Rate of coating material exchange rate coefficient between two segments of the same particle."
+    },
+    {
+      "name": "activateWettability",
+      "type": "int",
+      "default": "false",
+      "description": "If true, particles are wettable (coating material is distributed over particles with time). It works only for spherical particles. For clumps of spheres it is recommended to set false."
+    },
+    {
       "name": "prevTime",
       "type": "float",
-      "default": "0.0",
-      "description": "Virtual time of the last run. Compared to the"
+      "default": "0",
+      "description": "Virtual time of the last run. Compared to the virtLast, it is updated after the action of the engine.",
+      "read_only": true
     },
     {
       "name": "reInitCohesion",
       "type": "int",
       "default": "1",
-      "description": "This parameter is introduced to reinitialize the cohesion after two bodies exchange the coating material. That means it sets"
-    },
-    {
-      "name": "realPeriod",
-      "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)"
-    },
-    {
-      "name": "thetaResolution",
-      "type": "int",
-      "default": "2",
-      "description": "In how many regions a coating map of sphere should be divided vertically (theta is polar angle ranging from 0 to 180 degrees)."
+      "description": "This parameter is introduced to reinitialize the cohesion after two bodies exchange the coating material. That means it sets initCohesion true for the interaction. It is later determined by Ip2, whether the interaction should be cohesive (based on the material properties). Default value is 1 which means that reinitialization works only for interactions that are not yet cohesive (cohesionBroken is true). Set 2, in order to reinitialize cohesion on every run of SegmentedStateUpdater."
     },
     {
       "name": "virtPeriod",
       "type": "float",
-      "default": "0.0",
-      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)"
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using virtual (simulation) time (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realPeriod",
+      "type": "float",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using real (wall clock, computation, human) time in seconds (deactivated if <=0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterPeriod",
+      "type": "int",
+      "default": "((void)\"deactivated\",0)",
+      "description": "Periodicity criterion using step number (deactivated if <= 0)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDo",
+      "type": "int",
+      "default": "((void)\"deactivated\",-1)",
+      "description": "Limit number of executions by this number (deactivated if negative)",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "initRun",
+      "type": "bool",
+      "default": "false",
+      "description": "Run the first time we are called as well.",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "firstIterRun",
+      "type": "int",
+      "default": "0",
+      "description": "Sets the step number, at each an engine should be executed for the first time (disabled by default).",
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "virtLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks virtual time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "realLast",
+      "type": "float",
+      "default": "0",
+      "description": "Tracks real time of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "iterLast",
+      "type": "int",
+      "default": "0",
+      "description": "Tracks step number of last run (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "nDone",
+      "type": "int",
+      "default": "0",
+      "description": "Track number of executions (cummulative) (auto-updated).",
+      "read_only": true,
+      "inherited_from": "PeriodicEngine"
+    },
+    {
+      "name": "dead",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, this engine will not run at all; can be used for making an engine temporarily deactivated and only resurrect it at a later point.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "ompThreads",
+      "type": "int",
+      "default": "-1",
+      "description": "Number of threads to be used in the engine. If ompThreads<0 (default), the number will be typically OMP_NUM_THREADS or the number N defined by 'yade -jN' (this behavior can depend on the engine though). This attribute will only affect engines whose code includes openMP parallel regions (e.g. InteractionLoop). This attribute is mostly useful for experiments or when combining ParallelEngine with engines that run parallel regions, resulting in nested OMP loops with different number of threads at each level.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execTime",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative time in nanoseconds this Engine took to run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "execCount",
+      "type": "int",
+      "default": "0",
+      "description": "Cumulative count this engine was run (only used if O.timingEnabled == True).",
+      "no_save": true,
+      "inherited_from": "Engine"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Engine itself. Empty unless enabled in the source code and O.timingEnabled == True.",
+      "no_save": true,
+      "inherited_from": "Engine"
     }
   ],
   "methods": [
     {
       "name": "initialize",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Initializes SegmentedState::coatingThickness, so it has a proper length and next, sets the same thickness to all the segments. Not initialized bodies cannot exchange the coating material."
     },
     {
-      "name": "setThicknessToFacetSide",
-      "description": "Set thickness to facet side (0 to negative side, 1 to positive side, according to facet normal)."
-    },
-    {
       "name": "setThicknessToSphereSeg",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        },
+        {
+          "name": "arg4",
+          "type": "int"
+        },
+        {
+          "name": "arg5",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "Set thickness to the segment of sphere at position given by phi and theta."
     },
     {
+      "name": "setThicknessToFacetSide",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "int"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        },
+        {
+          "name": "arg4",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
+      "description": "Set thickness to facet side (0 to negative side, 1 to positive side, according to facet normal)."
+    },
+    {
       "name": "setThicknessToSpheres",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "object"
+        },
+        {
+          "name": "arg3",
+          "type": "int"
+        },
+        {
+          "name": "arg4",
+          "type": "int"
+        },
+        {
+          "name": "arg5",
+          "type": "int"
+        },
+        {
+          "name": "arg6",
+          "type": "int"
+        },
+        {
+          "name": "arg7",
+          "type": "float"
+        }
+      ],
+      "returns": "None",
       "description": "For each sphere from provided list (of Ids) set thickness at some range of segments specified by minimum and maximum theta and phi."
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

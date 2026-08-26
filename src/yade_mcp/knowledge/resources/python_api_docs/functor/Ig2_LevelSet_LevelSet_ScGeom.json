@@ -30,6 +30,17 @@
   ],
   "methods": [
     {
+      "name": "normalMismatch",
+      "args": [
+        {
+          "name": "cont",
+          "type": "Interaction"
+        }
+      ],
+      "returns": "float",
+      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment."
+    },
+    {
       "name": "dict",
       "args": [],
       "returns": "dict",

@@ -29,6 +29,18 @@
       "description": "Instance of MatchMaker determining cohesive part of the shear strength (a frictional term might be added depending on cohesionDisablesFriction)"
     },
     {
+      "name": "rollingCohesion",
+      "type": "MatchMaker",
+      "default": "None",
+      "description": "Instance of MatchMaker determining cohesive part of the rolling strength (a frictional term might be added depending on cohesionDisablesFriction). The default is $ frac{r}{4}R_t$ with $R_t$ the shear strength (inspired by stress in beams with circular cross-section)."
+    },
+    {
+      "name": "twistingCohesion",
+      "type": "MatchMaker",
+      "default": "None",
+      "description": "Instance of MatchMaker determining cohesive part of the twisting strength (a frictional term might be added depending on cohesionDisablesFriction). The default is $ frac{r}{2}R_s$ with $R_s$ the shear strength (inspired by stress in beams with circular cross-section)."
+    },
+    {
       "name": "frictAngle",
       "type": "MatchMaker",
       "default": "None",
@@ -59,6 +71,25 @@
     }
   ],
   "methods": [
+    {
+      "name": "setCohesion",
+      "args": [
+        {
+          "name": "interaction",
+          "type": "Interaction"
+        },
+        {
+          "name": "cohesive",
+          "type": "bool"
+        },
+        {
+          "name": "resetDisp",
+          "type": "bool"
+        }
+      ],
+      "returns": "None",
+      "description": "Bond or un-bond an interaction with cohesion. When True, the resulting state is the same as what is obtained by executing an InteractionLoop with the functor's setCohesionNow or the interaction's initCohesion True. It will use the matchmakers if defined. The only difference is that calling this function explicitly will make the contact cohesive even if not both materials have isCohesive=True. When False, the resulting state is the same as after breaking a fragile interaction. If `resetDisp` is True, the current distance is taken as the reference for computing normal displacement and normal force."
+    },
     {
       "name": "dict",
       "args": [],

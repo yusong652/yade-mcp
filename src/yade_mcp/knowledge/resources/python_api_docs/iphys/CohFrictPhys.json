@@ -14,7 +14,8 @@
       "name": "cohesionBroken",
       "type": "bool",
       "default": "true",
-      "description": "is cohesion active? Set to false at the creation of a cohesive contact, and set to true when a fragile contact is broken"
+      "description": "is cohesion active? Set to false at the creation of a cohesive contact, and set to true when a fragile contact is broken",
+      "read_only": true
     },
     {
       "name": "fragile",
@@ -47,6 +48,18 @@
       "description": "cohesive part of the shear strength (a frictional term might be added depending on"
     },
     {
+      "name": "rollingAdhesion",
+      "type": "float",
+      "default": "0",
+      "description": "maximum bending moment when normal force is null (a frictional term might be added depending on cohesionDisablesFriction and maxRollPl)"
+    },
+    {
+      "name": "twistingAdhesion",
+      "type": "float",
+      "default": "0",
+      "description": "maximum twisting moment when normal force is null (a frictional term might be added depending on cohesionDisablesFriction and maxTwistPl)"
+    },
+    {
       "name": "unp",
       "type": "float",
       "default": "0",
@@ -55,7 +68,7 @@
     {
       "name": "unpMax",
       "type": "float",
-      "default": "0",
+      "default": "-1",
       "description": "maximum value of plastic normal displacement (counted positively), after that the interaction breaks even if"
     },
     {
@@ -110,6 +123,14 @@
       "inherited_from": "FrictPhys"
     },
     {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only Law2_ScGeom_FrictPhys_CundallStrack) (auto-updated)",
+      "read_only": true,
+      "inherited_from": "FrictPhys"
+    },
+    {
       "name": "ks",
       "type": "float",
       "default": "0",
@@ -140,7 +161,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "6",
+      "default": "9",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IPhys"

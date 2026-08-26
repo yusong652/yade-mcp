@@ -3,11 +3,62 @@
   "category": "engines",
   "parent": "Ig2_LevelSet_LevelSet_ScGeom",
   "description": "Multiple contact points version of Ig2_LevelSet_LevelSet_ScGeom for a MultiScGeom description of a contact between two (non-convex typically) LevelSet-shaped bodies (with a ScGeom interaction at each contacting surface node). Does not support periodic boundary conditions at the moment. It is...",
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['LevelSet', 'LevelSet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ],
   "methods": [
     {
       "name": "normalMismatch",
-      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment."
+      "args": [
+        {
+          "name": "cont",
+          "type": "Interaction"
+        }
+      ],
+      "returns": "float",
+      "description": "Normal orientation mismatch (in radians) of given interaction *cont* if master and slave particles were to be exchanged. Does not support periodic boundary conditions at the moment.",
+      "inherited_from": "Ig2_LevelSet_LevelSet_ScGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

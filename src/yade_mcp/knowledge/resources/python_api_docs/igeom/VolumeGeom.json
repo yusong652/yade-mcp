@@ -5,50 +5,102 @@
   "description": "Geometry of the interaction between two LevelSet bodies when using volume-based interactions. Will soon become the general class for volume interaction, such that it works for polyhedra as well.",
   "attributes": [
     {
-      "name": "averagePenetrationDepth",
+      "name": "penetrationVolume",
       "type": "float",
-      "default": "nan",
-      "description": "penetrationVolume / contactArea."
+      "default": "NaN",
+      "description": "Volume of the overlap or penetrating region.",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "contactArea",
       "type": "float",
-      "default": "nan",
-      "description": "Contact area perpendicular to the normal."
+      "default": "NaN",
+      "description": "Contact area perpendicular to the normal.",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "averagePenetrationDepth",
+      "type": "float",
+      "default": "NaN",
+      "description": "penetrationVolume / contactArea.",
+      "read_only": true,
+      "no_save": true
     },
     {
       "name": "contactPoint",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Contact point (global coordinates), centroid of the penetration volume."
     },
     {
       "name": "normal",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
+      "default": "(0, 0, 0)",
       "description": "Normal direction of the interaction."
-    },
-    {
-      "name": "orthonormal_axis",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)"
-    },
-    {
-      "name": "penetrationVolume",
-      "type": "float",
-      "default": "nan",
-      "description": "Volume of the overlap or penetrating region."
-    },
-    {
-      "name": "shearInc",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear displacement increment in the last step."
     },
     {
       "name": "twist_axis",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)"
+      "default": "(0, 0, 0)",
+      "description": ""
+    },
+    {
+      "name": "orthonormal_axis",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": ""
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear displacement increment in the last step.",
+      "read_only": true,
+      "no_save": true
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "16",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

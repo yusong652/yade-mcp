@@ -46,7 +46,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "15",
+      "default": "16",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Shape"
@@ -58,6 +58,12 @@
       "args": [],
       "returns": "None",
       "description": "Initialization"
+    },
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Return polyhedra volume (duplicate of GetVolume, though with a better syntax)"
     },
     {
       "name": "GetVolume",

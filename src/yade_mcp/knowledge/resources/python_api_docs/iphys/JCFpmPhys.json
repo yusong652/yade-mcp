@@ -262,7 +262,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "10",
+      "default": "13",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IPhys"

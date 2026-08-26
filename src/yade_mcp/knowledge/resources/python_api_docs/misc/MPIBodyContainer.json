@@ -6,27 +6,71 @@
   "attributes": [
     {
       "name": "bContainer",
-      "type": "vector<shared_ptr<Body>>",
-      "default": "",
+      "type": "list[Body]",
+      "default": "[]",
       "description": "a dummy body container to serialize"
+    },
+    {
+      "name": "subdomainRank",
+      "type": "int",
+      "default": "-400435728",
+      "description": "origin rank of this container",
+      "no_save": true
     }
   ],
   "methods": [
     {
-      "name": "clearContainer",
-      "description": "clear bodies in the container"
-    },
-    {
-      "name": "getCount",
-      "description": "get container count"
-    },
-    {
       "name": "insertBody",
+      "args": [
+        {
+          "name": "bodyId",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
       "description": "insert a body (by id) in this container"
     },
     {
       "name": "insertBodyListPy",
+      "args": [
+        {
+          "name": "listOfIds",
+          "type": "list"
+        }
+      ],
+      "returns": "None",
       "description": "inset a list of bodies (by ids)"
+    },
+    {
+      "name": "clearContainer",
+      "args": [],
+      "returns": "None",
+      "description": "clear bodies in the container"
+    },
+    {
+      "name": "getCount",
+      "args": [],
+      "returns": "int",
+      "description": "get container count"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

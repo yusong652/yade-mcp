@@ -3,5 +3,50 @@
   "category": "engines",
   "parent": "IGeomFunctor",
   "description": "Creates or updates a MultiScGeom instance representing the multiple contact points interaction kinematics of one LevelSet body with one Wall body, extending Ig2_Wall_LevelSet_ScGeom to non-convex LevelSet-shaped bodies. Relative orientation of wall wrt global axes is again not supported. TODO: time...",
-  "attributes": []
+  "attributes": [
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual label for this object; must be a valid python identifier, you can refer to it directly from python.",
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "timingDeltas",
+      "type": "NoneType",
+      "default": "None",
+      "description": "Detailed information about timing inside the Dispatcher itself. Empty unless enabled in the source code and O.timingEnabled==True.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    },
+    {
+      "name": "bases",
+      "type": "list",
+      "default": "['Wall', 'LevelSet']",
+      "description": "Ordered list of types (as strings) this functor accepts.",
+      "no_save": true,
+      "inherited_from": "Functor"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
+    }
+  ]
 }

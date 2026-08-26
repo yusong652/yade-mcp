@@ -40,6 +40,11 @@ if [ -n "$MSYSTEM" ]; then
     command -v winpty >/dev/null && DOCKER="winpty docker"
 fi
 
+# No --platform here: the image is amd64 (pinned in Dockerfile.dev), but
+# classic-builder images lack manifest platform metadata, so passing
+# --platform makes docker fail local resolution and attempt a pull.
+# The harmless "platform mismatch" warning at startup is expected on
+# Apple Silicon.
 $DOCKER run -it --rm -p 9002:9002 -p 6080:6080 \
     -v "${REPO_ROOT}/yade-mcp-bridge/src/yade_mcp_bridge:/usr/local/lib/python3.10/dist-packages/yade_mcp_bridge" \
     -v "${REPO_ROOT}/src/yade_mcp/knowledge/resources/python_api_docs:/docs_output" \

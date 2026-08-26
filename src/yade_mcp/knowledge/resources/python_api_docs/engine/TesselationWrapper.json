@@ -29,6 +29,18 @@
       "description": "The Displacement Gradient Tensor"
     },
     {
+      "name": "groupMask",
+      "type": "mask_t",
+      "default": "0",
+      "description": "Bitmask for filtering spheres, ignored if 0."
+    },
+    {
+      "name": "mma",
+      "type": "MicroMacroAnalyser",
+      "default": "new MicroMacroAnalyser",
+      "description": "underlying object processing the data - see specific settings in MicroMacroAnalyser class documentation"
+    },
+    {
       "name": "dead",
       "type": "bool",
       "default": "false",
@@ -86,6 +98,21 @@
       ],
       "returns": "None",
       "description": "triangulate spheres of the packing"
+    },
+    {
+      "name": "addBoundingPlane",
+      "args": [
+        {
+          "name": "axis",
+          "type": "int"
+        },
+        {
+          "name": "positive",
+          "type": "bool"
+        }
+      ],
+      "returns": "int",
+      "description": "add a bounding plane (in fact a sphere with very large radius) bounding the spheres along the direction 'axis' (0,1,2), on the 'positive' or negative side."
     },
     {
       "name": "setState",
@@ -265,6 +292,17 @@
       "description": "Get individual components of the particle deformation tensors"
     },
     {
+      "name": "deformationTensor",
+      "args": [
+        {
+          "name": "id",
+          "type": "int"
+        }
+      ],
+      "returns": "Matrix3",
+      "description": "Get particle deformation (tensor)"
+    },
+    {
       "name": "testAlphaShape",
       "args": [
         {
@@ -331,6 +369,11 @@
           "name": "fixedAlpha",
           "type": "bool",
           "default": "False"
+        },
+        {
+          "name": "reset",
+          "type": "bool",
+          "default": "True"
         }
       ],
       "returns": "None",

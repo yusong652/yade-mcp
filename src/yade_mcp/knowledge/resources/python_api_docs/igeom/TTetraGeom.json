@@ -49,7 +49,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "12",
+      "default": "14",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IGeom"
