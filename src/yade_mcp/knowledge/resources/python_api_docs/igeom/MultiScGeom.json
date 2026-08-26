@@ -6,15 +6,57 @@
   "attributes": [
     {
       "name": "contacts",
-      "type": "list",
+      "type": "list[ScGeom]",
       "default": "[]",
-      "description": "The actual list of"
+      "description": "The actual list of ScGeom items corresponding to the different contact points."
     },
     {
       "name": "nodesIds",
-      "type": "list",
+      "type": "list[int]",
       "default": "[]",
-      "description": "List of"
+      "description": "List of surface nodes (on id1 if that body is smaller -- or equal -- in volume, or id2 otherwise) making contacts. Contact point for a node of index nodesIds[i] has kinematic properties stored in contacts[i]. Should be equal to MultiFrictPhys.nodesIds by design"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "11",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

@@ -35,7 +35,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "9",
+      "default": "10",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Shape"
@@ -75,6 +75,13 @@
       "args": [],
       "returns": "object",
       "description": "get list of linked GridConnection's."
+    },
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume.",
+      "inherited_from": "Sphere"
     },
     {
       "name": "dispHierarchy",

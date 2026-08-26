@@ -1,42 +1,597 @@
 {
   "name": "utils",
   "category": "utils",
-  "description": "YADE utility functions for body creation, timestep estimation, and simulation helpers.",
+  "description": "YADE utility functions (yade.utils): body creation (sphere, box, facet, wall, polyhedron, tetra, levelSetBody), packing measurement (porosity, psd, fabricTensor, getStress, unbalancedForce, kineticEnergy), timestep estimation (PWaveTimeStep, RayleighWaveTimeStep), body manipulation, coordinate transforms, and simulation helpers.",
   "functions": [
     {
-      "name": "sphere",
-      "signature": "utils.sphere(center, radius, dynamic=None, fixed=False, wire=False, color=None, highlight=False, material=-1, mask=1)",
-      "description": "Create sphere with given parameters; mass and inertia computed automatically.\n\n\tLast assigned material is used by default (*material* = -1), and utils.defaultMaterial() will be used if no material is "
-    },
-    {
-      "name": "wall",
-      "signature": "utils.wall(position, axis, sense=0, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), material=-1, mask=1)",
-      "description": "Return ready-made wall body.\n\n\t:param float-or-Vector3 position: center of the wall. If float, it is the position along given axis, the other 2 components being zero\n\t:param \u2208{0,1,2} axis: orientation"
-    },
-    {
-      "name": "facet",
-      "signature": "utils.facet(vertices, dynamic=None, fixed=True, wire=True, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, noBound=False, material=-1, mask=1)",
-      "description": "Create a :yref:`Facet`-shaped body with given parameters. Body center is chosen as the center of the inscribed circle of the *vertices* triangle\n\n\t:param [Vector3,Vector3,Vector3] vertices: coordinate"
-    },
-    {
-      "name": "box",
-      "signature": "utils.box(center, extents, orientation=Quaternion((1,0,0),0), dynamic=None, fixed=False, wire=False, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, material=-1, mask=1)",
-      "description": "Create box (cuboid) with given parameters.\n\n\t:param Vector3 extents: half-sizes along x,y,z axes. Use can be made of *orientation* parameter in case those box-related axes do not conform the simulatio"
-    },
-    {
-      "name": "unbalancedForce",
-      "signature": "utils.unbalancedForce()",
-      "description": "\nunbalancedForce([  (bool)useMaxForce=False]) -> float :\n    Compute the ratio of mean (or maximum, if *useMaxForce*) summary force on bodies and mean force magnitude on interactions. For perfectly st"
+      "name": "NormalRestitution2DampingRate",
+      "signature": "utils.NormalRestitution2DampingRate(en)",
+      "description": "Compute the normal damping rate as a function of the normal coefficient of restitution $e_n$. For $e_n in langle0,1 rangle$ damping rate equals .. math:: - frac{ log e_n}{ sqrt{e_n^2+ pi^2}}"
     },
     {
       "name": "PWaveTimeStep",
       "signature": "utils.PWaveTimeStep()",
-      "description": "\nPWaveTimeStep() -> float :\n    Get timestep accoring to the velocity of P-Wave propagation; computed for spheres and/or polyhedra based on their sizes, rigidities and masses."
+      "description": "Get timestep according to the velocity of P-Wave propagation; computed from Sphere/polyhedra sizes, rigidities and masses. WARNING: ignores LevelSet and other shapes — with no Sphere bodies present it returns a meaningless large value (e.g. 1.0 s); compute dt from sqrt(mass/stiffness) instead."
     },
     {
       "name": "RayleighWaveTimeStep",
       "signature": "utils.RayleighWaveTimeStep()",
-      "description": "\nRayleighWaveTimeStep() -> float :\n    Determination of time step according to Rayleigh wave speed of force propagation."
+      "description": "Determination of time step according to Rayleigh wave speed of force propagation."
+    },
+    {
+      "name": "SpherePWaveTimeStep",
+      "signature": "utils.SpherePWaveTimeStep(radius, density, young)",
+      "description": "Compute P-wave critical timestep for a single (presumably representative) sphere, using formula for P-Wave propagation speed $ Delta t_{c}= frac{r}{ sqrt{E/ rho}}$. If you want to compute minimum crit"
+    },
+    {
+      "name": "TetrahedronCentralInertiaTensor",
+      "signature": "utils.TetrahedronCentralInertiaTensor( (object)arg1)",
+      "description": "TODO"
+    },
+    {
+      "name": "TetrahedronInertiaTensor",
+      "signature": "utils.TetrahedronInertiaTensor( (object)arg1)",
+      "description": "TODO"
+    },
+    {
+      "name": "TetrahedronSignedVolume",
+      "signature": "utils.TetrahedronSignedVolume( (object)arg1)",
+      "description": "TODO"
+    },
+    {
+      "name": "TetrahedronVolume",
+      "signature": "utils.TetrahedronVolume( (object)arg1)",
+      "description": "TODO"
+    },
+    {
+      "name": "TetrahedronWithLocalAxesPrincipal",
+      "signature": "utils.TetrahedronWithLocalAxesPrincipal( (Body)arg1)",
+      "description": "TODO"
+    },
+    {
+      "name": "aabbDim",
+      "signature": "utils.aabbDim(cutoff=0.0, centers=False)",
+      "description": "Return dimensions of the axis-aligned bounding box, optionally with relative part *cutoff* cut away."
+    },
+    {
+      "name": "aabbExtrema",
+      "signature": "utils.aabbExtrema([  (float)cutoff=0.0 [, (bool)centers=False]])",
+      "description": "Return coordinates of box enclosing all spherical bodies :param bool centers: do not take sphere radii in account, only their centroids :param float∈〈0…1〉 cutoff: relative dimension by which the box w"
+    },
+    {
+      "name": "aabbExtrema2d",
+      "signature": "utils.aabbExtrema2d(pts)",
+      "description": "Return 2d bounding box for a sequence of 2-tuples."
+    },
+    {
+      "name": "aabbWalls",
+      "signature": "utils.aabbWalls(extrema=None, thickness=0, oversizeFactor=1.5, **kw)",
+      "description": "Return 6 boxes that will wrap existing packing as walls from all sides. :param extrema: extremal points of the Aabb of the packing, as a list of two Vector3, or any equivalent type (will be calculated"
+    },
+    {
+      "name": "angularMomentum",
+      "signature": "utils.angularMomentum([  (Vector3)origin=Vector3(0,0,0)])",
+      "description": "Returns total angular momentum of the simulation, about input point *origin*"
+    },
+    {
+      "name": "approxSectionArea",
+      "signature": "utils.approxSectionArea( (float)arg1, (int)arg2)",
+      "description": "Compute area of convex hull when when taking (swept) spheres crossing the plane at coord, perpendicular to axis."
+    },
+    {
+      "name": "avgNumInteractions",
+      "signature": "utils.avgNumInteractions(cutoff=0.0, skipFree=False, considerClumps=False)",
+      "description": "Return average numer of interactions per particle, also known as *coordination number* $Z$. This number is defined as .. math:: Z=2C/N where $C$ is number of contacts and $N$ is number of particles. W"
+    },
+    {
+      "name": "bodyNumInteractionsHistogram",
+      "signature": "utils.bodyNumInteractionsHistogram( (tuple)aabb)",
+      "description": ""
+    },
+    {
+      "name": "bodyStressTensors",
+      "signature": "utils.bodyStressTensors()",
+      "description": "Compute and return a table with per-particle stress tensors. Each tensor represents the average stress in one particle, obtained from the contour integral of applied load as detailed below. This defin"
+    },
+    {
+      "name": "box",
+      "signature": "utils.box(center, extents, orientation=Quaternion((1,0,0),0), dynamic=None, fixed=False, wire=False, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, material=-1, mask=1)",
+      "description": "Create box (cuboid) with given parameters. :param Vector3 extents: half-sizes along x,y,z axes. Use can be made of *orientation* parameter in case those box-related axes do not conform the simulation"
+    },
+    {
+      "name": "calm",
+      "signature": "utils.calm([  (int)mask=-1])",
+      "description": "Set translational and rotational velocities of bodies to zero. Applied to all bodies by default. To calm only some bodies, use mask parameter, it will calm only bodies with groupMask compatible to giv"
+    },
+    {
+      "name": "cart2spher",
+      "signature": "utils.cart2spher( (Vector3)vec)",
+      "description": "Converts cartesian coordinates to spherical ones. :param Vector3 vec: the $(x,y,z)$ cartesian coordinates :return: a $(r, theta, phi)$ Vector3 of spherical coordinates, with $ theta = ( vec{e_z}, vec{"
+    },
+    {
+      "name": "coordsAndDisplacements",
+      "signature": "utils.coordsAndDisplacements( (int)axis [, (tuple)Aabb=()])",
+      "description": "Return tuple of 2 same-length lists for coordinates and displacements (coordinate minus reference coordinate) along given axis (1st arg); if the Aabb=((x_min,y_min,z_min),(x_max,y_max,z_max)) box is g"
+    },
+    {
+      "name": "createInteraction",
+      "signature": "utils.createInteraction( (int)id1, (int)id2 [, (bool)virtualI=False])",
+      "description": "Create interaction between given bodies by hand. If *virtualI=False*, current engines are searched for IGeomDispatcher and IPhysDispatcher (might be both hidden in :yref:`InteractionLo"
+    },
+    {
+      "name": "defaultMaterial",
+      "signature": "utils.defaultMaterial()",
+      "description": "Return default material, when creating bodies with yade.utils.sphere and friends, material is unspecified and there is no shared material defined yet. By default, this function returns .. code"
+    },
+    {
+      "name": "distApproxRose",
+      "signature": "utils.distApproxRose( (Vector3)pt)",
+      "description": "An approximate distance value to a rose-like flaky surface defined in spherical coordinates as $r = 3+1.5 sin(5 theta) sin(4 phi)$ (see cart2spher function for spherical <-> cartesian c"
+    },
+    {
+      "name": "distApproxSE",
+      "signature": "utils.distApproxSE( (Vector3)pt, (Vector3)radii, (Vector2)epsilons)",
+      "description": "An approximate distance value to a superellipsoid surface defined (in local axes) as $f(x,y,z) = ( |x/r_x|^{2/ epsilon_e} + |y/r_y|^{2/ epsilon_e} )^{ epsilon_e/ epsilon_n} + |z/r_z|^{2/ epsilon_n} ="
+    },
+    {
+      "name": "distIniClump",
+      "signature": "utils.distIniClump( (Clump)clump, (RegularGrid)grid)",
+      "description": "An appropriate discrete field to serve as a Fast Marching Method input in FastMarchingMethod.phiIni in order to compute distance to a clump. :param Clump clump: considered clump instance :para"
+    },
+    {
+      "name": "distIniSE",
+      "signature": "utils.distIniSE( (Vector3)radii, (Vector2)epsilons, (RegularGrid)grid)",
+      "description": "An appropriate discrete field to serve as a Fast Marching Method input in FastMarchingMethod.phiIni in order to compute distance to a superellipsoid. :param Vector3 radii: the $(r_x,r_y,r_z)$"
+    },
+    {
+      "name": "fabricTensor",
+      "signature": "utils.fabricTensor([  (float)cutoff=0.0 [, (bool)splitTensor=False [, (float)thresholdForce=nan [, (object)extrema=[]]]]])",
+      "description": "Computes the fabric tensor $F_{ij}= frac{1}{n_c} sum_c n_i n_j$ (Satake1982), for all interactions $c$. :param Real cutoff: intended to disregard boundary effects: to define in [0;1] to focus on the"
+    },
+    {
+      "name": "facet",
+      "signature": "utils.facet(vertices, dynamic=None, fixed=True, wire=True, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), highlight=False, noBound=False, material=-1, mask=1)",
+      "description": "Create facet with given parameters. :param [Vector3,Vector3,Vector3] vertices: coordinates of vertices in the global coordinate system. :param bool wire: if True, facets are shown as skeleton; oth"
+    },
+    {
+      "name": "flipCell",
+      "signature": "utils.flipCell()",
+      "description": "Flip periodic cell so that angles between $R^3$ axes and transformed axes are as small as possible, using the two following facts:1. repeating in $R^3$ space the corners of a periodic cell defines a r"
+    },
+    {
+      "name": "forcesOnCoordPlane",
+      "signature": "utils.forcesOnCoordPlane( (float)arg1, (int)arg2)",
+      "description": ""
+    },
+    {
+      "name": "forcesOnPlane",
+      "signature": "utils.forcesOnPlane( (Vector3)planePt, (Vector3)normal)",
+      "description": "Find all interactions deriving from NormShearPhys that cross given plane and sum forces (both normal and shear) on them. :param Vector3 planePt: a point on the plane :param Vector3 normal: pla"
+    },
+    {
+      "name": "fractionalBox",
+      "signature": "utils.fractionalBox(fraction=1.0, minMax=None)",
+      "description": "Return (min,max) that is the original minMax box (or aabb of the whole simulation if not specified) linearly scaled around its center to the fraction factor"
+    },
+    {
+      "name": "getBodyIdsContacts",
+      "signature": "utils.getBodyIdsContacts([  (int)bodyID=0])",
+      "description": "Get a list of body-ids, which contacts the given body."
+    },
+    {
+      "name": "getCapillaryStress",
+      "signature": "utils.getCapillaryStress([  (float)volume=0 [, (bool)mindlin=False]])",
+      "description": "Compute and return Love-Weber capillary stress tensor: $ sigma^{cap}_{ij}= frac{1}{V} sum_b l_i^b f^{cap,b}_j$, where the sum is over all interactions, with $l$ the branch vector (joining centers of t"
+    },
+    {
+      "name": "getDepthProfiles",
+      "signature": "utils.getDepthProfiles( (float)volume, (int)nCell, (float)dz, (float)zRef [, (bool)activateCond=False [, (float)radiusPy=0 [, (int)direction=2]]])",
+      "description": "Compute and return the particle velocity and solid volume fraction (porosity) depth profile along the direction specified (default is z; 0=>x,1=>y,2=>z). For each defined cell z, the k component of th"
+    },
+    {
+      "name": "getDepthProfiles_center",
+      "signature": "utils.getDepthProfiles_center( (float)volume, (int)nCell, (float)dz, (float)zRef [, (bool)activateCond=False [, (float)radiusPy=0]])",
+      "description": "Same as getDepthProfiles but taking into account particles as points located at the particle center."
+    },
+    {
+      "name": "getDynamicStress",
+      "signature": "utils.getDynamicStress()",
+      "description": "Compute the dynamic stress tensor for each body: $ sigma^p_D= - frac{1}{V^p} m^p u'^p otimes u'^p$"
+    },
+    {
+      "name": "getSlicedProfiles",
+      "signature": "utils.getSlicedProfiles( (float)vCell, (int)nCell, (float)dP, (object)sliceCenters, (object)sliceWidths, (float)refP, (float)refS [, (int)dirP=2 [, (int)dirS=1 [, (bool)activateCond=False [, (float)radiusPy=0 [, (float)nSimpson=50]]]]])",
+      "description": "Compute and return the particle solid volume fraction (porosity) and velocity profiles along a specific direction dirP and for a given subdomain. In the direction dirP, the subdomain is divided into n"
+    },
+    {
+      "name": "getSpheresMass",
+      "signature": "utils.getSpheresMass([  (int)mask=-1])",
+      "description": "Compute the total mass of spheres in the simulation, mask parameter is considered"
+    },
+    {
+      "name": "getSpheresVolume",
+      "signature": "utils.getSpheresVolume([  (int)mask=-1])",
+      "description": "Compute the total volume of spheres in the simulation, mask parameter is considered"
+    },
+    {
+      "name": "getSpheresVolume2D",
+      "signature": "utils.getSpheresVolume2D([  (int)mask=-1])",
+      "description": "Compute the total volume of discs in the simulation, mask parameter is considered"
+    },
+    {
+      "name": "getStress",
+      "signature": "utils.getStress([  (float)volume=0])",
+      "description": "Compute and return Love-Weber stress tensor: $ sigma_{ij}= frac{1}{V} sum_b f_i^b l_j^b$, where the sum is over all interactions, with $f$ the contact force and $l$ the branch vector (joining centers"
+    },
+    {
+      "name": "getStressAndTangent",
+      "signature": "utils.getStressAndTangent([  (float)volume=0 [, (bool)symmetry=True]])",
+      "description": "Compute overall stress of periodic cell using the same equation as function getStress. In addition, the tangent operator is calculated using the equation published in [Kruyt and Rothenburg1998]_: .. m"
+    },
+    {
+      "name": "getStressProfile",
+      "signature": "utils.getStressProfile( (float)volume, (int)nCell, (float)dz, (float)zRef, (object)vPartAverageX, (object)vPartAverageY, (object)vPartAverageZ)",
+      "description": "Compute and return the stress tensor depth profile, including the contribution from Love-Weber stress tensor and the dynamic stress tensor taking into account the effect of particles inertia. For each"
+    },
+    {
+      "name": "getStressProfile_contact",
+      "signature": "utils.getStressProfile_contact( (float)volume, (int)nCell, (float)dz, (float)zRef)",
+      "description": "same as getStressProfile, only contact contribution."
+    },
+    {
+      "name": "getTotalDynamicStress",
+      "signature": "utils.getTotalDynamicStress([  (float)volume=0])",
+      "description": "Compute the total dynamic stress tensor : $ sigma_D= - frac{1}{V} sum_p m^p u'^p otimes u'^p$. The volume have to be provided for non-periodic simulations. It is computed from cell volume for period"
+    },
+    {
+      "name": "getViscoelasticFromSpheresInteraction",
+      "signature": "utils.getViscoelasticFromSpheresInteraction( (float)tc, (float)en, (float)es)",
+      "description": "Attention! The function is deprecated! Compute viscoelastic interaction parameters from analytical solution of a pair spheres collision problem: .. math:: k_n= frac{m}{t_c^2} left( pi^2+( ln e_n)^2 ri"
+    },
+    {
+      "name": "growParticle",
+      "signature": "utils.growParticle( (int)bodyID, (float)multiplier [, (bool)updateMass=True])",
+      "description": "Change the size of a single sphere (to be implemented: single clump). If updateMass=True, then the mass is updated."
+    },
+    {
+      "name": "growParticles",
+      "signature": "utils.growParticles( (float)multiplier [, (bool)updateMass=True [, (bool)dynamicOnly=True]])",
+      "description": "Change the size of spheres and clumps of spheres by the multiplier. If updateMass=True, then the mass and inertia are updated. dynamicOnly=True will select dynamic bodies."
+    },
+    {
+      "name": "highlightNone",
+      "signature": "utils.highlightNone()",
+      "description": "Reset highlight on all bodies."
+    },
+    {
+      "name": "initMPI",
+      "signature": "utils.initMPI()",
+      "description": "Initialize MPI communicator, for Foam Coupling"
+    },
+    {
+      "name": "inscribedCircleCenter",
+      "signature": "utils.inscribedCircleCenter( (Vector3)v1, (Vector3)v2, (Vector3)v3)",
+      "description": "Return center of inscribed circle for triangle given by its vertices *v1*, *v2*, *v3*."
+    },
+    {
+      "name": "insideClump",
+      "signature": "utils.insideClump( (Vector3)pt, (Clump)clump)",
+      "description": "Tells whether some point is inside or outside a clump :param Vector3 pt: the point of interest expressed in local coordinates :param Clump clump: the clump instance to consider :return bool: True when"
+    },
+    {
+      "name": "interactionAnglesHistogram",
+      "signature": "utils.interactionAnglesHistogram( (int)axis [, (int)mask=0 [, (int)bins=20 [, (tuple)aabb=() [, (bool)sphSph=0 [, (float)minProjLen=1e-06]]]]])",
+      "description": ""
+    },
+    {
+      "name": "intrsOfEachBody",
+      "signature": "utils.intrsOfEachBody()",
+      "description": "returns list of lists of interactions of each body"
+    },
+    {
+      "name": "kineticEnergy",
+      "signature": "utils.kineticEnergy([  (bool)findMaxId=False])",
+      "description": "Compute overall kinetic energy of the simulation as .. math:: sum frac{1}{2} left(m_i vec{v}_i^2+ vec{ omega}( mat{I} vec{ omega}^T) right). For aspherical bodies, the inerti"
+    },
+    {
+      "name": "levelSetBody",
+      "signature": "utils.levelSetBody(shape='', center=Vector3(0,0,0), radius=0, extents=Vector3(0,0,0), epsilons=Vector2(0,0), clump=None, spacing=0.1, grid=None, distField=[], smearCoeff=1.5, nSurfNodes=102, surfNodes=[], nodesPath=2, nodesTol=50, n_neighborsNodes=-1, orientation=Quaternion((1,0,0),0), hasAABE=False, axesAABE=Vector3(0,0,0), dynamic=True, material=-1, starLike=False, color=Vector3(1,1,1))",
+      "description": "Creates a LevelSet shaped body through various workflows: one can choose among pre-defined shapes (through *shape* and related attributes), or to mimick a Clump instance (*clump* attri"
+    },
+    {
+      "name": "loadVars",
+      "signature": "utils.loadVars(mark=None)",
+      "description": "Load variables from yade.utils.saveVars, which are saved inside the simulation. If mark==None, all save variables are loaded. Otherwise only those with the mark passed."
+    },
+    {
+      "name": "lsSimpleShape",
+      "signature": "utils.lsSimpleShape( (int)shape, (AlignedBox3)aabb [, (float)step=0.1 [, (float)smearCoeff=1.5 [, (Vector2)epsilons=Vector2(0,0) [, (Clump)clump=...]]]])",
+      "description": "Creates a LevelSet shape among pre-defined ones. Not intended to be used directly, see levelSetBody() instead. :param int shape: a shape index among supported choices :param AlignedBox3 aabb: the axis"
+    },
+    {
+      "name": "makeVideo",
+      "signature": "utils.makeVideo(frameSpec, out, renameNotOverwrite=True, fps=24, kbps=6000, bps=None)",
+      "description": "Create a video from external image files using `mencoder <http://www.mplayerhq.hu>`__. Two-pass encoding using the default mencoder codec (mpeg4) is performed, running multi-threaded with number of th"
+    },
+    {
+      "name": "maxOverlapRatio",
+      "signature": "utils.maxOverlapRatio()",
+      "description": "Return maximum overlap ration in interactions (with ScGeom) of two spheres. The ratio is computed as $ frac{u_N}{2(r_1 r_2)/r_1+r_2}$, where $u_N$ is the current overlap distan"
+    },
+    {
+      "name": "momentum",
+      "signature": "utils.momentum()",
+      "description": "Returns total linear momentum of the simulation"
+    },
+    {
+      "name": "nGP",
+      "signature": "utils.nGP( (float)min, (float)max, (float)step)",
+      "description": "Defines how many gridpoints are necessary to go from *min* to (at least) *max*, by *step* increments, eg when constructing a RegularGrid :param Real min: lowest grid extremity as (min,min,min)"
+    },
+    {
+      "name": "negPosExtremeIds",
+      "signature": "utils.negPosExtremeIds( (int)axis, (float)distFactor)",
+      "description": "Return list of ids for spheres (only) that are on extremal ends of the specimen along given axis; distFactor multiplies their radius so that sphere that do not touch the boundary coordinate can also b"
+    },
+    {
+      "name": "normalShearStressTensors",
+      "signature": "utils.normalShearStressTensors([  (bool)compressionPositive=False [, (bool)splitNormalTensor=False [, (float)thresholdForce=nan]]])",
+      "description": "Compute overall stress tensor of the periodic cell decomposed in 2 parts, one contributed by normal forces, the other by shear forces. The formulation can be found in (Thornton2000), eq. (3): .. math"
+    },
+    {
+      "name": "numIntrsOfEachBody",
+      "signature": "utils.numIntrsOfEachBody()",
+      "description": "returns list of number of interactions of each body"
+    },
+    {
+      "name": "perpendicularArea",
+      "signature": "utils.perpendicularArea(axis)",
+      "description": "Return area perpendicular to given axis (0=x,1=y,2=z) generated by bodies for which the function consider returns True (defaults to returning True always) and which is of the type Sphere."
+    },
+    {
+      "name": "phiIniCppPy",
+      "signature": "utils.phiIniCppPy( (RegularGrid)grid)",
+      "description": "A possibly handy function to construct a FastMarchingMethod.phiIni after applying on *grid* an inside-outside Python function. The latter necessarily names ioFn and takes three floating number"
+    },
+    {
+      "name": "phiIniPy",
+      "signature": "utils.phiIniPy(ioPyFn, grid)",
+      "description": "Returns a 3D discrete field appropriate to serve as FastMarchingMethod.phiIni (LS_DEM feature required), applying a user-made Python function *ioPyFn* :param ioPyFn: an existing inside-outside"
+    },
+    {
+      "name": "plotDirections",
+      "signature": "utils.plotDirections(aabb=(), mask=0, bins=20, numHist=True, noShow=False, sphSph=False)",
+      "description": "Plot 3 histograms for distribution of interaction directions, in yz,xz and xy planes and (optional but default) histogram of number of interactions per body. If sphSph only sphere-sphere interactions"
+    },
+    {
+      "name": "plotNumInteractionsHistogram",
+      "signature": "utils.plotNumInteractionsHistogram(cutoff=0.0)",
+      "description": "Plot histogram with number of interactions per body, optionally cutting away *cutoff* relative axis-aligned box from specimen margin."
+    },
+    {
+      "name": "pointInsidePolygon",
+      "signature": "utils.pointInsidePolygon( (tuple)arg1, (object)arg2)",
+      "description": ""
+    },
+    {
+      "name": "polyhedron",
+      "signature": "utils.polyhedron(vertices, fixed=False, wire=True, color=None, highlight=False, noBound=False, material=-1, mask=1)",
+      "description": "Create polyhedron with given parameters. :param [Vector3] vertices: coordinates of vertices in the global coordinate system. See yade.utils.sphere's documentation for meaning of other paramete"
+    },
+    {
+      "name": "porosity",
+      "signature": "utils.porosity([  (float)volume=-1])",
+      "description": "Compute packing porosity $ frac{V-V_s}{V}$ where $V$ is overall volume and $V_s$ is volume of spheres. :param float volume: overall volume $V$. For periodic simulations, current volume of the :yref:`C"
+    },
+    {
+      "name": "psd",
+      "signature": "utils.psd(bins=5, mass=True, mask=-1)",
+      "description": "Calculates particle size distribution. :param int bins: number of bins :param bool mass: if true, the mass-PSD will be calculated :param int mask: Body.mask for the body :return: * binsSizes:"
+    },
+    {
+      "name": "ptInAABB",
+      "signature": "utils.ptInAABB( (Vector3)arg1, (Vector3)arg2, (Vector3)arg3)",
+      "description": "Return True/False whether the point p is within box given by its min and max corners"
+    },
+    {
+      "name": "randomColor",
+      "signature": "utils.randomColor(seed=None)",
+      "description": "Return random Vector3 with each component in interval 0…1 (uniform distribution)"
+    },
+    {
+      "name": "randomOrientation",
+      "signature": "utils.randomOrientation()",
+      "description": "Returns (uniformly distributed) random orientation. Taken from `Eigen::Quaternion::UnitRandom() source code <https://eigen.tuxfamily.org/dox-devel/Quaternion_8h_source.html>`_. Uses standard Python ra"
+    },
+    {
+      "name": "randomizeColors",
+      "signature": "utils.randomizeColors(onlyDynamic=False)",
+      "description": "Assign random colors to color. If onlyDynamic is true, only dynamic bodies will have the color changed."
+    },
+    {
+      "name": "readParamsFromTable",
+      "signature": "utils.readParamsFromTable(tableFileLine=None, noTableOk=True, unknownOk=False, **kw)",
+      "description": "Read parameters from a file and assign them to __builtin__ variables. The format of the file is as follows (commens starting with # and empty lines allowed):: # commented lines allowed anywhere name1"
+    },
+    {
+      "name": "replaceCollider",
+      "signature": "utils.replaceCollider(colliderEngine)",
+      "description": "Replaces collider (Collider) engine with the engine supplied. Raises error if no collider is in engines."
+    },
+    {
+      "name": "runningInBatch",
+      "signature": "utils.runningInBatch()",
+      "description": "Tell whether we are running inside the batch or separately."
+    },
+    {
+      "name": "saveVars",
+      "signature": "utils.saveVars(mark='', loadNow=True, **kw)",
+      "description": "Save passed variables into the simulation so that it can be recovered when the simulation is loaded again. For example, variables *a*, *b* and *c* are defined. To save them, use:: >>> saveVars('someth"
+    },
+    {
+      "name": "scalarOnColorScale",
+      "signature": "utils.scalarOnColorScale( (float)x [, (float)xmin=0 [, (float)xmax=1]])",
+      "description": "Map scalar variable to color scale. :param float x: scalar value which the function applies to. :param float xmin: minimum value for the color scale, with a return value of (0,0,1) for *x* $ leq$ *xmi"
+    },
+    {
+      "name": "setBodyAngularVelocity",
+      "signature": "utils.setBodyAngularVelocity( (int)id, (Vector3)angVel)",
+      "description": "Set a body angular velocity from its id and a new Vector3r. :param int id: the body id. :param Vector3 angVel: the desired updated angular velocity."
+    },
+    {
+      "name": "setBodyColor",
+      "signature": "utils.setBodyColor( (int)id, (Vector3)color)",
+      "description": "Set a body color from its id and a new Vector3r. :param int id: the body id. :param Vector3 color: the desired updated color."
+    },
+    {
+      "name": "setBodyOrientation",
+      "signature": "utils.setBodyOrientation( (int)id, (Quaternion)ori)",
+      "description": "Set a body orientation from its id and a new Quaternionr. :param int id: the body id. :param Quaternion ori: the desired updated orientation."
+    },
+    {
+      "name": "setBodyPosition",
+      "signature": "utils.setBodyPosition( (int)id, (Vector3)pos [, (str)axis='xyz'])",
+      "description": "Set a body position from its id and a new vector3r. :param int id: the body id. :param Vector3 pos: the desired updated position. :param str axis: the axis along which the position has to be updated ("
+    },
+    {
+      "name": "setBodyVelocity",
+      "signature": "utils.setBodyVelocity( (int)id, (Vector3)vel [, (str)axis='xyz'])",
+      "description": "Set a body velocity from its id and a new vector3r. :param int id: the body id. :param Vector3 vel: the desired updated velocity. :param str axis: the axis along which the velocity has to be updated ("
+    },
+    {
+      "name": "setContactFriction",
+      "signature": "utils.setContactFriction( (float)angleRad)",
+      "description": "Modify the friction angle (in radians) inside the material classes and existing contacts. The friction for non-dynamic bodies is not modified."
+    },
+    {
+      "name": "setNewVerticesOfFacet",
+      "signature": "utils.setNewVerticesOfFacet( (Body)b, (Vector3)v1, (Vector3)v2, (Vector3)v3)",
+      "description": "Sets new vertices (in global coordinates) to given facet."
+    },
+    {
+      "name": "setRefSe3",
+      "signature": "utils.setRefSe3()",
+      "description": "Set reference positions and orientations of all bodies equal to their current positions and :yref:`orientations<State::o"
+    },
+    {
+      "name": "shiftBodies",
+      "signature": "utils.shiftBodies( (list)ids, (Vector3)shift)",
+      "description": "Shifts bodies listed in ids without updating their velocities."
+    },
+    {
+      "name": "spher2cart",
+      "signature": "utils.spher2cart( (Vector3)vec)",
+      "description": "Converts spherical coordinates to cartesian ones. :param Vector3 vec: the $(r, theta, phi)$ spherical coordinates, see cart2spher function for conventions :return: a $(x,y,z)$ Vector3 of cartesian coo"
+    },
+    {
+      "name": "sphere",
+      "signature": "utils.sphere(center, radius, dynamic=None, fixed=False, wire=False, color=None, highlight=False, material=-1, mask=1)",
+      "description": "Create sphere with given parameters; mass and inertia computed automatically. Last assigned material is used by default (*material* = -1), and utils.defaultMaterial() will be used if no material is de"
+    },
+    {
+      "name": "spiralProject",
+      "signature": "utils.spiralProject( (Vector3)pt, (float)dH_dTheta [, (int)axis=2 [, (float)periodStart=nan [, (float)theta0=0]]])",
+      "description": ""
+    },
+    {
+      "name": "sumFacetNormalForces",
+      "signature": "utils.sumFacetNormalForces( (object)ids [, (int)axis=-1])",
+      "description": "Sum force magnitudes on given bodies (must have shape of the Facet type), considering only part of forces perpendicular to each facet's face; if *axis* has p"
+    },
+    {
+      "name": "sumForces",
+      "signature": "utils.sumForces( (list)ids, (Vector3)direction)",
+      "description": "Return summary force on bodies with given *ids*, projected on the *direction* vector."
+    },
+    {
+      "name": "sumTorques",
+      "signature": "utils.sumTorques( (list)ids, (Vector3)axis, (Vector3)axisPt)",
+      "description": "Sum forces and torques on bodies given in *ids* with respect to axis specified by a point *axisPt* and its direction *axis*."
+    },
+    {
+      "name": "tetra",
+      "signature": "utils.tetra(vertices, strictCheck=True, fixed=False, wire=True, color=None, highlight=False, noBound=False, material=-1, mask=1)",
+      "description": "Create tetrahedron with given parameters. :param [Vector3,Vector3,Vector3,Vector3] vertices: coordinates of vertices in the global coordinate system. :param bool strictCheck: checks vertices order, ra"
+    },
+    {
+      "name": "tetraPoly",
+      "signature": "utils.tetraPoly(vertices, fixed=False, wire=True, color=None, highlight=False, noBound=False, material=-1, mask=1)",
+      "description": "Create tetrahedron (actually simple Polyhedra) with given parameters. :param [Vector3,Vector3,Vector3,Vector3] vertices: coordinates of vertices in the global coordinate system. See :yref:`yade.utils."
+    },
+    {
+      "name": "totalForceInVolume",
+      "signature": "utils.totalForceInVolume()",
+      "description": "Return summed forces on all interactions and average isotropic stiffness, as tuple (Vector3,float)"
+    },
+    {
+      "name": "trackPerfomance",
+      "signature": "utils.trackPerfomance(updateTime=5)",
+      "description": "Track perfomance of a simulation. (Experimental) Will create new thread to produce some plots. Useful for track perfomance of long run simulations (in bath mode for example)."
+    },
+    {
+      "name": "typedEngine",
+      "signature": "utils.typedEngine(name)",
+      "description": "Return first engine from current O.engines, identified by its type (as string). For example: >>> from yade import utils >>> O.engines=[InsertionSortCollider(),NewtonIntegrator(),GravityEngine()] >>> u"
+    },
+    {
+      "name": "unbalancedForce",
+      "signature": "utils.unbalancedForce([  (bool)useMaxForce=False])",
+      "description": "Compute the ratio of mean (or maximum, if *useMaxForce*) summary force on bodies and mean force magnitude on interactions. For perfectly static equilibrium, summary force on all bodies is zero (since"
+    },
+    {
+      "name": "uniaxialTestFeatures",
+      "signature": "utils.uniaxialTestFeatures(filename=None, areaSections=10, axis=-1, distFactor=2.2, **kw)",
+      "description": "Get some data about the current packing useful for uniaxial test: #. Find the dimensions that is the longest (uniaxial loading axis) #. Find the minimum cross-section area of the specimen by examining"
+    },
+    {
+      "name": "vmData",
+      "signature": "utils.vmData()",
+      "description": "Return memory usage data from Linux's /proc/[pid]/status, line VmData."
+    },
+    {
+      "name": "voidratio2D",
+      "signature": "utils.voidratio2D([  (float)zlen=1])",
+      "description": "Compute 2D packing void ratio $ frac{V-V_s}{V_s}$ where $V$ is overall volume and $V_s$ is volume of disks. :param float zlen: length in the third direction."
+    },
+    {
+      "name": "voxelPorosity",
+      "signature": "utils.voxelPorosity([  (int)resolution=200 [, (Vector3)start=Vector3(0,0,0) [, (Vector3)end=Vector3(0,0,0)]]])",
+      "description": "Compute packing porosity $ frac{V-V_v}{V}$ where $V$ is a specified volume (from start to end) and $V_v$ is volume of voxels that fall inside any sphere. The calculation method is to divide whole volu"
+    },
+    {
+      "name": "voxelPorosityTriaxial",
+      "signature": "utils.voxelPorosityTriaxial(triax, resolution=200, offset=0)",
+      "description": "Calculate the porosity of a sample, given the TriaxialCompressionEngine. A function yade.utils.voxelPorosity is invoked, with the volume of a box enclosed by TriaxialCompressionEngine walls. T"
+    },
+    {
+      "name": "waitIfBatch",
+      "signature": "utils.waitIfBatch()",
+      "description": "Block the simulation if running inside a batch. Typically used at the end of script so that it does not finish prematurely in batch mode (the execution would be ended in such a case)."
+    },
+    {
+      "name": "wall",
+      "signature": "utils.wall(position, axis, sense=0, color=Vector3(0.8000000000000000444,0.8000000000000000444,0.5999999999999999778), material=-1, mask=1)",
+      "description": "Return ready-made wall body. :param float-or-Vector3 position: center of the wall. If float, it is the position along given axis, the other 2 components being zero :param ∈{0,1,2} axis: orientation of"
+    },
+    {
+      "name": "wireAll",
+      "signature": "utils.wireAll()",
+      "description": "Set wire on all bodies to True, rendering them with wireframe only."
+    },
+    {
+      "name": "wireNoSpheres",
+      "signature": "utils.wireNoSpheres()",
+      "description": "Set wire to True on non-spherical bodies (Facets, Walls)."
+    },
+    {
+      "name": "wireNone",
+      "signature": "utils.wireNone()",
+      "description": "Set wire on all bodies to False, rendering them as solids."
+    },
+    {
+      "name": "xMirror",
+      "signature": "utils.xMirror(half)",
+      "description": "Mirror a sequence of 2d points around the x axis (changing sign on the y coord). The sequence should start up and then it will wrap from y downwards (or vice versa). If the last point's x coord is zer"
     }
   ]
 }

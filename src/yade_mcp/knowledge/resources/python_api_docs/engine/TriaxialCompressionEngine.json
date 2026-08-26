@@ -183,6 +183,13 @@
       "inherited_from": "TriaxialStressController"
     },
     {
+      "name": "legacyStressDamping",
+      "type": "bool",
+      "default": "false",
+      "description": "if true, the legacy formula behind stressDamping will be used. The formula was improved in March 2026. The legacy mode is preserved for repeatability of simulations conducted before the improvement.",
+      "inherited_from": "TriaxialStressController"
+    },
+    {
       "name": "strainDamping",
       "type": "float",
       "default": "0.99",
@@ -473,23 +480,23 @@
       "name": "max_vel1",
       "type": "float",
       "default": "",
-      "description": "see max_vel |ycomp|",
+      "description": "Order of magnitude of maximum velocity during stress control for boundaries normal to axis 0, see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
     },
     {
       "name": "max_vel2",
       "type": "float",
-      "default": "",
-      "description": "see max_vel |ycomp|",
+      "default": "1.160966434774019e-28",
+      "description": "Order of magnitude of maximum velocity during stress control for boundaries normal to axis 1, see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
     },
     {
       "name": "max_vel3",
       "type": "float",
-      "default": "",
-      "description": "see max_vel |ycomp|",
+      "default": "4.312660857655159e-96",
+      "description": "Order of magnitude of maximum velocity during stress control for boundaries normal to axis 2, see max_vel |ycomp|",
       "no_save": true,
       "inherited_from": "TriaxialStressController"
     },
@@ -550,6 +557,13 @@
       ],
       "returns": "None",
       "description": "Assign a new friction angle (degrees) to dynamic bodies and relative interactions"
+    },
+    {
+      "name": "strainRate",
+      "args": [],
+      "returns": "Vector3",
+      "description": "Current strain rate in a vector d/dt(exx,eyy,ezz).",
+      "inherited_from": "TriaxialStressController"
     },
     {
       "name": "stress",

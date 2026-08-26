@@ -5,58 +5,34 @@
   "description": "Material extending CohFrictMat to use dual material properties with segmented bodies (transition between properties depends on the coating thickness). Should be used with Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys to benefit from dual material capabilites. The other functors can be the same as...",
   "attributes": [
     {
-      "name": "alphaKr",
+      "name": "secondaryNormalCohesion",
       "type": "float",
-      "default": "2.0",
-      "description": "Dimensionless rolling stiffness."
+      "default": "-1",
+      "description": "Tensile strength (secondary), homogeneous to a pressure. If negative the normal force is purely elastic."
     },
     {
-      "name": "alphaKtw",
+      "name": "secondaryShearCohesion",
       "type": "float",
-      "default": "2.0",
-      "description": "Dimensionless twist stiffness."
+      "default": "-1",
+      "description": "Shear strength (secondary), homogeneous to a pressure. If negative the shear force is purely elastic."
     },
     {
-      "name": "density",
+      "name": "secondaryYoung",
       "type": "float",
-      "default": "1000.0",
-      "description": "Density of the material [kg/m\u00b3]"
+      "default": "1e9",
+      "description": "elastic modulus (secondary) [Pa]. It has different meanings depending on the Ip functor."
     },
     {
-      "name": "etaRoll",
+      "name": "secondaryPoisson",
       "type": "float",
-      "default": "-1.0",
-      "description": "Dimensionless rolling (aka 'bending') strength. If negative, rolling moment will be elastic."
+      "default": ".25",
+      "description": "Poisson's ratio (secondary) or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
     },
     {
-      "name": "etaTwist",
+      "name": "secondaryFrictionAngle",
       "type": "float",
-      "default": "-1.0",
-      "description": "Dimensionless twisting strength. If negative, twist moment will be elastic."
-    },
-    {
-      "name": "fragile",
-      "type": "bool",
-      "default": "True",
-      "description": "does cohesion disappear when contact strength is exceeded?"
-    },
-    {
-      "name": "frictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts."
-    },
-    {
-      "name": "isCohesive",
-      "type": "bool",
-      "default": "True",
-      "description": "Whether this body can form possibly cohesive interactions (if true and depending on other parameters such as"
-    },
-    {
-      "name": "maxThickness",
-      "type": "float",
-      "default": "1.0",
-      "description": "Value of thickness parameter, above which only secondary material parameters are taken into account."
+      "default": ".5",
+      "description": "Friction angle (secondary)."
     },
     {
       "name": "minThickness",
@@ -65,64 +41,165 @@
       "description": "Value of thickness parameter, below which only primary material parameters are taken into account."
     },
     {
-      "name": "momentRotationLaw",
+      "name": "maxThickness",
+      "type": "float",
+      "default": "1.0",
+      "description": "Value of thickness parameter, above which only secondary material parameters are taken into account."
+    },
+    {
+      "name": "isCohesive",
       "type": "bool",
-      "default": "False",
-      "description": "Use bending/twisting moment at contact. The contact may have moments only if both bodies have this flag true. See"
+      "default": "true",
+      "description": "Whether this body can form possibly cohesive interactions (if true and depending on other parameters such as",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "alphaKr",
+      "type": "float",
+      "default": "2.0",
+      "description": "Dimensionless rolling stiffness.",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "alphaKtw",
+      "type": "float",
+      "default": "2.0",
+      "description": "Dimensionless twist stiffness.",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "etaRoll",
+      "type": "float",
+      "default": "-1.",
+      "description": "Dimensionless rolling (aka 'bending') strength. If negative, rolling moment will be elastic.",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "etaTwist",
+      "type": "float",
+      "default": "-1.",
+      "description": "Dimensionless twisting strength. If negative, twist moment will be elastic.",
+      "inherited_from": "CohFrictMat"
     },
     {
       "name": "normalCohesion",
       "type": "float",
-      "default": "-1.0",
-      "description": "Tensile strength, homogeneous to a pressure. If negative the normal force is purely elastic."
-    },
-    {
-      "name": "poisson",
-      "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "secondaryFrictionAngle",
-      "type": "float",
-      "default": "0.5",
-      "description": "Friction angle (secondary)."
-    },
-    {
-      "name": "secondaryNormalCohesion",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Tensile strength (secondary), homogeneous to a pressure. If negative the normal force is purely elastic."
-    },
-    {
-      "name": "secondaryPoisson",
-      "type": "float",
-      "default": "0.25",
-      "description": "Poisson's ratio (secondary) or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor."
-    },
-    {
-      "name": "secondaryShearCohesion",
-      "type": "float",
-      "default": "-1.0",
-      "description": "Shear strength (secondary), homogeneous to a pressure. If negative the shear force is purely elastic."
-    },
-    {
-      "name": "secondaryYoung",
-      "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus (secondary) [Pa]. It has different meanings depending on the Ip functor."
+      "default": "-1",
+      "description": "Tensile strength, homogeneous to a pressure. If negative the normal force is purely elastic.",
+      "inherited_from": "CohFrictMat"
     },
     {
       "name": "shearCohesion",
       "type": "float",
-      "default": "-1.0",
-      "description": "Shear strength, homogeneous to a pressure. If negative the shear force is purely elastic."
+      "default": "-1",
+      "description": "Shear strength, homogeneous to a pressure. If negative the shear force is purely elastic.",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "fragile",
+      "type": "bool",
+      "default": "true",
+      "description": "does cohesion disappear when contact strength is exceeded?",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "momentRotationLaw",
+      "type": "bool",
+      "default": "false",
+      "description": "Use bending/twisting moment at contact. The contact may have moments only if both bodies have this flag true. See",
+      "inherited_from": "CohFrictMat"
+    },
+    {
+      "name": "frictionAngle",
+      "type": "float",
+      "default": ".5",
+      "description": "Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.",
+      "inherited_from": "FrictMat"
     },
     {
       "name": "young",
       "type": "float",
-      "default": "1000000000.0",
-      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor."
+      "default": "1e9",
+      "description": "elastic modulus [Pa]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "poisson",
+      "type": "float",
+      "default": ".25",
+      "description": "Poisson's ratio or the ratio between shear and normal stiffness [-]. It has different meanings depending on the Ip functor.",
+      "inherited_from": "ElastMat"
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "default": "((void)\"not shared\",-1)",
+      "description": "Numeric id of this material; is non-negative only if this Material is shared (i.e. in O.materials), -1 otherwise. This value is set automatically when the material is inserted to the simulation via O.materials.append. (This id was necessary since before boost::serialization was used, shared pointers were not tracked properly; it might disappear in the future)",
+      "read_only": true,
+      "inherited_from": "Material"
+    },
+    {
+      "name": "label",
+      "type": "str",
+      "default": "''",
+      "description": "Textual identifier for this material; can be used for shared materials lookup in MaterialContainer.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "density",
+      "type": "float",
+      "default": "1000",
+      "description": "Density of the material [kg/m\u00b3]",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "4",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "Material"
+    }
+  ],
+  "methods": [
+    {
+      "name": "newAssocState",
+      "args": [],
+      "returns": "State",
+      "description": "Return new State instance, which is associated with this Material. Some materials have special requirement on state type and calling this function when the body is created will ensure that they match. (This is done automatically if you use utils.sphere, \u2026 functions from python).",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "Material"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

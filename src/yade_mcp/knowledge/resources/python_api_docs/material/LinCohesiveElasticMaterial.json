@@ -41,7 +41,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "11",
+      "default": "12",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Material"

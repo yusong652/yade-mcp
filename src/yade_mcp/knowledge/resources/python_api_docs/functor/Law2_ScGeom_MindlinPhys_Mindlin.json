@@ -5,12 +5,6 @@
   "description": "Constitutive law for the Hertz-Mindlin formulation. It includes non linear elasticity in the normal direction as predicted by Hertz for two non-conforming elastic contact bodies. In the shear direction, instead, it reseambles the simplified case without slip discussed in Mindlin's paper, where a...",
   "attributes": [
     {
-      "name": "preventGranularRatcheting",
-      "type": "bool",
-      "default": "true",
-      "description": "bool to avoid granular ratcheting"
-    },
-    {
       "name": "includeAdhesion",
       "type": "bool",
       "default": "false",
@@ -33,6 +27,12 @@
       "type": "bool",
       "default": "false",
       "description": "Keep interactions even if particles go away from each other (only in case another constitutive law is in the scene, e.g."
+    },
+    {
+      "name": "nothing",
+      "type": "bool",
+      "default": "false",
+      "description": "dummy attribute for declaring preventGranularRatcheting deprecated"
     },
     {
       "name": "frictionDissipation",
@@ -60,6 +60,13 @@
       "type": "OpenMPAccumulator<Real>",
       "default": "0.0",
       "description": "Energy dissipated by tangential damping",
+      "no_save": true
+    },
+    {
+      "name": "preventGranularRatcheting",
+      "type": "bool",
+      "default": "False",
+      "description": "|ydeprecated| alias for nothing (this value is no longer used, don't define it.)",
       "no_save": true
     },
     {

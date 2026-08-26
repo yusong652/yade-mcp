@@ -55,6 +55,13 @@
   ],
   "methods": [
     {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume.",
+      "inherited_from": "Sphere"
+    },
+    {
       "name": "dispHierarchy",
       "args": [
         {

@@ -42,6 +42,12 @@
   ],
   "methods": [
     {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume."
+    },
+    {
       "name": "dispHierarchy",
       "args": [
         {

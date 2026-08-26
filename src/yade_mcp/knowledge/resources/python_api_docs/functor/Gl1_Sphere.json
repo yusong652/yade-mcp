@@ -19,7 +19,7 @@
     {
       "name": "stripes",
       "type": "bool",
-      "default": "False",
+      "default": "True",
       "description": ""
     },
     {

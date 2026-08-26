@@ -40,6 +40,7 @@
       "type": "list[float]",
       "default": "[]",
       "description": "vector (same length as 'gamma_save' for ex), with 0 or 1 depending whether the save for the corresponding value of gamma has been done (1) or not (0).",
+      "read_only": true,
       "inherited_from": "KinemSimpleShearBox"
     },
     {
@@ -103,6 +104,7 @@
       "type": "bool",
       "default": "true",
       "description": "boolean set to false as soon as the engine has done its job one time : useful to know if initial height of, and normal force sustained by, the upper box are known or not (and thus if they have to be initialized).",
+      "read_only": true,
       "inherited_from": "KinemSimpleShearBox"
     },
     {
@@ -110,6 +112,7 @@
       "type": "float",
       "default": "0.0",
       "description": "the (vertical) force acting on the upper plate on the very first time step (determined by the Engine). Controls of the loadings in case of",
+      "read_only": true,
       "inherited_from": "KinemSimpleShearBox"
     },
     {

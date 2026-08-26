@@ -119,6 +119,25 @@
       "description": "Initialize cummulated plastic dissipation to a value (0 by default)."
     },
     {
+      "name": "checkConsistency",
+      "args": [
+        {
+          "name": "ip",
+          "type": "CohFrictPhys"
+        },
+        {
+          "name": "id1",
+          "type": "int"
+        },
+        {
+          "name": "id2",
+          "type": "int"
+        }
+      ],
+      "returns": "None",
+      "description": "Runs consistency checks on an interaction physics and warn if some issues are suspected (e.g. if there is finite cohesion on the shear force and pure elasticity on bending moment). Most inconsistencies should occur when interaction properties are modified in a script; they are not supposed to result from the interaction loop, else please report the bug. This function is called automatically by the law functor on the first instance of a cohesive interaction. To call it in a script: `law.checkConsistency(i.phys,i.id1,i.id2)`."
+    },
+    {
       "name": "dict",
       "args": [],
       "returns": "dict",

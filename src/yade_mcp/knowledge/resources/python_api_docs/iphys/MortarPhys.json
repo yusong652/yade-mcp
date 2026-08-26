@@ -43,7 +43,7 @@
     {
       "name": "sigmaN",
       "type": "float",
-      "default": "",
+      "default": "0.0",
       "description": "Current normal stress (auto-updated)",
       "read_only": true,
       "no_save": true
@@ -61,6 +61,14 @@
       "type": "float",
       "default": "NaN",
       "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
+    },
+    {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only Law2_ScGeom_FrictPhys_CundallStrack) (auto-updated)",
+      "read_only": true,
       "inherited_from": "FrictPhys"
     },
     {
@@ -94,7 +102,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "17",
+      "default": "20",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IPhys"

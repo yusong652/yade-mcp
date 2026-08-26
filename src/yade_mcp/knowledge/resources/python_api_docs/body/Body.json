@@ -25,6 +25,12 @@
       "read_only": true
     },
     {
+      "name": "subdomain",
+      "type": "int",
+      "default": "0",
+      "description": "the subdomain this body belongs to."
+    },
+    {
       "name": "material",
       "type": "Material",
       "default": "None",
@@ -54,12 +60,6 @@
       "default": "Body::ID_NONE",
       "description": "Id of clump this body makes part of; invalid number if not part of clump; see isStandalone, isClump, isClumpMember properties. Not meant to be modified directly from Python, use O.bodies.appendClumped instead.",
       "read_only": true
-    },
-    {
-      "name": "chain",
-      "type": "int",
-      "default": "-1",
-      "description": "Returns Id of chain to which the body belongs."
     },
     {
       "name": "iterBorn",
@@ -101,6 +101,20 @@
       "type": "bool",
       "default": "false",
       "description": "Whether this body has different inertia along principal axes; NewtonIntegrator makes use of this flag to call rotation integration routine for aspherical bodies, which is more expensive.",
+      "no_save": true
+    },
+    {
+      "name": "isSubdomain",
+      "type": "bool",
+      "default": "false",
+      "description": "Whether this body is a subdomain should have Body.bound created. Subdomains` do not participate to collision detection with their own bodies, they may interact with external bodies and other subdomains through virtual interactions. (In c++, use Body::getIsSubdomain/Body::setIsSubdomain)",
+      "no_save": true
+    },
+    {
+      "name": "isFluidDomainBox",
+      "type": "auto",
+      "default": "false",
+      "description": "Whether this body is a Fluid grid bounding box should have Body.bound created. FluidDomainBboxes` do not participate to collision detection with their own bodies, they may interact with external bodies and other subdomains through virtual interactions. (In c++, use Body::getIsFluidDomainBbox/Body::setIsFluidDomainBbox)",
       "no_save": true
     },
     {

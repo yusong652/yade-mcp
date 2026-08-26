@@ -5,62 +5,136 @@
   "description": "Extends ScGeom for faster LevelSet-based simulations of convex bodies while storing previous closest node in surfNodeIdx<LSnodeGeom.surfNodeIdx>, for an optimal contact detection.",
   "attributes": [
     {
-      "name": "contactPoint",
-      "type": "Vector3",
-      "default": "(0, 0, 0)",
-      "description": "some reference point for the interaction (usually in the middle). |ycomp|"
-    },
-    {
-      "name": "normal",
-      "type": "Vector3",
-      "default": "(0, 0, 0)",
-      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)"
-    },
-    {
-      "name": "penetrationDepth",
-      "type": "float",
-      "default": "nan",
-      "description": "Penetration distance of spheres (positive if overlapping)"
-    },
-    {
-      "name": "refR1",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #1. |ycomp|"
-    },
-    {
-      "name": "refR2",
-      "type": "float",
-      "default": "0.0",
-      "description": "Reference radius of particle #2. |ycomp|"
-    },
-    {
-      "name": "shearInc",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear displacement increment in the last step"
-    },
-    {
       "name": "surfNodeIdx",
       "type": "int",
       "default": "-1",
-      "description": "Index (within"
+      "description": "Index (within surfNodes of id2 if Volume(id1) > Volume(id2); else id1) of the surface node that shows the smallest interparticle distance (overlap or not). A negative value that would be encountered during an actual simulation would mean an inconsistency in implementation.",
+      "read_only": true
     },
     {
       "name": "usedWorkflow",
       "type": "int",
       "default": "-1",
-      "description": "Tells for debugging purpose whether this interaction has just (in last Ig2 call) been handled by looping over full nodes because geom was just created (0) or because surfNodeIdx was directly detected as negative (1); or by looping just the neighbor subset (2, desired case), which could itself deteriorate into an additional full loop (3)."
+      "description": "Tells for debugging purpose whether this interaction has just (in last Ig2 call) been handled by looping over full nodes because geom was just created (0) or because surfNodeIdx was directly detected as negative (1); or by looping just the neighbor subset (2, desired case), which could itself deteriorate into an additional full loop (3).",
+      "read_only": true
+    },
+    {
+      "name": "penetrationDepth",
+      "type": "float",
+      "default": "NaN",
+      "description": "Penetration distance of spheres (positive if overlapping)",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "shearInc",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Shear displacement increment in the last step",
+      "read_only": true,
+      "no_save": true,
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "normal",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Unit vector oriented along the interaction, from particle #1, towards particle #2. (auto-updated)",
+      "read_only": true,
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "contactPoint",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "some reference point for the interaction (usually in the middle). |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR1",
+      "type": "float",
+      "default": "0.0",
+      "description": "Reference radius of particle #1. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "refR2",
+      "type": "float",
+      "default": "0.0",
+      "description": "Reference radius of particle #2. |ycomp|",
+      "inherited_from": "GenericSpheresContact"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "10",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IGeom"
     }
   ],
   "methods": [
     {
       "name": "incidentVel",
-      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument)."
+      "args": [
+        {
+          "name": "i",
+          "type": "Interaction"
+        },
+        {
+          "name": "avoidGranularRatcheting",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Return incident velocity of the interaction (see also Ig2_Sphere_Sphere_ScGeom.avoidGranularRatcheting for explanation of the ratcheting argument).",
+      "inherited_from": "ScGeom"
     },
     {
       "name": "relAngVel",
-      "description": "Return relative angular velocity of the interaction."
+      "args": [
+        {
+          "name": "i",
+          "type": "Interaction"
+        }
+      ],
+      "returns": "Vector3",
+      "description": "Return relative angular velocity of the interaction.",
+      "inherited_from": "ScGeom"
+    },
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IGeom"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }

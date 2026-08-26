@@ -171,10 +171,10 @@
       "inherited_from": "MindlinPhys"
     },
     {
-      "name": "alpha",
+      "name": "beta",
       "type": "float",
       "default": "0.0",
-      "description": "Constant coefficient to define contact viscous damping for non-linear elastic force-displacement relationship.",
+      "description": "Auxiliary parameter used in the viscous damping model of (Mueller2011)",
       "inherited_from": "MindlinPhys"
     },
     {
@@ -227,6 +227,14 @@
       "inherited_from": "FrictPhys"
     },
     {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only Law2_ScGeom_FrictPhys_CundallStrack) (auto-updated)",
+      "read_only": true,
+      "inherited_from": "FrictPhys"
+    },
+    {
       "name": "ks",
       "type": "float",
       "default": "0",
@@ -257,7 +265,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "16",
+      "default": "19",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IPhys"

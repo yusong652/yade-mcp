@@ -5,17 +5,17 @@
   "description": "Rigid aggregate of bodies whose usage is detailed here<ClumpSection>",
   "attributes": [
     {
-      "name": "ids",
-      "type": "list[int]",
-      "default": "[]",
-      "description": "Ids of constituent particles (only informative; direct modifications will have no effect).",
-      "read_only": true
-    },
-    {
       "name": "members",
       "type": "dict",
       "default": "{}",
       "description": "Return clump members as {'id1':(relPos,relOri),...}",
+      "no_save": true
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "default": "[]",
+      "description": "Ids of constituent particles (only informative; direct modifications will have no effect).",
       "no_save": true
     },
     {

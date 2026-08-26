@@ -26,28 +26,30 @@
       "read_only": true
     },
     {
-      "name": "nSurfNodes",
-      "type": "int",
-      "default": "100",
-      "description": "The number of boundary nodes in surfNodes, previously coined nNodes in (Duriez2021b). Usually set through utils levelSetBody() function (has to be set at instantiation in all cases). Please use a perfect square + 2 if not twoD and if nodesPath = 1."
+      "name": "neighborsNodes",
+      "type": "list[list[int]]",
+      "default": "[]",
+      "description": "Denoting n_neighborsNodes as $N$, neighborsNodes[i] is a $N+1$ elements iterable with i as the first item, then the indices of the $N$ closest neighbor nodes for every surface node i, ordered by increasing distance wrt to i.",
+      "read_only": true
     },
     {
-      "name": "nodesPath",
+      "name": "n_neighborsNodes",
       "type": "int",
-      "default": "2",
-      "description": "Defines how the space of spherical coordinates $( theta in [0; pi] , varphi in [0;2 pi])$ is discretized when ray tracing the boundary nodes: 1 gives a rectangular partition of that space, plus two nodes at $ theta = 0 [ pi]$; 2 locates the nodes along a spiral path (Duriez2021a)"
-    },
-    {
-      "name": "nodesTol",
-      "type": "float",
-      "default": "50",
-      "description": "Tolerance coefficient for accepting (if $| phi| / L <$ nodesTol $ times$ numeric precision with $ phi$ the return value of distance and $L$ a body-characteristic length taken as $ sqrt[3]{V}$ with $V$ the volume, or $ sqrt{V/g}$ with $g$ the grid spacing if twoD) boundary nodes proposed by the ray tracing algorithm."
+      "default": "-1",
+      "description": "How many closest nodes we want to store for every one in neighborsNodes (i.e., the $N$ therein). A negative value leaves the latter uncomputed i.e. empty"
     },
     {
       "name": "sphericity",
       "type": "float",
       "default": "-1",
       "description": "Shape sphericity computed from boundary nodes and assuming both largest inscribed sphere and smallest circumscribed sphere have the origin (of local axes) as center.",
+      "read_only": true
+    },
+    {
+      "name": "starLike",
+      "type": "bool",
+      "default": "false",
+      "description": "Indicates whether surface nodes are ray-traced considering that a ray can intersect the surface no more than once.",
       "read_only": true
     },
     {
@@ -63,6 +65,24 @@
       "default": "false",
       "description": "True for z-invariant shapes. Serves to restrict the ray tracing of",
       "read_only": true
+    },
+    {
+      "name": "smearCoeff",
+      "type": "float",
+      "default": "1.5",
+      "description": "Rules the smearing coefficient $ varepsilon > 0$ of the Heaviside step function for a smooth integration of the particle's volume close to its surface (the higher $ varepsilon$ the smoother, i.e. the more diffuse the surface in terms of volume integration). Given in reciprocal multiples of $R_{cell} = sqrt{3}/2 g_{grid}$ the half diagonal of the cells of the lsGrid with $g_{grid}$ the cell length: $ varepsilon = R_{cell} times 1/$ *smearCoeff* (smearing is deactivated if negative)."
+    },
+    {
+      "name": "hasAABE",
+      "type": "bool",
+      "default": "false",
+      "description": "Flag to indicate whether an axis-aligned bounding ellipsoid (AABE) has been provided by the user. If true, you must specify axisAABE. Only works for VLS-DEM."
+    },
+    {
+      "name": "axesAABE",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "The half lengths of the principal axes of the axis-aligned bounding ellipsoid (AABE) of the level-set shape. Format (rx,ry,rz). Only works for VLS-DEM."
     },
     {
       "name": "color",
@@ -88,7 +108,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "10",
+      "default": "11",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Shape"
@@ -96,10 +116,28 @@
   ],
   "methods": [
     {
+      "name": "binarize",
+      "args": [
+        {
+          "name": "surface",
+          "type": "bool",
+          "default": "False"
+        }
+      ],
+      "returns": "object",
+      "description": "Returns (for any user-defined purpose) a voxellised description of the shape volume. Selection (as being part of the particle) of voxels associated with a strictly zero value of distance depends on *surface*. :param bool surface: whether to consider particle surface voxels (with a zero distance value) as being part of the volume (if True) or not (if False) :returns: a 3D grid of 0/1 integers whose [i][j][k] term is 1, resp. 0, when the voxel associated to lsGrid.gridPoint(i,j,k) (see volume for an exact definition of that association) is inside, resp. outside, the particle. Modulo *surface* considerations, the returned 0/1 values actually correspond to $( phi-| phi|)/(2 phi)$"
+    },
+    {
       "name": "volume",
       "args": [],
       "returns": "float",
       "description": "A 2025/09-deprecated version of getVolume<LevelSet.getVolume>. Please use the latter instead."
+    },
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume as the negative domain of the level set function, in a voxellised fashion, where a negative value of the level set, distField[i][j][k] $ leq$ 0, is considered to correspond to a material cubic voxel of side lsGrid.spacing and centered at lsGrid.gridPoint(i,j,k). Smearing considerations may apply as per smearCoeff."
     },
     {
       "name": "center",
@@ -119,16 +157,15 @@
         {
           "name": "pt",
           "type": "Vector3"
+        },
+        {
+          "name": "unbound",
+          "type": "bool",
+          "default": "False"
         }
       ],
       "returns": "float",
       "description": "Distance to surface at *pt*, with pt being expressed in the local frame. The 'unbound' flag (if True) allows the computation of distance values outside of the grid<LevelSet.lsGrid> extents, which otherwise returns NaN together with an error."
-    },
-    {
-      "name": "marchingCubes",
-      "args": [],
-      "returns": "object",
-      "description": "Vertices of a triangulation of the particle surface after executing the Marching Cubes algorithm on distField."
     },
     {
       "name": "normal",
@@ -136,10 +173,26 @@
         {
           "name": "pt",
           "type": "Vector3"
+        },
+        {
+          "name": "unbound",
+          "type": "bool",
+          "default": "False"
         }
       ],
       "returns": "Vector3",
       "description": "Unit normal vector to the surface, at some pt. Local frame applies to both output normal and input pt. Has an 'unbound' flag signaling whether to allow (if True) the computation of the normal outside of the grid<LevelSet.lsGrid> extents."
+    },
+    {
+      "name": "assignSurfNodes",
+      "args": [
+        {
+          "name": "nodes",
+          "type": "object"
+        }
+      ],
+      "returns": "None",
+      "description": "Assigns given *nodes* (as a list of Vector3r points conforming local frame) to surfNodes, erasing pre-existing ones if any."
     },
     {
       "name": "rayTrace",
@@ -147,10 +200,73 @@
         {
           "name": "ray",
           "type": "Vector3"
+        },
+        {
+          "name": "nodesTol",
+          "type": "float",
+          "default": "50"
+        }
+      ],
+      "returns": "object",
+      "description": "Performs one ray tracing along *ray* (to be given in cartesian coordinates, see spher2cart() if a conversion is useful from spherical ones; norm should not matter) and returns the obtained surface points (without modifying surfNodes<LevelSet.surfNodes>). Argument *nodesTol* has the same meaning as in rayTraceSurfNodes<LevelSet.rayTraceSurfNodes>, see therein. Provided for debugging or shape analysis purposes."
+    },
+    {
+      "name": "rayTraceSurfNodes",
+      "args": [
+        {
+          "name": "nSurfNodes",
+          "type": "int",
+          "default": "102"
+        },
+        {
+          "name": "nodesPath",
+          "type": "int",
+          "default": "2"
+        },
+        {
+          "name": "nodesTol",
+          "type": "float",
+          "default": "50"
         }
       ],
       "returns": "None",
-      "description": "Performs one ray tracing along *ray* (to be given in cartesian coordinates, see spher2cart() if a conversion is useful from spherical ones; norm should not matter) and returns the obtained surface points (without modifying surfNodes<LevelSet.surfNodes>). Argument *nodesTol* has the same meaning as in rayTraceSurfNodes<LevelSet.rayTraceSurfNodes>, see therein. Provided for debugging or shape analysis purposes."
+      "description": "Defines all surface nodes (i.e., surfNodes) by ray tracing, erasing pre-existing ones if any, according to given arguments :param int nSurfNodes: how many rays are to be launched. Please use a perfect square + 2 if not twoD and if *nodesPath* = 1. Previously coined nNodes in (Duriez2021b) :param int nodesPath: defines how the space of spherical coordinates $( theta in [0; pi] , varphi in [0;2 pi])$ is discretized when ray tracing the boundary nodes: 1 gives a rectangular partition of that space, plus two nodes at $ theta = 0 [ pi]$; 2 locates the nodes along a spiral path (Duriez2021a) :param real nodesTol: tolerance coefficient for accepting (if $| phi| / L <$ nodesTol $ times$ numeric precision with $ phi$ the return value of distance and $L$ a body-characteristic length taken as $ sqrt[3]{V}$ with $V$ the volume, or $ sqrt{V/g_{grid}}$ with $g_{grid}$ the grid spacing if twoD) surface nodes proposed by the ray tracing algorithm"
+    },
+    {
+      "name": "getSurface",
+      "args": [
+        {
+          "name": "epsilon",
+          "type": "float",
+          "default": "1.0"
+        }
+      ],
+      "returns": "float",
+      "description": "Compute particle surface by differentiation of Level Set volume around $ phi = 0$, where best results have usually been obtained using smearCoeff = 1. Given argument *epsilon* (as a length quantity) serves to initialize the recursive limit search in the derivative expression (see (Duriez2025))"
+    },
+    {
+      "name": "computeMarchingCubes",
+      "args": [],
+      "returns": "None",
+      "description": "Compute or recompute the triangulation of the particle surface after using the Marching Cubes algorithm on distField."
+    },
+    {
+      "name": "marchingCubesVertices",
+      "args": [],
+      "returns": "object",
+      "description": "Returns the vertices for a surface triangulation obtained after executing the Marching Cubes algorithm on distField."
+    },
+    {
+      "name": "marchingCubesNormals",
+      "args": [],
+      "returns": "object",
+      "description": "Returns the normals for a surface triangulation obtained after executing the Marching Cubes algorithm on distField."
+    },
+    {
+      "name": "marchingCubesNbTriangles",
+      "args": [],
+      "returns": "int",
+      "description": "Returns the number of triangles forming the surface triangulation as per the Marching Cubes algorithm (executed on distField)."
     },
     {
       "name": "dispHierarchy",

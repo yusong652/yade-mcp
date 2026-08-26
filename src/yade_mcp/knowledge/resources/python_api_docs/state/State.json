@@ -68,7 +68,7 @@
       "name": "densityScaling",
       "type": "float",
       "default": "-1",
-      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per",
+      "description": "Multiplicative coefficient to reflect an artificial change in mass density (as per GlobalStiffnessTimeStepper.targetDt) which NewtonIntegrator (depending on the corresponding option NewtonIntegrator.densityScaling) will reflect into linear and angular velocities (but not angular momentum that still corresponds to the unbiaised inertia tensor) as a multiplicative coefficient (auto-updated).",
       "read_only": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "ori",
       "type": "Quaternion",
       "default": "Quaternion((1,0,0),0)",
-      "description": "Current orientation.",
+      "description": "Current orientation as the quaternion-form of the rotation that maps the model, i.e. global, coordinate system into an inertial, i.e. local, basis for the body.",
       "no_save": true
     }
   ],

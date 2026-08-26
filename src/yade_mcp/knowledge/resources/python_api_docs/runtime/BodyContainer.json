@@ -207,6 +207,12 @@
       ],
       "returns": "int",
       "description": "Insert a body at theid, (no body should exist in this id)"
+    },
+    {
+      "name": "subdomainBodies",
+      "args": [],
+      "returns": "object",
+      "description": "id's of bodies with bounds in MPI subdomain"
     }
   ],
   "attributes": [

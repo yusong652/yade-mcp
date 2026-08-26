@@ -11,6 +11,12 @@
       "description": "Enlarge sphere radii by this factor (if >1), to permit creation of distant interactions. InteractionGeometry will be computed when interactionDetectionFactor*(rad) > distance. .. note:: This parameter is functionally coupled with"
     },
     {
+      "name": "hertzian",
+      "type": "bool",
+      "default": "false",
+      "description": "If True, the equivalent radius for the Box (ScGeom.refR1) is chosen as 1e8 times the Sphere's radius (closer to Hertzian theory, where it is infinite). Both are equal if False"
+    },
+    {
       "name": "label",
       "type": "str",
       "default": "''",

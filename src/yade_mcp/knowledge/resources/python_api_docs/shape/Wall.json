@@ -40,13 +40,19 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "18",
+      "default": "21",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "Shape"
     }
   ],
   "methods": [
+    {
+      "name": "getVolume",
+      "args": [],
+      "returns": "float",
+      "description": "Returns the shape volume (0 here)."
+    },
     {
       "name": "dispHierarchy",
       "args": [

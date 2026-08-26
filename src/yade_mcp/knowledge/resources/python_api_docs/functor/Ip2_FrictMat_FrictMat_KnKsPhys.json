@@ -44,7 +44,7 @@
       "name": "viscousDamping",
       "type": "float",
       "default": "0.0",
-      "description": "Viscous damping ratio $ beta_n$, see"
+      "description": "Viscous damping ratio $ beta_n$, see Ip2_FrictMat_FrictMat_MindlinPhys documentation"
     },
     {
       "name": "cohesion",

@@ -43,7 +43,7 @@
     {
       "name": "realtime",
       "type": "float",
-      "default": "2636.249",
+      "default": "66.515",
       "description": "Return clock (human world) time the simulation has been running."
     },
     {
@@ -91,7 +91,7 @@
     {
       "name": "engines",
       "type": "list",
-      "default": "[<ForceResetter instance at 0xaaaae264b0e0>, <InsertionSortCollider instance ...",
+      "default": "[<PyRunner instance at 0x5555572cb280>, <ForceResetter instance at 0x555556a7...",
       "description": "List of engines in the simulation (corresponds to Scene::engines in C++ source code)."
     },
     {
@@ -473,6 +473,48 @@
       "args": [],
       "returns": "str",
       "description": "Return unique name of file in temporary directory which will be deleted when yade exits."
+    },
+    {
+      "name": "intrsctToBytes",
+      "args": [
+        {
+          "name": "subdomain",
+          "type": "Subdomain"
+        },
+        {
+          "name": "rank",
+          "type": "int"
+        },
+        {
+          "name": "mirror",
+          "type": "bool"
+        }
+      ],
+      "returns": "object",
+      "description": "returns a copy of intersections[rank] (a vector<int>) from a subdomain in the form of bytes. Returns a copy mirrorIntersections[rank] if mirror=True."
+    },
+    {
+      "name": "bufferFromIntrsct",
+      "args": [
+        {
+          "name": "subdomain",
+          "type": "Subdomain"
+        },
+        {
+          "name": "rank",
+          "type": "int"
+        },
+        {
+          "name": "size",
+          "type": "int"
+        },
+        {
+          "name": "mirror",
+          "type": "bool"
+        }
+      ],
+      "returns": "object",
+      "description": "returns a (char*) pointer to the underying buffer of intersections[rank], so that it can be overwritten. Size must be passed in advance. Pointer to mirrorIntersections[rank] is returned if mirror=True. Python syntax: bufferFromIntrsct(...)[:]=bytes(something)"
     }
   ]
 }

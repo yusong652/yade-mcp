@@ -24,6 +24,14 @@
       "inherited_from": "FrictPhys"
     },
     {
+      "name": "frictDissip",
+      "type": "float",
+      "default": "0.0",
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only Law2_ScGeom_FrictPhys_CundallStrack) (auto-updated)",
+      "read_only": true,
+      "inherited_from": "FrictPhys"
+    },
+    {
       "name": "ks",
       "type": "float",
       "default": "0",
@@ -54,7 +62,7 @@
     {
       "name": "dispIndex",
       "type": "int",
-      "default": "5",
+      "default": "4",
       "description": "Return class index of this instance.",
       "no_save": true,
       "inherited_from": "IPhys"

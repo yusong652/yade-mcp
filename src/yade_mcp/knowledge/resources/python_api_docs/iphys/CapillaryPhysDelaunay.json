@@ -5,106 +5,155 @@
   "description": "An extended version of \u0300FrictPhys, adding capillary data for CapillarityEngine.",
   "attributes": [
     {
+      "name": "meniscus",
+      "type": "bool",
+      "default": "false",
+      "description": "Presence of a meniscus if true"
+    },
+    {
+      "name": "isBroken",
+      "type": "bool",
+      "default": "false",
+      "description": "If true, capillary force is zero and liquid bridge is inactive."
+    },
+    {
+      "name": "computeBridge",
+      "type": "bool",
+      "default": "true",
+      "description": "If true, capillary bridge will be computed if not it will be ignored."
+    },
+    {
+      "name": "capillaryPressure",
+      "type": "float",
+      "default": "0.",
+      "description": "Value of the capillary pressure Uc defines as Ugas-Uliquid"
+    },
+    {
+      "name": "vMeniscus",
+      "type": "float",
+      "default": "0.",
+      "description": "Volume of the menicus"
+    },
+    {
       "name": "Delta1",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Defines the surface area wetted by the meniscus on the smallest grains of radius R1 (R1<R2)"
     },
     {
       "name": "Delta2",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Defines the surface area wetted by the meniscus on the biggest grains of radius R2 (R1<R2)"
+    },
+    {
+      "name": "fCap",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Capillary Force produces by the presence of the meniscus"
     },
     {
       "name": "SInterface",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Fluid-Gaz Interfacial area"
     },
     {
       "name": "arcLength",
       "type": "float",
-      "default": "0.0",
+      "default": "0.",
       "description": "Arc Length of the Fluid-Gaz Interface"
     },
     {
-      "name": "capillaryPressure",
+      "name": "fusionNumber",
+      "type": "short int",
+      "default": "0.",
+      "description": "Indicates the number of meniscii that overlap with this one"
+    },
+    {
+      "name": "tangensOfFrictionAngle",
       "type": "float",
-      "default": "0.0",
-      "description": "Value of the capillary pressure Uc defines as Ugas-Uliquid"
-    },
-    {
-      "name": "computeBridge",
-      "type": "bool",
-      "default": "True",
-      "description": "If true, capillary bridge will be computed if not it will be ignored."
-    },
-    {
-      "name": "fCap",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Capillary Force produces by the presence of the meniscus"
+      "default": "NaN",
+      "description": "tan of angle of friction",
+      "inherited_from": "FrictPhys"
     },
     {
       "name": "frictDissip",
       "type": "float",
       "default": "0.0",
-      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only"
-    },
-    {
-      "name": "fusionNumber",
-      "type": "int",
-      "default": "0",
-      "description": "Indicates the number of meniscii that overlap with this one"
-    },
-    {
-      "name": "isBroken",
-      "type": "bool",
-      "default": "False",
-      "description": "If true, capillary force is zero and liquid bridge is inactive."
-    },
-    {
-      "name": "kn",
-      "type": "float",
-      "default": "0.0",
-      "description": "Normal stiffness"
+      "description": "frictional energy dissipation in the contact (this value is updated by contact laws applicable to FrictPhys - currently only",
+      "read_only": true,
+      "inherited_from": "FrictPhys"
     },
     {
       "name": "ks",
       "type": "float",
-      "default": "0.0",
-      "description": "Shear stiffness"
-    },
-    {
-      "name": "meniscus",
-      "type": "bool",
-      "default": "False",
-      "description": "Presence of a meniscus if true"
-    },
-    {
-      "name": "normalForce",
-      "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "0",
+      "description": "Shear stiffness",
+      "inherited_from": "NormShearPhys"
     },
     {
       "name": "shearForce",
       "type": "Vector3",
-      "default": "Vector3(0,0,0)",
-      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1)."
+      "default": "(0, 0, 0)",
+      "description": "Shear force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormShearPhys"
     },
     {
-      "name": "tangensOfFrictionAngle",
+      "name": "kn",
       "type": "float",
-      "default": "nan",
-      "description": "tan of angle of friction"
+      "default": "0",
+      "description": "Normal stiffness",
+      "inherited_from": "NormPhys"
     },
     {
-      "name": "vMeniscus",
-      "type": "float",
-      "default": "0.0",
-      "description": "Volume of the menicus"
+      "name": "normalForce",
+      "type": "Vector3",
+      "default": "(0, 0, 0)",
+      "description": "Normal force after previous step (in global coordinates), as sustained by particle #2 (from particle #1).",
+      "inherited_from": "NormPhys"
+    },
+    {
+      "name": "dispIndex",
+      "type": "int",
+      "default": "8",
+      "description": "Return class index of this instance.",
+      "no_save": true,
+      "inherited_from": "IPhys"
+    }
+  ],
+  "methods": [
+    {
+      "name": "dispHierarchy",
+      "args": [
+        {
+          "name": "names",
+          "type": "bool",
+          "default": "True"
+        }
+      ],
+      "returns": "list",
+      "description": "Return list of dispatch classes (from down upwards), starting with the class instance itself, top-level indexable at last. If names is true (default), return class names rather than numerical indices.",
+      "inherited_from": "IPhys"
+    },
+    {
+      "name": "dict",
+      "args": [],
+      "returns": "dict",
+      "description": "Return dictionary of attributes.",
+      "inherited_from": "Serializable"
+    },
+    {
+      "name": "updateAttrs",
+      "args": [
+        {
+          "name": "arg2",
+          "type": "dict"
+        }
+      ],
+      "returns": "None",
+      "description": "Update object attributes from given dictionary",
+      "inherited_from": "Serializable"
     }
   ]
 }
