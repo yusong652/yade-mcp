@@ -30,8 +30,11 @@ def _load_all_documents() -> list[SearchDocument]:
         category = doc.get("category", "")
         parent = doc.get("parent", "")
 
-        # Build keywords from: name, parent, category, attribute names/descriptions, method names
+        # Build keywords from: name, parent, category, attribute names/descriptions, method names,
+        # plus any hand-authored search_keywords (the words a user says for something the
+        # documentation never spells out that way).
         keywords: list[str] = [name, category, parent]
+        keywords.extend(doc.get("search_keywords", []))
         for attr in doc.get("attributes", []):
             attr_name = attr.get("name", "")
             if attr_name:
@@ -72,7 +75,7 @@ def _load_all_documents() -> list[SearchDocument]:
                     SearchDocument(
                         name=func_name,
                         description=func.get("description", ""),
-                        keywords=[func_name, name, category],
+                        keywords=[func_name, name, category, *func.get("search_keywords", [])],
                         category=category,
                         metadata={
                             "path": rel_path,

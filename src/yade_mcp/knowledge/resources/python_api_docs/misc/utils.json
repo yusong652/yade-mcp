@@ -295,6 +295,19 @@
     },
     {
       "name": "levelSetBody",
+      "search_keywords": [
+        "create body",
+        "build body",
+        "make body",
+        "create particle",
+        "build particle",
+        "levelset particle",
+        "levelset body",
+        "irregular particle",
+        "non-spherical particle",
+        "arbitrary shape particle",
+        "level set body creation"
+      ],
       "signature": "utils.levelSetBody(shape='', center=Vector3(0,0,0), radius=0, extents=Vector3(0,0,0), epsilons=Vector2(0,0), clump=None, spacing=0.1, grid=None, distField=[], smearCoeff=1.5, nSurfNodes=102, surfNodes=[], nodesPath=2, nodesTol=50, n_neighborsNodes=-1, orientation=Quaternion((1,0,0),0), hasAABE=False, axesAABE=Vector3(0,0,0), dynamic=True, material=-1, starLike=False, color=Vector3(1,1,1))",
       "description": "Creates a LevelSet shaped body through various workflows: one can choose among pre-defined shapes (through *shape* and related attributes), or to mimick a Clump instance (*clump* attri"
     },
