@@ -154,8 +154,6 @@ The MCP server connects to 9002 unless told otherwise, so register it with the m
 }
 ```
 
-Or set the `YADE_MCP_BRIDGE_URL` environment variable where the agent client runs; `--bridge-url` takes precedence when both are given.
-
 ### Container
 
 When YADE runs inside a container, bind the bridge to all interfaces so it is reachable from outside:
