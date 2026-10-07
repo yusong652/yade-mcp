@@ -131,14 +131,40 @@ yade_mcp_bridge.start()
 
 The MCP client config persists.
 
-**Ports and containers.** `start()` takes `port` (default 9002) and `host`. If you change the port, the MCP server must be told, or it keeps connecting to 9002. Re-register it with the matching URL:
+## Configuration
 
-```bash
-codex mcp remove yade-mcp
-codex mcp add yade-mcp -- uvx yade-mcp --bridge-url http://localhost:9008
+### Port
+
+The bridge listens on 9002 by default. To use another port, pass it to `start()`:
+
+```python
+yade_mcp_bridge.start(port=9008)
 ```
 
-Inside a container, start with `yade_mcp_bridge.start(host="0.0.0.0")` so the bridge is reachable from outside.
+The MCP server connects to 9002 unless told otherwise, so register it with the matching URL:
+
+```json
+{
+  "mcpServers": {
+    "yade-mcp": {
+      "command": "uvx",
+      "args": ["yade-mcp", "--bridge-url", "http://localhost:9008"]
+    }
+  }
+}
+```
+
+Or set the `YADE_MCP_BRIDGE_URL` environment variable where the agent client runs; `--bridge-url` takes precedence when both are given.
+
+### Container
+
+When YADE runs inside a container, bind the bridge to all interfaces so it is reachable from outside:
+
+```python
+yade_mcp_bridge.start(host="0.0.0.0")
+```
+
+Publish the port when starting the container (for Docker, `-p 9002:9002`).
 
 ## Features
 

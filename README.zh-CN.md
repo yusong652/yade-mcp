@@ -129,14 +129,40 @@ yade_mcp_bridge.start()
 
 MCP 客户端的配置是持久的，不用重做。
 
-**端口与容器。** `start()` 接受 `port`（默认 9002）和 `host` 参数。改了端口就必须告诉 MCP 服务器，否则它还会连 9002。用对应的 URL 重新注册：
+## 配置
 
-```bash
-codex mcp remove yade-mcp
-codex mcp add yade-mcp -- uvx yade-mcp --bridge-url http://localhost:9008
+### 端口
+
+bridge 默认监听 9002。要换端口，传给 `start()`：
+
+```python
+yade_mcp_bridge.start(port=9008)
 ```
 
-在容器里运行时用 `yade_mcp_bridge.start(host="0.0.0.0")` 启动，bridge 才能从容器外访问。
+MCP 服务器默认连 9002，所以要用对应的 URL 注册：
+
+```json
+{
+  "mcpServers": {
+    "yade-mcp": {
+      "command": "uvx",
+      "args": ["yade-mcp", "--bridge-url", "http://localhost:9008"]
+    }
+  }
+}
+```
+
+也可以在智能体客户端所在的环境里设置 `YADE_MCP_BRIDGE_URL` 环境变量；两者都给时 `--bridge-url` 优先。
+
+### 容器
+
+YADE 在容器里运行时，让 bridge 绑定所有网卡，容器外才能访问：
+
+```python
+yade_mcp_bridge.start(host="0.0.0.0")
+```
+
+启动容器时记得发布端口（Docker 用 `-p 9002:9002`）。
 
 ## 功能特性
 
