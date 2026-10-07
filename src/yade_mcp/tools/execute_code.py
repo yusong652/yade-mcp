@@ -40,6 +40,10 @@ def register(mcp: FastMCP) -> None:
           or capture viewport screenshots when GUI is available)
         - Development and REPL-style testing
 
+        O.engines[0] holds a PyRunner that belongs to yade-mcp-bridge
+        (its command mentions "mcp bridge"). Ignore it: assign O.engines
+        as usual, the bridge re-adds the PyRunner before every O.run().
+
         Unlike yade_execute_task, this tool is fire-and-return: the
         response contains the full output. It is NOT tracked by
         yade_list_tasks and cannot be interrupted or polled.

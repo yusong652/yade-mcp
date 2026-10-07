@@ -393,12 +393,28 @@ class TestInterruptTask:
         data = await _call("yade_interrupt_task", task_id="t1")
         assert data["ok"] is False
         assert data["error"]["code"] == "not_found"
+        assert data["error"]["details"]["action"] == "Check the task_id against yade_list_tasks"
+        assert "task_status" not in data["error"]["details"]
 
     async def test_already_terminal_maps_to_error(self, bridge):
         bridge.interrupt_task.return_value = {
             "ok": False,
             "error": {"code": "already_terminal", "message": "Task already in terminal state: t1 (status: completed)"},
+            "data": {"task_id": "t1", "status": "completed", "interrupt_requested": False},
         }
         data = await _call("yade_interrupt_task", task_id="t1")
         assert data["ok"] is False
         assert data["error"]["code"] == "already_terminal"
+        assert data["error"]["details"]["task_status"] == "completed"
+        assert (
+            data["error"]["details"]["action"] == "No action needed: the task has already ended with status completed"
+        )
+
+    async def test_other_error_keeps_generic_action(self, bridge):
+        bridge.interrupt_task.return_value = {
+            "ok": False,
+            "error": {"code": "interrupt_failed", "message": "boom"},
+        }
+        data = await _call("yade_interrupt_task", task_id="t1")
+        assert data["ok"] is False
+        assert data["error"]["details"]["action"] == "Check task status and bridge logs"

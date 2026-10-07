@@ -60,11 +60,24 @@ def register(mcp: FastMCP) -> None:
         # structured error{}; lift its machine-readable code. (Older bridges
         # signalled the same conditions with a bare status:"error".)
         if bridge_error or not ok:
+            code = bridge_error.get("code") or response.get("status") or "interrupt_failed"
+            # The action hint is what the agent acts on; point it at the
+            # actual cause rather than a generic "check the logs".
+            task_status = bridge_data.get("status")
+            if code == "already_terminal":
+                action = "No action needed: the task has already ended"
+                if task_status:
+                    action += f" with status {task_status}"
+            elif code == "not_found":
+                action = "Check the task_id against yade_list_tasks"
+            else:
+                action = "Check task status and bridge logs"
             return build_operation_error(
-                bridge_error.get("code") or response.get("status") or "interrupt_failed",
+                code,
                 bridge_error.get("message") or response.get("message") or "Interrupt request failed",
                 task_id=task_id,
-                action="Check task status and bridge logs",
+                action=action,
+                task_status=task_status,
             )
 
         result: dict[str, Any] = {
