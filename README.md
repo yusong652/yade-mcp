@@ -38,7 +38,6 @@ Two documentation tools (no bridge needed) and five execution tools (bridge requ
 ## Example Prompts
 
 - *"Set up a triaxial compression test on a dense packing and plot deviatoric stress against axial strain"*
-- *"Deposit 5000 spheres under gravity into a box and report the final porosity"*
 - *"Build an irregular particle as a level set body and drop it onto a plane"*
 - *"The simulation is still running, check the unbalanced force without stopping it"*
 - *"Look up how GlobalStiffnessTimeStepper picks the timestep, then add it to this model"*
