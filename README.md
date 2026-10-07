@@ -17,47 +17,13 @@
 
 `O.engines += [LLM()]  # yet another engine.`
 
-**yade-mcp** connects AI agents to [YADE](https://yade-dem.org/) — the open-source discrete element method engine — through the [Model Context Protocol](https://modelcontextprotocol.io/). Browse API docs, run simulations, and execute code, all through natural conversation.
-
-Your agent doesn't just call tools — it sits at your YADE console, runs long simulations on its own, and stays in sync with what you're doing.
+**yade-mcp** connects AI agents to [YADE](https://yade-dem.org/), the open-source discrete element method engine, through the [Model Context Protocol](https://modelcontextprotocol.io/). The agent browses the YADE API, runs code in a live YADE session, launches long simulations as background tasks, and reads what you type at the YADE console.
 
 ![yade-mcp demo](https://raw.githubusercontent.com/yusong652/yade-mcp/assets/assets/demo.gif)
 
-*Works with any MCP client — verified with Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, OpenCode, and toyoura-nagisa.*
-
-## Features
-
-### Your agent types, YADE runs
-
-*Powered by `yade_execute_code`*
-
-Describe what you want in plain language. The agent types commands into your YADE console — inspecting particles, tweaking parameters, stepping the engine, analyzing results. It reads each output, debugs, and iterates, the same way you do at the console yourself.
-
-### Set it running, walk away
-
-*Powered by `yade_execute_task` + `yade_check_task_status` + `yade_interrupt_task`*
-
-Run a full YADE script as a background task — just like firing off `yade script.py`, except you don't have to babysit it. The agent watches on its own: tailing the live output, catching errors as they appear, stopping the run gracefully when something looks off, fixing the script, and resubmitting — until the simulation actually finishes.
-
-### New session, no cold start
-
-*Powered by `yade_list_tasks` + `yade_check_task_status`*
-
-Every task you've submitted — the script, the live output, the final state — stays on record. When the context window fills up or you come back the next day, a fresh agent walks into a project that already remembers itself: it lists what's been run, reads what each task produced, and picks up without you re-explaining anything.
-
-### A live shell into the running simulation
-
-*Powered by `yade_execute_code`*
-
-While a task runs, the agent has a live shell into the simulation — ask it to inspect any variable, dump any object's state, or render a fresh plot on demand, without editing the script or stopping the run.
-
-### You type, the agent's in sync
-
-Beyond submitted tasks, every line you type into the YADE console — the variables you peeked at, the parameters you tested, the dead ends you walked away from — flows into the agent's context too. When you turn to chat, it already has the trail of what you've been trying. Learning YADE and want feedback on what you just typed? Stuck on an unexpected error? Just ask — the agent saw what you typed and how YADE answered.
-
 ## Tools (7)
 
-Two documentation tools (no bridge) and five execution tools (bridge required):
+Two documentation tools (no bridge needed) and five execution tools (bridge required):
 
 | Tool | Purpose | Bridge |
 | --- | --- | --- |
@@ -66,15 +32,26 @@ Two documentation tools (no bridge) and five execution tools (bridge required):
 | `yade_execute_code` | Run Python in the live YADE process; returns synchronously | Yes |
 | `yade_execute_task` | Submit a script as a long-running background task | Yes |
 | `yade_check_task_status` | Inspect a running or finished task (output, status) | Yes |
-| `yade_interrupt_task` | Gracefully stop a running task | Yes |
+| `yade_interrupt_task` | Stop a running task at an iteration boundary, or cancel a queued one | Yes |
 | `yade_list_tasks` | List submitted tasks with metadata | Yes |
 
-## Quick Start
+## Example Prompts
+
+- *"Set up a triaxial compression test on a dense packing and plot deviatoric stress against axial strain"*
+- *"Deposit 5000 spheres under gravity into a box and report the final porosity"*
+- *"Build an irregular particle as a level set body and drop it onto a plane"*
+- *"The simulation is still running, check the unbalanced force without stopping it"*
+- *"Look up how GlobalStiffnessTimeStepper picks the timestep, then add it to this model"*
+- *"The command I just typed in the console raised an error, what went wrong?"*
+- *"List what was run yesterday and summarize what each task produced"*
+
+## First-time Setup
 
 ### Prerequisites
 
 - **[YADE](https://yade-dem.org/doc/installation.html)** installed
-- **[uv](https://docs.astral.sh/uv/getting-started/installation/)** installed (for `uvx`)
+- **[uv](https://docs.astral.sh/uv/getting-started/installation/)** installed. It provides the `uvx` launcher that agent clients use to run `yade-mcp`; without it the client reports `No such file or directory` when starting the server.
+- **An AI agent**: Claude Code, Codex CLI, Gemini CLI, or any MCP-capable client
 
 ### Agentic Setup (Recommended)
 
@@ -87,7 +64,20 @@ https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mc
 
 ### Manual Setup
 
-**1. Register the MCP server** in your client config:
+**1. Register the MCP server** with your agent (use the line for yours):
+
+```bash
+# Claude Code
+claude mcp add yade-mcp -- uvx yade-mcp
+
+# Codex CLI
+codex mcp add yade-mcp -- uvx yade-mcp
+
+# Gemini CLI
+gemini mcp add yade-mcp uvx yade-mcp
+```
+
+Or fill in the MCP config file by hand:
 
 ```json
 {
@@ -100,27 +90,69 @@ https://raw.githubusercontent.com/yusong652/yade-mcp/master/docs/agentic/yade-mc
 }
 ```
 
-**2. Start the bridge inside YADE:**
+**2. Install the bridge into YADE's Python.**
 
-In a YADE Python console, install the bridge using YADE's own interpreter:
+YADE embeds one specific interpreter (the system `python3` for the Debian and Ubuntu packages, or the one it was built against). A conda or venv Python is a different interpreter, and a package installed there is invisible to YADE. The reliable way to hit the right one is to install from inside YADE, where `sys.executable` is that interpreter. In the YADE console:
 
 ```python
 import sys, subprocess
 subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", "yade-mcp-bridge"])
 ```
 
-On PEP 668 externally-managed environments (pip refuses `--user`), see the [bootstrap guide](docs/agentic/yade-mcp-bootstrap.md) for a portable form.
+Two things can go wrong here:
 
-Restart YADE, then in the Python console:
+- `No module named pip`: the interpreter has no pip. Install it with the system package manager, for example `sudo apt install python3-pip`.
+- `externally-managed-environment` (Debian 12, Ubuntu 23.04 and later): pip refuses `--user` by default. Add `"--break-system-packages"` after `"--user"` in the command above.
+
+Then exit and restart YADE so the new package directory is picked up.
+
+The bridge is proposed for inclusion in YADE itself ([yade-dev/trunk !1187](https://gitlab.com/yade-dev/trunk/-/merge_requests/1187)). Once it ships with YADE, this step goes away and the bridge starts with `from yade import mcpbridge`.
+
+**3. Start the bridge** in the YADE console:
 
 ```python
 import yade_mcp_bridge
 yade_mcp_bridge.start()
 ```
 
+It prints one line: `YADE MCP Bridge on http://localhost:9002, log: <cwd>/.yade-mcp/bridge.log`.
+
 ### Verify
 
-Restart your AI agent (Claude Code, Codex CLI, Gemini CLI, etc.) and ask it to call `yade_execute_code` to verify the connection.
+Restart your AI agent and ask it to check that it is connected to YADE. It calls `yade_execute_code`; `ok: true` in the response means the whole chain works.
+
+## Daily Startup
+
+Once first-time setup is done, each new YADE session only needs the bridge started again. In the YADE console:
+
+```python
+import yade_mcp_bridge
+yade_mcp_bridge.start()
+```
+
+The MCP client config persists.
+
+**Ports and containers.** `start()` takes `port` (default 9002) and `host`. If you change the port, the MCP server must be told, or it keeps connecting to 9002. Re-register it with the matching URL:
+
+```bash
+codex mcp remove yade-mcp
+codex mcp add yade-mcp -- uvx yade-mcp --bridge-url http://localhost:9008
+```
+
+Inside a container, start with `yade_mcp_bridge.start(host="0.0.0.0")` so the bridge is reachable from outside.
+
+## Features
+
+- **Live REPL in the running YADE process**: `yade_execute_code` runs Python in the session's own namespace, so state persists between calls. It keeps working while a task runs, for reading intermediate results without stopping the simulation.
+- **Task lifecycle**: submit a script as a background task, tail its output, stop it at an iteration boundary, fix and resubmit. Tasks queue up and run one at a time, so a multi-stage pipeline can be submitted in one go.
+- **Task history across sessions**: every task's script, output, and final state stay on record. A new agent session lists what was run and picks up without being told.
+- **Console input reaches the agent**: lines you type at the YADE console arrive in the agent's context on its next call, so you can work at the console and with the agent at the same time.
+- **API documentation without a bridge**: the class tree and a BM25 search over the YADE Python API work offline, from a corpus refreshed against current YADE releases.
+- **Multi-client**: works with Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, OpenCode, toyoura-nagisa, and other MCP clients.
+
+## Troubleshooting
+
+See [Troubleshooting](docs/agentic/yade-mcp-bootstrap.md#troubleshooting) in the bootstrap guide.
 
 ## Contributing
 
@@ -128,4 +160,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).
