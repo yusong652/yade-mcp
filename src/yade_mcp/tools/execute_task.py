@@ -35,6 +35,11 @@ def register(mcp: FastMCP) -> None:
         Use this for production simulation runs, long O.run() cycles,
         and any operation that may take minutes or longer.
         For quick queries and REPL-style testing, use yade_execute_code.
+
+        O.engines[0] holds a PyRunner that belongs to yade-mcp-bridge
+        (its command mentions "mcp bridge"). The script does not need
+        to keep it: assign O.engines as usual, the bridge re-adds the
+        PyRunner before every O.run().
         """
         try:
             client = await get_bridge_client()
