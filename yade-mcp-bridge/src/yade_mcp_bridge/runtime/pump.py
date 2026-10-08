@@ -12,11 +12,24 @@ both start non-blocking:
   thread and returns, leaving the YADE prompt free for input.
 """
 
+import sys
 import threading
 import time
 
 # Keep a global reference to avoid Qt timer garbage collection.
 _qtPumpTimer = None
+
+
+def _liveQtCore():
+    """Return the QtCore of the binding that owns the running application, or None."""
+    # The application's binding is already imported; looking in sys.modules
+    # picks it when both bindings are installed and never loads a second Qt.
+    for binding in ("PyQt5", "PyQt6"):
+        QtCore = sys.modules.get(binding + ".QtCore")
+        if QtCore is not None and QtCore.QCoreApplication.instance() is not None:
+            return QtCore
+    return None
+
 
 # Pump tick cadence in milliseconds: how often runNext() is invoked.
 _TICK_INTERVAL_MS = 20
@@ -26,17 +39,8 @@ def startQtPump(codeExecutor, logger):
     """Drive the execute_code pump from the Qt event loop. Returns True on success."""
     global _qtPumpTimer
 
-    # Qt5-first matches YADE's current default GUI; PyQt6 covers Qt6 builds
-    try:
-        from PyQt5 import QtCore
-    except ImportError:
-        try:
-            from PyQt6 import QtCore
-        except ImportError:
-            return False
-
-    app = QtCore.QCoreApplication.instance()
-    if app is None:
+    QtCore = _liveQtCore()
+    if QtCore is None:
         return False
 
     # Stop previous timer if start() is called multiple times.

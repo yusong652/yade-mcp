@@ -3,9 +3,14 @@
 """Task-related message handlers for MCP bridge."""
 
 import logging
+import time
 
 from ..utils import errorResponse, okResponse
 from .helpers import requireField
+
+# How long interrupt_task waits for the flag to stop a task before it
+# injects AsyncAbort; the execute_code timeout path waits the same.
+INTERRUPT_GRACE_S = 2.0
 
 logger = logging.getLogger("MCP-Bridge")
 
@@ -115,19 +120,25 @@ def handleInterruptTask(ctx, data):
     requestInterrupt(taskId)
     logger.info("Interrupt flag set for task: %s", taskId)
 
-    # The flag interrupts a task inside O.run (PyRunner tick → CycleInterrupt);
-    # injecting AsyncAbort also covers pure-Python code with no O.run on the
-    # stack. Unregister first so a second interrupt cannot inject again.
+    # The flag stops a task inside O.run at the next PyRunner tick. Wait for
+    # that before injecting: an AsyncAbort that arrives while the
+    # CycleInterrupt is already being handled lands in the runner, not the script.
+    deadline = time.monotonic() + INTERRUPT_GRACE_S
+    while task.status in ("pending", "running") and time.monotonic() < deadline:
+        time.sleep(0.02)
+
+    # Still running: pure-Python code with no O.run on the stack never sees
+    # the flag. Unregister first so a second interrupt cannot inject again.
     method = "flag_only"
-    tid = getExecThread(taskId)
+    tid = getExecThread(taskId) if task.status in ("pending", "running") else None
     if tid is not None:
         unregisterExecThread(taskId)
         injectAsyncException(tid, AsyncAbort)
         method = "flag_and_async_exc"
         logger.info("AsyncAbort injected into task %s (tid=%s)", taskId, tid)
 
-    # The task may have finished while we set the flag; re-check so the
-    # flag cannot leak.
+    # The task may have finished while we waited; re-check so the flag
+    # cannot leak.
     if task.status not in ("pending", "running"):
         clearInterrupt(taskId)
 
