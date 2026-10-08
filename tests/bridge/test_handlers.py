@@ -227,6 +227,55 @@ class TestHandleInterruptTask:
             clearInterrupt("t2")
             unregisterExecThread("t2")
 
+    def test_interrupt_waits_for_the_flag_before_injecting(self):
+        """A task inside O.run stops at the next PyRunner tick once the flag
+        is set. The handler must give that a moment instead of injecting
+        AsyncAbort at once, which would land in the runner's own handlers."""
+        import threading
+        import time as _time
+
+        from yade_mcp_bridge.runtime.signals import (
+            clearInterrupt,
+            getExecThread,
+            isTaskInterruptRequested,
+            registerExecThread,
+            unregisterExecThread,
+        )
+
+        task = MagicMock()
+        task.status = "running"
+        ctx = _make_ctx(tasks={"t4": task})
+        clearInterrupt("t4")
+        got_exception: list[BaseException] = []
+
+        def _script():
+            # Like the PyRunner tick: notice the flag, finish normally.
+            try:
+                while not isTaskInterruptRequested("t4"):
+                    _time.sleep(0.005)
+                _time.sleep(0.05)  # the runner's except/finally window
+                unregisterExecThread("t4")
+                task.status = "interrupted"
+            except BaseException as e:
+                got_exception.append(e)
+
+        t = threading.Thread(target=_script, name="script-t4", daemon=True)
+        t.start()
+        registerExecThread("t4", t.ident)
+        try:
+            resp = handleInterruptTask(ctx, {"request_id": "r1", "task_id": "t4"})
+            t.join(timeout=2.0)
+            assert resp["ok"] is True
+            assert resp["data"]["method"] == "flag_only"
+            assert got_exception == []
+            assert task.status == "interrupted"
+            assert getExecThread("t4") is None
+            assert isTaskInterruptRequested("t4") is False
+        finally:
+            t.join(timeout=1.0)
+            clearInterrupt("t4")
+            unregisterExecThread("t4")
+
     def test_second_interrupt_is_noop_on_async_exc_path(self):
         """Re-entrancy guard: once handler unregisters the thread on
         first interrupt, a second handler call must NOT re-inject

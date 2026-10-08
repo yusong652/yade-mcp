@@ -68,6 +68,28 @@ class TestScriptTask:
         assert task.status == "failed"
         assert "crash" in task.error
 
+    def test_status_interrupted_when_abort_escapes_the_runner(self):
+        """An AsyncAbort injected while the runner is already handling a
+        CycleInterrupt escapes _execute and arrives as the future's exception.
+        The script stopped, so the task is interrupted — never left running."""
+        from yade_mcp_bridge.execution.termination import AsyncAbort, CycleInterrupt
+
+        for exc in (AsyncAbort(), CycleInterrupt("tick")):
+            f = Future()
+            task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
+            f.set_exception(exc)
+            assert task.status == "interrupted"
+            assert task.endTime is not None
+
+    def test_status_failed_on_base_exception(self):
+        """SystemExit and friends are BaseException; they must still end the
+        task in a terminal status."""
+        f = Future()
+        task = ScriptTask("t1", f, "test.py", "/tmp/test.py")
+        f.set_exception(SystemExit(3))
+        assert task.status == "failed"
+        assert task.error == "3"
+
     def test_status_completed_on_non_dict_result(self):
         f = Future()
         task = ScriptTask("t1", f, "test.py", "/tmp/test.py")

@@ -7,6 +7,7 @@ import os
 import time
 from concurrent.futures import CancelledError
 
+from ..execution.termination import AsyncAbort, CycleInterrupt
 from ..utils import TaskDataBuilder, okBody
 
 logger = logging.getLogger("MCP-Bridge")
@@ -112,9 +113,12 @@ class ScriptTask:
                     self.outputBuffer.close()
                 except (ValueError, OSError):
                     pass
-        except Exception as e:
+        except (CycleInterrupt, AsyncAbort):
+            # Escaped the runner's own handlers; the script still stopped.
+            self.status = "interrupted"
+        except BaseException as e:  # noqa: BLE001 — every outcome gets a terminal status
             self.status = "failed"
-            self.error = str(e)
+            self.error = str(e) or type(e).__name__
 
         if self.onStatusChange:
             try:
