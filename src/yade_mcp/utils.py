@@ -16,13 +16,18 @@ MAX_OUTPUT_LINES = 200
 DEFAULT_TASK_LIST_LIMIT = 32
 MAX_TASK_LIST_LIMIT = 100
 
+# Blocking parameters stay under the shortest MCP client request timeout
+# seen in practice (OpenCode 30 s), so the bridge answers before the
+# client drops the result.
+HARNESS_TIMEOUT_FLOOR_S = 20
+
 # Timeout constraints (seconds)
 MIN_TIMEOUT_S = 1
-MAX_TIMEOUT_S = 600
+MAX_TIMEOUT_S = HARNESS_TIMEOUT_FLOOR_S
 
 # Wait constraints (seconds)
 MIN_WAIT_SECONDS = 0
-MAX_WAIT_SECONDS = 3600
+MAX_WAIT_SECONDS = HARNESS_TIMEOUT_FLOOR_S
 
 # Description constraints
 DESCRIPTION_MAX_LENGTH = 200
@@ -134,7 +139,7 @@ WaitSeconds = Annotated[
         default=1,
         ge=MIN_WAIT_SECONDS,
         le=MAX_WAIT_SECONDS,
-        description="Delay before querying (prevents polling too fast). Use 0 for immediate check.",
+        description="Long-poll: return when the task changes state or after this many seconds. 0 = immediate.",
     ),
 ]
 
@@ -146,5 +151,10 @@ ConsoleCode = Annotated[
 
 ConsoleTimeoutSeconds = Annotated[
     int,
-    Field(default=10, ge=MIN_TIMEOUT_S, le=MAX_TIMEOUT_S, description="Console execution timeout in seconds"),
+    Field(
+        default=10,
+        ge=MIN_TIMEOUT_S,
+        le=MAX_TIMEOUT_S,
+        description="Seconds before the bridge aborts the snippet; longer work belongs in yade_execute_task.",
+    ),
 ]
