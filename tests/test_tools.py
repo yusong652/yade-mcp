@@ -18,6 +18,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from yade_mcp.server import mcp
+from yade_mcp.utils import HARNESS_TIMEOUT_FLOOR_S
 
 TOOL_MODULES = (
     "yade_mcp.tools.execute_code",
@@ -299,6 +300,27 @@ class TestCheckTaskStatus:
         assert data["data"]["task_status"] == "canceled"
         bridge.wait_for_task.assert_not_awaited()
         bridge.check_task_status.assert_awaited_once()
+
+
+# =========================================================================
+# advertised parameter bounds
+# =========================================================================
+
+
+class TestBlockingParameterBounds:
+    """Both blocking parameters stay under the shortest MCP client timeout (OpenCode 30 s)."""
+
+    async def test_wait_seconds_capped_below_harness_timeout(self):
+        tool = await mcp.get_tool("yade_check_task_status")
+        wait = tool.parameters["properties"]["wait_seconds"]
+        assert wait["maximum"] == HARNESS_TIMEOUT_FLOOR_S
+        assert wait["maximum"] < 30
+
+    async def test_execute_code_timeout_capped_below_harness_timeout(self):
+        tool = await mcp.get_tool("yade_execute_code")
+        timeout = tool.parameters["properties"]["timeout"]
+        assert timeout["maximum"] == HARNESS_TIMEOUT_FLOOR_S
+        assert timeout["maximum"] < 30
 
 
 # =========================================================================
