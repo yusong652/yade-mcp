@@ -18,14 +18,11 @@ from .backgroundRun import isBackgroundRun, markBackgroundRun
 
 _INTERRUPT_CHECK_PERIOD = 1  # PyRunner iterPeriod — check every step
 
-# The tick function's name in __main__; also the marker that identifies the
-# bridge's PyRunner among O.engines (engine labels break outside __main__,
-# e.g. inside %run).
+# Identify the MCP bridge PyRunner by its command string, not an engine label —
+# auto-injected labels break outside __main__ (e.g. inside %run).
 _TICK_NAME = "_mcpPyrunnerTick"
 
-# O.save() serializes this engine with the scene, so the command must also
-# run in a plain yade session that never imported the bridge: look the tick
-# up in __main__ (PyRunner's exec namespace) and fall back to a no-op.
+# O.save() writes this engine into the scene, so the command must be a no-op without the bridge.
 _PYRUNNER_COMMAND = (
     f'globals().get("{_TICK_NAME}", lambda: None)()'
     "  # yade-mcp bridge tick: a no-op without the bridge; re-added before every O.run()"
@@ -33,8 +30,7 @@ _PYRUNNER_COMMAND = (
 
 
 def isBridgePyrunnerCommand(command):
-    """True for the bridge PyRunner's command, including the form written by
-    older bridge versions into saved scenes."""
+    """True for the bridge PyRunner's command, in any bridge version's form."""
     return isinstance(command, str) and _TICK_NAME in command
 
 
@@ -99,11 +95,7 @@ def installPyrunner(logger):
     def _normalizePyrunner():
         """Ensure exactly one MCP bridge PyRunner is present, live, and at
         O.engines[0], restoring it if a user script wiped, disabled, moved or
-        duplicated it.
-
-        Engines are told apart by command, never by Python identity: an
-        engine deserialized by O.load() gets a fresh Python wrapper on every
-        O.engines access, so ``is`` would never match it."""
+        duplicated it."""
         engines = list(O.engines)
         ours = [e for e in engines if _isOurs(e)]
         others = [e for e in engines if not _isOurs(e)]
@@ -111,6 +103,7 @@ def installPyrunner(logger):
         if not ours:
             # Wiped (O.reset() or a user reassigned O.engines) — re-add at front.
             try:
+                # O.engines += [LLM()] # Yet another engine!
                 O.engines = [_makePyrunner()] + others
                 logger.debug("PyRunner auto-injected at O.engines[0] before O.run()")
             except Exception as e:
@@ -120,8 +113,7 @@ def installPyrunner(logger):
         pyrunner = ours[0]
 
         # Restore config in case a user script changed it (e.g. a negative index
-        # landing on the engine at O.engines[0]). The command is rewritten too,
-        # so a scene saved by an older bridge is healed on its next O.run().
+        # landing on the engine at O.engines[0]).
         try:
             if pyrunner.iterPeriod != _INTERRUPT_CHECK_PERIOD or pyrunner.dead:
                 logger.debug("MCP bridge PyRunner iterPeriod/dead changed; restoring")
@@ -133,8 +125,7 @@ def installPyrunner(logger):
         except Exception as e:
             logger.warning(f"Failed to normalize PyRunner config: {e}")
 
-        # Move back to index 0 if a user script pushed it out of front; drop
-        # extra copies (a scene saved with a duplicate, or a user re-adding one).
+        # Move back to index 0 if a user script pushed it out of front; drop extra copies.
         try:
             if len(ours) > 1 or not _isOurs(engines[0]):
                 O.engines = [pyrunner] + others
