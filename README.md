@@ -181,6 +181,24 @@ See [Troubleshooting](docs/agentic/yade-mcp-bootstrap.md#troubleshooting) in the
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
+## Citation
+
+If you use yade-mcp in your research, please cite the paper that describes it:
+
+> Han, Y., Uzuoka, R., Ueda, K. (2026). Connecting AI Agents to Live Discrete Element Simulations via the Model Context Protocol. [arXiv:2611.33926](https://arxiv.org/abs/2611.33926).
+
+```bibtex
+@misc{han2026demmcp,
+  title         = {Connecting {AI} Agents to Live Discrete Element Simulations via the {Model Context Protocol}},
+  author        = {Han, Yusong and Uzuoka, Ryosuke and Ueda, Kyohei},
+  year          = {2026},
+  eprint        = {2611.33926},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CE},
+  url           = {https://arxiv.org/abs/2611.33926}
+}
+```
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
