@@ -179,6 +179,24 @@ yade_mcp_bridge.start(host="0.0.0.0")
 
 参见 [CONTRIBUTING.md](CONTRIBUTING.md) 了解开发环境配置和贡献指南。
 
+## 引用
+
+如果你在研究中使用了 yade-mcp，请引用介绍它的论文：
+
+> Han, Y., Uzuoka, R., Ueda, K. (2026). Connecting AI Agents to Live Discrete Element Simulations via the Model Context Protocol. [arXiv:2611.33926](https://arxiv.org/abs/2611.33926).
+
+```bibtex
+@misc{han2026demmcp,
+  title         = {Connecting {AI} Agents to Live Discrete Element Simulations via the {Model Context Protocol}},
+  author        = {Han, Yusong and Uzuoka, Ryosuke and Ueda, Kyohei},
+  year          = {2026},
+  eprint        = {2611.33926},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CE},
+  url           = {https://arxiv.org/abs/2611.33926}
+}
+```
+
 ## 许可证
 
 MIT，参见 [LICENSE](LICENSE)。
